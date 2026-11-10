@@ -24,6 +24,10 @@ describe('cases', () => {
     ['missing session file', (c) => (c.sessions[0].file = 'nope.jsonl'), /sessions\[0\]\.file: file not found/],
     ['bad id', (c) => (c.id = 'Bad Id'), /id: does not match/],
     ['wrong schema', (c) => (c.schema = 'prbench.case/v0'), /schema: expected "prbench\.case\/v1"/],
+    ['subagent of a missing session', (c) => (c.sessions[0].subagentOf = 'nope.jsonl'), /sessions\[0\]\.subagentOf: must name another/],
+    ['subagent of itself', (c) => (c.sessions[0].subagentOf = c.sessions[0].file), /sessions\[0\]\.subagentOf: must name another/],
+    ['Codex subagent', (c) => { c.sessions.push({ ...c.sessions[0], agent: 'codex', subagentOf: c.sessions[0].file }); }, /sessions\[1\]\.subagentOf: only Claude Code/],
+    ['empty recorded alias', (c) => (c.repo.recordedAliases = ['']), /repo\.recordedAliases: must be a list/],
   ];
   for (const [name, edit, problem] of broken) {
     test(`rejects ${name}`, () => {

@@ -96,12 +96,46 @@ export function assertNoPublishedPrText(
       );
 }
 
+/** Ids of the tool calls a record makes (Claude Code tool_use, Codex call_id). */
+function toolCallIds(j: Record<string, any>): string[] {
+  if (Array.isArray(j.message?.content))
+    return j.message.content.flatMap((c: any) => (isObject(c) && c.type === 'tool_use' && typeof c.id === 'string' ? [c.id] : []));
+  const p = j.payload;
+  return isObject(p) && /_call$/.test(String(p.type)) && typeof p.call_id === 'string' ? [p.call_id] : [];
+}
+
+/** Ids of the tool calls whose results a record carries. */
+function toolResultIds(j: Record<string, any>): string[] {
+  if (Array.isArray(j.message?.content))
+    return j.message.content.flatMap((c: any) => (isObject(c) && c.type === 'tool_result' && typeof c.tool_use_id === 'string' ? [c.tool_use_id] : []));
+  const p = j.payload;
+  return isObject(p) && /_output$/.test(String(p.type)) && typeof p.call_id === 'string' ? [p.call_id] : [];
+}
+
+export interface SliceOptions {
+  /**
+   * More records that write PR text, beyond WRITES_PR_TEXT: a tool's own
+   * draft folders, say. Like it, they never drop the user's own input.
+   */
+  writesPrText?: RegExp[];
+  /**
+   * Record uuids a reviewer confirmed hold no PR text, kept even when a
+   * pattern or a dropped call would remove them (a commit message that
+   * merely mentions `gh pr create`, say).
+   */
+  keep?: string[];
+}
+
 export function sliceReplaySession(
   text: string,
   from: number,
   to: number,
+  opts: SliceOptions = {},
 ): { text: string; kept: number; cwd?: string } {
+  const writes = [WRITES_PR_TEXT, ...(opts.writesPrText ?? [])];
   const kept: string[] = [];
+  // A dropped call's result usually echoes the PR text it wrote or read.
+  const droppedCalls = new Set<string>();
   let cwd: string | undefined;
   for (const line of text.split('\n')) {
     if (!line.trim()) continue;
@@ -115,7 +149,13 @@ export function sliceReplaySession(
     const metadata = j.type === 'session_meta';
     const at = Date.parse(j.timestamp ?? '');
     if (!metadata && !(at >= from && at <= to)) continue;
-    if (WRITES_PR_TEXT.test(line) && !hasUserInput(j)) continue;
+    const reviewed = typeof j.uuid === 'string' && !!opts.keep?.includes(j.uuid);
+    const results = reviewed ? [] : toolResultIds(j);
+    if (results.some((id) => droppedCalls.has(id)) && !hasUserInput(j)) continue;
+    if (!reviewed && writes.some((re) => re.test(line)) && !hasUserInput(j)) {
+      for (const id of toolCallIds(j)) droppedCalls.add(id);
+      continue;
+    }
     const recordCwd = j.cwd ?? j.payload?.cwd;
     // Keep the existing discovery head-window contract for slices starting mid-session.
     if (!kept.length && !metadata && (line.length > 64 * 1024 || !recordCwd))

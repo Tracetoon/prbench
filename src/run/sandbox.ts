@@ -117,12 +117,13 @@ export function rewritePaths(jsonl: string, pairs: [from: string, to: string][])
   }
   const keys = [...map.keys()].sort((a, b) => b.length - a.length);
   if (keys.length === 0) return jsonl;
-  // Whole paths only: not preceded by a path character, and followed by a
+  // Whole paths only: not preceded by a path character (an escaped newline,
+  // tab or return before it starts a new line of output), and followed by a
   // separator, a quote or the end, so "/work" doesn't match ".github/workflows".
   const alt = keys.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   // The tail is JSON-escaped backslash + name segments, stopping at quotes,
   // whitespace and further escapes, so a command's other arguments are kept.
-  const re = new RegExp(`(?<![\\w.\\-~/\\\\])(${alt})((?:\\\\\\\\[^"\\\\\\s]+)*)(?=[\\\\/"'\`\\s]|$)`, 'g');
+  const re = new RegExp(`(?:(?<=(?<!\\\\)\\\\[nrt])|(?<![\\w.\\-~/\\\\]))(${alt})((?:\\\\\\\\[^"\\\\\\s]+)*)(?=[\\\\/"'\`\\s]|$)`, 'g');
   return jsonl.replace(re, (_m, key: string, tail: string) =>
     map.get(key)! + (posixTail.has(key) ? tail.replaceAll('\\\\', '/') : tail));
 }
@@ -140,6 +141,7 @@ export function pathPairs(c: Case, repo: string): [string, string][] {
   const parent = rec.replace(/[\\/]+$/, '').replace(/[\\/][^\\/]+$/, '');
   const repoParent = /^(?:[A-Za-z]:[\\/]|\\\\)/.test(repo) ? win32.dirname(repo) : posix.dirname(repo);
   if (parent && parent !== rec && !/^[A-Za-z]:$|^$/.test(parent)) pairs.push([parent, repoParent]);
+  for (const alias of c.repo.recordedAliases ?? []) if (!pairs.some(([from]) => from === alias)) pairs.push([alias, repo]);
   return pairs;
 }
 
@@ -163,11 +165,16 @@ function placeSession(
   pairs: [string, string][],
 ): string {
   const text = rewritePaths(readFileSync(join(loaded.dir, s.file), 'utf8'), pairs);
-  const cwd = rewritePaths(JSON.stringify(s.cwd), pairs);
+  const projectDir = (session: CaseSession) =>
+    join(sb.home, '.claude', 'projects', claudeProjectDir(JSON.parse(rewritePaths(JSON.stringify(session.cwd), pairs))));
   let dir: string;
   let name = basename(s.file);
-  if (s.agent === 'claude-code') {
-    dir = join(sb.home, '.claude', 'projects', claudeProjectDir(JSON.parse(cwd)));
+  if (s.agent === 'claude-code' && s.subagentOf) {
+    // Claude Code keeps a subagent's transcript in <session id>/subagents/ beside its parent.
+    const parent = loaded.case.sessions!.find((p) => p.file === s.subagentOf)!;
+    dir = join(projectDir(parent), basename(parent.file, '.jsonl'), 'subagents');
+  } else if (s.agent === 'claude-code') {
+    dir = projectDir(s);
   } else {
     // Codex keeps rollouts under sessions/YYYY/MM/DD/rollout-*.jsonl.
     const d = firstTimestamp(text);

@@ -1,0 +1,464 @@
+{
+  "schema": "prbench.candidates/v1",
+  "notes": "Case sources for scripts/import-cases.ts. Paths start with ~ (this machine) or $STAGING (~/.cache/prbench/staging, where codex-dev sessions and repository mirrors are copied); $HOME and $HOME_SLUG stand for the home directory, as a path and as a Claude Code project-directory slug. No session content or facts live here.",
+  "cases": [
+    {
+      "id": "bazzite-stale-portal",
+      "title": "Stale portal after gaming mode exit",
+      "split": "test",
+      "repo": "~/Development/Bazzite-Desktop-Login",
+      "license": "Apache-2.0",
+      "base": "834f7d7dade79a83255e08ed51c9613ebe838155",
+      "head": "17505fd4694c9604487f1939635978348b92d39f",
+      "recordedPath": "/var$HOME/Development/Bazzite-Desktop-Login",
+      "recordedAliases": [
+        "$HOME/Development/Bazzite-Desktop-Login"
+      ],
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "~/.codex/sessions/2026/08/23/rollout-2026-08-23T07-15-38-01a02efa-1b40-7701-8aeb-a464741892d3.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "winapps-sdl-wayland",
+      "title": "SDL FreeRDP for full desktop on Wayland",
+      "split": "dev",
+      "repo": "~/Development/winapps",
+      "license": "AGPL-3.0 (see COPYRIGHT.md)",
+      "base": "d5ea5d5a0b8ef28decb1f21e10b8290757e00693",
+      "head": "1e0b5ef6e77187f1777e65498454e47ddd22ba1f",
+      "recordedPath": "$HOME/Development/winapps",
+      "recordedAliases": [
+        "/var$HOME/Development/winapps"
+      ],
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "~/.codex/sessions/2026/04/28/rollout-2026-04-28T18-47-54-019dd6eb-d90b-7ff2-aba5-285d6712054f.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "winapps-org/winapps",
+        "number": 922
+      }
+    },
+    {
+      "id": "vexaim-workshop-ci",
+      "title": "Fix the workshop's first CI run",
+      "split": "dev",
+      "repo": "~/Development/vex-aim-agent-workshop",
+      "license": "Apache-2.0",
+      "base": "560b480b02c0d291d5e86be08c15460fde9c7399",
+      "head": "c43c1dd37297b2fd327cabe1c9a2716b7ed2fc1d",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill/stage/vex-aim-agent-workshop",
+      "recordedAliases": [
+        "$HOME/Development/vex-aim-agent-workshop",
+        "/var$HOME/Development/vex-aim-agent-workshop"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/vex-aim-agent-workshop",
+        "number": 1
+      },
+      "from": "2026-10-19T03:00:00Z"
+    },
+    {
+      "id": "vexaim-workshop-norobot",
+      "title": "AGENTS.md: the no-robot case and cold-run gaps",
+      "split": "test",
+      "repo": "~/Development/vex-aim-agent-workshop",
+      "license": "Apache-2.0",
+      "base": "052ee860c7babe17ee21e221ca0a3748f9812f17",
+      "head": "dea6faf95a10eeb2bc9068ab697872cf798d4f1f",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill/stage/vex-aim-agent-workshop",
+      "recordedAliases": [
+        "$HOME/Development/vex-aim-agent-workshop",
+        "/var$HOME/Development/vex-aim-agent-workshop"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        },
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c/subagents/agent-a12679d7b9bfa051f.jsonl",
+          "subagentOf": 0
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/vex-aim-agent-workshop",
+        "number": 3
+      },
+      "from": "2026-10-19T03:48:00Z"
+    },
+    {
+      "id": "vex-v5-serial-aim-port",
+      "title": "Recognise the AIM user serial port",
+      "split": "dev",
+      "repo": "~/.claude/jobs/ed296c46/tmp/vex-pr",
+      "license": "MIT",
+      "base": "b3a712a16c9c6819b69faacfee2284826a138070",
+      "head": "e074598574b45d033a2556aea4928c7fe47c283b",
+      "recordedPath": "$HOME/.claude/jobs/ed296c46/tmp/vex-pr",
+      "recordedAliases": [
+        "/var$HOME/.claude/jobs/ed296c46/tmp/vex-pr",
+        "/tmp/vex-pr"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl",
+          "ranges": [
+            [
+              "2026-10-18T22:10:00Z",
+              "2026-10-18T23:05:00Z"
+            ],
+            [
+              "2026-10-19T05:54:00Z",
+              "2026-10-19T05:56:34Z"
+            ]
+          ]
+        }
+      ],
+      "pr": {
+        "repo": "vexide/vex-v5-serial",
+        "number": 22
+      },
+      "notes": "The fix was investigated and patched locally early in the session, then committed to the fork and submitted upstream hours later; the slice keeps both stretches and drops the unrelated workshop work between them."
+    },
+    {
+      "id": "showtail-self-upgrade",
+      "title": "showtail upgrade command",
+      "split": "dev",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "8a2de5e17369dd2faa44497a7d6c2a13380817a8",
+      "head": "6847ec90e8f69f3fe7e0f383a982107cf7f0d55b",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T08-56-40-01a05889-7c44-7e32-b715-8e43b9c8e57e.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 13
+      }
+    },
+    {
+      "id": "showtail-windows-cmd",
+      "title": "Launch extension CLIs through cmd on Windows",
+      "split": "test",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "843dd6a79182f5c9bf06783505f52753e66a7a14",
+      "head": "8f8f05d6b405fe0362d5bc108560c56abf78cf34",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T04-45-59-01a057a3-faae-7db2-8efe-7a6800fd5eb6.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 11
+      },
+      "from": "2026-08-31T13:56:00Z"
+    },
+    {
+      "id": "aifirstcli-macos-installer",
+      "title": "macOS installer hangs under curl | sh",
+      "split": "dev",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "4f8b6e88baccaf05be8d966ff7e63f19bc061efe",
+      "head": "9d3ec935e75c7b64ccad8aac58ea0cb96a236d29",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-08T20-08-27-01a08423-6641-77b3-af70-48f238696ba6.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "aifirstcli-tui-responsive",
+      "title": "TUI responsiveness and instant prompt finish",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "369a2244eed2db7bb8fcf95fdd4c97f1efc4b457",
+      "head": "1aab407658fea18cddedbb55aa708eba92221a09",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-12T00-55-51-01a0949d-99b9-79f2-9b84-793b3155ada3.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "aifirstcli-hooks-path",
+      "title": "Claude hooks independent of PATH",
+      "split": "dev",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "5a703a05a99caf74900f00766d9b9b84d5a82ab4",
+      "head": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "recordedAliases": [
+        "$HOME/src/github.com/aifirstprogramming/aifirstcli-wt-main",
+        "$HOME/src/github.com/aifirstprogramming/aifirstcli-wt-claude-hook-20260831"
+      ],
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T16-15-45-01a05a1b-79a5-7ee1-bb89-51c1860ca477.jsonl"
+        }
+      ],
+      "from": "2026-08-31T23:15:00Z",
+      "notes": "Base and head commits were rebased onto main at the same moment, so the window starts at the session's first request rather than an hour before the base commit."
+    },
+    {
+      "id": "aifirstcli-homebrew-maven",
+      "title": "Homebrew Maven on immutable Linux",
+      "split": "dev",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "037046d6441b3eac65f1ffc048f0e1a8a3f791be",
+      "head": "06e4fc73551b0300110eba255c79083889b047a3",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-01T20-42-17-01a06035-daf9-7192-9de8-8030c147af36.jsonl"
+        }
+      ],
+      "from": "2026-09-02T13:22:00Z"
+    },
+    {
+      "id": "aifirstcontent-apache",
+      "title": "License content under Apache 2.0",
+      "split": "dev",
+      "repo": "$STAGING/repos/aifirstcontent.git",
+      "license": "Apache-2.0",
+      "base": "ec39a698c532b7bc012b346dbdb921939caddb22",
+      "head": "bbd363f3c702d20daec3bb249b6a0757bcca8762",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcontent",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T12-15-55-01a0593f-e7a9-73a3-9133-b59100be72e2.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "aifirstprogramming/aifirstcontent",
+        "number": 3
+      },
+      "from": "2026-08-31T23:30:00Z"
+    },
+    {
+      "id": "tracetoon-chained-runs",
+      "title": "Record every check in a chained command",
+      "split": "dev",
+      "repo": "~/Development/tracetoon",
+      "license": "Apache-2.0",
+      "base": "9ac29c4918ab485fb8132cac2464a05df134d2f2",
+      "head": "c2ea0dfe6f863fdb08391288826c0b30e562c399",
+      "recordedPath": "/var$HOME/Development/tracetoon",
+      "recordedAliases": [
+        "$HOME/Development/tracetoon"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "steveonjava/tracetoon",
+        "number": 2
+      },
+      "from": "2026-11-06T03:50:00Z"
+    },
+    {
+      "id": "tracetoon-evidence-graph",
+      "title": "Evidence graph of how each PR was made",
+      "split": "dev",
+      "repo": "~/Development/tracetoon",
+      "license": "Apache-2.0",
+      "base": "9ac29c4918ab485fb8132cac2464a05df134d2f2",
+      "head": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+      "recordedPath": "/var$HOME/Development/tracetoon",
+      "recordedAliases": [
+        "$HOME/Development/tracetoon"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "steveonjava/tracetoon",
+        "number": 1
+      }
+    },
+    {
+      "id": "tracetoon-receipt-quoting",
+      "title": "Receipt quoting fix and reviewed-brief default",
+      "split": "dev",
+      "repo": "~/Development/tracetoon",
+      "license": "Apache-2.0",
+      "base": "8dfcab6885f55a26a991e7f961389291a0b1544e",
+      "head": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+      "recordedPath": "/var$HOME/Development/tracetoon",
+      "recordedAliases": [
+        "$HOME/Development/tracetoon"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+        }
+      ],
+      "from": "2026-11-08T09:05:00Z"
+    },
+    {
+      "id": "tracetoon-lean-reviewer",
+      "title": "Lean reviewer: review packet and import",
+      "split": "dev",
+      "repo": "~/Development/tracetoon",
+      "license": "Apache-2.0",
+      "base": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+      "head": "360baccebf5a2aafc19c92b2cf0f8ea0579324f3",
+      "recordedPath": "/var$HOME/Development/tracetoon",
+      "recordedAliases": [
+        "/var/tmp/prbench-tmp/wt-reviewer",
+        "$HOME/Development/tracetoon"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl",
+          "from": "2026-11-08T21:06:00Z"
+        },
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a468106184d11f2ac.jsonl",
+          "subagentOf": 0
+        }
+      ]
+    },
+    {
+      "id": "tracetoon-neighborhood",
+      "title": "Neighborhood brief layout",
+      "split": "test",
+      "repo": "~/Development/tracetoon",
+      "license": "Apache-2.0",
+      "base": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+      "head": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+      "recordedPath": "/var$HOME/Development/tracetoon",
+      "recordedAliases": [
+        "$HOME/.claude/jobs/d955bb9a/tmp/nbhd",
+        "$HOME/Development/tracetoon"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/d955bb9a-6b8d-4065-82f5-fee240b30549.jsonl"
+        }
+      ]
+    },
+    {
+      "id": "prbench-parallel-providers",
+      "title": "Parallel comparisons on Codex or Claude",
+      "split": "dev",
+      "repo": "~/Development/prbench",
+      "license": "Apache-2.0",
+      "base": "f7647f50d433a5ec2aa3646a83b954f2658cc2e3",
+      "head": "f7ec46eedb0bb7c1f28a635d8a94ed733092dd7a",
+      "recordedPath": "/var$HOME/Development/prbench",
+      "recordedAliases": [
+        "$HOME/Development/prbench",
+        "/var$HOME/Development/prbench-judgefix",
+        "/var$HOME/Development/prbench-ghfix"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl",
+          "keep": [
+            "89ba5674-df33-49fd-ba9d-bba4f2ee4d45"
+          ]
+        },
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9/subagents/agent-a030cb94333e721e8.jsonl",
+          "subagentOf": 0
+        }
+      ],
+      "pr": {
+        "repo": "steveonjava/prbench",
+        "number": 1
+      }
+    },
+    {
+      "id": "prbench-scoring",
+      "title": "Absolute scoring, Codex cost, writer effort",
+      "split": "dev",
+      "repo": "~/Development/prbench",
+      "license": "Apache-2.0",
+      "base": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+      "head": "51a03875c90e4e6ed0da9797013b041ea4226eaa",
+      "recordedPath": "/var$HOME/Development/prbench-score",
+      "recordedAliases": [
+        "/var$HOME/Development/prbench",
+        "$HOME/Development/prbench-score"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl"
+        }
+      ],
+      "from": "2026-11-06T23:50:00Z"
+    },
+    {
+      "id": "prbench-crossjudge",
+      "title": "Cross-judge command",
+      "split": "test",
+      "repo": "~/Development/prbench",
+      "license": "Apache-2.0",
+      "base": "1422e36538442f35de9b53c4c9634a5643341fc3",
+      "head": "e7085bd05119486bd19671b4b85690b2ddce721f",
+      "recordedPath": "/var$HOME/Development/prbench-score",
+      "recordedAliases": [
+        "/var$HOME/Development/prbench",
+        "$HOME/Development/prbench-score"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl",
+          "from": "2026-11-09T05:54:00Z"
+        },
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a3dadc1404d6c395f.jsonl",
+          "subagentOf": 0
+        }
+      ]
+    }
+  ]
+}

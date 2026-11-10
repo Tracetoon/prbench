@@ -23,6 +23,48 @@
           "vexaim"
         ]
       }
+    },
+    {
+      "id": "real-cases",
+      "version": "2.0.0",
+      "description": "27 consented, redacted historical PR-writing replay cases",
+      "url": "https://github.com/Tingsters/prbench/releases/download/cases-v2.0.0/prbench-real-cases-2.0.0.tar.gz",
+      "sha256": "76efdc2a802811670e7ac66be080ee269c4b3458d7c21b195eddce4f3283c46d",
+      "manifestSha256": "a3a7346af71bf5ab42d5a93912b33cc9db1a47ce2189f235a759593a87a0288b",
+      "bytes": 152378085,
+      "cases": {
+        "dev": [
+          "aifirstcli-homebrew-maven",
+          "aifirstcli-hooks-path",
+          "aifirstcli-macos-installer",
+          "aifirstcontent-apache",
+          "pr11",
+          "pr12",
+          "pr5",
+          "pr8",
+          "pr9",
+          "prbench-parallel-providers",
+          "prbench-scoring",
+          "showtail-self-upgrade",
+          "tracetoon-chained-runs",
+          "tracetoon-evidence-graph",
+          "tracetoon-lean-reviewer",
+          "tracetoon-receipt-quoting",
+          "vex-v5-serial-aim-port",
+          "vexaim-workshop-ci",
+          "winapps-sdl-wayland"
+        ],
+        "test": [
+          "aifirstcli-tui-responsive",
+          "bazzite-stale-portal",
+          "pr10",
+          "prbench-crossjudge",
+          "showtail-windows-cmd",
+          "tracetoon-neighborhood",
+          "vexaim",
+          "vexaim-workshop-norobot"
+        ]
+      }
     }
   ]
 }

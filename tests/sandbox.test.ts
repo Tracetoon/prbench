@@ -283,3 +283,40 @@ test('a Windows recorded path names the checkout by its last segment on any host
     sb.dispose();
   }
 });
+
+test('places a Claude Code subagent transcript beside its parent session', () => {
+  const cases = copyExample('with-subagent', (c) => {
+    c.sessions.push({ ...c.sessions[0], file: 'agent-a1.jsonl', subagentOf: c.sessions[0].file });
+  });
+  writeFileSync(join(cases.dir, 'agent-a1.jsonl'), readFileSync(join(cases.dir, 'session.jsonl')));
+  const sb = createSandbox(loadCase(cases.dir), { parent: tempDir() });
+  try {
+    const parent = sb.sessions[0]!;
+    expect(sb.sessions[1]).toBe(join(parent.replace(/\.jsonl$/, ''), 'subagents', 'agent-a1.jsonl'));
+    expect(existsSync(sb.sessions[1]!)).toBe(true);
+  } finally {
+    sb.dispose();
+  }
+});
+
+test('maps recorded aliases such as worktrees onto the checkout, without their parents', () => {
+  const pairs = pathPairs(
+    { repo: { recordedPath: '/home/a/dev/tool', recordedAliases: ['/var/tmp/wt-x', '/var/home/a/dev/tool'] } } as never,
+    '/sb/work/tool',
+  );
+  expect(pairs).toEqual([
+    ['/home/a/dev/tool', '/sb/work/tool'],
+    ['/home/a/dev', '/sb/work'],
+    ['/var/tmp/wt-x', '/sb/work/tool'],
+    ['/var/home/a/dev/tool', '/sb/work/tool'],
+  ]);
+  expect(JSON.parse(rewritePaths(JSON.stringify({ a: '/var/tmp/wt-x/src/a.ts' }), pairs))).toEqual({ a: '/sb/work/tool/src/a.ts' });
+});
+
+test('rewrites paths that start a line of tool output after an escaped newline', () => {
+  const pairs: [string, string][] = [['/home/a/repo', '/sb/work/repo']];
+  const line = JSON.stringify({ out: '/home/a/repo/x.ts\n/home/a/repo/y.ts\t/home/a/repo/z.ts', keep: 'C:\\new/home/a/repo' });
+  const parsed = JSON.parse(rewritePaths(line, pairs));
+  expect(parsed.out).toBe('/sb/work/repo/x.ts\n/sb/work/repo/y.ts\t/sb/work/repo/z.ts');
+  expect(parsed.keep).toBe('C:\\new/home/a/repo');
+});

@@ -11,14 +11,16 @@
  * - factual errors on both systems of the same replicate (a hint at a fact-sheet
  *   problem when it repeats).
  *
- * Usage: bun run scripts/qualify-cases.ts <run>... [--dataset id@version | --cases dir] [--json]
+ * Usage: bun run scripts/qualify-cases.ts <run>... [--dataset id@version | --cases dir] [--json] [--aggregate-only]
+ *
+ * `--aggregate-only` (sealed runs) prints the dataset-wide summary only: no case is named.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { modelRoot, type ComparisonManifest } from "../src/comparison.ts";
 import { resolveDatasetInputs } from "../src/datasets.ts";
 import type { PairResult } from "../src/judge/pairwise.ts";
-import { collectDraftScores, type ItemCounts } from "../src/report/score.ts";
+import { caseClustered, collectDraftScores, type ItemCounts } from "../src/report/score.ts";
 import { caseDirs, loadCase, loadFacts } from "../src/schema/case.ts";
 import { BASELINE, CANDIDATE, consensusOutcome } from "./paired-delta.ts";
 
@@ -198,6 +200,51 @@ export function qualifyMarkdown(rows: CaseRow[]): string {
   return out.join("\n");
 }
 
+/**
+ * The dataset-wide summary with no case named (sealed runs, `--aggregate-only`):
+ * totals and pooled shares, composite means of per-case means with a bootstrap
+ * interval over cases, and how many cases carry each flag.
+ */
+export function qualifyAggregate(rows: CaseRow[]) {
+  const sum = (v: (r: CaseRow) => number) => rows.reduce((a, r) => a + v(r), 0);
+  const pairs = sum((r) => r.pairs);
+  const pooled = (v: (r: CaseRow) => number) =>
+    pairs ? sum((r) => (r.pairs && Number.isFinite(v(r)) ? v(r) * r.pairs : 0)) / pairs : NaN;
+  const composite = (side: "baseline" | "candidate") =>
+    caseClustered(rows.map((r) => ({ case: r.case, value: r.mean[side] })));
+  const flags: Record<string, number> = {};
+  for (const r of rows) for (const flag of r.flags) flags[flag] = (flags[flag] ?? 0) + 1;
+  return {
+    cases: rows.length,
+    qualified: rows.filter((r) => !r.flags.length).length,
+    suspect: rows.filter((r) => r.flags.length).length,
+    flags,
+    expected: sum((r) => r.expected),
+    drafts: { baseline: sum((r) => r.drafts.baseline), candidate: sum((r) => r.drafts.candidate) },
+    pairs,
+    consensusShare: pooled((r) => r.consensusShare),
+    flipShare: pooled((r) => r.flipShare),
+    judgeDisagreeShare: pooled((r) => r.judgeDisagreeShare),
+    composite: { baseline: composite("baseline"), candidate: composite("candidate") },
+    bothErrors: sum((r) => r.bothErrors),
+  };
+}
+
+export function qualifyAggregateMarkdown(a: ReturnType<typeof qualifyAggregate>): string {
+  const ci = (c: { mean: number; ci: [number, number] }) => `${f(c.mean)} [${f(c.ci[0])}, ${f(c.ci[1])}]`;
+  const flags = Object.entries(a.flags).sort(([x], [y]) => x.localeCompare(y));
+  return [
+    "Aggregate only: per-case rows are sealed.",
+    "",
+    "| Cases | Qualified | Suspect | Drafts base/cand of expected | Consensus | Order flips | Judges differ | Base composite [95% CI] | Cand composite [95% CI] | Errors on both |",
+    "|---|---|---|---|---|---|---|---|---|---|",
+    `| ${a.cases} | ${a.qualified} | ${a.suspect} | ${a.drafts.baseline}/${a.drafts.candidate} of ${a.expected} | ${pct(a.consensusShare)} | ${pct(a.flipShare)} | ${pct(a.judgeDisagreeShare)} | ${ci(a.composite.baseline)} | ${ci(a.composite.candidate)} | ${a.bothErrors} |`,
+    ...(flags.length
+      ? ["", "| Flag | Cases |", "|---|---|", ...flags.map(([flag, n]) => `| ${flag} | ${n} |`)]
+      : []),
+  ].join("\n");
+}
+
 if (import.meta.main) {
   const argv = process.argv.slice(2);
   const opt = (n: string) => {
@@ -205,12 +252,13 @@ if (import.meta.main) {
     return i >= 0 ? argv.splice(i, 2)[1] : undefined;
   };
   const json = argv.includes("--json");
+  const aggregateOnly = argv.includes("--aggregate-only");
   const dataset = opt("--dataset");
   const casesDir = opt("--cases");
-  const runs = argv.filter((a) => a !== "--json");
+  const runs = argv.filter((a) => a !== "--json" && a !== "--aggregate-only");
   if (!runs.length) {
     console.error(
-      "usage: qualify-cases.ts <run>... [--dataset id@version | --cases dir] [--json]",
+      "usage: qualify-cases.ts <run>... [--dataset id@version | --cases dir] [--json] [--aggregate-only]",
     );
     process.exit(2);
   }
@@ -226,5 +274,8 @@ if (import.meta.main) {
     }
   }
   const rows = qualify(runs, (id) => facts.get(id));
-  console.log(json ? JSON.stringify(rows, null, 2) : qualifyMarkdown(rows));
+  if (aggregateOnly) {
+    const aggregate = qualifyAggregate(rows);
+    console.log(json ? JSON.stringify(aggregate, null, 2) : qualifyAggregateMarkdown(aggregate));
+  } else console.log(json ? JSON.stringify(rows, null, 2) : qualifyMarkdown(rows));
 }

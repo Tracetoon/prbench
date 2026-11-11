@@ -4,6 +4,7 @@ import { join } from "node:path";
 import type { SideJudgment } from "../src/judge/rubric.ts";
 import { failureKind } from "../src/run/ledger.ts";
 import {
+  aggregateScores,
   caseClustered,
   collectDraftScores,
   collectJudgeFailures,
@@ -298,4 +299,42 @@ test("robustness: per-case composite Δ per model and a leave-one-case-out range
     "| pr10 | 0.0 (1) | – |",
   ]);
   expect(table).toContain("| Mean of cases | -5.0 | -15.0 |");
+});
+
+test("--aggregate-only prints overall tables and names no case", () => {
+  const root = tempDir();
+  const write = (rel: string, v: unknown) => {
+    mkdirSync(join(root, rel, ".."), { recursive: true });
+    writeFileSync(join(root, rel), JSON.stringify(v));
+  };
+  const ids = ["sealedcase-alpha", "sealedcase-beta", "sealedcase-gamma"];
+  for (const model of ["luna", "sol"])
+    for (const c of ids)
+      write(`${model}/tracetoon-baseline/judgments/v6/${c}/j/ab.json`, {
+        rubricVersion: "6",
+        judge: "codex:j@medium",
+        case: c,
+        order: "ab",
+        labels: { A: "tracetoon-baseline", B: "tracetoon-candidate" },
+        judgment: {
+          A: side({ notes: `rationale about ${c}` }),
+          B: side({ factualErrors: c === ids[1] ? [`wrong in ${c}`] : [] }),
+          preferred: "tie",
+        },
+      });
+  const drafts = collectDraftScores(root, () => facts);
+  const full = scoreMarkdown(drafts);
+  for (const id of ids) expect(full).toContain(id);
+  const sealed = scoreMarkdown(drafts, "S", [], [], { aggregateOnly: true });
+  for (const id of ids) expect(sealed).not.toContain(id);
+  expect(sealed).not.toContain("sealedcase");
+  expect(sealed).not.toContain("rationale");
+  expect(sealed).not.toContain("Leave one case out");
+  expect(sealed).toContain("Composite [95% CI]");
+  expect(sealed).toContain("aggregate only, per-case results sealed");
+  expect(sealed).toMatch(/\| luna \| tracetoon-baseline \| 3 \| -?[\d.]+ \[/);
+  expect(sealed).toContain("## Accuracy");
+  const json = JSON.stringify(aggregateScores(drafts));
+  expect(json).not.toContain("sealedcase");
+  expect(json).toContain("tracetoon-candidate");
 });

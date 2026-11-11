@@ -17,7 +17,7 @@ import { DEFAULT_AGENT_OPTIONS, parseBudget } from "./systems/agentShared.ts";
 import { judgePair, type PairResult } from "./judge/pairwise.ts";
 import { parseJudge } from "./judge/providers.ts";
 import { buildReport, reportMarkdown } from "./report.ts";
-import { collectDraftScores, collectJudgeFailures, collectWriterFailures, scoreMarkdown } from "./report/score.ts";
+import { aggregateScores, collectDraftScores, collectJudgeFailures, collectWriterFailures, scoreMarkdown } from "./report/score.ts";
 import { codexLogin } from "./agents/codexAuth.ts";
 import { claudeAuthStatus, saveClaudeToken } from "./agents/claude.ts";
 import { runBothProviders } from "./run/both.ts";
@@ -838,10 +838,19 @@ program
     "public dataset; defaults to the pinned release when --cases is omitted",
   )
   .option("--json", "print per-draft scores as JSON")
+  .option(
+    "--aggregate-only",
+    "print only overall tables (sealed runs): no per-case rows, deltas or leave-one-case-out ranges; with --json, arm aggregates instead of per-draft scores",
+  )
   .action(
     async (
       roots: string[],
-      opts: { cases?: string; dataset?: string; json?: boolean },
+      opts: {
+        cases?: string;
+        dataset?: string;
+        json?: boolean;
+        aggregateOnly?: boolean;
+      },
     ) => {
       const { cases } = await resolveDatasetInputs(opts);
       const facts = new Map(
@@ -850,8 +859,19 @@ program
       const all = [];
       for (const root of roots) {
         const drafts = collectDraftScores(resolve(root), (id) => facts.get(id));
-        if (opts.json) all.push(...drafts.map((d) => ({ root, ...d })));
-        else console.log(scoreMarkdown(drafts, `Scores: ${root}`, collectWriterFailures(resolve(root)), collectJudgeFailures(resolve(root))));
+        if (opts.json && opts.aggregateOnly)
+          all.push({ root, ...aggregateScores(drafts) });
+        else if (opts.json) all.push(...drafts.map((d) => ({ root, ...d })));
+        else
+          console.log(
+            scoreMarkdown(
+              drafts,
+              `Scores: ${root}`,
+              collectWriterFailures(resolve(root)),
+              collectJudgeFailures(resolve(root)),
+              { aggregateOnly: opts.aggregateOnly },
+            ),
+          );
       }
       if (opts.json) console.log(JSON.stringify(all, null, 2));
     },

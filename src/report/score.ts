@@ -778,8 +778,25 @@ export function collectJudgeFailures(root: string): JudgeFailures[] {
   return [...out.values()].sort((a, b) => a.judge.localeCompare(b.judge));
 }
 
+/**
+ * Arm-level results with nothing per case: composite and component means with
+ * case-clustered intervals, paired deltas without their per-case map or
+ * leave-one-case-out range. For sealed runs (`score --aggregate-only --json`).
+ */
+export function aggregateScores(drafts: DraftScore[]) {
+  return {
+    arms: armScores(drafts).sort((x, y) => (x.model + x.system).localeCompare(y.model + y.system)),
+    pairedDeltas: pairedDeltas(drafts).map(({ perCase: _perCase, leaveOneOut: _loo, ...d }) => d),
+  };
+}
+
+/**
+ * `aggregateOnly` prints the overall tables only (sealed runs): no per-case
+ * delta table and no leave-one-case-out column.
+ */
 export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: WriterFailures[] = [],
-  judgeFailures: JudgeFailures[] = [],): string {
+  judgeFailures: JudgeFailures[] = [], options: { aggregateOnly?: boolean } = {}): string {
+  const sealed = options.aggregateOnly === true;
   const w = WEIGHTS;
   const lines = [
     `## ${title}`,
@@ -809,19 +826,33 @@ export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: 
     );
   const deltas = pairedDeltas(drafts);
   if (deltas.length) {
-    lines.push(
-      "",
-      "Paired candidate − other system (same model, case and replicate). Leave one case out = lowest and highest composite Δ when each case in turn is dropped:",
-      "",
-      "| Model | Against | Pairs | Composite Δ [95% CI] | Leave one case out | Factual errors Δ |",
-      "|---|---|---:|---|---|---:|",
-    );
-    for (const d of deltas)
+    if (sealed)
       lines.push(
-        `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${d.leaveOneOut ? `${f(d.leaveOneOut[0], 1)} to ${f(d.leaveOneOut[1], 1)}` : "–"} | ${f(d.errorsDelta)} |`,
+        "",
+        "Paired candidate − other system (same model, case and replicate; aggregate only, per-case results sealed):",
+        "",
+        "| Model | Against | Pairs | Composite Δ [95% CI] | Factual errors Δ |",
+        "|---|---|---:|---|---:|",
+        ...deltas.map(
+          (d) =>
+            `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${f(d.errorsDelta)} |`,
+        ),
       );
-    const perCase = perCaseDeltaMarkdown(drafts);
-    if (perCase) lines.push("", perCase);
+    else {
+      lines.push(
+        "",
+        "Paired candidate − other system (same model, case and replicate). Leave one case out = lowest and highest composite Δ when each case in turn is dropped:",
+        "",
+        "| Model | Against | Pairs | Composite Δ [95% CI] | Leave one case out | Factual errors Δ |",
+        "|---|---|---:|---|---|---:|",
+      );
+      for (const d of deltas)
+        lines.push(
+          `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${d.leaveOneOut ? `${f(d.leaveOneOut[0], 1)} to ${f(d.leaveOneOut[1], 1)}` : "–"} | ${f(d.errorsDelta)} |`,
+        );
+      const perCase = perCaseDeltaMarkdown(drafts);
+      if (perCase) lines.push("", perCase);
+    }
   }
   if (failures.length) {
     const accepted = (f: WriterFailures) => drafts.filter((d) => d.model === f.model && d.system === f.system).length;

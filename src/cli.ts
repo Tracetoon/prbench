@@ -32,6 +32,7 @@ import { experimentStatus } from "./run/status.ts";
 import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
+import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
 import {
   datasetReleases,
   datasetRelease,
@@ -466,6 +467,82 @@ function readArtifacts(
   }
   return out;
 }
+
+program
+  .command("fact-review")
+  .description(
+    "Review fact sheets with an expert model panel (family consensus; disputed items go to human review)",
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--panel <spec>", "reviewers per model: opus, sol, claude/<model> or codex/<model> with a count", DEFAULT_PANEL)
+  .option("--effort <effort>", "reasoning effort for every reviewer and synthesis call", "xhigh")
+  .option("--rounds <n>", "review round plus vote rounds", Number, 2)
+  .option("--canaries <n>", "calibration mode: plant known defects in n cases' sheets and score the panel", Number)
+  .option("--out <dir>", "run folder (default results/fact-review-expert/<timestamp>)")
+  .option("--packets <dir>", "prebuilt fact packets; missing ones are built into the run folder", "results/fact-packets")
+  .option("--resume", "reuse finished reviewer calls from the run folder")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option("--aggregate-only", "print counts only: no case names, no fact text (sealed cases)")
+  .option("--apply", "write revised facts.json and expert-panel provenance into the case directories")
+  .action(
+    async (opts: {
+      cases: string;
+      case: string[];
+      panel: string;
+      effort: string;
+      rounds: number;
+      canaries?: number;
+      out?: string;
+      packets: string;
+      resume?: boolean;
+      parallel: number;
+      aggregateOnly?: boolean;
+      apply?: boolean;
+    }) => {
+      if (opts.resume && !opts.out) {
+        console.error("--resume needs --out <run folder>");
+        process.exitCode = 2;
+        return;
+      }
+      const out = resolve(
+        opts.out ??
+          join("results", "fact-review-expert", new Date().toISOString().replace(/[:.]/g, "-")),
+      );
+      try {
+        const summary = await factReview({
+          cases: opts.cases,
+          caseIds: opts.case,
+          panel: opts.panel,
+          effort: opts.effort,
+          rounds: opts.rounds,
+          canaries: opts.canaries,
+          out,
+          packets: opts.packets,
+          resume: opts.resume,
+          parallel: opts.parallel,
+          aggregateOnly: opts.aggregateOnly,
+          apply: opts.apply,
+        });
+        for (const line of summaryLines(summary)) console.log(line);
+        if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
+        if (summary.canary && !summary.canary.pass) process.exitCode = 1;
+      } catch (error) {
+        if (opts.aggregateOnly) {
+          // Errors can quote case names or facts: keep them in the run folder.
+          mkdirSync(out, { recursive: true });
+          writeFileSync(join(out, "error.log"), `${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
+          console.error(`fact-review failed; details in ${join(out, "error.log")}`);
+        } else console.error(error instanceof Error ? error.message : String(error));
+        process.exitCode = 2;
+      }
+    },
+  );
 
 program
   .command("validate")

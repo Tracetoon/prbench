@@ -5,7 +5,7 @@
     {
       "id": "bazzite-stale-portal",
       "title": "Stale portal after gaming mode exit",
-      "split": "test",
+      "split": "dev",
       "repo": "~/Development/Bazzite-Desktop-Login",
       "license": "Apache-2.0",
       "base": "834f7d7dade79a83255e08ed51c9613ebe838155",
@@ -72,7 +72,7 @@
     {
       "id": "vexaim-workshop-norobot",
       "title": "AGENTS.md: the no-robot case and cold-run gaps",
-      "split": "test",
+      "split": "dev",
       "repo": "~/Development/vex-aim-agent-workshop",
       "license": "Apache-2.0",
       "base": "052ee860c7babe17ee21e221ca0a3748f9812f17",
@@ -157,7 +157,7 @@
     {
       "id": "showtail-windows-cmd",
       "title": "Launch extension CLIs through cmd on Windows",
-      "split": "test",
+      "split": "dev",
       "repo": "$STAGING/repos/Showtail.git",
       "license": "Apache-2.0",
       "base": "843dd6a79182f5c9bf06783505f52753e66a7a14",
@@ -194,7 +194,7 @@
     {
       "id": "aifirstcli-tui-responsive",
       "title": "TUI responsiveness and instant prompt finish",
-      "split": "test",
+      "split": "dev",
       "repo": "$STAGING/repos/aifirstcli.git",
       "license": "Apache-2.0",
       "base": "369a2244eed2db7bb8fcf95fdd4c97f1efc4b457",
@@ -363,7 +363,7 @@
     {
       "id": "tracetoon-neighborhood",
       "title": "Neighborhood brief layout",
-      "split": "test",
+      "split": "dev",
       "repo": "~/Development/tracetoon",
       "license": "Apache-2.0",
       "base": "c194a028fe2283708d69d1d3a5c532332d3bd707",
@@ -437,7 +437,7 @@
     {
       "id": "prbench-crossjudge",
       "title": "Cross-judge command",
-      "split": "test",
+      "split": "dev",
       "repo": "~/Development/prbench",
       "license": "Apache-2.0",
       "base": "1422e36538442f35de9b53c4c9634a5643341fc3",
@@ -459,6 +459,344 @@
           "subagentOf": 0
         }
       ]
+    },
+    {
+      "id": "showtail-claude-exit-codes",
+      "title": "fix: recover shell exit codes from Claude results",
+      "split": "test",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "f070d3db69679c4a869f9168e288d13cda3374e9",
+      "head": "02908ede1e786a0a2bead8ff253c14af1efaea4a",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-29T22-14-22-01a05117-1774-7c90-8fb8-e35fe727be86.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 8
+      },
+      "from": "2026-08-30T15:50:57Z"
+    },
+    {
+      "id": "showtail-docker-tests",
+      "title": "Add local Docker test environment",
+      "split": "test",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "9ab8655282712a4029ab9aaae50e1b051db038fe",
+      "head": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T04-45-59-01a057a3-faae-7db2-8efe-7a6800fd5eb6.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 10
+      },
+      "from": "2026-08-31T02:42:37Z"
+    },
+    {
+      "id": "winapps-adobe-2026",
+      "title": "Add Illustrator 2026 and Photoshop 2026 application templates",
+      "split": "test",
+      "repo": "~/Development/winapps",
+      "license": "AGPL-3.0 (see COPYRIGHT.md)",
+      "base": "d5ea5d5a0b8ef28decb1f21e10b8290757e00693",
+      "head": "9c1b99f63a648d560f45aaf9749479f5087aa334",
+      "recordedPath": "$HOME/Development/winapps",
+      "recordedAliases": [
+        "/var$HOME/Development/winapps"
+      ],
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "~/.codex/sessions/2026/04/28/rollout-2026-04-28T18-47-54-019dd6eb-d90b-7ff2-aba5-285d6712054f.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "winapps-org/winapps",
+        "number": 921
+      }
+    },
+    {
+      "id": "showtail-signpath",
+      "title": "chore: prepare SignPath Foundation code signing",
+      "split": "test",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "8a2de5e17369dd2faa44497a7d6c2a13380817a8",
+      "head": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T16-08-42-01a05a15-0722-7232-9713-7702e4d20443.jsonl"
+        },
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T17-54-48-01a05a76-2967-7272-a214-c2dc7e6a6133.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 14
+      }
+    },
+    {
+      "id": "vexagent-repl-usb-iface",
+      "title": "Find AIM REPL on USB iface 4; round trips; experimental upload",
+      "split": "test",
+      "repo": "~/Development/vex-aim-agent",
+      "base": "c6be3bd9f5393359e1f94bd1ced1f68fef7afc99",
+      "head": "93e68cdad402ab511d4f800133e0e66fe860dc9d",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent",
+      "recordedAliases": [
+        "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill",
+        "$HOME/Development/vex-aim-agent"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        }
+      ],
+      "from": "2026-10-18T22:02:20Z"
+    },
+    {
+      "id": "vexagent-cli-snap",
+      "title": "vexaim: snap command, truncation hint, release binary, API reference",
+      "split": "test",
+      "repo": "~/Development/vex-aim-agent",
+      "base": "aac7918589b22c0ceae11f30470bda0712832f3d",
+      "head": "70dc1ab97722e4b9fb8311dce6659748b3a3a8c5",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent",
+      "recordedAliases": [
+        "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill",
+        "$HOME/Development/vex-aim-agent"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        }
+      ],
+      "from": "2026-10-18T22:31:18Z"
+    },
+    {
+      "id": "vexagent-skill",
+      "title": "Add vex-aim Goose/Claude skill; README; skill clarifications",
+      "split": "test",
+      "repo": "~/Development/vex-aim-agent",
+      "base": "70dc1ab97722e4b9fb8311dce6659748b3a3a8c5",
+      "head": "9de1891b6e558b1c76b7c0313653d3cbf7ee6e2f",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill",
+      "recordedAliases": [
+        "/var$HOME/Development/vex-aim-agent",
+        "$HOME/Development/vex-aim-agent"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        },
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c/subagents/agent-a5928dad01a35429f.jsonl",
+          "subagentOf": 0
+        }
+      ],
+      "from": "2026-10-18T22:36:46Z"
+    },
+    {
+      "id": "vexagent-replug-runs",
+      "title": "Replug runs 1-4, udev recovery gate, skill replug docs",
+      "split": "test",
+      "repo": "~/Development/vex-aim-agent",
+      "base": "9de1891b6e558b1c76b7c0313653d3cbf7ee6e2f",
+      "head": "aee98009d0995ede95db7f93458e206375c5c6fa",
+      "recordedPath": "/var$HOME/Development/vex-aim-agent/.claude/worktrees/goose-skill",
+      "recordedAliases": [
+        "/var$HOME/Development/vex-aim-agent",
+        "$HOME/Development/vex-aim-agent"
+      ],
+      "sessions": [
+        {
+          "agent": "claude-code",
+          "path": "~/.claude/projects/-var$HOME_SLUG-Development-vex-aim-agent--claude-worktrees-goose-skill/ed296c46-a7fc-4b93-8b42-72568658c31c.jsonl"
+        }
+      ],
+      "from": "2026-10-18T22:40:01Z"
+    },
+    {
+      "id": "aifirstcli-javafx-maven",
+      "title": "fix: launch JavaFX projects with Maven",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "06e4fc73551b0300110eba255c79083889b047a3",
+      "head": "cd1a47c1714662a4d7b02259d17f8f1db95a1641",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-01T20-42-17-01a06035-daf9-7192-9de8-8030c147af36.jsonl"
+        }
+      ],
+      "from": "2026-09-02T13:27:29Z"
+    },
+    {
+      "id": "aifirstcli-windows-cmd-shim",
+      "title": "fix(learn): repair Windows cmd shim launch (branch fix/windows-cmd-shim-clean)",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "base": "930d9c91e8f8d1b15ef94b655b586c71e276d5a1",
+      "head": "0c19b1d311c777599c47d3c96638e4b638f1ce6c",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-25T19-57-37-01a03c00-7135-7aa2-b273-769a7b3b332f.jsonl"
+        },
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-29T11-13-40-01a04eba-305c-7311-b833-da86e0e6e883.jsonl"
+        }
+      ],
+      "from": "2026-08-29T13:57:00Z"
+    },
+    {
+      "id": "aifirstcli-book-walk",
+      "title": "test: walk every authored book step",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "f4582a03253213cf598948630a042f0b7cdf69e4",
+      "head": "18a56a6023c265e2154b71516ba0462aaa16e06d",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-10T21-36-58-01a08ec1-2871-73d1-95c6-462d68389bea.jsonl"
+        }
+      ],
+      "from": "2026-09-12T01:24:54Z",
+      "notes": "The base commit is an automated version bump; the window starts at the last authored commit before it."
+    },
+    {
+      "id": "aifirstcontent-replay-start-state",
+      "title": "fix: record replay starting state",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcontent.git",
+      "base": "7d91771d65641dd20d749b93c43e1501b8f06ae6",
+      "head": "9f82cb3d88ed7c4c26950c5ba9bdd5ff6f1387bd",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcontent",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-30T13-33-51-01a05460-e427-7c52-ad5f-89822211a928.jsonl"
+        },
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-30T15-35-10-01a054cf-f570-72b2-8c5c-2edd5fba811d.jsonl"
+        }
+      ],
+      "from": "2026-08-30T22:27:40Z"
+    },
+    {
+      "id": "aifirstwebsite-guided-install",
+      "title": "docs: update guided install experience",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstwebsite.git",
+      "license": "Apache-2.0",
+      "base": "1f2b6be34d951ab9db4c5ac014338c93c477b872",
+      "head": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstwebsite",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-31T16-16-56-01a05a1c-8fc2-7c33-94ec-27aca435b281.jsonl"
+        }
+      ],
+      "from": "2026-09-01T00:10:40Z"
+    },
+    {
+      "id": "showtail-transcript-migrator",
+      "title": "Add append-only legacy transcript migration",
+      "split": "test",
+      "repo": "$STAGING/repos/Showtail.git",
+      "license": "Apache-2.0",
+      "base": "f070d3db69679c4a869f9168e288d13cda3374e9",
+      "head": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+      "recordedPath": "$HOME/src/github.com/Showtail",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-08-30T13-42-02-01a05468-630a-7623-b40a-9d29f5c78aa3.jsonl"
+        }
+      ],
+      "pr": {
+        "repo": "Tingsters/Showtail",
+        "number": 9
+      }
+    },
+    {
+      "id": "aifirstcli-duckling-wheels",
+      "title": "fix: install Duckling dependencies from Python wheels",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "dd0960e8fb7a8d018f6df7048c130e87b23ab02c",
+      "head": "9f9f657a69e316b14ca684238fa528ef6ebc4794",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-01T20-42-17-01a06035-daf9-7192-9de8-8030c147af36.jsonl"
+        }
+      ],
+      "from": "2026-09-02T05:28:09Z"
+    },
+    {
+      "id": "aifirstcli-learner-replay-ux",
+      "title": "feat: improve learner replay experience",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcli.git",
+      "license": "Apache-2.0",
+      "base": "b4602db256909ec1ffe2e2012f2f8956285b7107",
+      "head": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-02T22-14-55-01a065b1-0634-7442-b14c-1eea1fc081a4.jsonl"
+        }
+      ],
+      "from": "2026-09-02T14:12:23Z",
+      "notes": "The base commit is an automated version bump; the window starts at the last authored commit before it."
+    },
+    {
+      "id": "aifirstcontent-book-step-verify",
+      "title": "test: verify every book step in sequence",
+      "split": "test",
+      "repo": "$STAGING/repos/aifirstcontent.git",
+      "license": "Apache-2.0",
+      "base": "3556da9ed14d0cfea4ad4b4037d88ad98915dc18",
+      "head": "834fab16fd633c06d0745cfb6804b21d2261db6d",
+      "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcontent",
+      "sessions": [
+        {
+          "agent": "codex",
+          "path": "$STAGING/sessions/codex-dev/rollout-2026-09-10T21-36-58-01a08ec1-2871-73d1-95c6-462d68389bea.jsonl"
+        }
+      ],
+      "from": "2026-09-12T01:14:23Z"
     }
   ]
 }

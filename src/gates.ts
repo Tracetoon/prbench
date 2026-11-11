@@ -137,68 +137,113 @@ export interface ComparisonReport {
   comparison: string;
   report: Report;
 }
+/** The two arms whose drafts are checked for accuracy flags. */
+export const ACCURACY_ARMS = ["tracetoon-candidate", "tracetoon-baseline"] as const;
+export type AccuracyArm = (typeof ACCURACY_ARMS)[number];
 export interface AccuracyFinding {
   id: string;
+  /** Missing in findings written before baseline flags were collected: those are candidate flags. */
+  arm?: AccuracyArm;
   model: string;
   replicate: number;
   case: string;
   artifactDigest: string;
   claim: string;
   statuses: string[];
-  observations: { judge: string; evidenceRefs: string[]; reason: string }[];
+  observations: {
+    judge: string;
+    /** The other system in the pair that raised the flag. */
+    opponent?: string;
+    evidenceRefs: string[];
+    reason: string;
+  }[];
+}
+export function findingArm(finding: { arm?: string }): AccuracyArm {
+  return finding.arm === "tracetoon-baseline"
+    ? "tracetoon-baseline"
+    : "tracetoon-candidate";
+}
+const draftKey = (model: string, replicate: number, kase: string) =>
+  `${model}/${kase}/r${replicate}`;
+/** Drafts scored in a candidate-vs-baseline pair: the shared denominator of both accuracy rates. */
+export function accuracyScoredDrafts(
+  pairs: { model: string; replicate: number; pair: PairResult }[],
+): string[] {
+  const keys = new Set<string>();
+  for (const { model, replicate, pair } of pairs)
+    if (ACCURACY_ARMS.every((arm) => pair.sides[arm]?.length))
+      keys.add(draftKey(model, replicate, pair.case));
+  return [...keys].sort();
 }
 export function accuracyFindings(
   pairs: { model: string; replicate: number; pair: PairResult }[],
   artifacts: Map<string, PRArtifact>,
 ): AccuracyFinding[] {
   const all = new Map<string, AccuracyFinding>();
-  for (const { model, replicate, pair } of pairs) {
-    const artifact = artifacts.get(
-      `${replicate}/${model}/${pair.case}/tracetoon-candidate`,
-    );
-    if (!artifact)
-      throw new Error("Accuracy gate is missing its candidate artifact.");
-    const sha = artifactDigest(artifact);
-    for (const side of pair.sides["tracetoon-candidate"] ?? [])
-      for (const assessment of side.claimAssessments) {
-        if (!["contradicted", "unsupported"].includes(assessment.status))
-          continue;
-        const id = stageKey("accuracy-finding", {
-          model,
-          replicate,
-          case: pair.case,
-          artifact: sha,
-          claim: assessment.claim,
-        });
-        const finding = all.get(id) ?? {
-          id,
-          model,
-          replicate,
-          case: pair.case,
-          artifactDigest: sha,
-          claim: assessment.claim,
-          statuses: [],
-          observations: [],
-        };
-        if (!finding.statuses.includes(assessment.status))
-          finding.statuses.push(assessment.status);
-        finding.observations.push({
-          judge: pair.judge,
-          evidenceRefs: assessment.evidenceRefs,
-          reason: assessment.reason,
-        });
-        all.set(id, finding);
-      }
-  }
+  for (const { model, replicate, pair } of pairs)
+    for (const arm of ACCURACY_ARMS) {
+      const sides = pair.sides[arm];
+      if (!sides?.length) continue;
+      const artifact = artifacts.get(`${replicate}/${model}/${pair.case}/${arm}`);
+      if (!artifact)
+        throw new Error(`Accuracy gate is missing its ${arm} artifact.`);
+      const sha = artifactDigest(artifact);
+      const opponent = [pair.x, pair.y].find((s) => s !== arm);
+      for (const side of sides)
+        for (const assessment of side.claimAssessments) {
+          if (!["contradicted", "unsupported"].includes(assessment.status))
+            continue;
+          // Candidate ids keep their original key so existing adjudications still match.
+          const id = stageKey("accuracy-finding", {
+            model,
+            replicate,
+            case: pair.case,
+            artifact: sha,
+            claim: assessment.claim,
+            ...(arm === "tracetoon-candidate" ? {} : { arm }),
+          });
+          const finding = all.get(id) ?? {
+            id,
+            arm,
+            model,
+            replicate,
+            case: pair.case,
+            artifactDigest: sha,
+            claim: assessment.claim,
+            statuses: [],
+            observations: [],
+          };
+          if (!finding.statuses.includes(assessment.status))
+            finding.statuses.push(assessment.status);
+          finding.observations.push({
+            judge: pair.judge,
+            ...(opponent ? { opponent } : {}),
+            evidenceRefs: assessment.evidenceRefs,
+            reason: assessment.reason,
+          });
+          all.set(id, finding);
+        }
+    }
   return [...all.values()];
 }
 export interface Adjudication {
   finding: string;
+  /** Optional; when present it must match the finding's arm. Old entries omit it. */
+  arm?: AccuracyArm;
   outcome: "confirmed" | "false-positive" | "unresolved";
   reviewedBy: string;
   reviewedAt: string;
   rationale: string;
   sources: AdjudicationSource[];
+}
+export interface AccuracyComparison {
+  /** Drafts scored in candidate-vs-baseline pairs; each arm's rate divides by this. */
+  scoredDrafts: number;
+  candidate: { flags: number; confirmed: number; rate: number | null };
+  baseline: { flags: number; confirmed: number; rate: number | null };
+  /** Confirmed flags on drafts outside the shared pairs: adjudicated but not counted. */
+  uncountedConfirmed: number;
+  unresolved: number;
 }
 export function qualityGate(
   reports: ComparisonReport[],
@@ -208,17 +253,49 @@ export function qualityGate(
   adjudications: Adjudication[] = [],
   /** The provider's no-Tracetoon writer (`codex-native`, `claude-native`); null when the run had none. */
   native: string | null = "codex-native",
+  /** Draft keys (`model/case/rN`) scored in candidate-vs-baseline pairs; see accuracyScoredDrafts. */
+  scoredDrafts: string[] = [],
 ) {
   const failures: string[] = [],
     unresolved: string[] = [];
+  const shared = new Set(scoredDrafts);
+  const accuracy: AccuracyComparison = {
+    scoredDrafts: shared.size,
+    candidate: { flags: 0, confirmed: 0, rate: null },
+    baseline: { flags: 0, confirmed: 0, rate: null },
+    uncountedConfirmed: 0,
+    unresolved: 0,
+  };
   for (const finding of findings) {
+    const arm = findingArm(finding);
+    const tally = arm === "tracetoon-candidate" ? accuracy.candidate : accuracy.baseline;
+    tally.flags++;
     const audit = adjudications.find((a) => a.finding === finding.id);
-    if (!audit || audit.outcome === "unresolved") unresolved.push(finding.id);
-    else if (audit.outcome === "confirmed")
-      failures.push(
-        `${finding.model}/${finding.case}/r${finding.replicate}: ${finding.claim}`,
-      );
+    if (!audit || audit.outcome === "unresolved") {
+      accuracy.unresolved++;
+      unresolved.push(`${finding.id} [${arm}]`);
+    } else if (audit.outcome === "confirmed") {
+      if (shared.has(draftKey(finding.model, finding.replicate, finding.case)))
+        tally.confirmed++;
+      else accuracy.uncountedConfirmed++;
+    }
   }
+  if (shared.size) {
+    accuracy.candidate.rate = accuracy.candidate.confirmed / shared.size;
+    accuracy.baseline.rate = accuracy.baseline.confirmed / shared.size;
+  } else if (findings.length)
+    unresolved.push("accuracy: no drafts scored in candidate-vs-baseline pairs");
+  const rate = (t: { confirmed: number; rate: number | null }) =>
+    `${t.rate!.toFixed(3)} (${t.confirmed}/${shared.size})`;
+  // Compare only once every flag on both arms is adjudicated.
+  if (
+    !accuracy.unresolved &&
+    shared.size &&
+    accuracy.candidate.rate! > accuracy.baseline.rate! + 1e-9
+  )
+    failures.push(
+      `Candidate confirmed accuracy errors per scored draft ${rate(accuracy.candidate)} exceed baseline ${rate(accuracy.baseline)}`,
+    );
   let improved = false,
     totalWins = 0,
     totalLosses = 0;
@@ -296,6 +373,7 @@ export function qualityGate(
     unresolvedAccuracy: unresolved,
     consensusWins: totalWins,
     consensusLosses: totalLosses,
-    note: "Raw judgments remain unchanged. Source adjudication is a separate audit; unresolved accuracy flags cannot pass.",
+    accuracy,
+    note: "Raw judgments remain unchanged. Source adjudication is a separate audit; every candidate and baseline flag must be adjudicated, and the candidate's confirmed errors per scored draft may not exceed the baseline's.",
   };
 }

@@ -79,6 +79,8 @@ import { buildReport, reportMarkdown } from "./report.ts";
 import {
   qualityGate,
   accuracyFindings,
+  accuracyScoredDrafts,
+  findingArm,
   adoptionGate,
   type Adjudication,
   type ComparisonReport,
@@ -545,6 +547,7 @@ export function rebuildComparison(
       if (
         !finding ||
         seen.has(entry.finding) ||
+        (entry.arm !== undefined && entry.arm !== findingArm(finding)) ||
         !["confirmed", "false-positive", "unresolved"].includes(
           entry.outcome,
         ) ||
@@ -563,7 +566,7 @@ export function rebuildComparison(
           source,
           preflightCache,
           allArtifacts.get(
-            `${finding.replicate}/${finding.model}/${finding.case}/tracetoon-candidate`,
+            `${finding.replicate}/${finding.model}/${finding.case}/${findingArm(finding)}`,
           ),
         );
     }
@@ -575,6 +578,7 @@ export function rebuildComparison(
     findings,
     adjudications,
     SYSTEMS.includes(provider.native) ? provider.native : null,
+    accuracyScoredDrafts(allPairs),
   );
   const performance = performanceReport(
     metrics,
@@ -660,6 +664,7 @@ export function rebuildComparison(
     "",
     "## Gate findings",
     "",
+    `- Accuracy (confirmed errors per scored draft, ${quality.accuracy.scoredDrafts} drafts): candidate ${quality.accuracy.candidate.rate?.toFixed(3) ?? "unknown"} (${quality.accuracy.candidate.confirmed} of ${quality.accuracy.candidate.flags} flags confirmed), baseline ${quality.accuracy.baseline.rate?.toFixed(3) ?? "unknown"} (${quality.accuracy.baseline.confirmed} of ${quality.accuracy.baseline.flags} flags confirmed); unresolved ${quality.accuracy.unresolved}.`,
     ...quality.failures.map((f) => `- ${f}`),
     ...performance.failures.map((f) => `- ${f}`),
     ...quality.unresolvedAccuracy.map((f) => `- Unresolved: ${f}`),

@@ -1,7 +1,7 @@
 // Turns a reviewed fact draft into facts.json and facts-provenance.json.
 //
 //   bun run scripts/provenance.ts --case cases-local/<id> --draft <facts.draft.json>
-//        --reviewed-by "<who>" [--review-kind automated|human] [--repo <bare git dir>]
+//        --reviewed-by "<who>" [--review-kind automated|human|expert-panel] [--repo <bare git dir>]
 //   bun run scripts/provenance.ts --case cases-local/<id> --rehash [--repo <bare git dir>]
 //
 // --rehash rebuilds the provenance from the case's own facts.json and
@@ -26,10 +26,11 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'no
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { FACTS_SCHEMA, type Facts } from '../src/schema/case.ts';
-import type { FactProvenance, FactSource } from '../src/run/preflight.ts';
+import type { ExpertReviewRecord, FactProvenance, FactSource } from '../src/run/preflight.ts';
 import { exec } from '../src/util/exec.ts';
 import { digest } from '../src/util/hash.ts';
 
+export type ReviewKind = 'automated' | 'human' | 'expert-panel';
 export type DraftSource = Omit<FactSource, 'sha256'>;
 export interface DraftFact { text: string; rationale: string; sources: DraftSource[] }
 export type Draft = Record<'claims' | 'context' | 'uncertainties' | 'traps', DraftFact[]>;
@@ -77,7 +78,7 @@ export function draftOf(facts: Facts, provenance: FactProvenance): Draft {
 export function buildProvenance(
   caseDir: string,
   draft: Draft,
-  opts: { bare: string; reviewedBy: string; reviewKind: 'automated' | 'human'; reviewedAt?: string },
+  opts: { bare: string; reviewedBy: string; reviewKind: ReviewKind; reviewedAt?: string; expertReview?: ExpertReviewRecord },
 ): { facts: Facts; provenance: FactProvenance } {
   const contentOf = (s: DraftSource) => sourceContent(caseDir, opts.bare, s);
   const cache = new Map<string, string>();
@@ -119,6 +120,7 @@ export function buildProvenance(
       reviewedBy: opts.reviewedBy,
       reviewedAt: opts.reviewedAt ?? new Date().toISOString(),
       reviewKind: opts.reviewKind,
+      ...(opts.expertReview ? { expertReview: opts.expertReview } : {}),
       entries,
     },
   };
@@ -143,16 +145,16 @@ if (import.meta.main) {
   }
   try {
     let draft: Draft;
-    let review: { reviewedBy: string; reviewKind: 'automated' | 'human'; reviewedAt?: string };
+    let review: { reviewedBy: string; reviewKind: ReviewKind; reviewedAt?: string; expertReview?: ExpertReviewRecord };
     if (rehash) {
       const old = JSON.parse(readFileSync(join(caseDir, 'facts-provenance.json'), 'utf8')) as FactProvenance;
       draft = draftOf(JSON.parse(readFileSync(join(caseDir, 'facts.json'), 'utf8')), old);
-      review = { reviewedBy: old.reviewedBy, reviewKind: (old as any).reviewKind ?? 'automated', reviewedAt: old.reviewedAt };
+      review = { reviewedBy: old.reviewedBy, reviewKind: old.reviewKind ?? 'automated', reviewedAt: old.reviewedAt, ...(old.expertReview ? { expertReview: old.expertReview } : {}) };
     } else {
       draft = JSON.parse(readFileSync(resolve(arg('--draft')!), 'utf8')) as Draft;
       const reviewedBy = arg('--reviewed-by');
       if (!reviewedBy) throw new Error('--reviewed-by is required');
-      review = { reviewedBy, reviewKind: arg('--review-kind', 'automated') as 'automated' | 'human' };
+      review = { reviewedBy, reviewKind: arg('--review-kind', 'automated') as ReviewKind };
     }
     const { facts, provenance } = buildProvenance(caseDir, draft, { bare, ...review });
     writeFileSync(join(caseDir, 'facts.json'), JSON.stringify(facts, null, 2) + '\n');

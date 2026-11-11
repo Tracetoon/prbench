@@ -16,7 +16,7 @@
 // Packets live outside the case directories (results/ is git-ignored) so
 // nothing in them can reach a writer.
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { hasUserInput } from '../src/import/session.ts';
 import { exec } from '../src/util/exec.ts';
 
@@ -99,6 +99,65 @@ export function sessionIndex(jsonl: string): string[] {
   return out;
 }
 
+/**
+ * Writes the fact packet for one case directory into `out`, replacing what was
+ * there except an author's facts.draft.json. Returns the number of commits and
+ * session indexes written.
+ */
+export function buildFactPacket(dir: string, out: string): { commits: number; sessions: number } {
+  const id = dir.split(/[\\/]/).filter(Boolean).pop()!;
+  const c = JSON.parse(readFileSync(join(dir, 'case.json'), 'utf8'));
+  // Rebuilding keeps an author's draft.
+  const draftFile = join(out, 'facts.draft.json');
+  const draft = existsSync(draftFile) ? readFileSync(draftFile) : undefined;
+  rmSync(out, { recursive: true, force: true });
+  mkdirSync(join(out, 'commits'), { recursive: true });
+  if (draft) writeFileSync(draftFile, draft);
+  const bare = join(out, 'repo.git');
+  const run = (args: string[]) => {
+    const r = exec(['git', ...args]);
+    if (r.code) throw new Error(`${id}: git ${args.join(' ')}: ${r.stderr}`);
+    return r.stdout;
+  };
+  run(['init', '--quiet', '--bare', bare]);
+  run(['--git-dir', bare, 'fetch', '--quiet', '--no-tags', join(dir, c.repo.bundle), '+refs/*:refs/prbench-source/*']);
+  const g = (args: string[]) => run(['-c', 'core.fsmonitor=false', '--git-dir', bare, ...args]);
+  writeFileSync(join(out, 'diff.patch'), g(['diff', '--no-ext-diff', c.repo.base, c.repo.head]));
+  writeFileSync(join(out, 'diffstat.txt'), g(['diff', '--stat=160', c.repo.base, c.repo.head]));
+  const shas = g(['rev-list', '--reverse', `${c.repo.base}..${c.repo.head}`]).split('\n').filter(Boolean);
+  for (const sha of shas) writeFileSync(join(out, 'commits', `${sha}.txt`), g(['show', '--no-patch', '--format=fuller', sha]));
+  const indexes: string[] = [];
+  for (const s of c.sessions) {
+    const lines = sessionIndex(readFileSync(join(dir, s.file), 'utf8'));
+    const name = `${s.file.replace(/\.jsonl$/, '')}.md`;
+    mkdirSync(dirname(join(out, name)), { recursive: true });
+    writeFileSync(join(out, name), `# ${s.file} (${s.agent}${s.subagentOf ? `, subagent of ${s.subagentOf}` : ''})\n\nEach entry starts with its line in cases-local/${id}/${s.file}.\n\n${lines.join('\n')}\n`);
+    indexes.push(`- ${name}: index of ${s.file} (${lines.length} entries)`);
+  }
+  writeFileSync(
+    join(out, 'README.md'),
+    [
+      `# Fact packet: ${id}`,
+      '',
+      `- Title (case label): ${c.title}`,
+      `- Repository bundle: cases-local/${id}/${c.repo.bundle}; bare clone here: repo.git`,
+      `- Base: ${c.repo.base}`,
+      `- Head: ${c.repo.head}`,
+      `- Commits (${shas.length}): ${shas.map((s) => s.slice(0, 10)).join(', ')}`,
+      `- Session window: ${c.provenance.notes ?? ''}`,
+      '',
+      '## Files',
+      '- diff.patch: the whole change (kind "diff"); diffstat.txt: its summary',
+      '- commits/<sha>.txt: commit metadata and messages (kind "commit")',
+      ...indexes,
+      `- Raw sessions (kind "session"): ${c.sessions.map((s: { file: string }) => `cases-local/${id}/${s.file}`).join(', ')}`,
+      '- Files at base or head (kind "git"): `git --git-dir repo.git show <base|head>:<path>`',
+      '',
+    ].join('\n'),
+  );
+  return { commits: shas.length, sessions: c.sessions.length };
+}
+
 if (import.meta.main) {
   const cases = resolve(arg('--cases', 'cases-local')!);
   const outRoot = resolve(arg('--out', 'results/fact-packets')!);
@@ -106,55 +165,7 @@ if (import.meta.main) {
   for (const id of readdirSync(cases).sort()) {
     const dir = join(cases, id);
     if (!existsSync(join(dir, 'case.json')) || (only && !only.includes(id))) continue;
-    const c = JSON.parse(readFileSync(join(dir, 'case.json'), 'utf8'));
-    const out = join(outRoot, id);
-    // Rebuilding keeps an author's draft.
-    const draftFile = join(out, 'facts.draft.json');
-    const draft = existsSync(draftFile) ? readFileSync(draftFile) : undefined;
-    rmSync(out, { recursive: true, force: true });
-    mkdirSync(join(out, 'commits'), { recursive: true });
-    if (draft) writeFileSync(draftFile, draft);
-    const bare = join(out, 'repo.git');
-    const run = (args: string[]) => {
-      const r = exec(['git', ...args]);
-      if (r.code) throw new Error(`${id}: git ${args.join(' ')}: ${r.stderr}`);
-      return r.stdout;
-    };
-    run(['init', '--quiet', '--bare', bare]);
-    run(['--git-dir', bare, 'fetch', '--quiet', '--no-tags', join(dir, c.repo.bundle), '+refs/*:refs/prbench-source/*']);
-    const g = (args: string[]) => run(['-c', 'core.fsmonitor=false', '--git-dir', bare, ...args]);
-    writeFileSync(join(out, 'diff.patch'), g(['diff', '--no-ext-diff', c.repo.base, c.repo.head]));
-    writeFileSync(join(out, 'diffstat.txt'), g(['diff', '--stat=160', c.repo.base, c.repo.head]));
-    const shas = g(['rev-list', '--reverse', `${c.repo.base}..${c.repo.head}`]).split('\n').filter(Boolean);
-    for (const sha of shas) writeFileSync(join(out, 'commits', `${sha}.txt`), g(['show', '--no-patch', '--format=fuller', sha]));
-    const indexes: string[] = [];
-    for (const s of c.sessions) {
-      const lines = sessionIndex(readFileSync(join(dir, s.file), 'utf8'));
-      const name = `${s.file.replace(/\.jsonl$/, '')}.md`;
-      writeFileSync(join(out, name), `# ${s.file} (${s.agent}${s.subagentOf ? `, subagent of ${s.subagentOf}` : ''})\n\nEach entry starts with its line in cases-local/${id}/${s.file}.\n\n${lines.join('\n')}\n`);
-      indexes.push(`- ${name}: index of ${s.file} (${lines.length} entries)`);
-    }
-    writeFileSync(
-      join(out, 'README.md'),
-      [
-        `# Fact packet: ${id}`,
-        '',
-        `- Title (case label): ${c.title}`,
-        `- Repository bundle: cases-local/${id}/${c.repo.bundle}; bare clone here: repo.git`,
-        `- Base: ${c.repo.base}`,
-        `- Head: ${c.repo.head}`,
-        `- Commits (${shas.length}): ${shas.map((s) => s.slice(0, 10)).join(', ')}`,
-        `- Session window: ${c.provenance.notes ?? ''}`,
-        '',
-        '## Files',
-        '- diff.patch: the whole change (kind "diff"); diffstat.txt: its summary',
-        '- commits/<sha>.txt: commit metadata and messages (kind "commit")',
-        ...indexes,
-        `- Raw sessions (kind "session"): ${c.sessions.map((s: { file: string }) => `cases-local/${id}/${s.file}`).join(', ')}`,
-        '- Files at base or head (kind "git"): `git --git-dir repo.git show <base|head>:<path>`',
-        '',
-      ].join('\n'),
-    );
-    console.log(`ok    ${id}: ${shas.length} commit(s), ${c.sessions.length} session index(es)`);
+    const { commits, sessions } = buildFactPacket(dir, join(outRoot, id));
+    console.log(`ok    ${id}: ${commits} commit(s), ${sessions} session index(es)`);
   }
 }

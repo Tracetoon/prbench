@@ -21,8 +21,22 @@ export interface JudgeProvider {
   id: string;
   family: string;
   /** `schema` narrows the reply shape for this prompt (default: JUDGMENT_SCHEMA). */
-  ask(prompt: string, schema?: object): Promise<JudgeReply>;
+  ask(prompt: string, schema?: object, opts?: AskOptions): Promise<JudgeReply>;
 }
+
+export interface AskOptions {
+  /**
+   * Read-only agentic mode: the session starts in this directory and may read
+   * and search it, but cannot write, run commands that change anything, or
+   * reach the network. Needs an effort (the isolated judge contract).
+   */
+  workDir?: string;
+}
+
+/** Built-in Claude Code tools a read-only agentic judge may use. */
+export const CLAUDE_READ_ONLY_TOOLS = ['Read', 'Grep', 'Glob'];
+/** Tools a read-only agentic Claude judge must never use, denied explicitly as well as left out of `--tools`. */
+const CLAUDE_WRITE_TOOLS = ['Bash', 'Edit', 'Write', 'NotebookEdit', 'WebFetch', 'WebSearch', 'Task', 'Agent'];
 
 function withTempDir<T>(fn: (dir: string) => Promise<T>): Promise<T> {
   const dir = mkdtempSync(join(tmpdir(), 'prbench-judge-'));
@@ -30,10 +44,10 @@ function withTempDir<T>(fn: (dir: string) => Promise<T>): Promise<T> {
 }
 
 /** Flags that keep a Claude judge from reading settings, hooks, MCP servers, plugins or tools, and from saving a session. */
-export function claudeJudgeFlags(): string[] {
+export function claudeJudgeFlags(tools: string[] = []): string[] {
   return [
     '--tools',
-    '',
+    tools.join(','),
     '--setting-sources',
     '',
     '--strict-mcp-config',
@@ -70,14 +84,15 @@ export function claudeJudge(model = 'opus', timeoutMs = judgeTimeoutMs(), effort
   return {
     id: `claude:${model}${effort ? `@${effort}` : ''}`,
     family: 'anthropic',
-    ask: (prompt, schema) =>
+    ask: (prompt, schema, opts) =>
       withTempDir(async (dir) => {
+        if (opts?.workDir && !effort) throw new Error('read-only agentic judging needs an effort (claude:model@effort)');
         const cmd = [...claudeCommand(), '-p'];
         let env: Record<string, string | undefined> | undefined;
         let cwd = dir;
         if (effort) {
           const home = join(dir, 'home');
-          cwd = join(dir, 'work');
+          cwd = opts?.workDir ?? join(dir, 'work');
           for (const d of [home, cwd, join(home, '.config'), join(home, '.local', 'share'), join(home, '.local', 'state'), join(home, '.cache')])
             mkdirSync(d, { recursive: true });
           const base: Record<string, string | undefined> = {};
@@ -100,7 +115,11 @@ export function claudeJudge(model = 'opus', timeoutMs = judgeTimeoutMs(), effort
             },
             claudeAuthEnv(),
           );
-          cmd.push('--model', model, '--effort', effort, ...claudeJudgeFlags());
+          if (opts?.workDir)
+            // Read-only agentic mode: only file reading and search tools exist, are pre-approved, and
+            // everything else is denied; the headless default permission mode refuses anything unapproved.
+            cmd.push('--model', model, '--effort', effort, ...claudeJudgeFlags(CLAUDE_READ_ONLY_TOOLS), '--allowedTools', CLAUDE_READ_ONLY_TOOLS.join(','), '--disallowedTools', CLAUDE_WRITE_TOOLS.join(','), '--permission-mode', 'default');
+          else cmd.push('--model', model, '--effort', effort, ...claudeJudgeFlags());
         } else cmd.push('--tools', '', '--model', model, '--no-session-persistence', '--settings', '{"disableAllHooks":true}');
         cmd.push('--output-format', 'json', '--json-schema', JSON.stringify(schema ?? JUDGMENT_SCHEMA));
         const r = await runAgentProcess(cmd, { prompt, cwd, timeoutMs, env, terminalEvent: effort ? claudeTerminalEvent : undefined });
@@ -118,17 +137,23 @@ export function codexJudge(model?: string, timeoutMs = judgeTimeoutMs(), effort?
   return {
     id: `codex:${model ?? 'default'}${effort ? `@${effort}` : ''}`,
     family: 'openai',
-    ask: (prompt, schema) =>
+    ask: (prompt, schema, opts) =>
       withTempDir(async (dir) => {
+        if (opts?.workDir && !effort) throw new Error('read-only agentic judging needs an effort (codex:model@effort)');
         const schemaFile = join(dir, 'schema.json');
         const out = join(dir, 'out.json');
         writeFileSync(schemaFile, JSON.stringify(schema ?? JUDGMENT_SCHEMA));
         const cmd = [...codexCommand(), 'exec', '--ephemeral', '--skip-git-repo-check', '-s', 'read-only', '--output-schema', schemaFile, '-o', out];
         if (model) cmd.push('-m', model);
-        if (effort) cmd.push('--json', '--ignore-user-config', '--disable', 'hooks', '--disable', 'memories', '--disable', 'multi_agent', '--disable', 'apps', '-c', 'apps._default.enabled=false', '--disable', 'browser_use', '--disable', 'computer_use', '--disable', 'shell_tool', '--disable', 'view_image', '--disable', 'plugins', '--disable', 'image_generation', '-c', `model_reasoning_effort="${effort}"`, '-c', 'cli_auth_credentials_store="file"', '-c', 'web_search="disabled"');
+        if (effort) {
+          // Read-only agentic mode keeps the shell tool so the session can read and grep its work
+          // directory; the read-only sandbox stops writes and network access, and approvals never prompt.
+          const shell = opts?.workDir ? ['-C', opts.workDir, '-c', 'approval_policy="never"'] : ['--disable', 'shell_tool'];
+          cmd.push('--json', '--ignore-user-config', '--disable', 'hooks', '--disable', 'memories', '--disable', 'multi_agent', '--disable', 'apps', '-c', 'apps._default.enabled=false', '--disable', 'browser_use', '--disable', 'computer_use', ...shell, '--disable', 'view_image', '--disable', 'plugins', '--disable', 'image_generation', '-c', `model_reasoning_effort="${effort}"`, '-c', 'cli_auth_credentials_store="file"', '-c', 'web_search="disabled"');
+        }
         cmd.push('-');
         const ask = async (env?: Record<string, string | undefined>) => {
-          const r = await runAgentProcess(cmd, { prompt, cwd: dir, timeoutMs, env, terminalEvent: effort ? codexTerminalEvent : undefined });
+          const r = await runAgentProcess(cmd, { prompt, cwd: opts?.workDir ?? dir, timeoutMs, env, terminalEvent: effort ? codexTerminalEvent : undefined });
           if (r.timedOut) throw new Error(`codex judge timed out after ${timeoutMs} ms`);
           if (r.exitCode !== 0) throw new Error(`codex judge failed (${r.exitCode}): ${(r.stderr || r.stdout).slice(-800)}`);
           const parsed = effort ? parseCodexResult(r.stdout) : undefined;

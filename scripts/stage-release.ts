@@ -4,13 +4,18 @@
 //   bun run scripts/stage-release.ts --version 2.0.0 --out results/release-2.0.0/cases
 //        --from ~/.cache/prbench/datasets/real-cases/1.0.0 --from cases-local
 //        --record cases-local/publication-2.0.0.json --reviewed-by "<who>"
-//        [--consent-confirmed] [--note "<consent and review notes>"]
+//        [--consent-confirmed] [--note "<consent and review notes>"] [--splits <file>]
 //
 // Each --from is a case library with its own preparation.json; later sources
 // win on a case id clash (refused unless --replace). The tree gets every case
 // directory, a merged preparation.json with its fixture bundles, LICENSE (from
 // the first source that has one), DATASET_CARD.md from datasets/, and a
 // generated MANIFEST.md and NOTICE.md.
+//
+// --splits <file> reassigns splits in the staged copies, from a release entry's
+// cases.dev and cases.test (a registry entry, or a draft such as
+// datasets/real-cases-3.0.0.draft.json under "release"); every staged case
+// must be listed, and every listed case staged. Sources are never edited.
 //
 // The record lists every case and the SHA-256 of each input the packager
 // reads. publicRedistribution stays false until --consent-confirmed: set it
@@ -64,6 +69,26 @@ if (!license) throw new Error('no source has a LICENSE');
 cpSync(license, join(out, 'LICENSE'));
 cpSync(resolve(import.meta.dir, '..', 'datasets', 'DATASET_CARD.md'), join(out, 'DATASET_CARD.md'));
 writeFileSync(join(out, 'preparation.json'), JSON.stringify(preparation, null, 2) + '\n');
+
+const splitsFile = one('--splits');
+if (splitsFile) {
+  const doc = JSON.parse(readFileSync(expand(splitsFile), 'utf8'));
+  const { dev = [], test = [] } = (doc.release ?? doc).cases as { dev?: string[]; test?: string[] };
+  const want = new Map<string, 'dev' | 'test'>([...dev.map((c) => [c, 'dev'] as const), ...test.map((c) => [c, 'test'] as const)]);
+  if (want.size !== dev.length + test.length) throw new Error(`${splitsFile} lists a case twice`);
+  const staged = [...origin.keys()];
+  const missing = [...want.keys()].filter((c) => !origin.has(c));
+  const unlisted = staged.filter((c) => !want.has(c));
+  if (missing.length || unlisted.length)
+    throw new Error(`${splitsFile} does not match the staged cases (not staged: ${missing.join(', ') || 'none'}; not listed: ${unlisted.join(', ') || 'none'})`);
+  for (const c of staged) {
+    const path = join(out, c, 'case.json');
+    const kase = JSON.parse(readFileSync(path, 'utf8'));
+    if (kase.split === want.get(c)) continue;
+    kase.split = want.get(c);
+    writeFileSync(path, JSON.stringify(kase, null, 2) + '\n');
+  }
+}
 
 // MANIFEST.md and NOTICE.md describe exactly what was staged.
 const loaded = caseDirs(out).map(loadCase).filter((l) => !l.case.excluded);

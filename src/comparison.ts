@@ -4,6 +4,7 @@ import {
   collectDraftScores,
   collectJudgeFailures,
   collectWriterFailures,
+  draftCost,
   scoreMarkdown,
   writerTracesDir,
 } from "./report/score.ts";
@@ -417,6 +418,12 @@ export function rebuildComparison(
               system,
               replicate,
               cleanup: status.cleanup?.state ?? "unknown",
+              pricedCost: draftCost(
+                root,
+                file,
+                artifact.meta as Record<string, any>,
+                model,
+              ),
               validationCommands: validation?.commands.length ?? 0,
               commandsWithKnownDirectory:
                 validation?.commands.filter((c) => !c.cwd.startsWith("unknown"))
@@ -671,7 +678,15 @@ export function rebuildComparison(
     "",
     "## Paired performance",
     "",
-    `Candidate/baseline geometric mean writer ratio: ${performance.geometricMeanWriterRatio?.toFixed(3) ?? "unknown"}; case-clustered 95% interval: ${JSON.stringify(performance.writerRatio95CI)}.`,
+    `Rule: ${performance.rule}`,
+    "",
+    `Candidate/baseline geometric mean priced cost ratio (criterion): ${performance.geometricMeanCostRatio?.toFixed(3) ?? "unknown"} over ${performance.pricedPairs}/${performance.pairs} pairs; case-clustered 95% interval: ${JSON.stringify(performance.costRatio95CI)}.`,
+    ...performance.unpricedDrafts.map(
+      (d) =>
+        `- Unpriced: ${d.model}, ${d.case}, replicate ${d.replicate}, ${d.system}: ${d.reason}`,
+    ),
+    "",
+    `Candidate/baseline geometric mean writer ratio (information): ${performance.geometricMeanWriterRatio?.toFixed(3) ?? "unknown"}; case-clustered 95% interval: ${JSON.stringify(performance.writerRatio95CI)}.`,
     "",
     ...summary.limitations.map((x) => `- ${x}`),
     "",

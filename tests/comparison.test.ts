@@ -345,6 +345,12 @@ test("a run without native completes, scores, and records its systems for resume
     expect(md).toContain("| gpt-6.1-sol | tracetoon-baseline | 1 | 0.0 [–, –] | – | 0.00 |");
     expect(md.split("Paired candidate − other system")[1]!.split("\n\n")[1]).not.toContain("native");
     expect(md).toContain("Composite Δ [95% CI]");
+    // The performance gate is cost-based and the summary states its rule.
+    expect(summary.performanceGate.schema).toBe("prbench.performance/v3");
+    expect(md).toContain(`Rule: ${summary.performanceGate.rule}`);
+    expect(md).toContain("priced cost ratio (criterion)");
+    expect(md).toContain("writer ratio (information)");
+    expect(summary.writerMetrics.every((m: any) => m.pricedCost)).toBe(true);
     const manifest = JSON.parse(readFileSync(join(opts.out, "manifest.json"), "utf8"));
     expect(manifest.settings.systems).toEqual(["tracetoon-baseline", "tracetoon-candidate"]);
     const isolation = JSON.parse(readFileSync(join(opts.out, "isolation.json"), "utf8"));

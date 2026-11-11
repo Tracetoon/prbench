@@ -1,3 +1,4 @@
+import type { DraftCost } from "./report/score.ts";
 import { bootstrapMeanCI, mean } from "./stats.ts";
 import {
   compareValidationWork,
@@ -11,6 +12,8 @@ export interface WriterMetric extends ValidationWork {
   stageTimings?: Record<string, number>;
   inputTokens?: number;
   cleanup?: string;
+  /** Priced cost as `prbench score` computes it (see `draftCost`). */
+  pricedCost?: DraftCost;
   writerOutcome?: { isError?: boolean };
   [field: string]: unknown;
 }
@@ -23,6 +26,32 @@ export const median = (xs: number[]) => {
       ? values[mid]!
       : (values[mid - 1]! + values[mid]!) / 2;
 };
+/** Why a draft has no priced cost the gate can use, or null when it has one. */
+function unpricedReason(r: WriterMetric | undefined): string | null {
+  if (!r) return "missing draft";
+  const c = r.pricedCost;
+  if (!c || c.costUsd === undefined)
+    return "no priced cost (a model has no price, or token counts are missing)";
+  if (c.costSource === "estimated" && c.usageScope === "main-thread")
+    return "Codex usage covers the main thread only";
+  if (!Number.isFinite(c.costUsd) || c.costUsd <= 0)
+    return `nonpositive cost ${c.costUsd}`;
+  return null;
+}
+
+/**
+ * The performance gate's rule, stated once for the report and summary.
+ * Cost per draft is `prbench score`'s priced cost (reported totals where the
+ * agent gives one; otherwise every model at its own price, cached input at
+ * its own rate, Codex across all threads). The ratio is a geometric mean of
+ * paired candidate/baseline ratios: log ratios are averaged within each case
+ * (models and replicates are not independent), then across cases. A ratio
+ * of ratios is scale-free, so an expensive model or case cannot outweigh a
+ * cheap one, and it matches the writer-time ratio beside it.
+ */
+export const COST_RULE =
+  "Pass when the candidate/baseline geometric mean of paired per-draft priced cost (same model, case and replicate; log ratios averaged within each case, then across cases) is at most 1.000. The case-clustered 95% interval is reported, not required. Any paired draft without a priced cost makes the gate inconclusive. Writer wall time and token counts are information, not criteria.";
+
 export function performanceReport(
   rows: WriterMetric[],
   expectedPairs: number,
@@ -32,69 +61,110 @@ export function performanceReport(
     case: string;
     model: string;
     replicate: number;
-    baselineMs: number;
-    candidateMs: number;
+    baselineMs?: number;
+    candidateMs?: number;
     baselineTokens?: number;
     candidateTokens?: number;
+    baselineCostUsd?: number;
+    candidateCostUsd?: number;
   }[] = [];
-  const validationComparability = rows
-    .filter((r) => r.system === "tracetoon-candidate")
-    .map((candidate) => ({
-      case: candidate.case,
-      model: candidate.model,
-      replicate: candidate.replicate,
-      ...compareValidationWork(
-        rows.find(
-          (r) =>
-            r.case === candidate.case &&
-            r.model === candidate.model &&
-            r.replicate === candidate.replicate &&
-            r.system === "tracetoon-baseline",
-        ),
-        candidate,
-      ),
-    }));
-  for (const candidate of rows.filter(
-    (r) => r.system === "tracetoon-candidate",
-  )) {
-    const baseline = rows.find(
+  const unpricedDrafts: {
+    case: string;
+    model: string;
+    replicate: number;
+    system: string;
+    reason: string;
+  }[] = [];
+  const baselineOf = (candidate: WriterMetric) =>
+    rows.find(
       (r) =>
         r.case === candidate.case &&
         r.model === candidate.model &&
         r.replicate === candidate.replicate &&
         r.system === "tracetoon-baseline",
     );
-    const b = baseline?.stageTimings?.writerMs,
-      c = candidate.stageTimings?.writerMs;
-    if (b && c && b > 0 && c > 0)
-      pairs.push({
-        case: candidate.case,
-        model: candidate.model,
-        replicate: candidate.replicate,
-        baselineMs: b,
-        candidateMs: c,
-        baselineTokens: baseline?.inputTokens,
-        candidateTokens: candidate.inputTokens,
-      });
+  const candidates = rows.filter((r) => r.system === "tracetoon-candidate");
+  const validationComparability = candidates.map((candidate) => ({
+    case: candidate.case,
+    model: candidate.model,
+    replicate: candidate.replicate,
+    ...compareValidationWork(baselineOf(candidate), candidate),
+  }));
+  const positive = (x: number | undefined) =>
+    x !== undefined && x > 0 ? x : undefined;
+  for (const candidate of candidates) {
+    const baseline = baselineOf(candidate);
+    if (!baseline) continue;
+    const id = {
+      case: candidate.case,
+      model: candidate.model,
+      replicate: candidate.replicate,
+    };
+    for (const [system, r] of [
+      ["tracetoon-baseline", baseline],
+      ["tracetoon-candidate", candidate],
+    ] as const) {
+      const reason = unpricedReason(r);
+      if (reason) unpricedDrafts.push({ ...id, system, reason });
+    }
+    pairs.push({
+      ...id,
+      baselineMs: positive(baseline.stageTimings?.writerMs),
+      candidateMs: positive(candidate.stageTimings?.writerMs),
+      baselineTokens: baseline.inputTokens,
+      candidateTokens: candidate.inputTokens,
+      ...(unpricedReason(baseline) || unpricedReason(candidate)
+        ? {}
+        : {
+            baselineCostUsd: baseline.pricedCost!.costUsd,
+            candidateCostUsd: candidate.pricedCost!.costUsd,
+          }),
+    });
   }
+  // Case-clustered geometric mean of a paired ratio, with its bootstrap interval.
+  const clusteredRatio = (
+    value: (p: (typeof pairs)[number]) => [number?, number?],
+  ) => {
+    const usable = pairs.filter((p) => {
+      const [b, c] = value(p);
+      return b !== undefined && c !== undefined;
+    });
+    const ids = [...new Set(usable.map((p) => p.case))];
+    const logs = ids.map((id) =>
+      mean(
+        usable
+          .filter((p) => p.case === id)
+          .map((p) => {
+            const [b, c] = value(p);
+            return Math.log(c! / b!);
+          }),
+      ),
+    );
+    const ci = bootstrapMeanCI(logs, { resamples: 10000, seed: 1 }).map(
+      Math.exp,
+    );
+    return {
+      pairs: usable.length,
+      cases: ids.length,
+      ratio: logs.length ? Math.exp(mean(logs)) : null,
+      ci: ci.map((x) => (Number.isFinite(x) ? x : null)),
+    };
+  };
+  const cost = clusteredRatio((p) => [p.baselineCostUsd, p.candidateCostUsd]);
+  const writer = clusteredRatio((p) => [p.baselineMs, p.candidateMs]);
   const caseIds = [...new Set(pairs.map((p) => p.case))];
-  const caseLogs = caseIds.map((id) =>
-    mean(
-      pairs
-        .filter((p) => p.case === id)
-        .map((p) => Math.log(p.candidateMs / p.baselineMs)),
-    ),
-  );
-  const ci = bootstrapMeanCI(caseLogs, { resamples: 10000, seed: 1 }).map(
-    Math.exp,
-  );
   const models = [...new Set(rows.map((r) => r.model))].map((model) => {
     const selected = pairs.filter((p) => p.model === model);
+    const priced = selected.filter((p) => p.candidateCostUsd !== undefined);
     return {
       model,
       pairs: selected.length,
+      baselineCostMedianUsd: median(priced.map((p) => p.baselineCostUsd!)),
+      candidateCostMedianUsd: median(priced.map((p) => p.candidateCostUsd!)),
       medianPairedDeltaMs: median(
-        selected.map((p) => p.candidateMs - p.baselineMs),
+        selected.map((p) =>
+          p.baselineMs && p.candidateMs ? p.candidateMs - p.baselineMs : NaN,
+        ),
       ),
       baselineInputMedian: median(selected.map((p) => p.baselineTokens ?? NaN)),
       candidateInputMedian: median(
@@ -107,16 +177,13 @@ export function performanceReport(
     };
   });
   const complete = pairs.length === expectedPairs && caseIds.length >= 2;
-  const failures = models.flatMap((m) => [
-    ...(m.medianPairedDeltaMs !== null && m.medianPairedDeltaMs >= 0
-      ? [`${m.model}: median paired writer time did not improve`]
-      : []),
-    ...(m.baselineInputMedian !== null &&
-    m.candidateInputMedian !== null &&
-    m.candidateInputMedian > m.baselineInputMedian
-      ? [`${m.model}: median input tokens increased`]
-      : []),
-  ]);
+  const priced = !unpricedDrafts.length && cost.pairs === pairs.length;
+  const failures =
+    priced && cost.ratio !== null && cost.ratio > 1
+      ? [
+          `Candidate priced cost per draft is higher than the baseline's: geometric mean ratio ${cost.ratio.toFixed(3)} > 1.000`,
+        ]
+      : [];
   const counters = rows
     .filter((r) => r.system === "tracetoon-candidate")
     .map((r) => r.operationCounts as Record<string, number> | undefined);
@@ -177,25 +244,23 @@ export function performanceReport(
     ),
   ].sort();
   const validationLimitation = validationUnavailable
-    ? `Validation did not complete for either writer in any of the ${validationComparability.length} pairs, so the sandbox could not run it; timing and token results compare writers that both lacked completed validation and say nothing about validation work saved or skipped. Reasons recorded: ${unavailableReasons.join(" | ")}`
+    ? `Validation did not complete for either writer in any of the ${validationComparability.length} pairs, so the sandbox could not run it; cost, timing and token results compare writers that both lacked completed validation and say nothing about validation work saved or skipped. Reasons recorded: ${unavailableReasons.join(" | ")}`
     : null;
   const unknown =
     !complete ||
     validationComparability.length !== expectedPairs ||
     !validationUsable ||
-    models.some(
-      (m) => !m.allTokensRecorded || m.medianPairedDeltaMs === null,
-    ) ||
-    !ci.every(Number.isFinite) ||
-    ci[1]! >= 1 ||
+    !priced ||
+    cost.ratio === null ||
     (requireWorkEvidence && !workObserved);
   return {
-    schema: "prbench.performance/v2",
+    schema: "prbench.performance/v3",
     validationComparability,
     validationComparable,
     validationUnavailable,
     validationLimitation,
-    status: !validationUsable
+    rule: COST_RULE,
+    status: !validationUsable || !priced
       ? "inconclusive"
       : failures.length
         ? "failed"
@@ -208,14 +273,20 @@ export function performanceReport(
     expectedPairs,
     independentCases: caseIds.length,
     workEvidence,
-    geometricMeanWriterRatio: caseLogs.length ? Math.exp(mean(caseLogs)) : null,
-    writerRatio95CI: ci.map((x) => (Number.isFinite(x) ? x : null)),
+    unpricedDrafts,
+    geometricMeanCostRatio: cost.ratio,
+    costRatio95CI: cost.ci,
+    pricedPairs: cost.pairs,
+    // Information only: writer wall time is not a criterion.
+    geometricMeanWriterRatio: writer.ratio,
+    writerRatio95CI: writer.ci,
+    timedPairs: writer.pairs,
     models,
     limitations: [
       "Case-clustered percentile bootstrap; repeats, models and judges are not independent cases.",
-      "Service waits and observation overhead are included in writer wall time.",
-      "CLI token counts are not USD cost.",
-      "Noncomparable validation leaves timing and token differences descriptive; it establishes neither a gain nor a regression.",
+      "Priced cost uses src/report/prices.json list prices (reported totals where the agent gives one); it is not an invoice.",
+      "Writer wall time (service waits and observation overhead included) and token counts are reported as information, not criteria.",
+      "Noncomparable validation leaves cost, timing and token differences descriptive; it establishes neither a gain nor a regression.",
       ...(validationLimitation ? [validationLimitation] : []),
     ],
   };

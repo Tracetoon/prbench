@@ -143,6 +143,67 @@ export function estimateCostByModel(
   return usd;
 }
 
+export interface DraftCost {
+  costUsd?: number;
+  costSource?: "reported" | "estimated";
+  usageScope?: "all-threads" | "main-thread";
+  usageSource?: "artifact" | "traces";
+  subagentThreads?: number;
+  inputTokens?: number;
+  cachedInputTokens?: number;
+  outputTokens?: number;
+  models?: string[];
+}
+
+/**
+ * Priced cost of one saved draft, as `prbench score` reports it: the
+ * reported total when the agent gives one (Claude), otherwise an estimate
+ * from token counts with every model at its own price and cached input at
+ * its own rate. Codex usage covers every thread, from the artifact or its
+ * saved writer traces; `usageScope: "main-thread"` marks a draft whose
+ * subagent usage is unknown. `costUsd` is undefined when a model has no price.
+ */
+export function draftCost(
+  root: string,
+  artifactFile: string,
+  meta: Record<string, any>,
+  armModel: string,
+): DraftCost {
+  const d: DraftCost = {};
+  let tokens: Tokens & { usageByModel?: Record<string, Tokens> } = meta;
+  if (meta.agent === "codex" && typeof meta.costUsd !== "number") {
+    if (meta.usageScope === "all-threads") {
+      d.usageScope = "all-threads";
+      d.usageSource = "artifact";
+      d.subagentThreads = meta.subagentThreads;
+    } else {
+      const usage = writerTraceUsage(root, artifactFile);
+      if (usage && (meta.inputTokens === undefined || usage.inputTokens >= meta.inputTokens)) {
+        tokens = usage;
+        d.usageScope = "all-threads";
+        d.usageSource = "traces";
+        d.subagentThreads = usage.subagentThreads;
+      } else if (meta.inputTokens !== undefined) d.usageScope = "main-thread";
+    }
+  }
+  d.inputTokens = tokens.inputTokens;
+  d.cachedInputTokens = tokens.cachedInputTokens;
+  d.outputTokens = tokens.outputTokens;
+  const models = Object.keys(tokens.usageByModel ?? {}).sort();
+  if (models.length) d.models = models;
+  if (typeof meta.costUsd === "number") {
+    d.costUsd = meta.costUsd;
+    d.costSource = "reported";
+  } else {
+    const est = estimateCostByModel(String(meta.model ?? armModel), tokens, tokens.usageByModel);
+    if (est !== undefined) {
+      d.costUsd = est;
+      d.costSource = "estimated";
+    }
+  }
+  return d;
+}
+
 export interface DraftScore extends Components {
   model: string;
   replicate: number;
@@ -315,38 +376,8 @@ export function collectDraftScores(
     const artifact = a.artifactDir && join(a.artifactDir, `${a.key.system}.json`);
     if (artifact && existsSync(artifact)) {
       const meta = JSON.parse(readFileSync(artifact, "utf8")).meta ?? {};
-      let tokens: Tokens & { usageByModel?: Record<string, Tokens> } = meta;
-      if (meta.agent === "codex" && typeof meta.costUsd !== "number") {
-        if (meta.usageScope === "all-threads") {
-          d.usageScope = "all-threads";
-          d.usageSource = "artifact";
-          d.subagentThreads = meta.subagentThreads;
-        } else {
-          const usage = writerTraceUsage(root, artifact);
-          if (usage && (meta.inputTokens === undefined || usage.inputTokens >= meta.inputTokens)) {
-            tokens = usage;
-            d.usageScope = "all-threads";
-            d.usageSource = "traces";
-            d.subagentThreads = usage.subagentThreads;
-          } else if (meta.inputTokens !== undefined) d.usageScope = "main-thread";
-        }
-      }
-      d.inputTokens = tokens.inputTokens;
-      d.cachedInputTokens = tokens.cachedInputTokens;
-      d.outputTokens = tokens.outputTokens;
+      Object.assign(d, draftCost(root, artifact, meta, a.key.model));
       d.graphQueries = meta.operationCounts?.["graph.queries"];
-      const models = Object.keys(tokens.usageByModel ?? {}).sort();
-      if (models.length) d.models = models;
-      if (typeof meta.costUsd === "number") {
-        d.costUsd = meta.costUsd;
-        d.costSource = "reported";
-      } else {
-        const est = estimateCostByModel(String(meta.model ?? a.key.model), tokens, tokens.usageByModel);
-        if (est !== undefined) {
-          d.costUsd = est;
-          d.costSource = "estimated";
-        }
-      }
     }
     drafts.push(d);
   }

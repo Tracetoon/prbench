@@ -637,6 +637,9 @@ export function rebuildComparison(
       "Writer timing includes service waits and neutral observation overhead; runtime diagnostics may overlap.",
       "Diagnostic reuse cannot establish a fresh performance improvement.",
       "Raw judgments are preserved separately from source-backed adjudications.",
+      ...(performance.validationLimitation
+        ? [performance.validationLimitation]
+        : []),
     ],
   };
   const lines = [

@@ -149,10 +149,40 @@ export function performanceReport(
   const validationComparable =
     validationComparability.length === expectedPairs &&
     validationComparability.every((p) => p.status === "matched");
+  // Neither writer completed any validation in any pair: the sandbox could not
+  // run it. That is a limitation shared by both arms, not a difference between
+  // them; matched, unmatched and one-sided pairs keep their effect.
+  const validationUnavailable =
+    !validationComparable &&
+    validationComparability.length === expectedPairs &&
+    validationComparability.length > 0 &&
+    validationComparability.every(
+      (p) =>
+        p.status === "unknown" &&
+        p.baseline.reasons.length > 0 &&
+        p.candidate.reasons.length > 0 &&
+        !p.baseline.coverage.length &&
+        !p.candidate.coverage.length,
+    );
+  const validationUsable = validationComparable || validationUnavailable;
+  const unavailableReasons = [
+    ...new Set(
+      validationUnavailable
+        ? validationComparability.flatMap((p) =>
+            p.reasons.map((r) =>
+              r.replace(/^(baseline|candidate): (V\d+: )?/, ""),
+            ),
+          )
+        : [],
+    ),
+  ].sort();
+  const validationLimitation = validationUnavailable
+    ? `Validation did not complete for either writer in any of the ${validationComparability.length} pairs, so the sandbox could not run it; timing and token results compare writers that both lacked completed validation and say nothing about validation work saved or skipped. Reasons recorded: ${unavailableReasons.join(" | ")}`
+    : null;
   const unknown =
     !complete ||
     validationComparability.length !== expectedPairs ||
-    validationComparability.some((p) => p.status !== "matched") ||
+    !validationUsable ||
     models.some(
       (m) => !m.allTokensRecorded || m.medianPairedDeltaMs === null,
     ) ||
@@ -163,7 +193,9 @@ export function performanceReport(
     schema: "prbench.performance/v2",
     validationComparability,
     validationComparable,
-    status: !validationComparable
+    validationUnavailable,
+    validationLimitation,
+    status: !validationUsable
       ? "inconclusive"
       : failures.length
         ? "failed"
@@ -184,6 +216,7 @@ export function performanceReport(
       "Service waits and observation overhead are included in writer wall time.",
       "CLI token counts are not USD cost.",
       "Noncomparable validation leaves timing and token differences descriptive; it establishes neither a gain nor a regression.",
+      ...(validationLimitation ? [validationLimitation] : []),
     ],
   };
 }

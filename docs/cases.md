@@ -88,6 +88,8 @@ bun run scripts/stage-release.ts --version X.Y.Z --from <previous release> --fro
   --record cases-local/publication-X.Y.Z.json --reviewed-by "<name>" [--consent-confirmed]
 ```
 
+An expert model panel can review the sheets instead of, or before, a person: `bun run prbench fact-review --cases cases-local [--apply]` (see [fact-review.md](fact-review.md)).
+
 Stubbing keeps every record on its line, so cited ranges stay valid; `--rehash` only refreshes their hashes. A rerun of the importer replaces the scrubbed sessions, so run the scrub and the rehash again after it. The rules file (`cases-local/redaction-rules.json`) can name private repositories or people, so it stays local.
 
 A release can move earlier cases between splits without editing the published trees: `--splits <file>` sets each staged copy's split from a release entry's `cases.dev` and `cases.test`, and fails unless it lists exactly the staged cases. For 3.0.0, `datasets/real-cases-3.0.0.draft.json` (unpublished; url and checksums are filled in after packaging) moves every 2.0.0 case to `dev` and holds the new expansion cases out as `test`; build it with `--from ~/.cache/prbench/datasets/real-cases/2.0.0 --from cases-local --splits datasets/real-cases-3.0.0.draft.json`. The expansion entries in `datasets/expansion/candidates.json` carry the same splits.

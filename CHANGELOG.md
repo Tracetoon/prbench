@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `prbench fact-review`: an expert model panel (default 3 Opus 5.5 + 3 Sol 6.1 at xhigh) reviews each fact sheet against the raw evidence in read-only agentic sessions. Family consensus settles items, an Opus synthesis plus a round-2 panel vote settles rewrites and clustered additions, and everything else goes to `human-review.md`. Includes planted-error canary calibration with a PASS/FAIL bar, `--resume` keyed by call inputs, `--aggregate-only` for sealed cases, and `--apply`, which rewrites the case sheet with an `expert-panel` provenance. Judge providers gain a read-only agentic mode (`ask(..., { workDir })`). See `docs/fact-review.md`.
 - Run comparisons end to end on Codex or Claude (`compare --provider codex|claude|both`) as one parallel job graph (`--parallel <n>`). `--models` chooses the writer models (optionally `model@effort`) and keeps the provider's judges.
 - Add `compare --systems baseline,candidate` to skip native writers and judge only candidate vs baseline. A subset of systems is part of the experiment identity.
 - Add `prbench score <runs…>`: absolute per-draft scores (coverage, rubric, factual errors, unsupported claims, traps) on a documented 0–100 composite, with case-clustered bootstrap intervals, paired and per-case deltas, leave-one-case-out ranges, an accuracy view, and writer and judge reliability tables. It works on existing runs.

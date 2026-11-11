@@ -246,3 +246,44 @@ test('draft fallback is restricted to this invocation and ambiguity never choose
   make('20260101-000002', '/work');
   expect(() => tracetoonDraft(git, invocation)).toThrow('More than one draft');
 });
+
+test('the workflow record carries the stored review plan and reviewer passes', () => {
+  const git = tempDir(),
+    dir = join(git, 'tracetoon', 'runs', '20260101-000000'),
+    start = Date.now();
+  mkdirSync(dir, { recursive: true });
+  const write = (name: string, value: unknown) =>
+    writeFileSync(join(dir, name), JSON.stringify(value));
+  write('task.json', {
+    root: '/work',
+    branch: 'feature',
+    startedAt: new Date(start + 1).toISOString(),
+  });
+  write('guidance.json', { v: 1 });
+  write('review-input.json', {});
+  write('review-result.json', {});
+  write('review.json', {
+    v: 2,
+    reviewer: { mode: 'delegated', agentId: 'r2' },
+    passes: [
+      { pass: 1, agentId: 'r1', lens: 'a', model: 'sonnet', effort: 'high', findings: 2, importedAt: 'x' },
+      { pass: 2, agentId: 'r2', lens: 'b', model: 'sonnet', effort: 'high', findings: 0, importedAt: 'y', source: 'tracetoon-run', verifiedModel: null },
+    ],
+  });
+  write('review-plan.json', { v: 1, passes: 2, lenses: ['a', 'b'], reviewerModel: 'sonnet', reviewerEffort: 'high' });
+  const { workflow } = tracetoonTimings(git, { root: '/work', branch: 'feature', startedAt: start });
+  expect(workflow).toMatchObject({
+    reviewVersion: 2,
+    reviewPlan: { passes: 2, lenses: ['a', 'b'], reviewerModel: 'sonnet', reviewerEffort: 'high' },
+    reviewPasses: [
+      { agentId: 'r1', lens: 'a', model: 'sonnet', effort: 'high' },
+      { agentId: 'r2', lens: 'b', model: 'sonnet', effort: 'high', source: 'tracetoon-run', verifiedModel: null },
+    ],
+  });
+  // Not current: the packet does not describe this head, so the gate still refuses it.
+  expect(workflow!.reviewCurrent).toBe(false);
+  write('review-plan.json', { v: 1, passes: 0 });
+  expect(
+    tracetoonTimings(git, { root: '/work', branch: 'feature', startedAt: start }).workflow!.reviewPlan,
+  ).toBeUndefined();
+});

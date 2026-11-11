@@ -8,6 +8,7 @@ import {
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { COMPARISON_WRITER_ENTRIES } from "./comparison.ts";
+import { candidateWorkflowGaps } from "./gates.ts";
 import {
   DIAGNOSTIC_JUDGES,
   JUDGE_ENTRIES,
@@ -389,14 +390,9 @@ export async function admission(opts: AdmissionOptions) {
           kind: "accepted",
           artifact: file,
         });
-        if (
-          artifact.meta.workflow?.declaredIndependentRoles !== 3 ||
-          !artifact.meta.workflow.reviewCurrent ||
-          artifact.meta.workflow.reviewVersion !== 2
-        )
-          gaps.push(
-            `${id}/${model}: Three declared roles and a current v2 review are required.`,
-          );
+        const workflow = candidateWorkflowGaps(artifact.meta.workflow);
+        if (workflow.length)
+          gaps.push(`${id}/${model}: ${workflow.join("; ")}`);
         gaps.push(
           ...validationCoverage(performanceEvidence(artifact)).reasons.map(
             (reason) => `${id}/${model}: ${reason}`,

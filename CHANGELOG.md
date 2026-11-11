@@ -13,6 +13,7 @@
 - Add `crossjudge` to judge the candidate drafts of one finished run against the baseline drafts of another, using `compare`'s consensus rule.
 - Add `scripts/paired-delta.ts` to compare two runs pair by pair against their own baselines: consensus outcome counts and composite Δ-of-Δ with a case bootstrap interval.
 - Add `docs/reproduce-graph-vs-base.md`, which explains how to repeat the Tracetoon graph-vs-base comparison.
+- Adoption gate and admission accept a candidate either by the three-role rule or by the lean reviewed path: a current v2 review whose recorded passes meet the run's review plan (pass count from distinct reviewer agent ids, the planned lenses, the planned reviewer model and effort, tool-run verified passes when the plan asks for them). `meta.workflow` now records `reviewPlan` and `reviewPasses` from Tracetoon's `review-plan.json` and `review.json`; workflow gaps name each failed requirement.
 - Fixes: Windows-recorded cases replay correctly on POSIX hosts. Codex command directories are recovered from rollout execution records. The fake `gh` handles `--help` and `--fill`. Shell and session bookkeeping is kept out of writers and out of environment identities. Isolation probes run at the configured effort and accept proofs saved for effort arms.
 
 ## 0.2.0

@@ -4,9 +4,80 @@ import { stageKey } from "./run/cache.ts";
 import type { AdjudicationSource } from "./run/adjudication.ts";
 import type { PairResult } from "./judge/pairwise.ts";
 import type { Report } from "./report.ts";
-import type { PRArtifact } from "./schema/artifact.ts";
+import type { PRArtifact, WorkflowRecord } from "./schema/artifact.ts";
 import { artifactDigest } from "./schema/artifact.ts";
 import type { WriterMetric } from "./performance.ts";
+
+/** What the lean reviewed path still lacks: empty when the record shows its review plan met. */
+export function leanReviewGaps(workflow: WorkflowRecord | undefined): string[] {
+  if (!workflow) return ["no workflow record"];
+  const gaps: string[] = [];
+  if (workflow.reviewVersion !== 2)
+    gaps.push(`review version is ${workflow.reviewVersion ?? "unrecorded"}, not 2`);
+  if (!workflow.reviewCurrent) gaps.push("review is not current");
+  const plan = workflow.reviewPlan,
+    passes = workflow.reviewPasses;
+  if (!plan) gaps.push("no review plan recorded");
+  if (!passes) gaps.push("no reviewer passes recorded");
+  if (!plan || !passes) return gaps;
+  const required = Math.max(plan.passes, plan.lenses.length);
+  const named = passes.filter((p) => p.agentId.trim());
+  if (named.length < passes.length)
+    gaps.push(`${passes.length - named.length} pass(es) have no reviewer agent id`);
+  const agents = new Set(named.map((p) => p.agentId));
+  if (agents.size < required)
+    gaps.push(
+      `${agents.size} of ${required} planned passes from distinct reviewer agent ids`,
+    );
+  const lensAgents = new Set<string>();
+  for (const lens of plan.lenses) {
+    const pass = named.find(
+      (p) => p.lens === lens && !lensAgents.has(p.agentId),
+    );
+    if (pass) lensAgents.add(pass.agentId);
+    else gaps.push(`planned lens ${lens} has no pass from its own reviewer`);
+  }
+  for (const [key, want] of [
+    ["model", plan.reviewerModel],
+    ["effort", plan.reviewerEffort],
+  ] as const) {
+    if (!want) continue;
+    const off = passes.filter((p) => p[key] !== want);
+    if (off.length)
+      gaps.push(
+        `planned reviewer ${key} ${want}, but ${off.length} pass(es) recorded ${[...new Set(off.map((p) => p[key] ?? "none"))].join(", ")}`,
+      );
+  }
+  if (plan.runner === "tracetoon") {
+    const off = passes.filter(
+      (p) => p.source !== "tracetoon-run" || !p.verifiedModel,
+    );
+    if (off.length)
+      gaps.push(
+        `planned tool-run reviewers, but ${off.length} pass(es) were not tool-run with a verified model`,
+      );
+  }
+  return gaps;
+}
+
+/** Accept either three declared independent roles with a current v2 review, or the lean reviewed path. */
+export function candidateWorkflowGaps(workflow: WorkflowRecord | undefined): string[] {
+  const roles: string[] = [];
+  if (workflow?.declaredIndependentRoles !== 3)
+    roles.push(
+      `${workflow?.declaredIndependentRoles ?? 0} of 3 independent roles declared`,
+    );
+  if (workflow?.reviewVersion !== 2)
+    roles.push(`review version is ${workflow?.reviewVersion ?? "unrecorded"}, not 2`);
+  if (!workflow?.reviewCurrent) roles.push("review is not current");
+  if (!roles.length) return [];
+  const lean = leanReviewGaps(workflow);
+  if (!lean.length) return [];
+  return [
+    `three-role path: ${roles.join(", ")}`,
+    `lean reviewed path: ${lean.join(", ")}`,
+  ];
+}
 
 /** Keep every adoption criterion inside the frozen policy dependency closure. */
 export function adoptionGate(input: {
@@ -21,19 +92,12 @@ export function adoptionGate(input: {
   const candidates = input.writers.filter(
     (m) => m.system === "tracetoon-candidate",
   );
-  const workflowGaps = candidates
-    .filter((m) => {
-      const workflow = m.workflow as PRArtifact["meta"]["workflow"];
-      return (
-        workflow?.declaredIndependentRoles !== 3 ||
-        !workflow.reviewCurrent ||
-        workflow.reviewVersion !== 2
-      );
-    })
-    .map(
-      (m) =>
-        `${m.model}/${m.case}/r${m.replicate}: three independent roles and a current v2 review are required`,
-    );
+  const workflowGaps = candidates.flatMap((m) => {
+    const gaps = candidateWorkflowGaps(m.workflow as WorkflowRecord | undefined);
+    return gaps.length
+      ? [`${m.model}/${m.case}/r${m.replicate}: ${gaps.join("; ")}`]
+      : [];
+  });
   if (!candidates.length)
     workflowGaps.push("Candidate workflow records are unavailable");
   const failed = input.quality === "failed" || input.performance === "failed";

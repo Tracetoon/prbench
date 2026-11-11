@@ -2,9 +2,9 @@
 // wrote the sheet, and nothing suggests it is probably right. Changing what a
 // prompt asks for changes every resume key (the prompt text is hashed), so
 // bump FACT_REVIEW_PROMPT_VERSION with any change in meaning.
-import type { Proposal, SheetItem } from './schema.ts';
+import type { Proposal, SheetItem } from "./schema.ts";
 
-export const FACT_REVIEW_PROMPT_VERSION = 1;
+export const FACT_REVIEW_PROMPT_VERSION = 2;
 
 const WORKSPACE = `## Your workspace
 
@@ -16,6 +16,7 @@ Your working directory holds the evidence for one code change. You can read and 
 - <session>.md: a readable index of each recorded agent session; every entry starts with the line (L<n>) it came from in the raw transcript
 - raw/<session file>: the raw session transcripts (JSONL)
 - base/<path>, head/<path>: every changed file as it was before and after the change
+- fact-sources/<file> (when present): source documents the case's facts were built from, such as a recorded digest of the agent sessions; facts may rest on them as well as on the diff and sessions
 - repo.git: a bare clone of the repository (use it if you can run git)
 - sheet.json: the fact sheet under review
 
@@ -24,6 +25,7 @@ Cite evidence with these references, one location each:
 - \`commits/<sha>.txt:L1-L12\`
 - \`head/<path>:L5-L9\` or \`base/<path>:L5-L9\`
 - \`raw/<session file>:L23-L40\` (raw transcript lines; use the L<n> numbers from the session index)
+- \`fact-sources/<file>:L10-L20\` (line ranges of the file as stored)
 
 Read the evidence yourself. Check facts against what the diff and sessions show, not against what seems plausible.`;
 
@@ -38,9 +40,7 @@ A fact sheet is the reference that pull-request descriptions of this change are 
 A wrong, unsupported, trivial or missing fact biases every score, so be exact.`;
 
 const list = (items: SheetItem[]) =>
-  items
-    .map((i) => `- ${i.id} (${i.category}): ${i.text}`)
-    .join('\n');
+  items.map((i) => `- ${i.id} (${i.category}): ${i.text}`).join("\n");
 
 export function reviewPrompt(sheet: SheetItem[]): string {
   return `You are reviewing a fact sheet for a code change, item by item, against the raw evidence.
@@ -83,11 +83,19 @@ export function rewritePrompt(inputs: RewriteInput[]): string {
       [
         `### ${r.id} (${r.category})`,
         `Current text: ${r.original}`,
-        ...r.rewrites.map((w, i) => `Proposed rewrite ${i + 1}: ${w.text}\n  reason: ${w.reason}\n  evidence: ${w.evidenceRefs.join(', ') || 'none'}`),
-        ...(r.previous ? [`Candidate rejected in the last vote: ${r.previous.text}`, ...r.previous.objections.map((o) => `  objection: ${o}`)] : []),
-      ].join('\n'),
+        ...r.rewrites.map(
+          (w, i) =>
+            `Proposed rewrite ${i + 1}: ${w.text}\n  reason: ${w.reason}\n  evidence: ${w.evidenceRefs.join(", ") || "none"}`,
+        ),
+        ...(r.previous
+          ? [
+              `Candidate rejected in the last vote: ${r.previous.text}`,
+              ...r.previous.objections.map((o) => `  objection: ${o}`),
+            ]
+          : []),
+      ].join("\n"),
     )
-    .join('\n\n');
+    .join("\n\n");
   return `Several independent reviewers agreed that some items on a fact sheet need rewriting, and proposed rewrites. Merge each item's proposals into one candidate text.
 
 ${SHEET_RULES}
@@ -113,8 +121,16 @@ export interface ClusterInput {
   evidenceRefs: string[];
 }
 
-export function clusterPrompt(sheet: SheetItem[], additions: ClusterInput[]): string {
-  const body = additions.map((a) => `- ${a.id} (${a.category}): ${a.text}\n  reason: ${a.reason}\n  evidence: ${a.evidenceRefs.join(', ') || 'none'}`).join('\n');
+export function clusterPrompt(
+  sheet: SheetItem[],
+  additions: ClusterInput[],
+): string {
+  const body = additions
+    .map(
+      (a) =>
+        `- ${a.id} (${a.category}): ${a.text}\n  reason: ${a.reason}\n  evidence: ${a.evidenceRefs.join(", ") || "none"}`,
+    )
+    .join("\n");
   return `Independent reviewers proposed facts that a fact sheet is missing. Group proposals that state the same fact.
 
 ${SHEET_RULES}
@@ -139,11 +155,11 @@ Reply with the JSON object only.`;
 export function votePrompt(sheet: SheetItem[], proposals: Proposal[]): string {
   const body = proposals
     .map((p) =>
-      p.kind === 'revise'
-        ? `- ${p.id}: replace ${p.id.slice(2)} (${p.category})\n  from: ${p.original}\n  to:   ${p.text}\n  evidence: ${p.evidenceRefs.join(', ') || 'none'}`
-        : `- ${p.id}: add to ${p.category}: ${p.text}\n  evidence: ${p.evidenceRefs.join(', ') || 'none'}`,
+      p.kind === "revise"
+        ? `- ${p.id}: replace ${p.id.slice(2)} (${p.category})\n  from: ${p.original}\n  to:   ${p.text}\n  evidence: ${p.evidenceRefs.join(", ") || "none"}`
+        : `- ${p.id}: add to ${p.category}: ${p.text}\n  evidence: ${p.evidenceRefs.join(", ") || "none"}`,
     )
-    .join('\n');
+    .join("\n");
   return `You are voting on proposed changes to a fact sheet for a code change.
 
 ${SHEET_RULES}
@@ -166,5 +182,5 @@ Reply with the JSON object only.`;
 }
 
 export function correctionPrompt(prompt: string, problems: string[]): string {
-  return `${prompt}\n\n## Correction\n\nAn earlier reply to this request was rejected for these problems:\n${problems.map((p) => `- ${p}`).join('\n')}\nReply again with a complete, corrected JSON object.`;
+  return `${prompt}\n\n## Correction\n\nAn earlier reply to this request was rejected for these problems:\n${problems.map((p) => `- ${p}`).join("\n")}\nReply again with a complete, corrected JSON object.`;
 }

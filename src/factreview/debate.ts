@@ -19,6 +19,10 @@ import {
 import { basename, join, resolve } from "node:path";
 import { caseDirs, loadCase, type Facts } from "../schema/case.ts";
 import {
+  releaseCodexLoginLease,
+  setCodexLoginSharing,
+} from "../agents/codexAuth.ts";
+import {
   buildEvidence,
   json,
   limiter,
@@ -511,226 +515,241 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   const work = caseDirs(resolve(opts.cases))
     .map((dir) => loadCase(dir))
     .filter((l) => !wanted || wanted.has(l.case.id));
-  await Promise.all(
-    work.map((loaded) =>
-      caseLimit(async () => {
-        const id = loaded.case.id;
-        const factsFile = join(loaded.dir, loaded.case.facts ?? "facts.json");
-        if (!existsSync(factsFile)) return;
-        const facts: Facts = JSON.parse(readFileSync(factsFile, "utf8"));
-        const sheet = sheetOf(facts);
-        const disputes = disputesFrom(from, id);
-        const entries: DebateEntry[] = [];
-        for (const d of disputes.items) {
-          const item = sheet.find(
-            (s) => s.category === d.category && s.text === d.text,
-          );
-          if (item)
-            entries.push({
-              id: item.id,
-              kind: "item",
-              category: item.category,
-              text: item.text,
-              earlier: d.earlier,
-            });
-        }
-        disputes.additions.forEach((a, i) => {
-          if (!sheet.some((s) => s.text === a.text))
-            entries.push({
-              id: `N${i + 1}`,
-              kind: "addition",
-              category: a.category,
-              text: a.text,
-              earlier: null,
-            });
-        });
-        if (!entries.length) return;
-        const caseOut = join(out, id);
-        mkdirSync(caseOut, { recursive: true });
-        const ev = buildEvidence(loaded, packetFor(loaded, packets, caseOut));
-        try {
-          log(`case  ${id}: ${entries.length} disputed entries`);
-          const ids = entries.map((e) => e.id);
-          const files = { "debate.json": { entries } };
-          const stage = (
-            kind: "debate-open" | "debate-rebut" | "debate-amend",
-            round: number,
-            who: Reviewer,
-            prompt: string,
-            tag: string,
-          ) =>
-            call<PositionsReply>(caseOut, ev, sheet, {
-              kind,
-              round,
-              reviewer: who,
-              prompt,
-              schema: positionsSchema(ids),
-              check: (v) => checkPositions(v, entries),
-              files,
-              saveAs: `debate-${tag}/${kind.slice(7)}-${who.id}.json`,
-            });
-          const debate = async (
-            opener: Reviewer,
-            respondent: Reviewer,
-            tag: string,
-          ) => {
-            const opening = (
-              await stage(
-                "debate-open",
-                1,
-                opener,
-                openPrompt(sheet, entries),
-                tag,
-              )
-            ).items;
-            const rebuttal = (
-              await stage(
-                "debate-rebut",
-                2,
-                respondent,
-                rebutPrompt(sheet, entries, opening),
-                tag,
-              )
-            ).items;
-            const amended = (
-              await stage(
-                "debate-amend",
-                3,
-                opener,
-                amendPrompt(sheet, entries, opening, rebuttal),
-                tag,
-              )
-            ).items;
-            return { opener, respondent, opening, rebuttal, amended };
-          };
-          const [A, B] = await Promise.all([
-            debate(opus, sol, "a"),
-            debate(sol, opus, "b"),
-          ]);
-          const get = (ps: Position[], eid: string) =>
-            ps.find((p) => p.id === eid)!;
-          const split = entries.filter((e) => {
-            const a = get(A.amended, e.id),
-              b = get(B.amended, e.id);
-            return (
-              a.position === "revise" &&
-              b.position === "revise" &&
-              a.text!.trim() !== b.text!.trim()
+  // Sol calls share the benchmark Codex login, as in factReview.
+  setCodexLoginSharing(true);
+  try {
+    await Promise.all(
+      work.map((loaded) =>
+        caseLimit(async () => {
+          const id = loaded.case.id;
+          const factsFile = join(loaded.dir, loaded.case.facts ?? "facts.json");
+          if (!existsSync(factsFile)) return;
+          const facts: Facts = JSON.parse(readFileSync(factsFile, "utf8"));
+          const sheet = sheetOf(facts);
+          const disputes = disputesFrom(from, id);
+          const entries: DebateEntry[] = [];
+          for (const d of disputes.items) {
+            const item = sheet.find(
+              (s) => s.category === d.category && s.text === d.text,
             );
+            if (item)
+              entries.push({
+                id: item.id,
+                kind: "item",
+                category: item.category,
+                text: item.text,
+                earlier: d.earlier,
+              });
+          }
+          disputes.additions.forEach((a, i) => {
+            if (!sheet.some((s) => s.text === a.text))
+              entries.push({
+                id: `N${i + 1}`,
+                kind: "addition",
+                category: a.category,
+                text: a.text,
+                earlier: null,
+              });
           });
-          const picks = new Map<
-            string,
-            { reviewer: string; choice: "1" | "2"; reason: string }[]
-          >();
-          if (split.length) {
-            const rIds = split.map((e) => e.id);
-            const view = split.map((entry) => ({
-              entry,
-              one: get(A.amended, entry.id).text!,
-              two: get(B.amended, entry.id).text!,
-            }));
-            const replies = await Promise.all(
-              [opus, sol].map(async (who) => ({
-                who,
-                reply: await call<ReconcileReply>(caseOut, ev, sheet, {
-                  kind: "debate-reconcile",
-                  round: 4,
-                  reviewer: who,
-                  prompt: reconcilePrompt(sheet, view),
-                  schema: reconcileSchema(rIds),
-                  check: (v) => checkReconcile(v, rIds),
-                  files: { "texts.json": { entries: view } },
-                  saveAs: `debate-reconcile/${who.id}.json`,
-                }),
-              })),
-            );
-            for (const e of split)
-              picks.set(
-                e.id,
-                replies.map(({ who, reply }) => ({
-                  reviewer: who.id,
-                  ...reply.items.find((x) => x.id === e.id)!,
+          if (!entries.length) return;
+          const caseOut = join(out, id);
+          mkdirSync(caseOut, { recursive: true });
+          const ev = buildEvidence(loaded, packetFor(loaded, packets, caseOut));
+          try {
+            log(`case  ${id}: ${entries.length} disputed entries`);
+            const ids = entries.map((e) => e.id);
+            const files = { "debate.json": { entries } };
+            const stage = (
+              kind: "debate-open" | "debate-rebut" | "debate-amend",
+              round: number,
+              who: Reviewer,
+              prompt: string,
+              tag: string,
+            ) =>
+              call<PositionsReply>(caseOut, ev, sheet, {
+                kind,
+                round,
+                reviewer: who,
+                prompt,
+                schema: positionsSchema(ids),
+                check: (v) => checkPositions(v, entries),
+                files,
+                saveAs: `debate-${tag}/${kind.slice(7)}-${who.id}.json`,
+              });
+            const debate = async (
+              opener: Reviewer,
+              respondent: Reviewer,
+              tag: string,
+            ) => {
+              const opening = (
+                await stage(
+                  "debate-open",
+                  1,
+                  opener,
+                  openPrompt(sheet, entries),
+                  tag,
+                )
+              ).items;
+              const rebuttal = (
+                await stage(
+                  "debate-rebut",
+                  2,
+                  respondent,
+                  rebutPrompt(sheet, entries, opening),
+                  tag,
+                )
+              ).items;
+              const amended = (
+                await stage(
+                  "debate-amend",
+                  3,
+                  opener,
+                  amendPrompt(sheet, entries, opening, rebuttal),
+                  tag,
+                )
+              ).items;
+              return { opener, respondent, opening, rebuttal, amended };
+            };
+            const [A, B] = await Promise.all([
+              debate(opus, sol, "a"),
+              debate(sol, opus, "b"),
+            ]);
+            const get = (ps: Position[], eid: string) =>
+              ps.find((p) => p.id === eid)!;
+            const split = entries.filter((e) => {
+              const a = get(A.amended, e.id),
+                b = get(B.amended, e.id);
+              return (
+                a.position === "revise" &&
+                b.position === "revise" &&
+                a.text!.trim() !== b.text!.trim()
+              );
+            });
+            const picks = new Map<
+              string,
+              { reviewer: string; choice: "1" | "2"; reason: string }[]
+            >();
+            if (split.length) {
+              const rIds = split.map((e) => e.id);
+              const view = split.map((entry) => ({
+                entry,
+                one: get(A.amended, entry.id).text!,
+                two: get(B.amended, entry.id).text!,
+              }));
+              const replies = await Promise.all(
+                [opus, sol].map(async (who) => ({
+                  who,
+                  reply: await call<ReconcileReply>(caseOut, ev, sheet, {
+                    kind: "debate-reconcile",
+                    round: 4,
+                    reviewer: who,
+                    prompt: reconcilePrompt(sheet, view),
+                    schema: reconcileSchema(rIds),
+                    check: (v) => checkReconcile(v, rIds),
+                    files: { "texts.json": { entries: view } },
+                    saveAs: `debate-reconcile/${who.id}.json`,
+                  }),
                 })),
               );
-          }
-          const outcomes: DebateOutcome[] = entries.map((entry) => {
-            const a = get(A.amended, entry.id),
-              b = get(B.amended, entry.id);
-            for (const [d, amended] of [
-              [A, a],
-              [B, b],
-            ] as const) {
-              const opened = get(d.opening, entry.id);
-              if (
-                opened.position !== amended.position ||
-                (opened.text ?? "") !== (amended.text ?? "")
-              )
-                summary.changedMinds[d.opener.family] =
-                  (summary.changedMinds[d.opener.family] ?? 0) + 1;
+              for (const e of split)
+                picks.set(
+                  e.id,
+                  replies.map(({ who, reply }) => ({
+                    reviewer: who.id,
+                    ...reply.items.find((x) => x.id === e.id)!,
+                  })),
+                );
             }
-            const result = decide(a, b, picks.get(entry.id));
-            if (picks.has(entry.id) && result.status === "settled")
-              summary.reconciled++;
-            return {
-              entry,
-              ...result,
-              debates: [A, B].map((d) => ({
-                opener: d.opener.id,
-                respondent: d.respondent.id,
-                opening: get(d.opening, entry.id),
-                rebuttal: get(d.rebuttal, entry.id),
-                amended: get(d.amended, entry.id),
-              })),
-              ...(picks.has(entry.id)
-                ? { reconcile: picks.get(entry.id) }
-                : {}),
-            };
-          });
-          writeFileSync(
-            join(caseOut, "debates.json"),
-            json({
-              schema: "prbench.fact-debate/v1",
-              runId,
-              case: id,
-              outcomes,
-            }),
-          );
-          writeFileSync(
-            join(caseOut, "human-review.md"),
-            debateHumanReview(id, outcomes),
-          );
-          summary.cases++;
-          for (const o of outcomes) {
-            summary.entries++;
-            summary[o.status]++;
-            const k =
-              o.status === "settled"
-                ? `${o.entry.kind}:${o.position}`
-                : "disputed";
-            summary.outcomes[k] = (summary.outcomes[k] ?? 0) + 1;
+            const outcomes: DebateOutcome[] = entries.map((entry) => {
+              const a = get(A.amended, entry.id),
+                b = get(B.amended, entry.id);
+              for (const [d, amended] of [
+                [A, a],
+                [B, b],
+              ] as const) {
+                const opened = get(d.opening, entry.id);
+                if (
+                  opened.position !== amended.position ||
+                  (opened.text ?? "") !== (amended.text ?? "")
+                )
+                  summary.changedMinds[d.opener.family] =
+                    (summary.changedMinds[d.opener.family] ?? 0) + 1;
+              }
+              const result = decide(a, b, picks.get(entry.id));
+              if (picks.has(entry.id) && result.status === "settled")
+                summary.reconciled++;
+              return {
+                entry,
+                ...result,
+                debates: [A, B].map((d) => ({
+                  opener: d.opener.id,
+                  respondent: d.respondent.id,
+                  opening: get(d.opening, entry.id),
+                  rebuttal: get(d.rebuttal, entry.id),
+                  amended: get(d.amended, entry.id),
+                })),
+                ...(picks.has(entry.id)
+                  ? { reconcile: picks.get(entry.id) }
+                  : {}),
+              };
+            });
+            writeFileSync(
+              join(caseOut, "debates.json"),
+              json({
+                schema: "prbench.fact-debate/v1",
+                runId,
+                case: id,
+                outcomes,
+              }),
+            );
+            writeFileSync(
+              join(caseOut, "human-review.md"),
+              debateHumanReview(id, outcomes),
+            );
+            summary.cases++;
+            for (const o of outcomes) {
+              summary.entries++;
+              summary[o.status]++;
+              const k =
+                o.status === "settled"
+                  ? `${o.entry.kind}:${o.position}`
+                  : "disputed";
+              summary.outcomes[k] = (summary.outcomes[k] ?? 0) + 1;
+            }
+            let applied = false;
+            if (opts.apply && outcomes.some((o) => o.status === "settled")) {
+              applyDebate(
+                loaded,
+                facts,
+                sheet,
+                outcomes,
+                ev.bare,
+                runId,
+                effort,
+              );
+              applied = true;
+              summary.applied++;
+            }
+            const n = (s: string) =>
+              outcomes.filter((o) => o.status === s).length;
+            log(
+              `done  ${id}: ${n("settled")}/${outcomes.length} settled${applied ? ", applied" : ""}`,
+            );
+          } finally {
+            rmSync(ev.dir, {
+              recursive: true,
+              force: true,
+              maxRetries: 5,
+              retryDelay: 100,
+            });
           }
-          let applied = false;
-          if (opts.apply && outcomes.some((o) => o.status === "settled")) {
-            applyDebate(loaded, facts, sheet, outcomes, ev.bare, runId, effort);
-            applied = true;
-            summary.applied++;
-          }
-          const n = (s: string) =>
-            outcomes.filter((o) => o.status === s).length;
-          log(
-            `done  ${id}: ${n("settled")}/${outcomes.length} settled${applied ? ", applied" : ""}`,
-          );
-        } finally {
-          rmSync(ev.dir, {
-            recursive: true,
-            force: true,
-            maxRetries: 5,
-            retryDelay: 100,
-          });
-        }
-      }),
-    ),
-  );
+        }),
+      ),
+    );
+  } finally {
+    setCodexLoginSharing(false);
+    releaseCodexLoginLease();
+  }
   Object.assign(summary, {
     calls: stats.calls,
     cachedCalls: stats.cached,

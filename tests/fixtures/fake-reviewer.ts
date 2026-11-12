@@ -170,7 +170,9 @@ if (kind === "review") {
     ? "open"
     : prompt.includes("## Your task: rebut")
       ? "rebut"
-      : "amend";
+      : prompt.includes("## Your task: rule")
+        ? "judge"
+        : "amend";
   const s = script.debate?.[model]?.[stage] ?? {};
   const entries = read("debate.json")?.entries ?? [];
   reply = {
@@ -238,6 +240,9 @@ if (codex) {
       result: text,
       structured_output: reply,
       total_cost_usd: 0.01,
+      ...(process.env.FAKE_REVIEW_MODEL_USAGE
+        ? { modelUsage: { [process.env.FAKE_REVIEW_MODEL_USAGE]: {} } }
+        : {}),
     }),
   );
 }

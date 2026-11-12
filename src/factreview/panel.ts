@@ -382,8 +382,7 @@ export interface CallSpec<T> {
     | "cross-exam"
     | "debate-open"
     | "debate-rebut"
-    | "debate-amend"
-    | "debate-reconcile";
+    | "debate-judge";
   round: number;
   reviewer: Reviewer;
   prompt: string;

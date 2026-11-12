@@ -39,7 +39,11 @@ import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
-import { debateSummaryLines, factDebate } from "./factreview/debate.ts";
+import {
+  DEFAULT_JUDGE,
+  debateSummaryLines,
+  factDebate,
+} from "./factreview/debate.ts";
 import {
   datasetReleases,
   datasetRelease,
@@ -616,14 +620,20 @@ program
 program
   .command("fact-debate")
   .description(
-    "Settle items earlier fact-review runs left disputed by two mirrored debates (Opus and Sol each make the case, the other rebuts, the opener amends)",
+    "Settle entries earlier fact-review runs left without family consensus: Opus and Sol each make the case and rebut the other, then one judge rules on the evidence and both debates",
   )
-  .requiredOption(
+  .option(
     "--from <run>",
-    "an earlier fact-review run whose disputed items and additions are debated (repeatable)",
+    "an earlier fact-review run whose disputed items and additions are settled (repeatable)",
     (v: string, prev: string[]) => [...prev, v],
     [] as string[],
   )
+  .option(
+    "--control <spec>",
+    "score the judge on explicit entries with expected outcomes (scripts/fact-control.ts); never applied",
+  )
+  .option("--judge <provider/model>", "the judge", DEFAULT_JUDGE)
+  .option("--judge-effort <effort>", "the judge's reasoning effort", "xhigh")
   .option("--cases <dir>", "cases directory", "cases-local")
   .option(
     "--case <id>",
@@ -631,7 +641,7 @@ program
     (v: string, prev: string[]) => [...prev, v],
     [] as string[],
   )
-  .option("--effort <effort>", "reasoning effort for every debater", "xhigh")
+  .option("--effort <effort>", "reasoning effort for both debaters", "xhigh")
   .option(
     "--out <dir>",
     "run folder (default results/fact-review-expert/debate-<timestamp>)",
@@ -643,13 +653,13 @@ program
     "--aggregate-only",
     "print counts only: no case names, no fact text (sealed cases)",
   )
-  .option(
-    "--apply",
-    "write settled outcomes into the case facts and provenance",
-  )
+  .option("--apply", "write the rulings into the case facts and provenance")
   .action(
     async (opts: {
       from: string[];
+      control?: string;
+      judge: string;
+      judgeEffort: string;
       cases: string;
       case: string[];
       effort: string;

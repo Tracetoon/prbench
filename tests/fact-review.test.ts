@@ -31,16 +31,18 @@ import {
   checkReview,
   sheetOf,
 } from "../src/factreview/schema.ts";
-import { decide, factDebate } from "../src/factreview/debate.ts";
+import { debaterOrder, factDebate } from "../src/factreview/debate.ts";
+import { canaryEntries, unanimousEntries } from "../scripts/fact-control.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
 
 afterAll(cleanupTemps);
 const saved: Record<string, string | undefined> = {};
-function env(vars: Record<string, string>): void {
+function env(vars: Record<string, string | undefined>): void {
   for (const [k, v] of Object.entries(vars)) {
     if (!(k in saved)) saved[k] = process.env[k];
-    process.env[k] = v;
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
   }
 }
 afterAll(() => {
@@ -807,36 +809,9 @@ describe("cross-examination and focused re-review", () => {
   });
 });
 
-describe("debate", () => {
-  test("decide: agreement settles, a split stays disputed, two rewrites need matching picks", () => {
-    const p = (position: any, text: string | null = null) => ({
-      id: "C1",
-      position,
-      text,
-      argument: "a",
-      evidenceRefs: ["diff.patch:L1-L2"],
-    });
-    expect(decide(p("keep"), p("keep")).status).toBe("settled");
-    expect(decide(p("keep"), p("remove"))).toMatchObject({
-      status: "disputed",
-    });
-    expect(decide(p("revise", "x"), p("revise", "x"))).toMatchObject({
-      status: "settled",
-      text: "x",
-    });
-    expect(decide(p("revise", "x"), p("revise", "y")).status).toBe("disputed");
-    const pick = (choice: "1" | "2") => ({ reviewer: "r", choice, reason: "" });
-    expect(
-      decide(p("revise", "x"), p("revise", "y"), [pick("2"), pick("2")]),
-    ).toMatchObject({ status: "settled", text: "y" });
-    expect(
-      decide(p("revise", "x"), p("revise", "y"), [pick("1"), pick("2")]).status,
-    ).toBe("disputed");
-  });
-
-  test("a disputed item is debated both ways, settled, applied, and recorded", async () => {
-    const { root, dir } = reviewedCase("debate");
-    // First, a review that leaves X1 disputed across families.
+describe("debate and judge", () => {
+  const disputedX1 = async (id: string) => {
+    const { root, dir } = reviewedCase(id);
     const first = setup({
       "*": {
         review: {
@@ -850,24 +825,28 @@ describe("debate", () => {
     });
     await run({ cases: root, out: first.out });
     expect(
-      decisions(first.out, "debate").items.find((i: any) => i.id === "X1")
-        .outcome,
+      decisions(first.out, id).items.find((i: any) => i.id === "X1").outcome,
     ).toBe("disputed");
+    return { root, dir, first };
+  };
+  const FABLE = "claude-fable-5-2";
+
+  test("two debates, then one judge ruling, applied with provenance and recorded", async () => {
+    const { root, dir, first } = await disputedX1("debate");
     const x1 = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"))
       .context[0];
-    // Opus opens with keep, is rebutted by Sol (remove), and amends to remove; Sol opens and amends with remove.
     const second = setup({
       "*": {
         debate: {
-          [OPUS]: {
-            open: {},
-            rebut: { X1: { position: "remove" } },
-            amend: { X1: { position: "remove" } },
-          },
+          [OPUS]: { open: {}, rebut: {} },
           [SOL]: {
             open: { X1: { position: "remove" } },
             rebut: { X1: { position: "remove" } },
-            amend: { X1: { position: "remove" } },
+          },
+          [FABLE]: {
+            judge: {
+              X1: { position: "revise", text: "A shorter context line." },
+            },
           },
         },
       },
@@ -882,38 +861,43 @@ describe("debate", () => {
     expect(s).toMatchObject({
       cases: 1,
       entries: 1,
-      settled: 1,
-      disputed: 0,
+      rulings: { "item:revise": 1 },
+      sidedWith: { neither: 1 },
       applied: 1,
     });
-    expect(s.changedMinds).toEqual({ anthropic: 1 });
     const log = second.calls();
-    const kinds = log
-      .map(
-        (c) =>
-          `${c.model}:${c.prompt.includes("make the case") ? "open" : c.prompt.includes("Your task: rebut") ? "rebut" : "amend"}`,
-      )
-      .sort();
-    expect(kinds).toEqual([
-      `${OPUS}:amend`,
-      `${OPUS}:open`,
-      `${OPUS}:rebut`,
-      `${SOL}:amend`,
-      `${SOL}:open`,
-      `${SOL}:rebut`,
-    ]);
-    // The rebuttal prompt shows the case but never names models or families.
-    const rebut = log.find((c) => c.prompt.includes("Your task: rebut"));
-    expect(rebut.prompt).toContain("The advocate's case");
-    expect(rebut.prompt).not.toMatch(
-      /opus|sol-1|anthropic|openai|gpt-|claude-/i,
+    const stage = (c: any) =>
+      c.prompt.includes("make the case")
+        ? "open"
+        : c.prompt.includes("Your task: rebut")
+          ? "rebut"
+          : c.prompt.includes("Your task: rule")
+            ? "judge"
+            : "?";
+    expect(log.map((c) => `${c.model}:${stage(c)}`).sort()).toEqual(
+      [
+        `${OPUS}:open`,
+        `${OPUS}:rebut`,
+        `${SOL}:open`,
+        `${SOL}:rebut`,
+        `${FABLE}:judge`,
+      ].sort(),
+    );
+    // Prompts never name models or families; the judge sees blinded, consistent labels.
+    for (const c of log)
+      expect(c.prompt).not.toMatch(
+        /opus|sol-1|anthropic|openai|gpt-|claude-|fable/i,
+      );
+    const judge = log.find((c) => stage(c) === "judge");
+    expect(judge.prompt).toContain(
+      "In debate 1, Debater 1 made the case and Debater 2 rebutted",
+    );
+    expect(judge.prompt).toMatch(
+      /Debater 1 \(case\)[\s\S]*Debater 2 \(rebuttal\)[\s\S]*Debater 2 \(case\)[\s\S]*Debater 1 \(rebuttal\)/,
     );
     const facts = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"));
     expect(facts.context).not.toContain(x1);
-    const prov = JSON.parse(
-      readFileSync(join(dir, "facts-provenance.json"), "utf8"),
-    );
-    expect(prov.reviewKind).toBe("expert-panel");
+    expect(facts.context).toContain("A shorter context line.");
     expect(
       preflightCase(loadCase(dir), {
         cache: tempDir(),
@@ -925,11 +909,155 @@ describe("debate", () => {
         facts.uncertainties.length +
         facts.traps.length,
     );
+    const rec = JSON.parse(
+      readFileSync(join(second.out, "debate", "debates.json"), "utf8"),
+    );
+    expect(rec.rulings[0]).toMatchObject({
+      position: "revise",
+      advocated: { opus: "keep", sol: "remove" },
+    });
+    expect(["claude-opus-5-5", "gpt-6.1-sol"]).toContain(rec.debater1);
+  });
+
+  test("debater order is stable per case and both orders occur", () => {
+    expect(debaterOrder("a")).toBe(debaterOrder("a"));
+    const orders = new Set(
+      ["a", "b", "c", "d", "e", "f", "g", "h"].map(debaterOrder),
+    );
+    expect(orders.size).toBe(2);
+  });
+
+  test("control mode scores rulings against expected outcomes and refuses --apply", async () => {
+    const { root, dir } = reviewedCase("control");
+    const sheet = sheetOf(
+      JSON.parse(readFileSync(join(dir, "facts.json"), "utf8")),
+    );
+    const spec = {
+      schema: "prbench.fact-debate-control/v1",
+      cases: [
+        {
+          case: "control",
+          entries: [
+            {
+              ...sheet[0],
+              kind: "item",
+              earlier: null,
+              expected: ["keep"],
+              group: "unanimous",
+            },
+            {
+              ...sheet[1],
+              kind: "item",
+              earlier: null,
+              expected: ["revise", "remove"],
+              group: "canary:contradicted",
+            },
+          ],
+        },
+      ],
+    };
+    const work = tempDir("prbench-control-");
+    writeFileSync(join(work, "spec.json"), JSON.stringify(spec));
+    const before = readFileSync(join(dir, "facts.json"), "utf8");
+    const { out } = setup({
+      "*": { debate: { [FABLE]: { judge: { C2: { position: "keep" } } } } },
+    });
+    await expect(
+      factDebate({
+        cases: root,
+        control: join(work, "spec.json"),
+        out,
+        apply: true,
+        log: () => {},
+      }),
+    ).rejects.toThrow("--apply");
+    const s = await factDebate({
+      cases: root,
+      control: join(work, "spec.json"),
+      out: `${out}-2`,
+      log: () => {},
+    });
+    expect(s.control).toEqual({
+      correct: 1,
+      total: 2,
+      byGroup: {
+        unanimous: { correct: 1, total: 1 },
+        "canary:contradicted": { correct: 0, total: 1 },
+      },
+    });
+    expect(readFileSync(join(dir, "facts.json"), "utf8")).toBe(before);
+  });
+
+  test("a Claude reply from a different model than requested is refused", async () => {
+    const { root, first } = await disputedX1("fallback");
+    const second = setup({ "*": {} });
+    env({ FAKE_REVIEW_MODEL_USAGE: "claude-sonnet-5-5" });
+    await expect(
+      factDebate({
+        cases: root,
+        from: [first.out],
+        out: second.out,
+        log: () => {},
+      }),
+    ).rejects.toThrow(
+      "asked for claude-opus-5-5 but the reply came from claude-sonnet-5-5",
+    );
+    env({ FAKE_REVIEW_MODEL_USAGE: undefined });
+  });
+});
+
+describe("judge control spec", () => {
+  test("canaries become expected revise/remove items plus a missing claim to add; unanimous keeps skip canary cases", () => {
+    const run = tempDir("prbench-ctl-");
+    const mk = (id: string, items: any[], extra: Record<string, unknown>) => {
+      mkdirSync(join(run, id));
+      for (const [f, v] of Object.entries(extra))
+        writeFileSync(join(run, id, f), JSON.stringify(v));
+      return items;
+    };
+    const sheet = [
+      { id: "C1", category: "claims", text: "one" },
+      { id: "T1", category: "traps", text: "true now" },
+    ];
+    mk("k", [], {
+      "canary.json": {
+        defects: [
+          { kind: "contradicted", id: "C1" },
+          { kind: "missing", text: "gone" },
+          { kind: "trap-true", id: "T1" },
+        ],
+      },
+      "sheet.json": { items: sheet },
+    });
+    const keep = (id: string) => ({
+      id,
+      category: "claims",
+      text: id,
+      round1: { votes: Array(6).fill({ verdict: "keep", trapIsReal: null }) },
+    });
+    mk("u", [], {
+      "decisions.json": {
+        items: [
+          keep("C1"),
+          keep("C2"),
+          { ...keep("C3"), round1: { votes: [{ verdict: "remove" }] } },
+        ],
+      },
+    });
+    mk("k2", [], { "decisions.json": { items: [keep("C1")] } });
+    const canaries = canaryEntries(run);
+    expect(canaries).toHaveLength(1);
     expect(
-      JSON.parse(
-        readFileSync(join(second.out, "debate", "debates.json"), "utf8"),
-      ).outcomes[0],
-    ).toMatchObject({ status: "settled", position: "remove" });
+      canaries[0]!.entries.map((e) => [e.id, e.kind, e.group, e.expected]),
+    ).toEqual([
+      ["C1", "item", "canary:contradicted", ["revise", "remove"]],
+      ["N1", "addition", "canary:missing", ["keep", "revise"]],
+      ["T1", "item", "canary:trap-true", ["revise", "remove"]],
+    ]);
+    const unanimous = unanimousEntries(run, 30, new Set(["k2"]));
+    expect(unanimous.map((u) => [u.case, u.entries.map((e) => e.id)])).toEqual([
+      ["u", ["C1", "C2"]],
+    ]);
   });
 });
 

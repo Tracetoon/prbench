@@ -139,23 +139,35 @@ Scoring:
 
 With `--aggregate-only` the terminal shows only counts: cases, items, settled, kept, revised, removed and disputed items, additions, calls, cost and canary metrics. It never shows case names, fact text or the run folder path. The run folder still holds every decision and `human-review.md` for the person resolving disputes. The panel models do see sealed content, but they tune nothing, so the set stays sealed for the tuner.
 
-## Debate (`prbench fact-debate`)
+## Debate and judge (`prbench fact-debate`)
 
-Items still disputed after review and cross-examination can be settled by debate:
+Entries without family consensus are settled by debate plus a single judge:
 
 ```sh
 bun run prbench fact-debate --cases <dir> --from <run> [--from <run>...] --out <dir> [--apply] [--aggregate-only]
+bun run prbench fact-debate --cases <dir> --control spec.json --out <dir>     # score the judge first
 ```
 
-Every disputed item and disputed addition recorded in the `--from` runs is matched by text to the case's current sheet and debated twice, in mirror image:
+**What is settled:** every disputed item and disputed or unsourced addition in the `--from` runs, matched by text to the case's current sheet. That covers round-1 disputes and consensus revisions whose rewrite failed the round-2 vote.
 
-1. **Debate A:** Opus makes the case for a position, Sol must rebut it (even when it agrees), and Opus gives an amended decision.
-2. **Debate B:** the same with the roles swapped. Sol opens, Opus rebuts, Sol amends.
+**Per case, over all entries at once:**
+1. **Debate A:** Opus makes the case, then Sol must rebut it, even if it agrees.
+2. **Debate B:** Sol makes the case, then Opus rebuts.
+3. **Ruling:** the judge, Fable 5.2 at xhigh by default (`--judge`, `--judge-effort`), reads the same read-only evidence and both debates, then rules on every entry: keep, revise (with the final text) or remove. Its ruling is final.
 
-Prompts name the roles (advocate, respondent), never the models, and ask for the shortest text that is correct and scoreable.
+**Blinding:**
+- Debaters see the roles advocate and respondent.
+- The judge sees "Debater 1" and "Debater 2". The label for each model is fixed per case by a hash of the case ID and recorded in `debates.json`.
+- The summary counts how often a ruling sided with Opus, Sol, both or neither, and with Debater 1 or Debater 2, so model and position bias both show up.
 
-- **Same decision in both debates:** the entry settles. Keep or remove applies directly.
-- **Both revise, with different texts:** one Opus and one Sol call each pick the better text, and it settles only if they pick the same one.
-- **Anything else:** stays disputed, and `<out>/<case>/human-review.md` lists both debates in full.
+**Why a judge instead of consensus:** in cross-examination, and in an earlier amend-and-pick debate, the Claude reviewers moved toward a well-argued opposing position far more readily than Sol did. Any rule that needs both families to agree therefore drifted toward the more stubborn side. In the two-text pick, each model also tended to pick its own text.
 
-`--apply` writes settled outcomes into the case with expert-panel provenance, built from the cited evidence. The summary counts how many amended decisions moved away from the debater's own opening case, per family.
+**Control (`--control`, built by `scripts/fact-control.ts`):**
+- items the whole panel kept unanimously in round 1 (expected: keep);
+- the planted canaries on their canary sheets (expected: revise or remove; a removed claim offered as an addition is expected to be added).
+
+It is scored and never applied.
+
+**Model check:** a Claude reply is refused if Claude Code reports a different model than the one requested, since it can quietly answer an unknown model ID with its default model.
+
+**`--apply`:** writes the rulings with provenance from the judge's cited evidence. An accepted addition with no resolvable reference goes to `human-review.md`.

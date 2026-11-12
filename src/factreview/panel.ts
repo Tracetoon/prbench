@@ -30,6 +30,10 @@ import {
   type JudgeProvider,
 } from "../judge/providers.ts";
 import { claudeEffort } from "../agents/claude.ts";
+import {
+  releaseCodexLoginLease,
+  setCodexLoginSharing,
+} from "../agents/codexAuth.ts";
 import { reasoningEffort } from "../agents/codex.ts";
 import { digest } from "../util/hash.ts";
 import { exec } from "../util/exec.ts";
@@ -1033,7 +1037,20 @@ export async function factReview(
     }
   }
 
-  await Promise.all(selected.map((c) => caseLimit(() => reviewCase(c))));
+  // Codex calls share the benchmark login, as `compare` does; without this each
+  // call holds the exclusive login lock for its whole run, so Sol reviewers
+  // would run one at a time whatever --parallel says.
+  const shareCodex =
+    parallel > 1 && reviewers.some((r) => r.provider === "codex");
+  if (shareCodex) setCodexLoginSharing(true);
+  try {
+    await Promise.all(selected.map((c) => caseLimit(() => reviewCase(c))));
+  } finally {
+    if (shareCodex) {
+      setCodexLoginSharing(false);
+      releaseCodexLoginLease();
+    }
+  }
   results.sort((a, b) => a.id.localeCompare(b.id));
 
   const counts = results.reduce<CaseCounts>(

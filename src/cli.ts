@@ -39,6 +39,7 @@ import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
+import { debateSummaryLines, factDebate } from "./factreview/debate.ts";
 import {
   datasetReleases,
   datasetRelease,
@@ -604,6 +605,82 @@ program
           );
           console.error(
             `fact-review failed; details in ${join(out, "error.log")}`,
+          );
+        } else
+          console.error(error instanceof Error ? error.message : String(error));
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("fact-debate")
+  .description(
+    "Settle items earlier fact-review runs left disputed by two mirrored debates (Opus and Sol each make the case, the other rebuts, the opener amends)",
+  )
+  .requiredOption(
+    "--from <run>",
+    "an earlier fact-review run whose disputed items and additions are debated (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--effort <effort>", "reasoning effort for every debater", "xhigh")
+  .option(
+    "--out <dir>",
+    "run folder (default results/fact-review-expert/debate-<timestamp>)",
+  )
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option("--resume", "reuse finished calls from the run folder")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option(
+    "--aggregate-only",
+    "print counts only: no case names, no fact text (sealed cases)",
+  )
+  .option(
+    "--apply",
+    "write settled outcomes into the case facts and provenance",
+  )
+  .action(
+    async (opts: {
+      from: string[];
+      cases: string;
+      case: string[];
+      effort: string;
+      out?: string;
+      packets: string;
+      resume?: boolean;
+      parallel: number;
+      aggregateOnly?: boolean;
+      apply?: boolean;
+    }) => {
+      const out = resolve(
+        opts.out ??
+          join(
+            "results",
+            "fact-review-expert",
+            `debate-${new Date().toISOString().replace(/[:.]/g, "-")}`,
+          ),
+      );
+      try {
+        const s = await factDebate({ ...opts, caseIds: opts.case, out });
+        for (const line of debateSummaryLines(s)) console.log(line);
+        if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
+      } catch (error) {
+        if (opts.aggregateOnly) {
+          mkdirSync(out, { recursive: true });
+          writeFileSync(
+            join(out, "error.log"),
+            `${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
+          );
+          console.error(
+            `fact-debate failed; details in ${join(out, "error.log")}`,
           );
         } else
           console.error(error instanceof Error ? error.message : String(error));

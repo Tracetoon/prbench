@@ -138,3 +138,24 @@ Scoring:
 ## Sealed cases
 
 With `--aggregate-only` the terminal shows only counts: cases, items, settled, kept, revised, removed and disputed items, additions, calls, cost and canary metrics. It never shows case names, fact text or the run folder path. The run folder still holds every decision and `human-review.md` for the person resolving disputes. The panel models do see sealed content, but they tune nothing, so the set stays sealed for the tuner.
+
+## Debate (`prbench fact-debate`)
+
+Items still disputed after review and cross-examination can be settled by debate:
+
+```sh
+bun run prbench fact-debate --cases <dir> --from <run> [--from <run>...] --out <dir> [--apply] [--aggregate-only]
+```
+
+Every disputed item and disputed addition recorded in the `--from` runs is matched by text to the case's current sheet and debated twice, in mirror image:
+
+1. **Debate A:** Opus makes the case for a position, Sol must rebut it (even when it agrees), and Opus gives an amended decision.
+2. **Debate B:** the same with the roles swapped. Sol opens, Opus rebuts, Sol amends.
+
+Prompts name the roles (advocate, respondent), never the models, and ask for the shortest text that is correct and scoreable.
+
+- **Same decision in both debates:** the entry settles. Keep or remove applies directly.
+- **Both revise, with different texts:** one Opus and one Sol call each pick the better text, and it settles only if they pick the same one.
+- **Anything else:** stays disputed, and `<out>/<case>/human-review.md` lists both debates in full.
+
+`--apply` writes settled outcomes into the case with expert-panel provenance, built from the cited evidence. The summary counts how many amended decisions moved away from the debater's own opening case, per family.

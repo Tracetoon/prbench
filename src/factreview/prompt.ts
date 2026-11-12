@@ -6,7 +6,7 @@ import type { Proposal, SheetItem } from "./schema.ts";
 
 export const FACT_REVIEW_PROMPT_VERSION = 2;
 
-const WORKSPACE = `## Your workspace
+export const WORKSPACE = `## Your workspace
 
 Your working directory holds the evidence for one code change. You can read and search it; you cannot change it.
 
@@ -29,7 +29,7 @@ Cite evidence with these references, one location each:
 
 Read the evidence yourself. Check facts against what the diff and sessions show, not against what seems plausible.`;
 
-const SHEET_RULES = `## What a fact sheet is
+export const SHEET_RULES = `## What a fact sheet is
 
 A fact sheet is the reference that pull-request descriptions of this change are scored against. It has four sections:
 - claims: things a good description should convey, each checkable against the diff or sessions;
@@ -39,7 +39,7 @@ A fact sheet is the reference that pull-request descriptions of this change are 
 
 A wrong, unsupported, trivial or missing fact biases every score, so be exact.`;
 
-const list = (items: SheetItem[]) =>
+export const list = (items: SheetItem[]) =>
   items.map((i) => `- ${i.id} (${i.category}): ${i.text}`).join("\n");
 
 export function reviewPrompt(sheet: SheetItem[], focus?: string[]): string {

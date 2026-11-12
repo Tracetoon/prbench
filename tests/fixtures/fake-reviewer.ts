@@ -45,18 +45,24 @@ const schema = JSON.parse(
 );
 const required: string[] = schema.required ?? [];
 const crossExam = existsSync(join(process.cwd(), "disputes.json"));
+const debating = existsSync(join(process.cwd(), "debate.json"));
+const reconciling = existsSync(join(process.cwd(), "texts.json"));
 const kind =
-  required.includes("items") && crossExam
-    ? "cross-exam"
-    : required.includes("items")
-      ? "review"
-      : required.includes("votes")
-        ? "vote"
-        : required.includes("candidates")
-          ? "rewrite"
-          : required.includes("clusters")
-            ? "cluster"
-            : "unknown";
+  required.includes("items") && reconciling
+    ? "reconcile"
+    : required.includes("items") && debating
+      ? "debate"
+      : required.includes("items") && crossExam
+        ? "cross-exam"
+        : required.includes("items")
+          ? "review"
+          : required.includes("votes")
+            ? "vote"
+            : required.includes("candidates")
+              ? "rewrite"
+              : required.includes("clusters")
+                ? "cluster"
+                : "unknown";
 const cwd = process.cwd();
 const read = (f: string) =>
   existsSync(join(cwd, f))
@@ -157,6 +163,32 @@ if (kind === "review") {
       text: g[0].text,
       members: g.map((a) => a.id),
       evidenceRefs: g[0].evidenceRefs,
+    })),
+  };
+} else if (kind === "debate") {
+  const stage = prompt.includes("## Your task: make the case")
+    ? "open"
+    : prompt.includes("## Your task: rebut")
+      ? "rebut"
+      : "amend";
+  const s = script.debate?.[model]?.[stage] ?? {};
+  const entries = read("debate.json")?.entries ?? [];
+  reply = {
+    items: entries.map((e: any) => ({
+      id: e.id,
+      position: s[e.id]?.position ?? "keep",
+      text: s[e.id]?.text ?? null,
+      argument: `${stage} argument`,
+      evidenceRefs: ["diff.patch:L1-L2"],
+    })),
+  };
+} else if (kind === "reconcile") {
+  const s = script.reconcile?.[model] ?? {};
+  reply = {
+    items: (read("texts.json")?.entries ?? []).map((e: any) => ({
+      id: e.entry.id,
+      choice: s[e.entry.id] ?? "1",
+      reason: "clearer",
     })),
   };
 } else if (kind === "cross-exam") {

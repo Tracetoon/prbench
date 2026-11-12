@@ -155,7 +155,7 @@ export interface Reviewer extends Member {
   judge: JudgeProvider;
 }
 
-function judgeFor(
+export function judgeFor(
   provider: "claude" | "codex",
   model: string,
   effort: string,
@@ -224,7 +224,7 @@ export interface CrossExamStats {
 }
 
 /** A counting semaphore for concurrent model calls. */
-function limiter(n: number) {
+export function limiter(n: number) {
   let active = 0;
   const queue: (() => void)[] = [];
   return async <T>(fn: () => Promise<T>): Promise<T> => {
@@ -279,7 +279,7 @@ function filesOf(
 const notEvidence = (rel: string) =>
   /^facts([.-]|$)/.test(basename(rel)) || rel === "facts.draft.json";
 
-interface Evidence {
+export interface Evidence {
   dir: string;
   hash: string;
   bare: string;
@@ -290,7 +290,7 @@ interface Evidence {
  * draft), the raw session transcripts under raw/, and every changed file at
  * base/ and head/. Hashed without repo.git, whose packing varies.
  */
-function buildEvidence(loaded: LoadedCase, packet: string): Evidence {
+export function buildEvidence(loaded: LoadedCase, packet: string): Evidence {
   const dir = mkdtempSync(join(tmpdir(), "prbench-factreview-evidence-"));
   linkTree(packet, dir, notEvidence);
   for (const s of loaded.case.sessions ?? []) {
@@ -346,7 +346,7 @@ function buildEvidence(loaded: LoadedCase, packet: string): Evidence {
   return { dir, hash: digest(manifest.join("\n")), bare };
 }
 
-function packetFor(
+export function packetFor(
   loaded: LoadedCase,
   packets: string | undefined,
   caseOut: string,
@@ -364,17 +364,26 @@ function packetFor(
   return built;
 }
 
-const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
+export const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 
-interface CallStats {
+export interface CallStats {
   calls: number;
   cached: number;
   costUsd: number;
 }
 
-interface CallSpec<T> {
+export interface CallSpec<T> {
   kind:
-    "review" | "rewrite" | "cluster" | "vote" | "cross-rewrite" | "cross-exam";
+    | "review"
+    | "rewrite"
+    | "cluster"
+    | "vote"
+    | "cross-rewrite"
+    | "cross-exam"
+    | "debate-open"
+    | "debate-rebut"
+    | "debate-amend"
+    | "debate-reconcile";
   round: number;
   reviewer: Reviewer;
   prompt: string;
@@ -384,6 +393,126 @@ interface CallSpec<T> {
   /** Where the per-reviewer copy of the reply goes. */
   saveAs: string;
   _t?: T;
+}
+
+/** The resumable, schema-checked model call every fact-review stage uses. Each call's key hashes the evidence, sheet, prompt and reviewer. */
+export function makeCaller(
+  out: string,
+  resume: boolean,
+  limit: <R>(fn: () => Promise<R>) => Promise<R>,
+  stats: CallStats,
+) {
+  return async function call<T>(
+    caseOut: string,
+    ev: Evidence,
+    sheet: SheetItem[],
+    spec: CallSpec<T>,
+  ): Promise<T> {
+    const key = digest(
+      JSON.stringify({
+        v: FACT_REVIEW_PROMPT_VERSION,
+        kind: spec.kind,
+        evidence: ev.hash,
+        sheet: digest(JSON.stringify(sheet)),
+        prompt: digest(spec.prompt),
+        provider: spec.reviewer.provider,
+        model: spec.reviewer.model,
+        effort: spec.reviewer.effort,
+        round: spec.round,
+        replicate: spec.reviewer.replicate,
+      }),
+    );
+    const cacheFile = join(out, "calls", `${key}.json`);
+    let saved: { reply: T; costUsd?: number } | undefined;
+    if (resume && existsSync(cacheFile)) {
+      const s = JSON.parse(readFileSync(cacheFile, "utf8"));
+      if (spec.check(s.reply).length === 0) {
+        saved = s;
+        stats.cached++;
+      }
+    }
+    if (!saved)
+      saved = await limit(async () => {
+        let prompt = spec.prompt;
+        let lastError = "";
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          const work = mkdtempSync(join(tmpdir(), "prbench-factreview-"));
+          try {
+            linkTree(ev.dir, work);
+            writeFileSync(
+              join(work, "sheet.json"),
+              json({
+                items: sheet.map(({ id, category, text }) => ({
+                  id,
+                  category,
+                  text,
+                })),
+              }),
+            );
+            for (const [name, value] of Object.entries(spec.files ?? {}))
+              writeFileSync(join(work, name), json(value));
+            stats.calls++;
+            const reply = await spec.reviewer.judge.ask(prompt, spec.schema, {
+              workDir: work,
+            });
+            if (reply.costUsd) stats.costUsd += reply.costUsd;
+            let parsed: unknown;
+            let problems: string[];
+            try {
+              parsed = extractJson(reply.text);
+              problems = spec.check(parsed);
+            } catch (error) {
+              problems = [String(error)];
+            }
+            if (!problems.length) {
+              const record = {
+                key,
+                kind: spec.kind,
+                round: spec.round,
+                reviewer: spec.reviewer.id,
+                model: spec.reviewer.model,
+                effort: spec.reviewer.effort,
+                attempts: attempt,
+                costUsd: reply.costUsd,
+                at: new Date().toISOString(),
+                reply: parsed as T,
+              };
+              writeFileSync(cacheFile, json(record));
+              return record;
+            }
+            lastError = problems.join("; ");
+            prompt = correctionPrompt(spec.prompt, problems);
+          } catch (error) {
+            lastError = String(error);
+          } finally {
+            rmSync(work, {
+              recursive: true,
+              force: true,
+              maxRetries: 5,
+              retryDelay: 100,
+            });
+          }
+        }
+        throw new Error(
+          `${spec.kind} call by ${spec.reviewer.id} (round ${spec.round}) failed after 3 attempts: ${lastError.slice(0, 600)}`,
+        );
+      });
+    mkdirSync(dirname(join(caseOut, spec.saveAs)), { recursive: true });
+    writeFileSync(
+      join(caseOut, spec.saveAs),
+      json({
+        reviewer: spec.reviewer.id,
+        model: spec.reviewer.model,
+        family: spec.reviewer.family,
+        effort: spec.reviewer.effort,
+        round: spec.round,
+        kind: spec.kind,
+        key,
+        reply: saved.reply,
+      }),
+    );
+    return saved.reply;
+  };
 }
 
 export async function factReview(
@@ -542,117 +671,7 @@ export async function factReview(
   };
   const limit = limiter(parallel);
 
-  async function call<T>(
-    caseOut: string,
-    ev: Evidence,
-    sheet: SheetItem[],
-    spec: CallSpec<T>,
-  ): Promise<T> {
-    const key = digest(
-      JSON.stringify({
-        v: FACT_REVIEW_PROMPT_VERSION,
-        kind: spec.kind,
-        evidence: ev.hash,
-        sheet: digest(JSON.stringify(sheet)),
-        prompt: digest(spec.prompt),
-        provider: spec.reviewer.provider,
-        model: spec.reviewer.model,
-        effort: spec.reviewer.effort,
-        round: spec.round,
-        replicate: spec.reviewer.replicate,
-      }),
-    );
-    const cacheFile = join(out, "calls", `${key}.json`);
-    let saved: { reply: T; costUsd?: number } | undefined;
-    if (opts.resume && existsSync(cacheFile)) {
-      const s = JSON.parse(readFileSync(cacheFile, "utf8"));
-      if (spec.check(s.reply).length === 0) {
-        saved = s;
-        stats.cached++;
-      }
-    }
-    if (!saved)
-      saved = await limit(async () => {
-        let prompt = spec.prompt;
-        let lastError = "";
-        for (let attempt = 1; attempt <= 3; attempt++) {
-          const work = mkdtempSync(join(tmpdir(), "prbench-factreview-"));
-          try {
-            linkTree(ev.dir, work);
-            writeFileSync(
-              join(work, "sheet.json"),
-              json({
-                items: sheet.map(({ id, category, text }) => ({
-                  id,
-                  category,
-                  text,
-                })),
-              }),
-            );
-            for (const [name, value] of Object.entries(spec.files ?? {}))
-              writeFileSync(join(work, name), json(value));
-            stats.calls++;
-            const reply = await spec.reviewer.judge.ask(prompt, spec.schema, {
-              workDir: work,
-            });
-            if (reply.costUsd) stats.costUsd += reply.costUsd;
-            let parsed: unknown;
-            let problems: string[];
-            try {
-              parsed = extractJson(reply.text);
-              problems = spec.check(parsed);
-            } catch (error) {
-              problems = [String(error)];
-            }
-            if (!problems.length) {
-              const record = {
-                key,
-                kind: spec.kind,
-                round: spec.round,
-                reviewer: spec.reviewer.id,
-                model: spec.reviewer.model,
-                effort: spec.reviewer.effort,
-                attempts: attempt,
-                costUsd: reply.costUsd,
-                at: new Date().toISOString(),
-                reply: parsed as T,
-              };
-              writeFileSync(cacheFile, json(record));
-              return record;
-            }
-            lastError = problems.join("; ");
-            prompt = correctionPrompt(spec.prompt, problems);
-          } catch (error) {
-            lastError = String(error);
-          } finally {
-            rmSync(work, {
-              recursive: true,
-              force: true,
-              maxRetries: 5,
-              retryDelay: 100,
-            });
-          }
-        }
-        throw new Error(
-          `${spec.kind} call by ${spec.reviewer.id} (round ${spec.round}) failed after 3 attempts: ${lastError.slice(0, 600)}`,
-        );
-      });
-    mkdirSync(dirname(join(caseOut, spec.saveAs)), { recursive: true });
-    writeFileSync(
-      join(caseOut, spec.saveAs),
-      json({
-        reviewer: spec.reviewer.id,
-        model: spec.reviewer.model,
-        family: spec.reviewer.family,
-        effort: spec.reviewer.effort,
-        round: spec.round,
-        kind: spec.kind,
-        key,
-        reply: saved.reply,
-      }),
-    );
-    return saved.reply;
-  }
+  const call = makeCaller(out, !!opts.resume, limit, stats);
 
   const results: {
     id: string;

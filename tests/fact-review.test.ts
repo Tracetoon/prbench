@@ -31,6 +31,7 @@ import {
   checkReview,
   sheetOf,
 } from "../src/factreview/schema.ts";
+import { decide, factDebate } from "../src/factreview/debate.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
 
@@ -803,6 +804,132 @@ describe("cross-examination and focused re-review", () => {
     );
     expect(out.claims).not.toContain("A changed second claim.");
     expect(out.claims).toContain(facts.claims[0]);
+  });
+});
+
+describe("debate", () => {
+  test("decide: agreement settles, a split stays disputed, two rewrites need matching picks", () => {
+    const p = (position: any, text: string | null = null) => ({
+      id: "C1",
+      position,
+      text,
+      argument: "a",
+      evidenceRefs: ["diff.patch:L1-L2"],
+    });
+    expect(decide(p("keep"), p("keep")).status).toBe("settled");
+    expect(decide(p("keep"), p("remove"))).toMatchObject({
+      status: "disputed",
+    });
+    expect(decide(p("revise", "x"), p("revise", "x"))).toMatchObject({
+      status: "settled",
+      text: "x",
+    });
+    expect(decide(p("revise", "x"), p("revise", "y")).status).toBe("disputed");
+    const pick = (choice: "1" | "2") => ({ reviewer: "r", choice, reason: "" });
+    expect(
+      decide(p("revise", "x"), p("revise", "y"), [pick("2"), pick("2")]),
+    ).toMatchObject({ status: "settled", text: "y" });
+    expect(
+      decide(p("revise", "x"), p("revise", "y"), [pick("1"), pick("2")]).status,
+    ).toBe("disputed");
+  });
+
+  test("a disputed item is debated both ways, settled, applied, and recorded", async () => {
+    const { root, dir } = reviewedCase("debate");
+    // First, a review that leaves X1 disputed across families.
+    const first = setup({
+      "*": {
+        review: {
+          [SOL]: [
+            { X1: { verdict: "remove" } },
+            { X1: { verdict: "remove" } },
+            {},
+          ],
+        },
+      },
+    });
+    await run({ cases: root, out: first.out });
+    expect(
+      decisions(first.out, "debate").items.find((i: any) => i.id === "X1")
+        .outcome,
+    ).toBe("disputed");
+    const x1 = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"))
+      .context[0];
+    // Opus opens with keep, is rebutted by Sol (remove), and amends to remove; Sol opens and amends with remove.
+    const second = setup({
+      "*": {
+        debate: {
+          [OPUS]: {
+            open: {},
+            rebut: { X1: { position: "remove" } },
+            amend: { X1: { position: "remove" } },
+          },
+          [SOL]: {
+            open: { X1: { position: "remove" } },
+            rebut: { X1: { position: "remove" } },
+            amend: { X1: { position: "remove" } },
+          },
+        },
+      },
+    });
+    const s = await factDebate({
+      cases: root,
+      from: [first.out],
+      out: second.out,
+      apply: true,
+      log: () => {},
+    });
+    expect(s).toMatchObject({
+      cases: 1,
+      entries: 1,
+      settled: 1,
+      disputed: 0,
+      applied: 1,
+    });
+    expect(s.changedMinds).toEqual({ anthropic: 1 });
+    const log = second.calls();
+    const kinds = log
+      .map(
+        (c) =>
+          `${c.model}:${c.prompt.includes("make the case") ? "open" : c.prompt.includes("Your task: rebut") ? "rebut" : "amend"}`,
+      )
+      .sort();
+    expect(kinds).toEqual([
+      `${OPUS}:amend`,
+      `${OPUS}:open`,
+      `${OPUS}:rebut`,
+      `${SOL}:amend`,
+      `${SOL}:open`,
+      `${SOL}:rebut`,
+    ]);
+    // The rebuttal prompt shows the case but never names models or families.
+    const rebut = log.find((c) => c.prompt.includes("Your task: rebut"));
+    expect(rebut.prompt).toContain("The advocate's case");
+    expect(rebut.prompt).not.toMatch(
+      /opus|sol-1|anthropic|openai|gpt-|claude-/i,
+    );
+    const facts = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"));
+    expect(facts.context).not.toContain(x1);
+    const prov = JSON.parse(
+      readFileSync(join(dir, "facts-provenance.json"), "utf8"),
+    );
+    expect(prov.reviewKind).toBe("expert-panel");
+    expect(
+      preflightCase(loadCase(dir), {
+        cache: tempDir(),
+        requireProvenance: true,
+      }).checkedFacts,
+    ).toBe(
+      facts.claims.length +
+        facts.context.length +
+        facts.uncertainties.length +
+        facts.traps.length,
+    );
+    expect(
+      JSON.parse(
+        readFileSync(join(second.out, "debate", "debates.json"), "utf8"),
+      ).outcomes[0],
+    ).toMatchObject({ status: "settled", position: "remove" });
   });
 });
 

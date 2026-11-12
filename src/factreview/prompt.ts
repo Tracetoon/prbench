@@ -42,7 +42,8 @@ A wrong, unsupported, trivial or missing fact biases every score, so be exact.`;
 const list = (items: SheetItem[]) =>
   items.map((i) => `- ${i.id} (${i.category}): ${i.text}`).join("\n");
 
-export function reviewPrompt(sheet: SheetItem[]): string {
+export function reviewPrompt(sheet: SheetItem[], focus?: string[]): string {
+  if (focus) return focusPrompt(sheet, focus);
   return `You are reviewing a fact sheet for a code change, item by item, against the raw evidence.
 
 ${SHEET_RULES}
@@ -64,6 +65,101 @@ For each item also give a one-line reason and the evidence references you checke
 For traps, set "trapIsReal": true only if the statement is a real temptation for someone describing this change AND is false according to the evidence; otherwise false (and revise or remove it). For other sections set it to null.
 
 Then list important facts the sheet is missing, under "additions", each with its section, the text as it should appear on the sheet, a one-line reason and evidence references. Propose only facts that matter for judging a description of this change; return an empty list if nothing important is missing.
+
+Reply with the JSON object only.`;
+}
+
+/** Re-review of changed items only: the rest of the sheet is context. */
+function focusPrompt(sheet: SheetItem[], focus: string[]): string {
+  const under = sheet.filter((i) => focus.includes(i.id));
+  return `You are re-checking some items of a fact sheet for a code change against the raw evidence. These items were recently rewritten or added; the rest of the sheet is settled and shown only as context.
+
+${SHEET_RULES}
+
+${WORKSPACE}
+
+## The whole sheet, for context (also in sheet.json)
+
+${list(sheet)}
+
+## The items to review
+
+${list(under)}
+
+## Your task
+
+For every item under review (and only those), give exactly one verdict:
+- keep: supported by the evidence, correct, specific and worth scoring;
+- revise: worth keeping but inaccurate, overstated, vague or wrongly scoped; give the corrected text in "rewrite";
+- remove: unsupported, contradicted, trivial, or a duplicate of another item on the sheet.
+
+For each item also give a one-line reason and the evidence references you checked. Set "rewrite" to null unless you revise.
+For traps, set "trapIsReal": true only if the statement is a real temptation for someone describing this change AND is false according to the evidence; otherwise false (and revise or remove it). For other sections set it to null.
+
+Return an empty "additions" list: this pass does not add facts.
+
+Reply with the JSON object only.`;
+}
+
+export interface CrossExamEntry {
+  id: string;
+  category: string;
+  text: string;
+  /** Arguments made in the first round, grouped by position, without saying who made them or how many did. */
+  positions: {
+    verdict: string;
+    arguments: { reason: string; evidenceRefs: string[] }[];
+  }[];
+  /** The merged rewrite put forward by those who wanted a revision, if any. */
+  candidate: string | null;
+}
+
+export function crossExamPrompt(
+  sheet: SheetItem[],
+  entries: CrossExamEntry[],
+): string {
+  const body = entries
+    .map((e) =>
+      [
+        `### ${e.id} (${e.category})`,
+        `Current text: ${e.text}`,
+        ...(e.candidate
+          ? [`Candidate rewrite: ${e.candidate}`]
+          : ["Candidate rewrite: none (choose keep or remove)"]),
+        ...e.positions.map((p) =>
+          [
+            `Arguments for ${p.verdict}:`,
+            ...p.arguments.map(
+              (a) =>
+                `  - ${a.reason} (evidence: ${a.evidenceRefs.join(", ") || "none"})`,
+            ),
+          ].join("\n"),
+        ),
+      ].join("\n"),
+    )
+    .join("\n\n");
+  return `Independent reviewers checked a fact sheet for a code change against the raw evidence and disagreed on some items. You decide each disputed item after weighing every argument.
+
+${SHEET_RULES}
+
+${WORKSPACE}
+
+## The sheet (also in sheet.json)
+
+${list(sheet)}
+
+## Disputed items (also in disputes.json)
+
+${body}
+
+## Your task
+
+For every disputed item choose one:
+- keep: the current text is correct, supported, specific and worth scoring as it stands;
+- revise: the candidate rewrite is better and is itself correct and supported (only when a candidate is given);
+- remove: the item is unsupported, contradicted, trivial or a duplicate.
+
+The arguments are claims, not evidence. Open the evidence they cite and check it yourself. Decide on what the evidence shows and on what makes a good reference fact for scoring descriptions: do not defer to any side, do not split the difference, and do not pick revise just because a rewrite is more detailed. Give a one-line reason and the evidence references you checked.
 
 Reply with the JSON object only.`;
 }

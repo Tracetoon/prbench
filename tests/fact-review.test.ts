@@ -26,7 +26,11 @@ import {
   summaryLines,
   type FactReviewOptions,
 } from "../src/factreview/panel.ts";
-import { checkReview, sheetOf } from "../src/factreview/schema.ts";
+import {
+  checkCrossExam,
+  checkReview,
+  sheetOf,
+} from "../src/factreview/schema.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
 
@@ -652,6 +656,153 @@ describe("fact-review with a fake panel", () => {
     expect(
       readFileSync(join(out, "sealed-secret-case", "human-review.md"), "utf8"),
     ).toContain("## C1");
+  });
+});
+
+describe("cross-examination and focused re-review", () => {
+  test("cross-examination settles a dispute by family consensus and records changed minds", async () => {
+    const { root } = reviewedCase("cross");
+    const rewrite = "A sharper first claim.";
+    const { out, calls } = setup({
+      "*": {
+        review: {
+          [OPUS]: [{}, {}, {}],
+          [SOL]: [
+            { C1: { verdict: "revise", rewrite, reason: "overstated" } },
+            { C1: { verdict: "revise", rewrite, reason: "overstated" } },
+            { X1: { verdict: "remove", reason: "incidental" } },
+          ],
+        },
+        cross: {
+          [OPUS]: [{ C1: "revise" }, { C1: "revise" }, { C1: "keep" }],
+          [SOL]: [{ C1: "revise" }, { C1: "revise" }, { C1: "revise" }],
+        },
+      },
+    });
+    const s = await run({ cases: root, out, crossExam: true });
+    const d = decisions(out, "cross");
+    const c1 = d.items.find((i: any) => i.id === "C1");
+    expect(c1).toMatchObject({
+      outcome: "revised",
+      finalText: rewrite,
+      crossExam: {
+        candidate: { text: rewrite },
+        consensus: { status: "settled", value: "revise" },
+      },
+    });
+    expect(
+      c1.crossExam.votes.filter((v: any) => v.choice !== v.before),
+    ).toHaveLength(3);
+    // X1 had only a single remove vote, so its family majority was keep: settled in round 1.
+    expect(d.items.find((i: any) => i.id === "X1").outcome).toBe("kept");
+    expect(s.crossExam).toMatchObject({
+      items: 1,
+      settled: 1,
+      changed: { anthropic: 2, openai: 1 },
+      votes: 6,
+    });
+    const log = calls();
+    const cross = log.filter((c) => c.kind === "cross-exam");
+    expect(cross).toHaveLength(6);
+    // Arguments are shown without reviewer names or counts.
+    expect(cross[0].prompt).toContain("Arguments for revise:");
+    expect(cross[0].prompt).not.toMatch(/opus-\d|sol-\d|anthropic|openai/);
+    expect(cross[0].files).toContain("disputes.json");
+    const facts = JSON.parse(
+      readFileSync(join(out, "cross", "facts.json"), "utf8"),
+    );
+    expect(facts.claims[0]).toBe(rewrite);
+    const human = readFileSync(join(out, "cross", "human-review.md"), "utf8");
+    expect(human).not.toContain("## C1");
+  });
+
+  test("a dispute the families still split on after cross-examination stays disputed", async () => {
+    const { root } = reviewedCase("cross-split");
+    const { out } = setup({
+      "*": {
+        review: {
+          [OPUS]: [{}, {}, {}],
+          [SOL]: [
+            { X1: { verdict: "remove" } },
+            { X1: { verdict: "remove" } },
+            {},
+          ],
+        },
+        cross: {
+          [SOL]: [{ X1: "remove" }, { X1: "remove" }, { X1: "remove" }],
+        },
+      },
+    });
+    const s = await run({ cases: root, out, crossExam: true });
+    const x1 = decisions(out, "cross-split").items.find(
+      (i: any) => i.id === "X1",
+    );
+    expect(x1.outcome).toBe("disputed");
+    expect(x1.why).toContain("still disputed after cross-examination");
+    expect(s.counts.disputed).toBe(1);
+    expect(
+      readFileSync(join(out, "cross-split", "human-review.md"), "utf8"),
+    ).toContain("### Cross-examination");
+  });
+
+  test("a choice of revise without a candidate is refused and corrected", async () => {
+    expect(
+      checkCrossExam(
+        {
+          items: [
+            { id: "X1", choice: "revise", reason: "r", evidenceRefs: [] },
+          ],
+        },
+        [{ id: "X1", candidate: null }],
+      ),
+    ).toEqual(["X1: no rewrite was proposed, so choose keep or remove"]);
+  });
+
+  test("--focus-run reviews only items changed since that run, with the sheet as context", async () => {
+    const { root, dir } = reviewedCase("focus");
+    const first = setup({ "*": {} });
+    await run({ cases: root, out: first.out });
+    // Change one claim on the case's sheet, as an applied revision would.
+    const facts = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"));
+    facts.claims[1] = "A changed second claim.";
+    writeFileSync(
+      join(dir, "facts.json"),
+      JSON.stringify(facts, null, 2) + "\n",
+    );
+    const second = setup({
+      "*": {
+        review: {
+          [SOL]: [
+            { C2: { verdict: "remove" } },
+            { C2: { verdict: "remove" } },
+            {},
+          ],
+          [OPUS]: [
+            { C2: { verdict: "remove" } },
+            { C2: { verdict: "remove" } },
+            {},
+          ],
+        },
+      },
+    });
+    const s = await run({ cases: root, out: second.out, focusRun: first.out });
+    expect(s.counts).toMatchObject({ items: 1, removed: 1, settled: 1 });
+    const reviews = second.calls().filter((c) => c.kind === "review");
+    expect(reviews).toHaveLength(6);
+    expect(reviews[0].prompt).toContain(
+      "## The items to review\n\n- C2 (claims): A changed second claim.",
+    );
+    expect(reviews[0].prompt).toContain("## The whole sheet, for context");
+    const d = decisions(second.out, "focus");
+    expect(d.items.find((i: any) => i.id === "C1")).toMatchObject({
+      outcome: "kept",
+      reviewed: false,
+    });
+    const out = JSON.parse(
+      readFileSync(join(second.out, "focus", "facts.json"), "utf8"),
+    );
+    expect(out.claims).not.toContain("A changed second claim.");
+    expect(out.claims).toContain(facts.claims[0]);
   });
 });
 

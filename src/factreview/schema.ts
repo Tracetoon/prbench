@@ -2,14 +2,24 @@
 // review, each reviewer's reply, synthesis replies and round-2 votes, with JSON
 // Schemas strict enough for both Claude's --json-schema and Codex's
 // --output-schema (every property required, optional values nullable).
-import { FACTS_SCHEMA, type Facts } from '../schema/case.ts';
+import { FACTS_SCHEMA, type Facts } from "../schema/case.ts";
 
-export const CATEGORIES = ['claims', 'context', 'uncertainties', 'traps'] as const;
+export const CATEGORIES = [
+  "claims",
+  "context",
+  "uncertainties",
+  "traps",
+] as const;
 export type Category = (typeof CATEGORIES)[number];
-export const PREFIX: Record<Category, string> = { claims: 'C', context: 'X', uncertainties: 'U', traps: 'T' };
-export const VERDICTS = ['keep', 'revise', 'remove'] as const;
+export const PREFIX: Record<Category, string> = {
+  claims: "C",
+  context: "X",
+  uncertainties: "U",
+  traps: "T",
+};
+export const VERDICTS = ["keep", "revise", "remove"] as const;
 export type Verdict = (typeof VERDICTS)[number];
-export const VOTES = ['accept', 'reject'] as const;
+export const VOTES = ["accept", "reject"] as const;
 export type Vote = (typeof VOTES)[number];
 
 /** One fact on the sheet, with the ID the provenance file uses (C1, X2, U1, T3). */
@@ -46,7 +56,7 @@ export interface ReviewReply {
 export interface Proposal {
   /** R:<item id> for a rewrite, A<n> for an addition. */
   id: string;
-  kind: 'revise' | 'add';
+  kind: "revise" | "add";
   category: Category;
   /** The item's current text, for rewrites. */
   original: string | null;
@@ -58,19 +68,40 @@ export interface VoteReply {
   votes: { id: string; vote: Vote; reason: string; evidenceRefs: string[] }[];
 }
 
+/** Cross-examination: a reviewer's final position on a disputed item after seeing every argument. */
+export interface CrossExamReply {
+  items: {
+    id: string;
+    choice: Verdict;
+    reason: string;
+    evidenceRefs: string[];
+  }[];
+}
+
 export interface RewriteReply {
-  candidates: { id: string; text: string; reason: string; evidenceRefs: string[] }[];
+  candidates: {
+    id: string;
+    text: string;
+    reason: string;
+    evidenceRefs: string[];
+  }[];
 }
 
 export interface ClusterReply {
-  clusters: { category: Category; text: string; members: string[]; evidenceRefs: string[] }[];
+  clusters: {
+    category: Category;
+    text: string;
+    members: string[];
+    evidenceRefs: string[];
+  }[];
 }
 
-const str = { type: 'string' };
-const refs = { type: 'array', items: str };
-const ids = (values: string[]) => (values.length ? { type: 'string', enum: [...values] } : str);
+const str = { type: "string" };
+const refs = { type: "array", items: str };
+const ids = (values: string[]) =>
+  values.length ? { type: "string", enum: [...values] } : str;
 const object = (properties: Record<string, unknown>) => ({
-  type: 'object',
+  type: "object",
   additionalProperties: false,
   required: Object.keys(properties),
   properties,
@@ -79,51 +110,101 @@ const object = (properties: Record<string, unknown>) => ({
 export function reviewSchema(itemIds: string[]) {
   return object({
     items: {
-      type: 'array',
+      type: "array",
       items: object({
         id: ids(itemIds),
-        category: { type: 'string', enum: [...CATEGORIES] },
-        verdict: { type: 'string', enum: [...VERDICTS] },
+        category: { type: "string", enum: [...CATEGORIES] },
+        verdict: { type: "string", enum: [...VERDICTS] },
         reason: str,
         evidenceRefs: refs,
-        rewrite: { type: ['string', 'null'] },
-        trapIsReal: { type: ['boolean', 'null'] },
+        rewrite: { type: ["string", "null"] },
+        trapIsReal: { type: ["boolean", "null"] },
       }),
     },
     additions: {
-      type: 'array',
-      items: object({ category: { type: 'string', enum: [...CATEGORIES] }, text: str, reason: str, evidenceRefs: refs }),
+      type: "array",
+      items: object({
+        category: { type: "string", enum: [...CATEGORIES] },
+        text: str,
+        reason: str,
+        evidenceRefs: refs,
+      }),
     },
   });
 }
 
 export function voteSchema(proposalIds: string[]) {
   return object({
-    votes: { type: 'array', items: object({ id: ids(proposalIds), vote: { type: 'string', enum: [...VOTES] }, reason: str, evidenceRefs: refs }) },
+    votes: {
+      type: "array",
+      items: object({
+        id: ids(proposalIds),
+        vote: { type: "string", enum: [...VOTES] },
+        reason: str,
+        evidenceRefs: refs,
+      }),
+    },
+  });
+}
+
+export function crossExamSchema(itemIds: string[]) {
+  return object({
+    items: {
+      type: "array",
+      items: object({
+        id: ids(itemIds),
+        choice: { type: "string", enum: [...VERDICTS] },
+        reason: str,
+        evidenceRefs: refs,
+      }),
+    },
   });
 }
 
 export function rewriteSchema(itemIds: string[]) {
-  return object({ candidates: { type: 'array', items: object({ id: ids(itemIds), text: str, reason: str, evidenceRefs: refs }) } });
+  return object({
+    candidates: {
+      type: "array",
+      items: object({
+        id: ids(itemIds),
+        text: str,
+        reason: str,
+        evidenceRefs: refs,
+      }),
+    },
+  });
 }
 
 export function clusterSchema(additionIds: string[]) {
   return object({
     clusters: {
-      type: 'array',
-      items: object({ category: { type: 'string', enum: [...CATEGORIES] }, text: str, members: { type: 'array', items: ids(additionIds) }, evidenceRefs: refs }),
+      type: "array",
+      items: object({
+        category: { type: "string", enum: [...CATEGORIES] },
+        text: str,
+        members: { type: "array", items: ids(additionIds) },
+        evidenceRefs: refs,
+      }),
     },
   });
 }
 
-const isObj = (x: unknown): x is Record<string, any> => !!x && typeof x === 'object' && !Array.isArray(x);
-const isStrings = (x: unknown) => Array.isArray(x) && x.every((s) => typeof s === 'string');
-const isCategory = (x: unknown): x is Category => (CATEGORIES as readonly unknown[]).includes(x);
+const isObj = (x: unknown): x is Record<string, any> =>
+  !!x && typeof x === "object" && !Array.isArray(x);
+const isStrings = (x: unknown) =>
+  Array.isArray(x) && x.every((s) => typeof s === "string");
+const isCategory = (x: unknown): x is Category =>
+  (CATEGORIES as readonly unknown[]).includes(x);
 
 /** Everything a review reply must satisfy beyond its schema: every item reviewed once, consistently. */
 export function checkReview(value: unknown, sheet: SheetItem[]): string[] {
   const problems: string[] = [];
-  if (!isObj(value) || !Array.isArray(value.items) || !Array.isArray(value.additions)) return ['expected {items: [...], additions: [...]}'];
+  if (
+    !isObj(value) ||
+    !Array.isArray(value.items) ||
+    !Array.isArray(value.additions)
+  )
+    return ["expected {items: [...], additions: [...]}"];
   const byId = new Map(sheet.map((s) => [s.id, s]));
   const seen = new Set<string>();
   for (const [i, r] of (value.items as unknown[]).entries()) {
@@ -138,26 +219,49 @@ export function checkReview(value: unknown, sheet: SheetItem[]): string[] {
     }
     if (seen.has(r.id)) problems.push(`${r.id}: reviewed more than once`);
     seen.add(r.id);
-    if (r.category !== item.category) problems.push(`${r.id}: category must be ${item.category}`);
-    if (!(VERDICTS as readonly unknown[]).includes(r.verdict)) problems.push(`${r.id}: verdict must be keep, revise or remove`);
-    if (typeof r.reason !== 'string' || !r.reason.trim()) problems.push(`${r.id}: reason is required`);
-    if (!isStrings(r.evidenceRefs)) problems.push(`${r.id}: evidenceRefs must be strings`);
-    if (r.verdict === 'revise' && (typeof r.rewrite !== 'string' || !r.rewrite.trim())) problems.push(`${r.id}: a revise verdict needs a rewrite`);
-    if (item.category === 'traps') {
-      if (typeof r.trapIsReal !== 'boolean') problems.push(`${r.id}: traps need trapIsReal true or false`);
-      else if (r.trapIsReal === false && r.verdict === 'keep') problems.push(`${r.id}: a trap that is not real cannot be kept as it is`);
+    if (r.category !== item.category)
+      problems.push(`${r.id}: category must be ${item.category}`);
+    if (!(VERDICTS as readonly unknown[]).includes(r.verdict))
+      problems.push(`${r.id}: verdict must be keep, revise or remove`);
+    if (typeof r.reason !== "string" || !r.reason.trim())
+      problems.push(`${r.id}: reason is required`);
+    if (!isStrings(r.evidenceRefs))
+      problems.push(`${r.id}: evidenceRefs must be strings`);
+    if (
+      r.verdict === "revise" &&
+      (typeof r.rewrite !== "string" || !r.rewrite.trim())
+    )
+      problems.push(`${r.id}: a revise verdict needs a rewrite`);
+    if (item.category === "traps") {
+      if (typeof r.trapIsReal !== "boolean")
+        problems.push(`${r.id}: traps need trapIsReal true or false`);
+      else if (r.trapIsReal === false && r.verdict === "keep")
+        problems.push(
+          `${r.id}: a trap that is not real cannot be kept as it is`,
+        );
     }
   }
-  for (const s of sheet) if (!seen.has(s.id)) problems.push(`${s.id}: not reviewed`);
+  for (const s of sheet)
+    if (!seen.has(s.id)) problems.push(`${s.id}: not reviewed`);
   for (const [i, a] of (value.additions as unknown[]).entries()) {
-    if (!isObj(a) || !isCategory(a.category) || typeof a.text !== 'string' || !a.text.trim() || !isStrings(a.evidenceRefs) || typeof a.reason !== 'string')
-      problems.push(`additions[${i}]: needs category, text, reason and evidenceRefs`);
+    if (
+      !isObj(a) ||
+      !isCategory(a.category) ||
+      typeof a.text !== "string" ||
+      !a.text.trim() ||
+      !isStrings(a.evidenceRefs) ||
+      typeof a.reason !== "string"
+    )
+      problems.push(
+        `additions[${i}]: needs category, text, reason and evidenceRefs`,
+      );
   }
   return problems;
 }
 
 export function checkVotes(value: unknown, proposals: Proposal[]): string[] {
-  if (!isObj(value) || !Array.isArray(value.votes)) return ['expected {votes: [...]}'];
+  if (!isObj(value) || !Array.isArray(value.votes))
+    return ["expected {votes: [...]}"];
   const problems: string[] = [];
   const seen = new Set<string>();
   for (const v of value.votes as any[]) {
@@ -167,35 +271,99 @@ export function checkVotes(value: unknown, proposals: Proposal[]): string[] {
     }
     if (seen.has(v.id)) problems.push(`${v.id}: voted more than once`);
     seen.add(v.id);
-    if (!(VOTES as readonly unknown[]).includes(v.vote)) problems.push(`${v.id}: vote must be accept or reject`);
-    if (typeof v.reason !== 'string' || !v.reason.trim()) problems.push(`${v.id}: reason is required`);
-    if (!isStrings(v.evidenceRefs)) problems.push(`${v.id}: evidenceRefs must be strings`);
+    if (!(VOTES as readonly unknown[]).includes(v.vote))
+      problems.push(`${v.id}: vote must be accept or reject`);
+    if (typeof v.reason !== "string" || !v.reason.trim())
+      problems.push(`${v.id}: reason is required`);
+    if (!isStrings(v.evidenceRefs))
+      problems.push(`${v.id}: evidenceRefs must be strings`);
   }
-  for (const p of proposals) if (!seen.has(p.id)) problems.push(`${p.id}: no vote`);
+  for (const p of proposals)
+    if (!seen.has(p.id)) problems.push(`${p.id}: no vote`);
+  return problems;
+}
+
+/** Every disputed item answered once; "revise" only where a candidate rewrite was put forward. */
+export function checkCrossExam(
+  value: unknown,
+  entries: { id: string; candidate: string | null }[],
+): string[] {
+  if (!isObj(value) || !Array.isArray(value.items))
+    return ["expected {items: [...]}"];
+  const problems: string[] = [];
+  const seen = new Set<string>();
+  for (const v of value.items as any[]) {
+    const e = isObj(v) ? entries.find((x) => x.id === v.id) : undefined;
+    if (!e) {
+      problems.push(`unknown item ${JSON.stringify(v?.id)}`);
+      continue;
+    }
+    if (seen.has(v.id)) problems.push(`${v.id}: answered more than once`);
+    seen.add(v.id);
+    if (!(VERDICTS as readonly unknown[]).includes(v.choice))
+      problems.push(`${v.id}: choice must be keep, revise or remove`);
+    else if (v.choice === "revise" && e.candidate === null)
+      problems.push(
+        `${v.id}: no rewrite was proposed, so choose keep or remove`,
+      );
+    if (typeof v.reason !== "string" || !v.reason.trim())
+      problems.push(`${v.id}: reason is required`);
+    if (!isStrings(v.evidenceRefs))
+      problems.push(`${v.id}: evidenceRefs must be strings`);
+  }
+  for (const e of entries)
+    if (!seen.has(e.id)) problems.push(`${e.id}: not answered`);
   return problems;
 }
 
 export function checkRewrites(value: unknown, wanted: string[]): string[] {
-  if (!isObj(value) || !Array.isArray(value.candidates)) return ['expected {candidates: [...]}'];
-  const got = (value.candidates as any[]).filter((c) => isObj(c) && typeof c.text === 'string' && c.text.trim() && isStrings(c.evidenceRefs));
-  const problems = (value.candidates as any[]).length !== got.length ? ['every candidate needs id, text, reason and evidenceRefs'] : [];
-  for (const id of wanted) if (got.filter((c) => c.id === id).length !== 1) problems.push(`${id}: expected exactly one candidate`);
+  if (!isObj(value) || !Array.isArray(value.candidates))
+    return ["expected {candidates: [...]}"];
+  const got = (value.candidates as any[]).filter(
+    (c) =>
+      isObj(c) &&
+      typeof c.text === "string" &&
+      c.text.trim() &&
+      isStrings(c.evidenceRefs),
+  );
+  const problems =
+    (value.candidates as any[]).length !== got.length
+      ? ["every candidate needs id, text, reason and evidenceRefs"]
+      : [];
+  for (const id of wanted)
+    if (got.filter((c) => c.id === id).length !== 1)
+      problems.push(`${id}: expected exactly one candidate`);
   return problems;
 }
 
 export function checkClusters(value: unknown, additionIds: string[]): string[] {
-  if (!isObj(value) || !Array.isArray(value.clusters)) return ['expected {clusters: [...]}'];
+  if (!isObj(value) || !Array.isArray(value.clusters))
+    return ["expected {clusters: [...]}"];
   const problems: string[] = [];
   const placed = new Map<string, number>();
   for (const [i, c] of (value.clusters as any[]).entries()) {
-    if (!isObj(c) || !isCategory(c.category) || typeof c.text !== 'string' || !c.text.trim() || !isStrings(c.members) || !c.members.length || !isStrings(c.evidenceRefs)) {
-      problems.push(`clusters[${i}]: needs category, text, members and evidenceRefs`);
+    if (
+      !isObj(c) ||
+      !isCategory(c.category) ||
+      typeof c.text !== "string" ||
+      !c.text.trim() ||
+      !isStrings(c.members) ||
+      !c.members.length ||
+      !isStrings(c.evidenceRefs)
+    ) {
+      problems.push(
+        `clusters[${i}]: needs category, text, members and evidenceRefs`,
+      );
       continue;
     }
-    for (const m of c.members as string[]) placed.set(m, (placed.get(m) ?? 0) + 1);
+    for (const m of c.members as string[])
+      placed.set(m, (placed.get(m) ?? 0) + 1);
   }
-  for (const id of additionIds) if (placed.get(id) !== 1) problems.push(`${id}: must be in exactly one cluster`);
-  for (const id of placed.keys()) if (!additionIds.includes(id)) problems.push(`unknown addition ${id}`);
+  for (const id of additionIds)
+    if (placed.get(id) !== 1)
+      problems.push(`${id}: must be in exactly one cluster`);
+  for (const id of placed.keys())
+    if (!additionIds.includes(id)) problems.push(`unknown addition ${id}`);
   return problems;
 }
 
@@ -205,11 +373,23 @@ export function checkClusters(value: unknown, additionIds: string[]): string[] {
  * sheets look exactly like real ones.
  */
 export function sheetOf(facts: Facts): SheetItem[] {
-  return CATEGORIES.flatMap((category) => (facts[category] ?? []).map((text, i) => ({ id: `${PREFIX[category]}${i + 1}`, category, text })));
+  return CATEGORIES.flatMap((category) =>
+    (facts[category] ?? []).map((text, i) => ({
+      id: `${PREFIX[category]}${i + 1}`,
+      category,
+      text,
+    })),
+  );
 }
 
 export function factsOf(items: { category: Category; text: string }[]): Facts {
-  const facts: Facts = { schema: FACTS_SCHEMA, claims: [], context: [], uncertainties: [], traps: [] };
+  const facts: Facts = {
+    schema: FACTS_SCHEMA,
+    claims: [],
+    context: [],
+    uncertainties: [],
+    traps: [],
+  };
   for (const item of items) facts[item.category].push(item.text);
   return facts;
 }

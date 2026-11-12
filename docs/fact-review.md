@@ -30,6 +30,8 @@ bun run prbench fact-review --cases cases-local --out results/fact-review-expert
 | `--parallel <n>` | `6` | concurrent model calls |
 | `--aggregate-only` | off | print counts only: no case names and no fact text, errors go to `<out>/error.log` |
 | `--apply` | off | write the revised sheet and its provenance into each case directory |
+| `--cross-exam` | off | after round 1, every reviewer sees all arguments on each disputed item and makes a final choice (see below) |
+| `--focus-run <dir>` | off | re-review only the items not on that earlier run's sheet for the case (rewritten or added since); the rest of the sheet is context |
 
 ## What a reviewer sees
 
@@ -97,6 +99,22 @@ Every cited range is rehashed the way preflight reads it. The provenance gets `r
 `scripts/provenance.ts --rehash` keeps that record. The run folder's `facts.json` is always exactly what `--apply` would write. Cases without provenance only get their `facts.json` rewritten.
 
 Sheets come from the case's `facts` file. A case without one is reviewed from `<packets>/<id>/facts.draft.json` when that exists. Its provenance is then built from the draft's sources on `--apply`.
+
+## Cross-examination
+
+With `--cross-exam`, items still disputed after round 1 get one more pass:
+
+1. When anyone proposed a rewrite, the synthesizer merges the proposals into one candidate.
+2. Each reviewer sees, for each disputed item, the current text, the candidate, and every round-1 argument grouped by position with its evidence references. The arguments carry no reviewer names, no families and no counts.
+3. Each reviewer chooses keep, revise (to the candidate) or remove.
+
+The prompt tells reviewers that arguments are claims, not evidence: they must check the cited evidence themselves and must not defer to a side. The same family rule then applies. A settled choice is final; anything still split goes to human review with the cross-examination votes listed.
+
+`decisions.json` records each reviewer's round-1 verdict next to its final choice, and the summary counts changed positions per family, so herding shows up. Round-2 ballots are built from round-1 consensus only, so adding cross-examination to a finished run with `--resume` reuses every earlier call.
+
+## Focused re-review
+
+`--focus-run <earlier run>` re-checks a sheet after `--apply`. Only the items whose text is not on the earlier run's `sheet.json` for that case go to the panel, and the rest is shown as context. No additions are proposed. Unchanged items are recorded as `reviewed: false` and are left out of the counts. Rewrites, votes and cross-examination work as in a full review.
 
 ## Canary calibration
 

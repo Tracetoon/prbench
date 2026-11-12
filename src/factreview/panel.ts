@@ -42,6 +42,7 @@ import type { Draft } from "../../scripts/provenance.ts";
 import {
   aggregateItems,
   aggregateVotes,
+  consensus,
   numberAdditions,
   type Member,
 } from "./aggregate.ts";
@@ -56,8 +57,10 @@ import {
   clusterPrompt,
   correctionPrompt,
   FACT_REVIEW_PROMPT_VERSION,
+  crossExamPrompt,
   reviewPrompt,
   rewritePrompt,
+  type CrossExamEntry,
   votePrompt,
   type RewriteInput,
 } from "./prompt.ts";
@@ -79,7 +82,11 @@ import {
 import {
   checkClusters,
   checkReview,
+  checkCrossExam,
   checkRewrites,
+  crossExamSchema,
+  VERDICTS,
+  type CrossExamReply,
   checkVotes,
   clusterSchema,
   reviewSchema,
@@ -184,6 +191,10 @@ export interface FactReviewOptions {
   parallel?: number;
   aggregateOnly?: boolean;
   apply?: boolean;
+  /** After round 1, show every reviewer all arguments on each disputed item and take a final vote. */
+  crossExam?: boolean;
+  /** Re-review only the items whose text is not on this earlier run's sheet for the case (changed or added since). */
+  focusRun?: string;
   /** Where prebuilt fact packets live (scripts/fact-packet.ts); missing ones are built into the run folder. */
   packets?: string;
   log?: (line: string) => void;
@@ -201,6 +212,15 @@ export interface FactReviewSummary {
   cachedCalls: number;
   costUsd: number;
   applied: number;
+  crossExam?: CrossExamStats;
+}
+
+export interface CrossExamStats {
+  items: number;
+  settled: number;
+  /** Reviewers whose final choice differs from their round-1 verdict, per family. */
+  changed: Record<string, number>;
+  votes: number;
 }
 
 /** A counting semaphore for concurrent model calls. */
@@ -353,7 +373,8 @@ interface CallStats {
 }
 
 interface CallSpec<T> {
-  kind: "review" | "rewrite" | "cluster" | "vote";
+  kind:
+    "review" | "rewrite" | "cluster" | "vote" | "cross-rewrite" | "cross-exam";
   round: number;
   reviewer: Reviewer;
   prompt: string;
@@ -388,6 +409,11 @@ export async function factReview(
     throw new Error(
       "--apply cannot be used with --canaries: canary sheets are planted with errors",
     );
+  if (opts.focusRun && opts.canaries !== undefined)
+    throw new Error("--focus-run cannot be used with --canaries");
+  const focusRun = opts.focusRun ? resolve(opts.focusRun) : undefined;
+  if (focusRun && !existsSync(focusRun))
+    throw new Error(`--focus-run ${opts.focusRun}: no such run folder`);
   const groups = parsePanel(panelSpec);
   const reviewers = reviewersOf(groups, effort);
   const anthropic = groups.find((g) => g.provider === "claude");
@@ -421,6 +447,8 @@ export async function factReview(
     rounds,
     canaries: opts.canaries ?? null,
     synthesizer: synthesizer.model,
+    crossExam: !!opts.crossExam,
+    focusRun: focusRun ? basename(focusRun) : null,
   };
   const runFile = join(out, "run.json");
   if (existsSync(runFile)) {
@@ -506,6 +534,12 @@ export async function factReview(
   }
 
   const stats: CallStats = { calls: 0, cached: 0, costUsd: 0 };
+  const xStats: CrossExamStats = {
+    items: 0,
+    settled: 0,
+    changed: {},
+    votes: 0,
+  };
   const limit = limiter(parallel);
 
   async function call<T>(
@@ -643,24 +677,62 @@ export async function factReview(
     const packet = packetFor(loaded, packets, caseOut);
     const ev = buildEvidence(loaded, packet);
     try {
-      log(`case  ${id}: ${sheet.length} items, ${reviewers.length} reviewers`);
-      // Round 1: every reviewer reviews every item.
-      const ids = sheet.map((s) => s.id);
-      const replies = await Promise.all(
-        reviewers.map(async (member) => ({
-          member,
-          reply: await call<ReviewReply>(caseOut, ev, sheet, {
-            kind: "review",
-            round: 1,
-            reviewer: member,
-            prompt: reviewPrompt(sheet),
-            schema: reviewSchema(ids),
-            check: (v) => checkReview(v, sheet),
-            saveAs: `round-1/${member.id}.json`,
-          }),
-        })),
+      // A focused re-review puts only items not on the earlier run's sheet to the panel.
+      let focus: string[] | undefined;
+      if (focusRun) {
+        const prior = join(focusRun, id, "sheet.json");
+        const before: SheetItem[] = existsSync(prior)
+          ? JSON.parse(readFileSync(prior, "utf8")).items
+          : [];
+        focus = sheet
+          .filter(
+            (i) =>
+              !before.some(
+                (b) => b.category === i.category && b.text === i.text,
+              ),
+          )
+          .map((i) => i.id);
+      }
+      const under = focus ? sheet.filter((i) => focus!.includes(i.id)) : sheet;
+      log(
+        `case  ${id}: ${under.length}${focus ? ` of ${sheet.length}` : ""} items, ${reviewers.length} reviewers`,
       );
-      const round1 = aggregateItems(sheet, replies);
+      // Round 1: every reviewer reviews every item under review.
+      const ids = under.map((s) => s.id);
+      const replies = under.length
+        ? await Promise.all(
+            reviewers.map(async (member) => ({
+              member,
+              reply: await call<ReviewReply>(caseOut, ev, sheet, {
+                kind: "review",
+                round: 1,
+                reviewer: member,
+                prompt: reviewPrompt(sheet, focus),
+                schema: reviewSchema(ids),
+                // A focused reviewer may also answer context items; those answers are ignored.
+                check: (v) =>
+                  checkReview(
+                    focus &&
+                      v &&
+                      typeof v === "object" &&
+                      Array.isArray((v as ReviewReply).items)
+                      ? {
+                          ...(v as ReviewReply),
+                          items: (v as ReviewReply).items.filter((i) =>
+                            ids.includes(i?.id),
+                          ),
+                        }
+                      : v,
+                    under,
+                  ),
+                saveAs: `round-1/${member.id}.json`,
+              }),
+            })),
+          )
+        : [];
+      if (focus)
+        for (const r of replies) r.reply = { ...r.reply, additions: [] };
+      const round1 = aggregateItems(under, replies);
       const proposals = numberAdditions(replies);
       writeFileSync(
         join(caseOut, "round-1", "summary.json"),
@@ -675,7 +747,27 @@ export async function factReview(
         }),
       );
 
-      const items: ItemDecision[] = round1.map((r) => {
+      const settledContext: ItemDecision[] = sheet
+        .filter((i) => !ids.includes(i.id))
+        .map((i) => ({
+          id: i.id,
+          category: i.category,
+          text: i.text,
+          outcome: "kept",
+          finalText: i.text,
+          round: 0,
+          why: "not under review: unchanged since the focus run",
+          round1: {
+            id: i.id,
+            category: i.category,
+            text: i.text,
+            consensus: { status: "settled", value: "keep", byFamily: {} },
+            votes: [],
+          },
+          rewriteRounds: [],
+          reviewed: false,
+        }));
+      const reviewedItems: ItemDecision[] = round1.map((r) => {
         const base = {
           id: r.id,
           category: r.category,
@@ -719,6 +811,143 @@ export async function factReview(
               : "consensus revise; awaiting a vote",
         };
       });
+      const items = [...reviewedItems, ...settledContext].sort(
+        (a, b) =>
+          sheet.findIndex((s) => s.id === a.id) -
+          sheet.findIndex((s) => s.id === b.id),
+      );
+
+      // Cross-examination: each reviewer sees every argument on each disputed
+      // item (unattributed, uncounted) and makes a final choice. It settles
+      // items only by family consensus, like round 1, and leaves the round-2
+      // ballot untouched.
+      if (opts.crossExam) {
+        const disputed = items.filter(
+          (i) =>
+            i.reviewed !== false && i.round1.consensus.status === "disputed",
+        );
+        if (disputed.length) {
+          const withRewrites = disputed.filter((i) =>
+            i.round1.votes.some((v) => v.verdict === "revise" && v.rewrite),
+          );
+          const merged = new Map<
+            string,
+            { text: string; reason: string; evidenceRefs: string[] }
+          >();
+          if (withRewrites.length) {
+            const inputs: RewriteInput[] = withRewrites.map((i) => ({
+              id: `R:${i.id}`,
+              category: i.category,
+              original: i.text,
+              rewrites: i.round1.votes
+                .filter((v) => v.verdict === "revise" && v.rewrite)
+                .map((v) => ({
+                  text: v.rewrite!,
+                  reason: v.reason,
+                  evidenceRefs: v.evidenceRefs,
+                })),
+            }));
+            const wantedIds = inputs.map((r) => r.id);
+            const synth = await call<RewriteReply>(caseOut, ev, sheet, {
+              kind: "cross-rewrite",
+              round: 1,
+              reviewer: synthesizer,
+              prompt: rewritePrompt(inputs),
+              schema: rewriteSchema(wantedIds),
+              check: (v) => checkRewrites(v, wantedIds),
+              files: { "proposals.json": { items: inputs } },
+              saveAs: "cross-exam/synthesis-revisions.json",
+            });
+            for (const cand of synth.candidates)
+              merged.set(cand.id.slice(2), cand);
+          }
+          const entries: CrossExamEntry[] = disputed.map((i) => ({
+            id: i.id,
+            category: i.category,
+            text: i.text,
+            candidate: merged.get(i.id)?.text ?? null,
+            positions: VERDICTS.map((verdict) => ({
+              verdict,
+              arguments: i.round1.votes
+                .filter((v) => v.verdict === verdict)
+                .map((v) => ({
+                  reason: v.reason,
+                  evidenceRefs: v.evidenceRefs,
+                }))
+                .sort((a, b) => a.reason.localeCompare(b.reason)),
+            })).filter((p) => p.arguments.length),
+          }));
+          const xIds = entries.map((e) => e.id);
+          const finals = await Promise.all(
+            reviewers.map(async (member) => ({
+              member,
+              reply: await call<CrossExamReply>(caseOut, ev, sheet, {
+                kind: "cross-exam",
+                round: 1,
+                reviewer: member,
+                prompt: crossExamPrompt(sheet, entries),
+                schema: crossExamSchema(xIds),
+                check: (v) => checkCrossExam(v, entries),
+                files: { "disputes.json": { items: entries } },
+                saveAs: `cross-exam/${member.id}.json`,
+              }),
+            })),
+          );
+          for (const item of disputed) {
+            const votes = finals.map(({ member, reply }) => {
+              const v = reply.items.find((x) => x.id === item.id)!;
+              const before = item.round1.votes.find(
+                (x) => x.reviewer === member.id,
+              )!.verdict;
+              return {
+                reviewer: member.id,
+                family: member.family,
+                choice: v.choice,
+                before,
+                reason: v.reason,
+                evidenceRefs: v.evidenceRefs,
+              };
+            });
+            const cons = consensus(
+              finals.map(({ member }, k) => ({
+                member,
+                value: votes[k]!.choice,
+              })),
+            );
+            const candidate = merged.get(item.id) ?? null;
+            item.crossExam = { candidate, consensus: cons, votes };
+            xStats.items++;
+            xStats.votes += votes.length;
+            for (const v of votes)
+              if (v.choice !== v.before)
+                xStats.changed[v.family] = (xStats.changed[v.family] ?? 0) + 1;
+            if (cons.status !== "settled") {
+              item.why = `${item.why}; still disputed after cross-examination (${cons.why === "family-split" ? "a family had no majority" : "the families disagreed"})`;
+              continue;
+            }
+            xStats.settled++;
+            if (cons.value === "keep")
+              Object.assign(item, {
+                outcome: "kept",
+                finalText: item.text,
+                why: "consensus keep after cross-examination",
+              });
+            else if (cons.value === "remove")
+              Object.assign(item, {
+                outcome: "removed",
+                finalText: null,
+                why: "consensus remove after cross-examination",
+              });
+            else
+              Object.assign(item, {
+                outcome: "revised",
+                finalText: candidate!.text,
+                why: "candidate rewrite accepted by consensus after cross-examination",
+              });
+          }
+        }
+      }
+
       const pendingRevisions = new Set(
         rounds >= 2
           ? round1
@@ -1094,6 +1323,7 @@ export async function factReview(
     cachedCalls: stats.cached,
     costUsd: stats.costUsd,
     applied: results.filter((r) => r.applied).length,
+    ...(opts.crossExam ? { crossExam: xStats } : {}),
   };
   writeFileSync(
     join(out, "summary.json"),
@@ -1115,6 +1345,16 @@ export function summaryLines(s: FactReviewSummary): string[] {
     `additions: added ${c.added}, disputed ${c.additionsDisputed}, dropped ${c.additionsDropped}`,
     `calls ${s.calls} new, ${s.cachedCalls} reused; reported cost $${s.costUsd.toFixed(2)}${s.applied ? `; applied to ${s.applied} case(s)` : ""}`,
   ];
+  if (s.crossExam) {
+    const x = s.crossExam;
+    lines.push(
+      `cross-examination: ${x.settled}/${x.items} disputed items settled; changed positions ${
+        Object.entries(x.changed)
+          .map(([f, n]) => `${f} ${n}`)
+          .join(", ") || "none"
+      } of ${x.votes} votes`,
+    );
+  }
   if (s.canary) {
     const k = s.canary;
     lines.push(

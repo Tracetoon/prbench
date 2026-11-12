@@ -17,7 +17,13 @@ import { DEFAULT_AGENT_OPTIONS, parseBudget } from "./systems/agentShared.ts";
 import { judgePair, type PairResult } from "./judge/pairwise.ts";
 import { parseJudge } from "./judge/providers.ts";
 import { buildReport, reportMarkdown } from "./report.ts";
-import { aggregateScores, collectDraftScores, collectJudgeFailures, collectWriterFailures, scoreMarkdown } from "./report/score.ts";
+import {
+  aggregateScores,
+  collectDraftScores,
+  collectJudgeFailures,
+  collectWriterFailures,
+  scoreMarkdown,
+} from "./report/score.ts";
 import { codexLogin } from "./agents/codexAuth.ts";
 import { claudeAuthStatus, saveClaudeToken } from "./agents/claude.ts";
 import { runBothProviders } from "./run/both.ts";
@@ -246,7 +252,10 @@ program
       },
     ) => {
       if (opts.judgeTimeoutMs !== undefined) {
-        if (!Number.isInteger(opts.judgeTimeoutMs) || opts.judgeTimeoutMs <= 0) {
+        if (
+          !Number.isInteger(opts.judgeTimeoutMs) ||
+          opts.judgeTimeoutMs <= 0
+        ) {
           console.error("--judge-timeout-ms must be a positive integer.");
           process.exitCode = 2;
           return;
@@ -280,14 +289,26 @@ program
   .description(
     "Judge candidate drafts of one finished compare run against baseline drafts of another (e.g. different writer models), reusing their saved artifacts",
   )
-  .requiredOption("--candidate <dir>", "run whose tracetoon-candidate drafts are judged")
-  .requiredOption("--baseline <dir>", "run whose tracetoon-baseline drafts are judged")
-  .requiredOption("--out <dir>", "output directory for judgments and the summary")
+  .requiredOption(
+    "--candidate <dir>",
+    "run whose tracetoon-candidate drafts are judged",
+  )
+  .requiredOption(
+    "--baseline <dir>",
+    "run whose tracetoon-baseline drafts are judged",
+  )
+  .requiredOption(
+    "--out <dir>",
+    "output directory for judgments and the summary",
+  )
   .option(
     "--cache <dir>",
     "content-addressed stage cache (default <parent of --out>/.prbench-cache/v2)",
   )
-  .option("--plan", "verify inputs and print the planned judge calls without calling models")
+  .option(
+    "--plan",
+    "verify inputs and print the planned judge calls without calling models",
+  )
   .option("--parallel <n>", "concurrent judge pairs", Number, 4)
   .action(
     async (opts: {
@@ -480,16 +501,49 @@ program
     (v: string, prev: string[]) => [...prev, v],
     [] as string[],
   )
-  .option("--panel <spec>", "reviewers per model: opus, sol, claude/<model> or codex/<model> with a count", DEFAULT_PANEL)
-  .option("--effort <effort>", "reasoning effort for every reviewer and synthesis call", "xhigh")
+  .option(
+    "--panel <spec>",
+    "reviewers per model: opus, sol, claude/<model> or codex/<model> with a count",
+    DEFAULT_PANEL,
+  )
+  .option(
+    "--effort <effort>",
+    "reasoning effort for every reviewer and synthesis call",
+    "xhigh",
+  )
   .option("--rounds <n>", "review round plus vote rounds", Number, 2)
-  .option("--canaries <n>", "calibration mode: plant known defects in n cases' sheets and score the panel", Number)
-  .option("--out <dir>", "run folder (default results/fact-review-expert/<timestamp>)")
-  .option("--packets <dir>", "prebuilt fact packets; missing ones are built into the run folder", "results/fact-packets")
+  .option(
+    "--canaries <n>",
+    "calibration mode: plant known defects in n cases' sheets and score the panel",
+    Number,
+  )
+  .option(
+    "--out <dir>",
+    "run folder (default results/fact-review-expert/<timestamp>)",
+  )
+  .option(
+    "--packets <dir>",
+    "prebuilt fact packets; missing ones are built into the run folder",
+    "results/fact-packets",
+  )
   .option("--resume", "reuse finished reviewer calls from the run folder")
   .option("--parallel <n>", "concurrent model calls", Number, 6)
-  .option("--aggregate-only", "print counts only: no case names, no fact text (sealed cases)")
-  .option("--apply", "write revised facts.json and expert-panel provenance into the case directories")
+  .option(
+    "--aggregate-only",
+    "print counts only: no case names, no fact text (sealed cases)",
+  )
+  .option(
+    "--apply",
+    "write revised facts.json and expert-panel provenance into the case directories",
+  )
+  .option(
+    "--cross-exam",
+    "after round 1, show every reviewer all arguments on each disputed item and take a final vote",
+  )
+  .option(
+    "--focus-run <dir>",
+    "re-review only items changed or added since this earlier run (the rest of the sheet is context)",
+  )
   .action(
     async (opts: {
       cases: string;
@@ -504,6 +558,8 @@ program
       parallel: number;
       aggregateOnly?: boolean;
       apply?: boolean;
+      crossExam?: boolean;
+      focusRun?: string;
     }) => {
       if (opts.resume && !opts.out) {
         console.error("--resume needs --out <run folder>");
@@ -512,7 +568,11 @@ program
       }
       const out = resolve(
         opts.out ??
-          join("results", "fact-review-expert", new Date().toISOString().replace(/[:.]/g, "-")),
+          join(
+            "results",
+            "fact-review-expert",
+            new Date().toISOString().replace(/[:.]/g, "-"),
+          ),
       );
       try {
         const summary = await factReview({
@@ -528,6 +588,8 @@ program
           parallel: opts.parallel,
           aggregateOnly: opts.aggregateOnly,
           apply: opts.apply,
+          crossExam: opts.crossExam,
+          focusRun: opts.focusRun,
         });
         for (const line of summaryLines(summary)) console.log(line);
         if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
@@ -536,9 +598,15 @@ program
         if (opts.aggregateOnly) {
           // Errors can quote case names or facts: keep them in the run folder.
           mkdirSync(out, { recursive: true });
-          writeFileSync(join(out, "error.log"), `${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
-          console.error(`fact-review failed; details in ${join(out, "error.log")}`);
-        } else console.error(error instanceof Error ? error.message : String(error));
+          writeFileSync(
+            join(out, "error.log"),
+            `${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
+          );
+          console.error(
+            `fact-review failed; details in ${join(out, "error.log")}`,
+          );
+        } else
+          console.error(error instanceof Error ? error.message : String(error));
         process.exitCode = 2;
       }
     },

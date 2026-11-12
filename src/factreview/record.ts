@@ -27,6 +27,7 @@ import {
   factsOf,
   type Category,
   type SheetItem,
+  type Verdict,
   type Vote,
 } from "./schema.ts";
 
@@ -35,6 +36,21 @@ export interface VoteRound {
   candidate: { text: string; reason: string; evidenceRefs: string[] };
   consensus: Consensus<Vote>;
   votes: VoteRecord[];
+}
+
+/** The cross-examination of a disputed item: every reviewer's final choice after seeing all arguments. */
+export interface CrossExamRound {
+  candidate: { text: string; reason: string; evidenceRefs: string[] } | null;
+  consensus: Consensus<Verdict>;
+  votes: {
+    reviewer: string;
+    family: string;
+    choice: Verdict;
+    /** The reviewer's round-1 verdict, to measure how many changed their mind. */
+    before: Verdict;
+    reason: string;
+    evidenceRefs: string[];
+  }[];
 }
 
 export interface ItemDecision {
@@ -49,6 +65,9 @@ export interface ItemDecision {
   why: string;
   round1: ItemRound1;
   rewriteRounds: VoteRound[];
+  crossExam?: CrossExamRound;
+  /** False for context items a focused re-review did not put to the panel. */
+  reviewed?: boolean;
 }
 
 export interface AdditionDecision {
@@ -88,11 +107,12 @@ export interface CaseCounts {
 }
 
 export function countsOf(r: CaseResult): CaseCounts {
+  const reviewed = r.items.filter((i) => i.reviewed !== false);
   const n = (o: ItemDecision["outcome"]) =>
-    r.items.filter((i) => i.outcome === o).length;
+    reviewed.filter((i) => i.outcome === o).length;
   return {
-    items: r.items.length,
-    settled: r.items.length - n("disputed"),
+    items: reviewed.length,
+    settled: reviewed.length - n("disputed"),
     kept: n("kept"),
     disputed: n("disputed"),
     revised: n("revised"),
@@ -209,6 +229,24 @@ export function humanReview(r: CaseResult): string {
       ),
       "",
     );
+    if (i.crossExam) {
+      const x = i.crossExam;
+      out.push(
+        `### Cross-examination (${familyLine(x.consensus.byFamily)})`,
+        "",
+        ...(x.candidate ? [`Candidate rewrite: ${x.candidate.text}`, ""] : []),
+        votesTable(
+          x.votes.map((v) => ({
+            ...v,
+            value:
+              v.choice === v.before
+                ? v.choice
+                : `${v.choice} (was ${v.before})`,
+          })),
+        ),
+        "",
+      );
+    }
     for (const rr of i.rewriteRounds) {
       out.push(
         `### Round ${rr.round} vote on a rewrite (${familyLine(rr.consensus.byFamily)})`,
@@ -387,7 +425,9 @@ export function revisedDraft(
       draft[item.category].push({ ...old, text: item.finalText });
       continue;
     }
-    const last = item.rewriteRounds.at(-1)!;
+    const last = item.crossExam?.candidate
+      ? { candidate: item.crossExam.candidate }
+      : item.rewriteRounds.at(-1)!;
     const extra = sources(last.candidate.evidenceRefs).filter(
       (s) => !old.sources.some((o) => JSON.stringify(o) === JSON.stringify(s)),
     );

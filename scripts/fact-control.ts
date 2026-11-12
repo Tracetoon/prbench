@@ -57,8 +57,14 @@ export function unanimousEntries(
       (_, j) => items[Math.floor((j * items.length) / k)]!,
     );
     taken += picks.length;
+    // The run's own sheet, so entry IDs match what the judge is shown even after --apply renumbered the case's sheet.
+    const sheetFile = join(run, id, "sheet.json");
+    const sheet: SheetItem[] | undefined = existsSync(sheetFile)
+      ? JSON.parse(readFileSync(sheetFile, "utf8")).items
+      : undefined;
     out.push({
       case: id,
+      ...(sheet ? { sheet } : {}),
       entries: picks.map((i) => ({
         ...i,
         kind: "item" as const,

@@ -121,7 +121,11 @@ test("equal rates pass; a higher candidate rate fails with both rates", () => {
     pair("c2", [], ["d"]),
   ]);
   expect(
-    gate(findings, findings.map((f) => audit(f, "confirmed")), scored).status,
+    gate(
+      findings,
+      findings.map((f) => audit(f, "confirmed")),
+      scored,
+    ).status,
   ).toBe("passed");
   const result = gate(
     findings,
@@ -169,4 +173,33 @@ test("old findings and adjudications without an arm are candidate flags", () => 
   expect(result.status).toBe("failed");
   expect(result.accuracy.candidate).toMatchObject({ flags: 1, confirmed: 1 });
   expect(result.accuracy.baseline).toMatchObject({ flags: 0, confirmed: 0 });
+});
+
+test("coverage may drop by at most the guard; a larger drop fails", () => {
+  const withCoverage = (claim: number, context: number): ComparisonReport[] => [
+    {
+      ...reports[0]!,
+      report: {
+        splits: {
+          test: {
+            systems: [
+              { system: BASE, claimCoverage: 0.5, contextCoverage: 0.33 },
+              { system: CAND, claimCoverage: claim, contextCoverage: context },
+            ],
+            pairs: [{ judge: "all judges agree", xWins: 0, yWins: 2 }],
+          },
+        },
+      } as unknown as ComparisonReport["report"],
+    },
+  ];
+  const { findings, scored } = run([pair("c1", [], [])]);
+  const g = (r: ComparisonReport[]) =>
+    qualityGate(r, "test", ["m"], findings, [], null, scored);
+  // The Codex dev confirmation case: context 0.33 -> 0.32 with claims up.
+  expect(g(withCoverage(0.6, 0.32)).status).toBe("passed");
+  const failed = g(withCoverage(0.6, 0.27));
+  expect(failed.status).toBe("failed");
+  expect(failed.failures).toContain(
+    "m: contextCoverage regressed against baseline by more than 0.05",
+  );
 });

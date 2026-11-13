@@ -4,6 +4,10 @@ import type { CommandEvidence } from '../schema/validation.ts';
 export function hostAgentStateFindings(commands: Pick<CommandEvidence, 'id' | 'command'>[]) {
   const findings: { commandId: string; kind: 'host-agent-state' | 'host-instructions' | 'outside-case-inputs' }[] = [];
   for (const command of commands) {
+    // The body of a quoted heredoc (<<'E', <<"E", <<\E) is data the shell never
+    // expands or runs, e.g. a PR description that quotes `~/.codex/auth.json`.
+    // Unquoted heredocs can expand $(...) and stay in the scan.
+    const text = command.command.replace(/<<-?[ \t]*(?:'([^'\n]+)'|"([^"\n]+)"|\\(\w+))[^\n]*\n[\s\S]*?\n[ \t]*\1\2\3[ \t]*(?=\n|$)/g, (m) => m.slice(0, m.indexOf('\n')));
     // PowerShell execution records can split a path with adjacent quote
     // fragments. Keep relative and redirected-home prefixes attached before
     // tokenizing; otherwise /path looks like an absolute host path.
@@ -12,7 +16,7 @@ export function hostAgentStateFindings(commands: Pick<CommandEvidence, 'id' | 'c
     // would invent the absolute path `/.agents`. Only an escape whose token
     // continues without backslashes qualifies: Windows paths (`\.agents\skills`,
     // `C:\Users\x\.codex`) keep their separators and stay observable.
-    const normalized = command.command.replace(/(^|[\s"'`;(),!=])\\+(?=\.[^\s"'`;(),\\]*(?:[\s"'`;(),]|$))/g, '$1').replaceAll(String.fromCharCode(92), '/').replace(/\/+/g, '/')
+    const normalized = text.replace(/(^|[\s"'`;(),!=])\\+(?=\.[^\s"'`;(),\\]*(?:[\s"'`;(),]|$))/g, '$1').replaceAll(String.fromCharCode(92), '/').replace(/\/+/g, '/')
       .replace(/(\.|~|\$(?:env:)?(?:CODEX_HOME|CLAUDE_CONFIG_DIR|HOME|USERPROFILE))["']+(?=\/)/gi, '$1');
     for (let token of normalized.split(/[\s"'`;(),]+/)) {
       try { token = decodeURIComponent(token); } catch { /* Keep an undecodable path conservative. */ }

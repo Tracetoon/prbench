@@ -75,3 +75,15 @@ test('an escaped dot in a glob is shell quoting, not an absolute host path', () 
     { commandId: 'P1', kind: 'host-agent-state' },
   ]);
 });
+
+test('quoted heredoc bodies are data; unquoted heredocs and the command line stay in the scan', () => {
+  const body = "cat > body.md <<'E'\nCodex sessions share `~/.codex/auth.json`; the escape became `/.agents/**`.\nE\necho done";
+  expect(hostAgentStateFindings([{ id: 'H1', command: body }])).toEqual([]);
+  expect(hostAgentStateFindings([{ id: 'H2', command: 'cat > b.md <<"EOF"\n/home/u/.claude/skills\nEOF' }])).toEqual([]);
+  expect(hostAgentStateFindings([{ id: 'H3', command: 'cat > b.md <<\\E\n/home/u/.codex/x\nE' }])).toEqual([]);
+  // An unquoted heredoc expands $(...), so its body is still scanned.
+  expect(hostAgentStateFindings([{ id: 'H4', command: 'cat > b.md <<E\n$(cat /home/u/.codex/auth.json)\nE' }])).toEqual([{ commandId: 'H4', kind: 'host-agent-state' }]);
+  // Commands after the heredoc, and its first line, are still scanned.
+  expect(hostAgentStateFindings([{ id: 'H5', command: "cat > b.md <<'E'\ntext\nE\ncat /home/u/.codex/auth.json" }])).toEqual([{ commandId: 'H5', kind: 'host-agent-state' }]);
+  expect(hostAgentStateFindings([{ id: 'H6', command: "cat > /home/u/.claude/x <<'E'\ntext\nE" }])).toEqual([{ commandId: 'H6', kind: 'host-agent-state' }]);
+});

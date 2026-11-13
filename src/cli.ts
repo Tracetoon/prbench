@@ -41,6 +41,7 @@ import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
 import {
   DEFAULT_JUDGES,
+  decideFinished,
   debateSummaryLines,
   factDebate,
 } from "./factreview/debate.ts";
@@ -639,6 +640,10 @@ program
     [] as string[],
   )
   .option("--judge-effort <effort>", "the judge's reasoning effort", "xhigh")
+  .option(
+    "--decider <model>",
+    "the judge whose ruling decides entries the judges disagree on (default: a human decides)",
+  )
   .option("--cases <dir>", "cases directory", "cases-local")
   .option(
     "--case <id>",
@@ -665,6 +670,7 @@ program
       control?: string;
       judge: string[];
       judgeEffort: string;
+      decider?: string;
       cases: string;
       case: string[];
       effort: string;
@@ -704,6 +710,66 @@ program
           );
         } else
           console.error(error instanceof Error ? error.message : String(error));
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("fact-decide")
+  .description(
+    "Settle the entries a finished fact-debate run left for human review with one judge's ruling (no model calls)",
+  )
+  .requiredOption("--run <dir>", "the finished fact-debate run")
+  .requiredOption(
+    "--decider <model>",
+    "the judge whose ruling is applied, e.g. claude-fable-5-1",
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option(
+    "--apply",
+    "write the decided rulings into the case facts and provenance",
+  )
+  .option("--aggregate-only", "print counts only (sealed cases)")
+  .action(
+    (opts: {
+      run: string;
+      decider: string;
+      cases: string;
+      case: string[];
+      packets: string;
+      apply?: boolean;
+      aggregateOnly?: boolean;
+    }) => {
+      try {
+        const s = decideFinished({
+          ...opts,
+          caseIds: opts.case,
+          log: opts.aggregateOnly ? undefined : (l) => console.error(l),
+        });
+        const kv =
+          Object.entries(s.outcomes)
+            .sort()
+            .map(([k, v]) => `${k} ${v}`)
+            .join(", ") || "none";
+        console.log(
+          `decided ${s.decided} entries in ${s.cases} case(s) by ${opts.decider}: ${kv}${s.skipped ? `; ${s.skipped} skipped (no longer on the sheet)` : ""}${s.unsourced ? `; ${s.unsourced} unsourced additions` : ""}${opts.apply ? "; applied" : ""}`,
+        );
+      } catch (error) {
+        console.error(
+          opts.aggregateOnly
+            ? "fact-decide failed"
+            : error instanceof Error
+              ? error.message
+              : String(error),
+        );
         process.exitCode = 2;
       }
     },

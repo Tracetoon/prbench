@@ -329,6 +329,28 @@ export interface Ruling {
 export function combine(
   rulings: JudgeRuling[],
   checks: TextCheck[],
+  decider?: string,
+): Pick<
+  Ruling,
+  "outcome" | "position" | "text" | "reason" | "evidenceRefs" | "why"
+> {
+  const result = combineJudges(rulings, checks);
+  if (result.outcome === "applied" || !decider) return result;
+  const d = rulings.find((r) => r.judge === decider);
+  if (!d) throw new Error(`decider ${decider} is not one of the judges`);
+  return {
+    outcome: "applied",
+    position: d.position,
+    text: d.text,
+    reason: d.reason,
+    evidenceRefs: [...new Set(d.evidenceRefs)],
+    why: `${result.why}; decided by ${decider}`,
+  };
+}
+
+function combineJudges(
+  rulings: JudgeRuling[],
+  checks: TextCheck[],
 ): Pick<
   Ruling,
   "outcome" | "position" | "text" | "reason" | "evidenceRefs" | "why"
@@ -443,6 +465,8 @@ export interface DebateOptions {
   /** provider/model of each independent judge (default Fable 5.1 and GPT-6 Astra). */
   judges?: string[];
   judgeEffort?: string;
+  /** Model of the judge whose ruling decides entries the judges disagree on (default: none, a human decides). */
+  decider?: string;
   /** Effort for the two debaters. */
   effort?: string;
   out: string;
@@ -899,7 +923,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
             text: entry.text,
             earlier: entry.earlier,
           },
-          ...combine(js, cs),
+          ...combine(js, cs, opts.decider),
           judges: js,
           textChecks: cs,
           stances,
@@ -1021,7 +1045,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
 }
 
 /** Writes applied rulings into the case (rewrites, removals, additions) with provenance from the judges' cited evidence; returns additions that could not be sourced. */
-function applyRulings(
+export function applyRulings(
   loaded: ReturnType<typeof loadCase>,
   facts: Facts,
   sheet: SheetItem[],
@@ -1238,4 +1262,137 @@ export function debateSummaryLines(s: DebateSummary): string[] {
     `calls ${s.calls} new, ${s.cachedCalls} reused; reported cost $${s.costUsd.toFixed(2)} (Claude calls; Codex runs on the subscription)${s.applied ? `; applied to ${s.applied} case(s)` : ""}`,
   );
   return lines;
+}
+
+export interface DecideSummary {
+  cases: number;
+  decided: number;
+  outcomes: Record<string, number>;
+  /** Entries whose text is no longer on the case's sheet (edited since the run). */
+  skipped: number;
+  unsourced: number;
+}
+
+/**
+ * Settles the entries a finished fact-debate run sent to human review with
+ * one judge's ruling: the decider's position (and text) is applied to the
+ * case's current sheet, matched by the entry's text. Makes no model calls.
+ */
+export function decideFinished(opts: {
+  run: string;
+  cases: string;
+  decider: string;
+  caseIds?: string[];
+  apply?: boolean;
+  /** Prebuilt fact packets; the bare clone in each case's packet backs the provenance hashes. */
+  packets?: string;
+  log?: (line: string) => void;
+}): DecideSummary {
+  const log = opts.log ?? (() => {});
+  const run = resolve(opts.run);
+  const meta = JSON.parse(readFileSync(join(run, "run.json"), "utf8"));
+  const judgeModels: string[] = (meta.judges ?? []).map(
+    (j: { model: string }) => j.model,
+  );
+  if (!judgeModels.includes(opts.decider))
+    throw new Error(
+      `--decider ${opts.decider} was not a judge in ${basename(run)} (${judgeModels.join(", ")})`,
+    );
+  const judges = meta.judges.map(
+    (j: { model: string; effort: string }, i: number) => {
+      const provider = j.model.startsWith("claude-") ? "claude" : "codex";
+      return {
+        id: `judge-${i + 1}`,
+        family: provider === "claude" ? "anthropic" : "openai",
+        model: j.model,
+        provider,
+        replicate: 0,
+        effort: j.effort,
+      } as unknown as Reviewer;
+    },
+  );
+  const runId = `${basename(run)}+decided-by-${opts.decider}`;
+  const wanted = opts.caseIds?.length ? new Set(opts.caseIds) : undefined;
+  const summary: DecideSummary = {
+    cases: 0,
+    decided: 0,
+    outcomes: {},
+    skipped: 0,
+    unsourced: 0,
+  };
+  for (const dir of caseDirs(resolve(opts.cases))) {
+    const loaded = loadCase(dir);
+    const id = loaded.case.id;
+    const file = join(run, id, "debates.json");
+    if ((wanted && !wanted.has(id)) || !existsSync(file)) continue;
+    const open: Ruling[] = (
+      JSON.parse(readFileSync(file, "utf8")).rulings as Ruling[]
+    ).filter((r) => r.outcome === "human");
+    if (!open.length) continue;
+    const facts: Facts = JSON.parse(
+      readFileSync(join(loaded.dir, loaded.case.facts ?? "facts.json"), "utf8"),
+    );
+    const sheet = sheetOf(facts);
+    const decided: Ruling[] = [];
+    for (const r of open) {
+      const d = r.judges.find((j) => j.judge === opts.decider)!;
+      let entry = r.entry;
+      if (entry.kind === "item") {
+        const item = sheet.find(
+          (s) => s.category === entry.category && s.text === entry.text,
+        );
+        if (!item) {
+          summary.skipped++;
+          continue;
+        }
+        entry = { ...entry, id: item.id };
+      }
+      decided.push({
+        ...r,
+        entry,
+        outcome: "applied",
+        position: d.position,
+        text: d.text,
+        reason: d.reason,
+        evidenceRefs: [...new Set(d.evidenceRefs)],
+        why: `${r.why}; decided by ${opts.decider}`,
+      });
+      summary.outcomes[`${entry.kind}:${d.position}`] =
+        (summary.outcomes[`${entry.kind}:${d.position}`] ?? 0) + 1;
+    }
+    if (!decided.length) continue;
+    summary.cases++;
+    summary.decided += decided.length;
+    if (opts.apply) {
+      const packet = packetFor(
+        loaded,
+        opts.packets ? resolve(opts.packets) : undefined,
+        join(run, id),
+      );
+      const unsourced = applyRulings(
+        loaded,
+        facts,
+        sheet,
+        decided,
+        join(packet, "repo.git"),
+        runId,
+        judges,
+      );
+      summary.unsourced += unsourced.length;
+      writeFileSync(
+        join(run, id, "decided.json"),
+        json({
+          schema: "prbench.fact-decide/v1",
+          decider: opts.decider,
+          rulings: decided,
+          unsourced: unsourced.map((a) => ({
+            category: a.category,
+            text: a.text,
+          })),
+        }),
+      );
+    }
+    log(`decided ${id}: ${decided.length}${opts.apply ? ", applied" : ""}`);
+  }
+  return summary;
 }

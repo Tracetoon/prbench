@@ -174,6 +174,11 @@ bun run prbench fact-debate --cases <dir> --control spec.json --out <dir>     # 
 
 It reports combined and per-judge results (correct, wrong, sent to a human) and is never applied.
 
+**Deciding splits:**
+- `--decider <model>` makes one judge's ruling settle every entry the judges disagree on, instead of sending it to a human.
+- `prbench fact-decide --run <dir> --decider <model> [--apply] [--aggregate-only]` does the same afterwards for a finished run, with no model calls.
+- For the 3.0.0 release the decider is Fable 5.1. On the remaining splits, neither keep nor revise was wrong. Fable reasoned through that uncertainty better on human review, and it is the stronger model.
+
 **Model checks:**
 - A Claude reply is refused if Claude Code reports a different model than requested; it quietly substitutes its default model for an unknown or org-restricted model.
 - Codex fails on an unknown model by itself (`model_not_found`).

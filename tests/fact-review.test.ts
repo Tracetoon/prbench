@@ -31,7 +31,12 @@ import {
   checkReview,
   sheetOf,
 } from "../src/factreview/schema.ts";
-import { combine, debaterOrder, factDebate } from "../src/factreview/debate.ts";
+import {
+  combine,
+  debaterOrder,
+  decideFinished,
+  factDebate,
+} from "../src/factreview/debate.ts";
 import { canaryEntries, unanimousEntries } from "../scripts/fact-control.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
@@ -951,6 +956,79 @@ describe("debate and judges", () => {
     );
     expect(human).toContain("## X1 (context)");
     expect(human).toContain(`**${FABLE}:** keep`);
+  });
+
+  test("a decider settles a split, live (--decider) or afterwards from a finished run (fact-decide)", async () => {
+    const split = {
+      [FABLE]: {
+        judge: { X1: { position: "revise", text: "Fable wording." } },
+      },
+      [ASTRA]: { judge: { X1: { position: "keep" } } },
+    };
+    const live = await disputedX1("decider-live");
+    const a = setup({ "*": { debate: split } });
+    const s = await factDebate({
+      cases: live.root,
+      from: [live.first.out],
+      out: a.out,
+      apply: true,
+      decider: FABLE,
+      log: () => {},
+    });
+    expect(s.outcomes).toEqual({ "item:revise": 1 });
+    expect(
+      JSON.parse(readFileSync(join(live.dir, "facts.json"), "utf8")).context,
+    ).toContain("Fable wording.");
+
+    const later = await disputedX1("decider-later");
+    const b = setup({ "*": { debate: split } });
+    const before = await factDebate({
+      cases: later.root,
+      from: [later.first.out],
+      out: b.out,
+      apply: true,
+      log: () => {},
+    });
+    expect(before.outcomes).toEqual({ human: 1 });
+    expect(() =>
+      decideFinished({ run: b.out, cases: later.root, decider: "nobody" }),
+    ).toThrow("was not a judge");
+    const d = decideFinished({
+      run: b.out,
+      cases: later.root,
+      decider: FABLE,
+      apply: true,
+    });
+    expect(d).toMatchObject({
+      cases: 1,
+      decided: 1,
+      outcomes: { "item:revise": 1 },
+      skipped: 0,
+    });
+    const facts = JSON.parse(
+      readFileSync(join(later.dir, "facts.json"), "utf8"),
+    );
+    expect(facts.context).toContain("Fable wording.");
+    expect(
+      preflightCase(loadCase(later.dir), {
+        cache: tempDir(),
+        requireProvenance: true,
+      }).checkedFacts,
+    ).toBe(
+      facts.claims.length +
+        facts.context.length +
+        facts.uncertainties.length +
+        facts.traps.length,
+    );
+    // Run again: the decided text is no longer on the sheet, so nothing changes.
+    expect(
+      decideFinished({
+        run: b.out,
+        cases: later.root,
+        decider: FABLE,
+        apply: true,
+      }),
+    ).toMatchObject({ decided: 0, skipped: 1 });
   });
 
   test("both judges revise: Astra checks Fable's text first, then the reverse, else human", async () => {

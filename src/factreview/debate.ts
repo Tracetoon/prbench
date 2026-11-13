@@ -54,15 +54,17 @@ import {
   type ItemDecision,
 } from "./record.ts";
 import {
+  checkVotes,
   sheetOf,
   VERDICTS,
+  voteSchema,
   type Category,
   type SheetItem,
   type Verdict,
+  type VoteReply,
 } from "./schema.ts";
 
 export const DEBATE_PROMPT_VERSION = 2;
-export const DEFAULT_JUDGE = "claude/claude-fable-5-2";
 
 /** One disputed thing to settle: an item on the sheet, or a proposed addition. */
 export interface DebateEntry {
@@ -279,20 +281,110 @@ export function debaterOrder(caseId: string): "opus-first" | "sol-first" {
     : "sol-first";
 }
 
-export interface Ruling {
-  entry: DebateEntry;
+/** One judge's ruling on one entry. */
+export interface JudgeRuling {
+  judge: string;
   position: Verdict;
   text: string | null;
   reason: string;
   evidenceRefs: string[];
-  /** Each debater's position as advocate. */
-  advocated: { opus: Verdict; sol: Verdict };
-  /** Whom the ruling's position sided with. */
-  sidedWith: "both" | "opus" | "sol" | "neither";
+}
+
+/** A text check: one judge votes on the other's rewrite. */
+export interface TextCheck {
+  checker: string;
+  author: string;
+  text: string;
+  vote: "accept" | "reject";
+  reason: string;
+}
+
+export interface Ruling {
+  entry: DebateEntry;
+  /** applied: the judges agreed (and, for a rewrite, one accepted the other's text); human: they did not. */
+  outcome: "applied" | "human";
+  position: Verdict | null;
+  text: string | null;
+  reason: string;
+  evidenceRefs: string[];
+  why: string;
+  judges: JudgeRuling[];
+  textChecks: TextCheck[];
+  /** Each debater's stance: as advocate (open) and as respondent after reading the other's case (final). */
+  stances: {
+    opus: { open: Verdict; final: Verdict };
+    sol: { open: Verdict; final: Verdict };
+  };
   debater1: "opus" | "sol";
   /** Control mode: the outcomes counted as correct, and the entry's group. */
   expected?: Verdict[];
   group?: string;
+}
+
+/**
+ * Combines independent judge rulings on one entry. All the same keep or
+ * remove: applied. All revise: the first text another judge accepted is
+ * applied (checks are tried in order). Anything else goes to a human.
+ */
+export function combine(
+  rulings: JudgeRuling[],
+  checks: TextCheck[],
+): Pick<
+  Ruling,
+  "outcome" | "position" | "text" | "reason" | "evidenceRefs" | "why"
+> {
+  const refs = [...new Set(rulings.flatMap((r) => r.evidenceRefs))];
+  const positions = new Set(rulings.map((r) => r.position));
+  const reason = rulings.map((r) => `${r.judge}: ${r.reason}`).join(" | ");
+  if (positions.size > 1)
+    return {
+      outcome: "human",
+      position: null,
+      text: null,
+      reason,
+      evidenceRefs: refs,
+      why: `the judges disagreed: ${rulings.map((r) => `${r.judge} ${r.position}`).join(", ")}`,
+    };
+  const position = rulings[0]!.position;
+  if (position !== "revise")
+    return {
+      outcome: "applied",
+      position,
+      text: null,
+      reason,
+      evidenceRefs: refs,
+      why: `all judges ruled ${position}`,
+    };
+  if (rulings.length === 1) {
+    const only = rulings[0]!;
+    return {
+      outcome: "applied",
+      position,
+      text: only.text,
+      reason,
+      evidenceRefs: refs,
+      why: "the judge ruled revise",
+    };
+  }
+  const accepted = checks.find((c) => c.vote === "accept");
+  if (!accepted)
+    return {
+      outcome: "human",
+      position: "revise",
+      text: null,
+      reason,
+      evidenceRefs: refs,
+      why: "all judges ruled revise, but no judge accepted another's text",
+    };
+  const author = rulings.find((r) => r.judge === accepted.author)!;
+  return {
+    outcome: "applied",
+    position,
+    text: accepted.text,
+    reason,
+    evidenceRefs: [...new Set(author.evidenceRefs)],
+    why: `all judges ruled revise; ${accepted.checker} accepted ${accepted.author}'s text`,
+  };
 }
 
 interface Disputes {
@@ -328,7 +420,7 @@ export function disputesFrom(runs: string[], caseId: string): Disputes {
   return out;
 }
 
-/** An explicit set of entries per case, with the outcomes that count as correct: the judge's control set. */
+/** An explicit set of entries per case, with the outcomes that count as correct: the judges' control set. */
 export interface ControlSpec {
   schema: "prbench.fact-debate-control/v1";
   cases: {
@@ -339,6 +431,8 @@ export interface ControlSpec {
   }[];
 }
 
+export const DEFAULT_JUDGES = ["claude/claude-fable-5-1", "codex/gpt-6-astra"];
+
 export interface DebateOptions {
   cases: string;
   caseIds?: string[];
@@ -346,8 +440,8 @@ export interface DebateOptions {
   from?: string[];
   /** Control mode: explicit entries with expected outcomes; scored, never applied. */
   control?: string;
-  /** provider/model of the judge (default claude/claude-fable-5-2). */
-  judge?: string;
+  /** provider/model of each independent judge (default Fable 5.1 and GPT-6 Astra). */
+  judges?: string[];
   judgeEffort?: string;
   /** Effort for the two debaters. */
   effort?: string;
@@ -360,21 +454,40 @@ export interface DebateOptions {
   log?: (line: string) => void;
 }
 
+interface Tally {
+  correct: number;
+  wrong: number;
+  human: number;
+  total: number;
+}
+
 export interface DebateSummary {
   runId: string;
   mode: "settle" | "control";
-  judge: string;
+  judges: string[];
   cases: number;
   entries: number;
-  rulings: Record<string, number>;
-  sidedWith: Record<string, number>;
-  /** Rulings whose position matched only Debater 1's case, or only Debater 2's. */
-  byLabel: { debater1: number; debater2: number };
+  /** Combined outcomes: kind:position for applied rulings, "human" otherwise. */
+  outcomes: Record<string, number>;
+  judgesAgreed: number;
+  /** Per judge, on entries where the debaters' final stances differ: rulings matching Opus's or Sol's final stance, and Debater 1's or 2's. */
+  perJudge: Record<
+    string,
+    {
+      contested: number;
+      withOpus: number;
+      withSol: number;
+      withDebater1: number;
+      withDebater2: number;
+      rulings: Record<string, number>;
+    }
+  >;
+  /** Debaters who moved from their opening case when rebutting the other's. */
+  moved: { opus: number; sol: number };
   unsourced: number;
   control?: {
-    correct: number;
-    total: number;
-    byGroup: Record<string, { correct: number; total: number }>;
+    combined: Record<string, Tally>;
+    perJudge: Record<string, Record<string, Tally>>;
   };
   calls: number;
   cachedCalls: number;
@@ -382,13 +495,13 @@ export interface DebateSummary {
   applied: number;
 }
 
-function judgeOf(spec: string, effort: string): Reviewer {
+function judgeOf(spec: string, effort: string, index: number): Reviewer {
   const m = /^(claude|codex)\/(.+)$/.exec(spec);
   if (!m)
     throw new Error(`--judge ${spec}: use claude/<model> or codex/<model>`);
   const provider = m[1] as "claude" | "codex";
   return {
-    id: "judge",
+    id: `judge-${index + 1}`,
     family: provider === "claude" ? "anthropic" : "openai",
     model: m[2]!,
     provider,
@@ -398,21 +511,57 @@ function judgeOf(spec: string, effort: string): Reviewer {
   };
 }
 
+function textCheckPrompt(
+  sheet: SheetItem[],
+  entries: { entry: DebateEntry; text: string }[],
+): string {
+  const body = entries
+    .map(({ entry, text }) =>
+      [
+        `### ${entry.id} (${entry.kind === "addition" ? `proposed addition to ${entry.category}` : entry.category})`,
+        `Current text: ${entry.text}`,
+        `Proposed text: ${text}`,
+      ].join("\n"),
+    )
+    .join("\n\n");
+  return `A ruling on a fact sheet for a code change replaces the entries below with new text. Check each proposed text against the evidence.
+
+${SHEET_RULES}
+
+${WORKSPACE}
+
+## The sheet (also in sheet.json)
+
+${list(sheet)}
+
+## Proposed texts (also in proposals.json)
+
+${body}
+
+## Your task
+
+For every entry vote accept if the proposed text is correct against the evidence (check it), specific enough to score, and no longer than it needs to be; otherwise reject. Give a one-line reason and the evidence references you checked.
+
+Reply with the JSON object only.`;
+}
+
 export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   const log = opts.aggregateOnly
     ? () => {}
     : (opts.log ?? ((l: string) => console.error(l)));
   if (!!opts.control === !!opts.from?.length)
     throw new Error(
-      "give either --from <run> (settle disputes) or --control <spec> (score the judge)",
+      "give either --from <run> (settle disputes) or --control <spec> (score the judges)",
     );
   if (opts.control && opts.apply)
     throw new Error("--apply cannot be used with --control");
   const effort = opts.effort ?? "xhigh";
-  const judge = judgeOf(
-    opts.judge ?? DEFAULT_JUDGE,
-    opts.judgeEffort ?? "xhigh",
+  const judgeSpecs = opts.judges?.length ? opts.judges : DEFAULT_JUDGES;
+  const judges = judgeSpecs.map((s, i) =>
+    judgeOf(s, opts.judgeEffort ?? "xhigh", i),
   );
+  if (new Set(judges.map((j) => j.model)).size !== judges.length)
+    throw new Error("each judge model may be listed once");
   const [opus, sol] = reviewersOf(parsePanel("opus:1,sol:1"), effort) as [
     Reviewer,
     Reviewer,
@@ -434,12 +583,12 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   writeFileSync(
     runFile,
     json({
-      schema: "prbench.fact-debate-run/v2",
+      schema: "prbench.fact-debate-run/v3",
       promptVersion: DEBATE_PROMPT_VERSION,
       runId,
       mode: control ? "control" : "settle",
       effort,
-      judge: { model: judge.model, effort: judge.effort },
+      judges: judges.map((j) => ({ model: j.model, effort: j.effort })),
       from: from.map((r) => basename(r)),
       control: opts.control ? basename(opts.control) : null,
       debaters: [opus.model, sol.model],
@@ -459,14 +608,34 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   const summary: DebateSummary = {
     runId,
     mode: control ? "control" : "settle",
-    judge: judge.model,
+    judges: judges.map((j) => j.model),
     cases: 0,
     entries: 0,
-    rulings: {},
-    sidedWith: {},
-    byLabel: { debater1: 0, debater2: 0 },
+    outcomes: {},
+    judgesAgreed: 0,
+    perJudge: Object.fromEntries(
+      judges.map((j) => [
+        j.model,
+        {
+          contested: 0,
+          withOpus: 0,
+          withSol: 0,
+          withDebater1: 0,
+          withDebater2: 0,
+          rulings: {},
+        },
+      ]),
+    ),
+    moved: { opus: 0, sol: 0 },
     unsourced: 0,
-    ...(control ? { control: { correct: 0, total: 0, byGroup: {} } } : {}),
+    ...(control
+      ? {
+          control: {
+            combined: {},
+            perJudge: Object.fromEntries(judges.map((j) => [j.model, {}])),
+          },
+        }
+      : {}),
     calls: 0,
     cachedCalls: 0,
     costUsd: 0,
@@ -474,6 +643,18 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   };
   const bump = (o: Record<string, number>, k: string) =>
     (o[k] = (o[k] ?? 0) + 1);
+  const tally = (
+    o: Record<string, Tally>,
+    group: string,
+    applied: boolean,
+    ok: boolean,
+  ) => {
+    const t = (o[group] ??= { correct: 0, wrong: 0, human: 0, total: 0 });
+    t.total++;
+    if (!applied) t.human++;
+    else if (ok) t.correct++;
+    else t.wrong++;
+  };
 
   const work = caseDirs(resolve(opts.cases))
     .map((dir) => loadCase(dir))
@@ -589,29 +770,127 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
         opening: d.opening,
         rebuttal: d.rebuttal,
       })) as [Debate, Debate];
-      const ruled = (
-        await call<PositionsReply>(caseOut, ev, sheet, {
-          kind: "debate-judge",
-          round: 3,
-          reviewer: judge,
-          prompt: judgePrompt(sheet, shown, shownDebates),
-          schema: positionsSchema(ids),
-          check: (v) => checkPositions(v, shown),
-          files,
-          saveAs: "judge.json",
-        })
-      ).items;
+      const judgePromptText = judgePrompt(sheet, shown, shownDebates);
+      const byJudge = await Promise.all(
+        judges.map(async (j) => ({
+          j,
+          items: (
+            await call<PositionsReply>(caseOut, ev, sheet, {
+              kind: "debate-judge",
+              round: 3,
+              reviewer: j,
+              prompt: judgePromptText,
+              schema: positionsSchema(ids),
+              check: (v) => checkPositions(v, shown),
+              files,
+              saveAs: `judge-${j.model}.json`,
+            })
+          ).items,
+        })),
+      );
       const get = (ps: Position[], eid: string) =>
         ps.find((p) => p.id === eid)!;
+      const rulingsOf = (eid: string): JudgeRuling[] =>
+        byJudge.map(({ j, items }) => {
+          const p = get(items, eid);
+          return {
+            judge: j.model,
+            position: p.position,
+            text: p.text,
+            reason: p.argument,
+            evidenceRefs: p.evidenceRefs,
+          };
+        });
+
+      // Text checks where every judge ruled revise with different texts: each later judge checks the first judge's text, then the reverse.
+      const checks = new Map<string, TextCheck[]>();
+      if (judges.length > 1) {
+        const pending = shown.filter((e) => {
+          const rs = rulingsOf(e.id);
+          return (
+            rs.every((r) => r.position === "revise") &&
+            new Set(rs.map((r) => r.text!.trim())).size > 1
+          );
+        });
+        for (const e of shown) {
+          const rs = rulingsOf(e.id);
+          if (
+            rs.every((r) => r.position === "revise") &&
+            new Set(rs.map((r) => r.text!.trim())).size === 1
+          )
+            checks.set(e.id, [
+              {
+                checker: "(identical texts)",
+                author: rs[0]!.judge,
+                text: rs[0]!.text!,
+                vote: "accept",
+                reason: "all judges wrote the same text",
+              },
+            ]);
+        }
+        const pairs: [Reviewer, Reviewer][] = [
+          [judges[1]!, judges[0]!],
+          [judges[0]!, judges[1]!],
+        ];
+        let open = pending;
+        for (const [k, [checker, author]] of pairs.entries()) {
+          if (!open.length) break;
+          const view = open.map((entry) => ({
+            entry,
+            text: rulingsOf(entry.id).find((r) => r.judge === author.model)!
+              .text!,
+          }));
+          const proposals = view.map(({ entry, text }) => ({
+            id: entry.id,
+            kind: "revise" as const,
+            category: entry.category,
+            original: entry.text,
+            text,
+            evidenceRefs: [] as string[],
+          }));
+          const pIds = proposals.map((p) => p.id);
+          const reply = await call<VoteReply>(caseOut, ev, sheet, {
+            kind: "debate-textcheck",
+            round: 4 + k,
+            reviewer: checker,
+            prompt: textCheckPrompt(sheet, view),
+            schema: voteSchema(pIds),
+            check: (v) => checkVotes(v, proposals),
+            files: { "proposals.json": { proposals } },
+            saveAs: `textcheck-${checker.model}-on-${author.model}.json`,
+          });
+          for (const { entry, text } of view) {
+            const v = reply.votes.find((x) => x.id === entry.id)!;
+            checks.set(entry.id, [
+              ...(checks.get(entry.id) ?? []),
+              {
+                checker: checker.model,
+                author: author.model,
+                text,
+                vote: v.vote,
+                reason: v.reason,
+              },
+            ]);
+          }
+          open = open.filter(
+            (e) => !(checks.get(e.id) ?? []).some((c) => c.vote === "accept"),
+          );
+        }
+      }
+
       const rulings: Ruling[] = entries.map((entry) => {
-        const r = get(ruled, entry.id);
-        const advocated = {
-          opus: get(A.opening, entry.id).position,
-          sol: get(B.opening, entry.id).position,
+        const js = rulingsOf(entry.id);
+        const cs = checks.get(entry.id) ?? [];
+        const stances = {
+          opus: {
+            open: get(A.opening, entry.id).position,
+            final: get(B.rebuttal, entry.id).position,
+          },
+          sol: {
+            open: get(B.opening, entry.id).position,
+            final: get(A.rebuttal, entry.id).position,
+          },
         };
-        const o = r.position === advocated.opus;
-        const s = r.position === advocated.sol;
-        const sidedWith = o && s ? "both" : o ? "opus" : s ? "sol" : "neither";
         return {
           entry: {
             id: entry.id,
@@ -620,12 +899,10 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
             text: entry.text,
             earlier: entry.earlier,
           },
-          position: r.position,
-          text: r.text,
-          reason: r.argument,
-          evidenceRefs: r.evidenceRefs,
-          advocated,
-          sidedWith,
+          ...combine(js, cs),
+          judges: js,
+          textChecks: cs,
+          stances,
           debater1: order === "opus-first" ? "opus" : "sol",
           ...(entry.expected
             ? { expected: entry.expected, group: entry.group }
@@ -635,26 +912,53 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
       summary.cases++;
       for (const r of rulings) {
         summary.entries++;
-        bump(summary.rulings, `${r.entry.kind}:${r.position}`);
-        bump(summary.sidedWith, r.sidedWith);
-        if (r.sidedWith === "opus" || r.sidedWith === "sol")
-          summary.byLabel[
-            r.sidedWith === r.debater1 ? "debater1" : "debater2"
-          ]++;
+        bump(
+          summary.outcomes,
+          r.outcome === "applied" ? `${r.entry.kind}:${r.position}` : "human",
+        );
+        if (new Set(r.judges.map((j) => j.position)).size === 1)
+          summary.judgesAgreed++;
+        if (r.stances.opus.open !== r.stances.opus.final) summary.moved.opus++;
+        if (r.stances.sol.open !== r.stances.sol.final) summary.moved.sol++;
+        const contested = r.stances.opus.final !== r.stances.sol.final;
+        for (const j of r.judges) {
+          const pj = summary.perJudge[j.judge]!;
+          bump(pj.rulings, `${r.entry.kind}:${j.position}`);
+          if (!contested) continue;
+          pj.contested++;
+          const withOpus = j.position === r.stances.opus.final;
+          const withSol = j.position === r.stances.sol.final;
+          if (withOpus) pj.withOpus++;
+          if (withSol) pj.withSol++;
+          if (
+            (withOpus && r.debater1 === "opus") ||
+            (withSol && r.debater1 === "sol")
+          )
+            pj.withDebater1++;
+          if (
+            (withOpus && r.debater1 === "sol") ||
+            (withSol && r.debater1 === "opus")
+          )
+            pj.withDebater2++;
+        }
         if (summary.control && r.expected) {
-          const ok = r.expected.includes(r.position);
-          summary.control.total++;
-          if (ok) summary.control.correct++;
-          const g = (summary.control.byGroup[r.group ?? "other"] ??= {
-            correct: 0,
-            total: 0,
-          });
-          g.total++;
-          if (ok) g.correct++;
+          tally(
+            summary.control.combined,
+            r.group ?? "other",
+            r.outcome === "applied",
+            r.position !== null && r.expected.includes(r.position),
+          );
+          for (const j of r.judges)
+            tally(
+              summary.control.perJudge[j.judge]!,
+              r.group ?? "other",
+              true,
+              r.expected.includes(j.position),
+            );
         }
       }
       let unsourced: AdditionDecision[] = [];
-      if (opts.apply) {
+      if (opts.apply && rulings.some((r) => r.outcome === "applied")) {
         unsourced = applyRulings(
           loaded,
           facts,
@@ -662,7 +966,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
           rulings,
           ev.bare,
           runId,
-          judge,
+          judges,
         );
         summary.applied++;
         summary.unsourced += unsourced.length;
@@ -670,7 +974,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
       writeFileSync(
         join(caseOut, "debates.json"),
         json({
-          schema: "prbench.fact-debate/v2",
+          schema: "prbench.fact-debate/v3",
           runId,
           case: id,
           debater1: order === "opus-first" ? opus.model : sol.model,
@@ -681,10 +985,11 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
       );
       writeFileSync(
         join(caseOut, "human-review.md"),
-        humanReview(id, unsourced),
+        humanReview(id, rulings, unsourced),
       );
+      const h = rulings.filter((r) => r.outcome === "human").length;
       log(
-        `done  ${id}: ${rulings.length} ruled${opts.apply ? ", applied" : ""}${unsourced.length ? `, ${unsourced.length} unsourced` : ""}`,
+        `done  ${id}: ${rulings.length - h}/${rulings.length} applied${h ? `, ${h} to human review` : ""}${unsourced.length ? `, ${unsourced.length} unsourced` : ""}`,
       );
     } finally {
       rmSync(ev.dir, {
@@ -696,7 +1001,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
     }
   }
 
-  // Sol calls share the benchmark Codex login, as in factReview.
+  // Sol and Astra calls share the benchmark Codex login, as in factReview.
   setCodexLoginSharing(true);
   try {
     await Promise.all(
@@ -715,7 +1020,7 @@ export async function factDebate(opts: DebateOptions): Promise<DebateSummary> {
   return summary;
 }
 
-/** Writes the judge's rulings into the case (rewrites, removals, additions) with provenance from its cited evidence; returns additions that could not be sourced. */
+/** Writes applied rulings into the case (rewrites, removals, additions) with provenance from the judges' cited evidence; returns additions that could not be sourced. */
 function applyRulings(
   loaded: ReturnType<typeof loadCase>,
   facts: Facts,
@@ -723,18 +1028,19 @@ function applyRulings(
   rulings: Ruling[],
   bare: string,
   runId: string,
-  judge: Reviewer,
+  judges: Reviewer[],
 ): AdditionDecision[] {
   const draft = baseDraft(loaded.dir, facts);
   if (!draft)
     throw new Error(
       `${loaded.case.id}: no fact provenance to apply the rulings to`,
     );
+  const applied = rulings.filter((r) => r.outcome === "applied");
   const vr = (r: Ruling, text: string) => ({
     round: 0,
     candidate: {
       text,
-      reason: `judge ruling: ${r.reason}`,
+      reason: `judge ruling (${r.why})`,
       evidenceRefs: r.evidenceRefs,
     },
     consensus: {
@@ -745,7 +1051,7 @@ function applyRulings(
     votes: [],
   });
   const items: ItemDecision[] = sheet.map((s) => {
-    const r = rulings.find(
+    const r = applied.find(
       (x) => x.entry.kind === "item" && x.entry.id === s.id,
     );
     const base = {
@@ -771,24 +1077,19 @@ function applyRulings(
         ...base,
         outcome: "kept",
         finalText: s.text,
-        why: r ? "judge ruling: keep" : "not disputed",
+        why: r ? r.why : "not ruled on",
       };
     if (r.position === "remove")
-      return {
-        ...base,
-        outcome: "removed",
-        finalText: null,
-        why: "judge ruling: remove",
-      };
+      return { ...base, outcome: "removed", finalText: null, why: r.why };
     return {
       ...base,
       outcome: "revised",
       finalText: r.text,
-      why: "judge ruling: revise",
+      why: r.why,
       rewriteRounds: [vr(r, r.text!)],
     };
   });
-  const additions: AdditionDecision[] = rulings
+  const additions: AdditionDecision[] = applied
     .filter((r) => r.entry.kind === "addition" && r.position !== "remove")
     .map((r, i) => {
       const text = r.position === "revise" ? r.text! : r.entry.text;
@@ -797,10 +1098,10 @@ function applyRulings(
         category: r.entry.category,
         text,
         members: [],
-        proposers: ["judge"],
+        proposers: ["judges"],
         outcome: "added",
         round: 0,
-        why: "judge ruling",
+        why: r.why,
         evidenceRefs: r.evidenceRefs,
         rounds: [vr(r, text)],
       };
@@ -823,7 +1124,7 @@ function applyRulings(
   const revised = revisedDraft(draft, result, (ref) => resolveRef(ref, ctx));
   applyToCase(loaded.dir, revised, {
     bare,
-    reviewedBy: `expert panel debate ${runId} (opus and sol at xhigh, judged by ${judge.model} at ${judge.effort})`,
+    reviewedBy: `expert panel debate ${runId} (opus and sol at xhigh; judges ${judges.map((j) => `${j.model} at ${j.effort}`).join(", ")})`,
     record: {
       runId,
       reviewers: [
@@ -834,15 +1135,17 @@ function applyRulings(
           count: 1,
         },
         { model: "gpt-6.1-sol", family: "openai", effort: "xhigh", count: 1 },
-        {
-          model: judge.model,
-          family: judge.family,
-          effort: judge.effort,
+        ...judges.map((j) => ({
+          model: j.model,
+          family: j.family,
+          effort: j.effort,
           count: 1,
-        },
+        })),
       ],
       rounds: 3,
-      disputed: additions.filter((a) => a.outcome === "unsourced").length,
+      disputed:
+        rulings.filter((r) => r.outcome === "human").length +
+        additions.filter((a) => a.outcome === "unsourced").length,
       revised: items.filter((i) => i.outcome === "revised").length,
       removed: items.filter((i) => i.outcome === "removed").length,
       added: additions.filter((a) => a.outcome === "added").length,
@@ -851,20 +1154,55 @@ function applyRulings(
   return additions.filter((a) => a.outcome === "unsourced");
 }
 
-function humanReview(caseId: string, unsourced: AdditionDecision[]): string {
-  const out = [`# Human review after the judge: ${caseId}`, ""];
-  if (!unsourced.length)
+function humanReview(
+  caseId: string,
+  rulings: Ruling[],
+  unsourced: AdditionDecision[],
+): string {
+  const open = rulings.filter((r) => r.outcome === "human");
+  const out = [`# Human review after the judges: ${caseId}`, ""];
+  if (!open.length && !unsourced.length)
     return [
       ...out,
-      "Nothing to review: the judge ruled on every entry and every accepted addition is sourced.",
+      "Nothing to review: the judges agreed on every entry.",
       "",
     ].join("\n");
-  out.push(
-    "The judge accepted these additions, but none of their evidence references resolve to a citable source, so they are not on the sheet. Add each with a source, or drop it.",
-    "",
-  );
-  for (const a of unsourced)
-    out.push(`## ${a.id} (${a.category})`, "", `> ${a.text}`, "", a.why, "");
+  if (open.length)
+    out.push(
+      "The judges did not agree on these entries. Disputed items stay on the sheet as they were; disputed additions are left out.",
+      "",
+    );
+  for (const r of open) {
+    out.push(
+      `## ${r.entry.id} (${r.entry.kind === "addition" ? `proposed addition to ${r.entry.category}` : r.entry.category})`,
+      "",
+      `> ${r.entry.text}`,
+      "",
+      `Why: ${r.why}`,
+      "",
+    );
+    for (const j of r.judges)
+      out.push(
+        `- **${j.judge}:** ${j.position}${j.text ? ` → "${j.text}"` : ""} — ${j.reason}${j.evidenceRefs.length ? `\n  evidence: ${j.evidenceRefs.join(", ")}` : ""}`,
+      );
+    for (const c of r.textChecks)
+      out.push(
+        `- **${c.checker} on ${c.author}'s text:** ${c.vote} — ${c.reason}`,
+      );
+    out.push(
+      "",
+      `Debaters: Opus opened ${r.stances.opus.open} and ended ${r.stances.opus.final}; Sol opened ${r.stances.sol.open} and ended ${r.stances.sol.final}. Full debates in debates.json.`,
+      "",
+    );
+  }
+  if (unsourced.length) {
+    out.push(
+      "The judges accepted these additions, but none of their evidence references resolve to a citable source, so they are not on the sheet. Add each with a source, or drop it.",
+      "",
+    );
+    for (const a of unsourced)
+      out.push(`## ${a.id} (${a.category})`, "", `> ${a.text}`, "", a.why, "");
+  }
   return out.join("\n");
 }
 
@@ -874,22 +1212,30 @@ export function debateSummaryLines(s: DebateSummary): string[] {
       .sort()
       .map(([k, v]) => `${k} ${v}`)
       .join(", ") || "none";
-  const lines = [
-    `${s.mode === "control" ? "judge control" : "debate and judge"} (${s.judge}): cases ${s.cases}; entries ${s.entries}`,
-    `rulings: ${kv(s.rulings)}${s.unsourced ? `; unsourced additions ${s.unsourced}` : ""}`,
-    `ruling sided with: ${kv(s.sidedWith)}; with Debater 1 only ${s.byLabel.debater1}, Debater 2 only ${s.byLabel.debater2}`,
-  ];
-  if (s.control)
-    lines.push(
-      `control: ${s.control.correct}/${s.control.total} correct; ${Object.entries(
-        s.control.byGroup,
+  const tallies = (o: Record<string, Tally>) =>
+    Object.entries(o)
+      .sort()
+      .map(
+        ([g, t]) =>
+          `${g} ${t.correct}/${t.total}${t.wrong ? ` (${t.wrong} wrong)` : ""}${t.human ? ` (${t.human} to human)` : ""}`,
       )
-        .sort()
-        .map(([g, v]) => `${g} ${v.correct}/${v.total}`)
-        .join(", ")}`,
-    );
+      .join(", ");
+  const lines = [
+    `${s.mode === "control" ? "judge control" : "debate and judges"} (${s.judges.join(" + ")}): cases ${s.cases}; entries ${s.entries}; judges agreed on ${s.judgesAgreed}`,
+    `outcomes: ${kv(s.outcomes)}${s.unsourced ? `; unsourced additions ${s.unsourced}` : ""}`,
+    `debaters who moved when rebutting: opus ${s.moved.opus}, sol ${s.moved.sol}`,
+    ...Object.entries(s.perJudge).map(
+      ([j, p]) =>
+        `${j}: ${kv(p.rulings)}; on ${p.contested} contested entries sided with opus ${p.withOpus}, sol ${p.withSol}; Debater 1 ${p.withDebater1}, Debater 2 ${p.withDebater2}`,
+    ),
+  ];
+  if (s.control) {
+    lines.push(`control, combined: ${tallies(s.control.combined)}`);
+    for (const [j, t] of Object.entries(s.control.perJudge))
+      lines.push(`control, ${j} alone: ${tallies(t)}`);
+  }
   lines.push(
-    `calls ${s.calls} new, ${s.cachedCalls} reused; reported cost $${s.costUsd.toFixed(2)}${s.applied ? `; applied to ${s.applied} case(s)` : ""}`,
+    `calls ${s.calls} new, ${s.cachedCalls} reused; reported cost $${s.costUsd.toFixed(2)} (Claude calls; Codex runs on the subscription)${s.applied ? `; applied to ${s.applied} case(s)` : ""}`,
   );
   return lines;
 }

@@ -40,7 +40,7 @@ import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
 import {
-  DEFAULT_JUDGE,
+  DEFAULT_JUDGES,
   debateSummaryLines,
   factDebate,
 } from "./factreview/debate.ts";
@@ -632,7 +632,12 @@ program
     "--control <spec>",
     "score the judge on explicit entries with expected outcomes (scripts/fact-control.ts); never applied",
   )
-  .option("--judge <provider/model>", "the judge", DEFAULT_JUDGE)
+  .option(
+    "--judge <provider/model>",
+    `an independent judge (repeatable; default ${DEFAULT_JUDGES.join(" and ")})`,
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
   .option("--judge-effort <effort>", "the judge's reasoning effort", "xhigh")
   .option("--cases <dir>", "cases directory", "cases-local")
   .option(
@@ -658,7 +663,7 @@ program
     async (opts: {
       from: string[];
       control?: string;
-      judge: string;
+      judge: string[];
       judgeEffort: string;
       cases: string;
       case: string[];
@@ -679,7 +684,12 @@ program
           ),
       );
       try {
-        const s = await factDebate({ ...opts, caseIds: opts.case, out });
+        const s = await factDebate({
+          ...opts,
+          judges: opts.judge,
+          caseIds: opts.case,
+          out,
+        });
         for (const line of debateSummaryLines(s)) console.log(line);
         if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
       } catch (error) {

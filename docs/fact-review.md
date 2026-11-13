@@ -139,13 +139,13 @@ Scoring:
 
 With `--aggregate-only` the terminal shows only counts: cases, items, settled, kept, revised, removed and disputed items, additions, calls, cost and canary metrics. It never shows case names, fact text or the run folder path. The run folder still holds every decision and `human-review.md` for the person resolving disputes. The panel models do see sealed content, but they tune nothing, so the set stays sealed for the tuner.
 
-## Debate and judge (`prbench fact-debate`)
+## Debate and judges (`prbench fact-debate`)
 
-Entries without family consensus are settled by debate plus a single judge:
+Entries without family consensus are settled by debate plus two independent judges:
 
 ```sh
 bun run prbench fact-debate --cases <dir> --from <run> [--from <run>...] --out <dir> [--apply] [--aggregate-only]
-bun run prbench fact-debate --cases <dir> --control spec.json --out <dir>     # score the judge first
+bun run prbench fact-debate --cases <dir> --control spec.json --out <dir>     # score the judges first
 ```
 
 **What is settled:** every disputed item and disputed or unsourced addition in the `--from` runs, matched by text to the case's current sheet. That covers round-1 disputes and consensus revisions whose rewrite failed the round-2 vote.
@@ -153,21 +153,31 @@ bun run prbench fact-debate --cases <dir> --control spec.json --out <dir>     # 
 **Per case, over all entries at once:**
 1. **Debate A:** Opus makes the case, then Sol must rebut it, even if it agrees.
 2. **Debate B:** Sol makes the case, then Opus rebuts.
-3. **Ruling:** the judge, Fable 5.2 at xhigh by default (`--judge`, `--judge-effort`), reads the same read-only evidence and both debates, then rules on every entry: keep, revise (with the final text) or remove. Its ruling is final.
+3. **Judges:** each judge independently reads the same read-only evidence and both debates, and rules on every entry: keep, revise (with the final text) or remove. The defaults are Fable 5.1 and GPT-6 Astra, both at xhigh (`--judge`, repeatable; `--judge-effort`). Neither judge sees the other's ruling.
 
-**Blinding:**
+**Combining the rulings:**
+- **All judges keep, or all remove:** applied.
+- **All judges revise:** the second judge checks the first judge's text (accept or reject against the evidence). If it rejects it, the first judge checks the second's text. The first text accepted is applied; if neither is accepted, the entry goes to a human.
+- **Any other split:** a human, with every ruling and both debates in `human-review.md`.
+
+**Blinding and bias:**
 - Debaters see the roles advocate and respondent.
-- The judge sees "Debater 1" and "Debater 2". The label for each model is fixed per case by a hash of the case ID and recorded in `debates.json`.
-- The summary counts how often a ruling sided with Opus, Sol, both or neither, and with Debater 1 or Debater 2, so model and position bias both show up.
+- Judges see "Debater 1" and "Debater 2". The label for each model is fixed per case by a hash of the case ID and recorded in `debates.json`.
+- For each debater, the summary reports its opening stance and its final stance (its rebuttal position, after reading the other's case).
+- For each judge, on contested entries (where the debaters' final stances differ), it reports how often the judge sided with Opus or with Sol, and with Debater 1 or Debater 2.
 
-**Why a judge instead of consensus:** in cross-examination, and in an earlier amend-and-pick debate, the Claude reviewers moved toward a well-argued opposing position far more readily than Sol did. Any rule that needs both families to agree therefore drifted toward the more stubborn side. In the two-text pick, each model also tended to pick its own text.
+**Why two judges instead of consensus:** in cross-examination, and in an earlier amend-and-pick debate, the Claude reviewers moved toward a well-argued position far more readily than Sol did. Any rule that needs the two debating families to agree therefore drifted toward the more stubborn side. A single Claude judge (Fable) removed that, but left the question of a Claude model judging debates that include a Claude model. A second frontier judge from the other family (Astra) answers that, and the judges never debate each other.
 
 **Control (`--control`, built by `scripts/fact-control.ts`):**
 - items the whole panel kept unanimously in round 1 (expected: keep);
 - the planted canaries on their canary sheets (expected: revise or remove; a removed claim offered as an addition is expected to be added).
 
-It is scored and never applied.
+It reports combined and per-judge results (correct, wrong, sent to a human) and is never applied.
 
-**Model check:** a Claude reply is refused if Claude Code reports a different model than the one requested, since it can quietly answer an unknown model ID with its default model.
+**Model checks:**
+- A Claude reply is refused if Claude Code reports a different model than requested; it quietly substitutes its default model for an unknown or org-restricted model.
+- Codex fails on an unknown model by itself (`model_not_found`).
 
-**`--apply`:** writes the rulings with provenance from the judge's cited evidence. An accepted addition with no resolvable reference goes to `human-review.md`.
+**Cost:** the reported cost covers Claude calls only. Codex runs on the subscription.
+
+**`--apply`:** writes applied rulings with provenance from the judges' cited evidence. An accepted addition with no resolvable reference goes to `human-review.md`.

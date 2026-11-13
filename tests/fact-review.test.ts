@@ -31,7 +31,7 @@ import {
   checkReview,
   sheetOf,
 } from "../src/factreview/schema.ts";
-import { debaterOrder, factDebate } from "../src/factreview/debate.ts";
+import { combine, debaterOrder, factDebate } from "../src/factreview/debate.ts";
 import { canaryEntries, unanimousEntries } from "../scripts/fact-control.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
@@ -809,7 +809,7 @@ describe("cross-examination and focused re-review", () => {
   });
 });
 
-describe("debate and judge", () => {
+describe("debate and judges", () => {
   const disputedX1 = async (id: string) => {
     const { root, dir } = reviewedCase(id);
     const first = setup({
@@ -829,9 +829,20 @@ describe("debate and judge", () => {
     ).toBe("disputed");
     return { root, dir, first };
   };
-  const FABLE = "claude-fable-5-2";
+  const FABLE = "claude-fable-5-1";
+  const ASTRA = "gpt-6-astra";
+  const stage = (c: any) =>
+    c.kind === "vote"
+      ? "check"
+      : c.prompt.includes("make the case")
+        ? "open"
+        : c.prompt.includes("Your task: rebut")
+          ? "rebut"
+          : c.prompt.includes("Your task: rule")
+            ? "judge"
+            : "?";
 
-  test("two debates, then one judge ruling, applied with provenance and recorded", async () => {
+  test("two debates, two independent judges; agreement is applied with provenance", async () => {
     const { root, dir, first } = await disputedX1("debate");
     const x1 = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"))
       .context[0];
@@ -843,11 +854,8 @@ describe("debate and judge", () => {
             open: { X1: { position: "remove" } },
             rebut: { X1: { position: "remove" } },
           },
-          [FABLE]: {
-            judge: {
-              X1: { position: "revise", text: "A shorter context line." },
-            },
-          },
+          [FABLE]: { judge: { X1: { position: "remove" } } },
+          [ASTRA]: { judge: { X1: { position: "remove" } } },
         },
       },
     });
@@ -861,19 +869,17 @@ describe("debate and judge", () => {
     expect(s).toMatchObject({
       cases: 1,
       entries: 1,
-      rulings: { "item:revise": 1 },
-      sidedWith: { neither: 1 },
+      judgesAgreed: 1,
+      outcomes: { "item:remove": 1 },
       applied: 1,
+      moved: { opus: 0, sol: 0 },
+    });
+    expect(s.perJudge[FABLE]).toMatchObject({
+      contested: 1,
+      withSol: 1,
+      withOpus: 0,
     });
     const log = second.calls();
-    const stage = (c: any) =>
-      c.prompt.includes("make the case")
-        ? "open"
-        : c.prompt.includes("Your task: rebut")
-          ? "rebut"
-          : c.prompt.includes("Your task: rule")
-            ? "judge"
-            : "?";
     expect(log.map((c) => `${c.model}:${stage(c)}`).sort()).toEqual(
       [
         `${OPUS}:open`,
@@ -881,23 +887,21 @@ describe("debate and judge", () => {
         `${SOL}:open`,
         `${SOL}:rebut`,
         `${FABLE}:judge`,
+        `${ASTRA}:judge`,
       ].sort(),
     );
-    // Prompts never name models or families; the judge sees blinded, consistent labels.
+    // Prompts never name models or families; both judges get the same blinded prompt.
     for (const c of log)
       expect(c.prompt).not.toMatch(
-        /opus|sol-1|anthropic|openai|gpt-|claude-|fable/i,
+        /opus|sol-1|anthropic|openai|gpt-|claude-|fable|astra/i,
       );
-    const judge = log.find((c) => stage(c) === "judge");
-    expect(judge.prompt).toContain(
+    const judges = log.filter((c) => stage(c) === "judge");
+    expect(judges[0].prompt).toBe(judges[1].prompt);
+    expect(judges[0].prompt).toContain(
       "In debate 1, Debater 1 made the case and Debater 2 rebutted",
-    );
-    expect(judge.prompt).toMatch(
-      /Debater 1 \(case\)[\s\S]*Debater 2 \(rebuttal\)[\s\S]*Debater 2 \(case\)[\s\S]*Debater 1 \(rebuttal\)/,
     );
     const facts = JSON.parse(readFileSync(join(dir, "facts.json"), "utf8"));
     expect(facts.context).not.toContain(x1);
-    expect(facts.context).toContain("A shorter context line.");
     expect(
       preflightCase(loadCase(dir), {
         cache: tempDir(),
@@ -909,14 +913,103 @@ describe("debate and judge", () => {
         facts.uncertainties.length +
         facts.traps.length,
     );
-    const rec = JSON.parse(
-      readFileSync(join(second.out, "debate", "debates.json"), "utf8"),
+    const prov = JSON.parse(
+      readFileSync(join(dir, "facts-provenance.json"), "utf8"),
     );
-    expect(rec.rulings[0]).toMatchObject({
-      position: "revise",
-      advocated: { opus: "keep", sol: "remove" },
+    expect(prov.expertReview.reviewers.map((r: any) => r.model)).toEqual([
+      "claude-opus-5-5",
+      "gpt-6.1-sol",
+      FABLE,
+      ASTRA,
+    ]);
+  });
+
+  test("judges that disagree send the entry to human review and leave the sheet alone", async () => {
+    const { root, dir, first } = await disputedX1("judges-split");
+    const before = readFileSync(join(dir, "facts.json"), "utf8");
+    const second = setup({
+      "*": {
+        debate: {
+          [FABLE]: { judge: { X1: { position: "keep" } } },
+          [ASTRA]: { judge: { X1: { position: "remove" } } },
+        },
+      },
     });
-    expect(["claude-opus-5-5", "gpt-6.1-sol"]).toContain(rec.debater1);
+    const s = await factDebate({
+      cases: root,
+      from: [first.out],
+      out: second.out,
+      apply: true,
+      log: () => {},
+    });
+    expect(s.outcomes).toEqual({ human: 1 });
+    expect(s.applied).toBe(0);
+    expect(readFileSync(join(dir, "facts.json"), "utf8")).toBe(before);
+    const human = readFileSync(
+      join(second.out, "judges-split", "human-review.md"),
+      "utf8",
+    );
+    expect(human).toContain("## X1 (context)");
+    expect(human).toContain(`**${FABLE}:** keep`);
+  });
+
+  test("both judges revise: Astra checks Fable's text first, then the reverse, else human", async () => {
+    const both = {
+      [FABLE]: { judge: { X1: { position: "revise", text: "Fable text." } } },
+      [ASTRA]: { judge: { X1: { position: "revise", text: "Astra text." } } },
+    };
+    const runWith = async (id: string, vote: object) => {
+      const { root, dir, first } = await disputedX1(id);
+      const second = setup({ "*": { debate: both, vote } });
+      const s = await factDebate({
+        cases: root,
+        from: [first.out],
+        out: second.out,
+        apply: true,
+        log: () => {},
+      });
+      return {
+        s,
+        facts: JSON.parse(readFileSync(join(dir, "facts.json"), "utf8")),
+        calls: second.calls(),
+      };
+    };
+    const a = await runWith("rev-a", {});
+    expect(a.facts.context).toContain("Fable text.");
+    expect(
+      a.calls.filter((c) => c.kind === "vote").map((c) => c.model),
+    ).toEqual([ASTRA]);
+    const b = await runWith("rev-b", { [ASTRA]: [{ X1: "reject" }] });
+    expect(b.facts.context).toContain("Astra text.");
+    expect(
+      b.calls.filter((c) => c.kind === "vote").map((c) => c.model),
+    ).toEqual([ASTRA, FABLE]);
+    const c = await runWith("rev-c", {
+      [ASTRA]: [{ X1: "reject" }],
+      [FABLE]: [{ X1: "reject" }],
+    });
+    expect(c.s.outcomes).toEqual({ human: 1 });
+  });
+
+  test("combine: one judge alone is applied; identical rewrites need no check", () => {
+    const r = (judge: string, position: any, text: string | null = null) => ({
+      judge,
+      position,
+      text,
+      reason: "r",
+      evidenceRefs: [],
+    });
+    expect(combine([r("a", "revise", "t")], [])).toMatchObject({
+      outcome: "applied",
+      text: "t",
+    });
+    expect(combine([r("a", "keep"), r("b", "keep")], [])).toMatchObject({
+      outcome: "applied",
+      position: "keep",
+    });
+    expect(combine([r("a", "keep"), r("b", "revise", "t")], []).outcome).toBe(
+      "human",
+    );
   });
 
   test("debater order is stable per case and both orders occur", () => {
@@ -927,7 +1020,7 @@ describe("debate and judge", () => {
     expect(orders.size).toBe(2);
   });
 
-  test("control mode scores rulings against expected outcomes and refuses --apply", async () => {
+  test("control mode scores combined and per-judge outcomes and refuses --apply", async () => {
     const { root, dir } = reviewedCase("control");
     const sheet = sheetOf(
       JSON.parse(readFileSync(join(dir, "facts.json"), "utf8")),
@@ -960,7 +1053,12 @@ describe("debate and judge", () => {
     writeFileSync(join(work, "spec.json"), JSON.stringify(spec));
     const before = readFileSync(join(dir, "facts.json"), "utf8");
     const { out } = setup({
-      "*": { debate: { [FABLE]: { judge: { C2: { position: "keep" } } } } },
+      "*": {
+        debate: {
+          [FABLE]: { judge: { C2: { position: "remove" } } },
+          [ASTRA]: { judge: {} },
+        },
+      },
     });
     await expect(
       factDebate({
@@ -977,13 +1075,15 @@ describe("debate and judge", () => {
       out: `${out}-2`,
       log: () => {},
     });
-    expect(s.control).toEqual({
+    expect(s.control!.combined).toEqual({
+      unanimous: { correct: 1, wrong: 0, human: 0, total: 1 },
+      "canary:contradicted": { correct: 0, wrong: 0, human: 1, total: 1 },
+    });
+    expect(s.control!.perJudge[FABLE]!["canary:contradicted"]).toMatchObject({
       correct: 1,
-      total: 2,
-      byGroup: {
-        unanimous: { correct: 1, total: 1 },
-        "canary:contradicted": { correct: 0, total: 1 },
-      },
+    });
+    expect(s.control!.perJudge[ASTRA]!["canary:contradicted"]).toMatchObject({
+      wrong: 1,
     });
     expect(readFileSync(join(dir, "facts.json"), "utf8")).toBe(before);
   });

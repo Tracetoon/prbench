@@ -383,7 +383,8 @@ export interface CallSpec<T> {
     | "debate-open"
     | "debate-rebut"
     | "debate-judge"
-    | "debate-textcheck";
+    | "debate-textcheck"
+    | "accuracy";
   round: number;
   reviewer: Reviewer;
   prompt: string;
@@ -449,8 +450,14 @@ export function makeCaller(
                 })),
               }),
             );
-            for (const [name, value] of Object.entries(spec.files ?? {}))
-              writeFileSync(join(work, name), json(value));
+            for (const [name, value] of Object.entries(spec.files ?? {})) {
+              // Strings are written as text (e.g. a draft's markdown), anything else as JSON.
+              mkdirSync(dirname(join(work, name)), { recursive: true });
+              writeFileSync(
+                join(work, name),
+                typeof value === "string" ? value : json(value),
+              );
+            }
             stats.calls++;
             const reply = await spec.reviewer.judge.ask(prompt, spec.schema, {
               workDir: work,

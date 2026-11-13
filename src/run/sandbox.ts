@@ -238,6 +238,11 @@ export const VOLATILE_ENV = [
 export const VOLATILE_PREFIXES = ['KONSOLE_', 'CLAUDE_'];
 
 const DROPPED_ENV = [
+  // No display: a tool that resets PATH (so the GUI shims are bypassed) and
+  // runs the real editor by absolute path still cannot open a window.
+  'DISPLAY',
+  'WAYLAND_DISPLAY',
+  'DBUS_SESSION_BUS_ADDRESS',
   'PRBENCH_JUDGE_TIMEOUT_MS',
   'PRBENCH_WRITER_TIMEOUT_MS',
   'PRBENCH_PREFLIGHT_CACHE',

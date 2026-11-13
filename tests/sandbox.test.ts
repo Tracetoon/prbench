@@ -199,6 +199,8 @@ describe('createSandbox', () => {
   test('editors and desktop openers are no-ops inside the sandbox', () => {
     const sb = createSandbox(loaded, { parent: tempDir() });
     try {
+      // Without a display, an editor reached outside the shims (PATH reset to /usr/bin) cannot open a window either.
+      for (const k of ['DISPLAY', 'WAYLAND_DISPLAY', 'DBUS_SESSION_BUS_ADDRESS']) expect(sb.env[k]).toBeUndefined();
       for (const name of GUI_LAUNCHERS) {
         const cmd = process.platform === 'win32' ? ['cmd', '/d', '/c', name, '.'] : [name, '.'];
         const r = exec(cmd, { cwd: sb.repo, env: sb.env });

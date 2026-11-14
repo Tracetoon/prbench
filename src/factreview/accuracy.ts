@@ -418,8 +418,11 @@ export async function accuracyReview(
           ? [...new Set(per.flatMap((p) => p.evidenceRefs))]
           : chosen.evidenceRefs;
         const sources: AdjudicationSource[] = [];
+        // A captured command proves something only about its own draft: the
+        // comparison verifies validation proofs against the flagged artifact.
+        const own = new Map([[flags[i]!.draft, drafts.get(flags[i]!.draft)!]]);
         for (const r of refs) {
-          const s = adjudicationSource(r, ctx, drafts);
+          const s = adjudicationSource(r, ctx, own);
           if (
             s &&
             !sources.some((x) => JSON.stringify(x) === JSON.stringify(s))

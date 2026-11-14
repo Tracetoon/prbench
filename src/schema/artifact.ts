@@ -40,7 +40,12 @@ export interface ArtifactMeta {
    */
   usageByModel?: Record<
     string,
-    { inputTokens: number; cachedInputTokens: number; outputTokens: number; costUsd?: number }
+    {
+      inputTokens: number;
+      cachedInputTokens: number;
+      outputTokens: number;
+      costUsd?: number;
+    }
   >;
   experimentId?: string;
   runtimeIdentity?: { version: string; buildId: string; sha256: string };
@@ -85,6 +90,8 @@ export interface WorkflowReviewPass {
 export interface WorkflowRecord {
   declaredIndependentRoles: number;
   reviewCurrent: boolean;
+  /** Why the review is not current, when it is not. */
+  reviewIssues?: string[];
   reviewVersion?: number;
   /** Absent when the run stored no review plan. */
   reviewPlan?: WorkflowReviewPlan;
@@ -189,8 +196,13 @@ export function checkArtifact(value: unknown): Problems {
       optional: true,
       min: 0,
     });
-    if (m.usageByModel !== undefined && c.object(m.usageByModel, "meta.usageByModel"))
-      for (const [model, u] of Object.entries(m.usageByModel as Record<string, unknown>)) {
+    if (
+      m.usageByModel !== undefined &&
+      c.object(m.usageByModel, "meta.usageByModel")
+    )
+      for (const [model, u] of Object.entries(
+        m.usageByModel as Record<string, unknown>,
+      )) {
         const at = `meta.usageByModel.${model}`;
         if (!c.object(u, at)) continue;
         const v = u as Record<string, unknown>;

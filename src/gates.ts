@@ -17,7 +17,10 @@ export function leanReviewGaps(workflow: WorkflowRecord | undefined): string[] {
     gaps.push(
       `review version is ${workflow.reviewVersion ?? "unrecorded"}, not 2`,
     );
-  if (!workflow.reviewCurrent) gaps.push("review is not current");
+  if (!workflow.reviewCurrent)
+    gaps.push(
+      `review is not current${workflow.reviewIssues?.length ? ` (${workflow.reviewIssues.join("; ")})` : ""}`,
+    );
   const plan = workflow.reviewPlan,
     passes = workflow.reviewPasses;
   if (!plan) gaps.push("no review plan recorded");

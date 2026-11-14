@@ -64,11 +64,15 @@ test("a lean reviewed run with no guidance file is current only with an empty gu
   const packet = { fingerprint: "fp", headSha: head, title: "T", body: "B\n", guidanceSha256: "", authorSha256: digest("") };
   write("review.json", review);
   write("review-input.json", packet);
-  write("review-result.json", { status: "current", inputFingerprint: "fp", reportSha256: objectHash(review) });
+  // Tracetoon reports a lean review "incomplete" (no guidance to assess); a stale one never counts.
+  write("review-result.json", { status: "stale", inputFingerprint: "fp", reportSha256: objectHash(review) });
   write("title.txt", "T\n");
   write("final-body.md", "B\n");
+  expect(currentTracetoonReview(root, head)).toBe(false);
+  write("review-result.json", { status: "incomplete", inputFingerprint: "fp", reportSha256: objectHash(review) });
+  write("final-body.md", "B\n");
   expect(currentTracetoonReview(root, head)).toBe(true);
-  // A guidance file that the packet does not account for makes it stale.
+  // With a guidance file, "incomplete" is not enough (and the packet does not account for it).
   write("guidance.json", '{"v":1}\n');
   expect(currentTracetoonReview(root, head)).toBe(false);
 });

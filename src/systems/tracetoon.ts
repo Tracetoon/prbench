@@ -15,7 +15,7 @@ import { join } from "node:path";
 import { describeRun, runClaude } from "../agents/claude.ts";
 import type { Sandbox } from "../run/sandbox.ts";
 import { exec } from "../util/exec.ts";
-import { currentTracetoonReview } from "./tracetoonReview.ts";
+import { tracetoonReviewIssues } from "./tracetoonReview.ts";
 import {
   AGENT_TOOLS,
   agentArtifact,
@@ -230,7 +230,9 @@ const optionalString = (value: unknown) =>
   typeof value === "string" && value.trim() ? value.trim() : undefined;
 
 /** Copy a stored review plan's fields as written; malformed plans are dropped, not repaired. */
-export function workflowReviewPlan(raw: unknown): WorkflowReviewPlan | undefined {
+export function workflowReviewPlan(
+  raw: unknown,
+): WorkflowReviewPlan | undefined {
   if (!raw || typeof raw !== "object") return undefined;
   const plan = raw as Record<string, unknown>;
   if (
@@ -365,7 +367,8 @@ export function tracetoonTimings(
                   role.agentId.trim(),
               )
               .map((role) => role.agentId);
-          const current = currentTracetoonReview(root, headSha);
+          const reviewIssues = tracetoonReviewIssues(root, headSha);
+          const current = reviewIssues.length === 0;
           const planFile = join(root, "review-plan.json");
           let reviewPlan: WorkflowReviewPlan | undefined;
           try {
@@ -380,6 +383,7 @@ export function tracetoonTimings(
           workflow = {
             declaredIndependentRoles: new Set(ids).size,
             reviewCurrent: current,
+            ...(current ? {} : { reviewIssues }),
             reviewVersion: review.v,
             ...(reviewPlan ? { reviewPlan } : {}),
             ...(reviewPasses ? { reviewPasses } : {}),

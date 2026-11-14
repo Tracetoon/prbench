@@ -748,7 +748,7 @@ export interface JudgeFailures {
 /**
  * Failed judge attempts per judge under a run root (or a folder of run
  * roots). Timed-out and transient calls are retried (up to 3 attempts per
- * order judgment) and a malformed reply gets one format repair; each failed
+ * order judgment) and a malformed reply gets one format repair, then fresh requests up to 5 attempts; each failed
  * attempt is counted here as a reliability measure. Results saved before
  * they named their judge take the judge from a sibling judgment, else from
  * the judge's folder name.
@@ -899,7 +899,7 @@ export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: 
   if (judgeFailures.length)
     lines.push(
       "",
-      "Judge reliability (timed-out and transient calls are retried, up to 3 attempts per order judgment; a malformed reply gets one format repair):",
+      "Judge reliability (timed-out and transient calls are retried, up to 3 attempts per order judgment; a malformed reply gets one format repair, then fresh requests, up to 5 attempts):",
       "",
       "| Judge | Failed attempts | Timed out | Transient | Format | Other |",
       "|---|---:|---:|---:|---:|---:|",

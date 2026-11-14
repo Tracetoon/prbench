@@ -185,13 +185,13 @@ describe('pairwise', () => {
     expect(prompts).toHaveLength(4); // the prompt changed, so it is judged again
   });
 
-  test('retries once on an unusable reply, then fails with the reason', async () => {
+  test('retries an unusable reply up to five times, then fails with the reason', async () => {
     let n = 0;
     const judge: JudgeProvider = { id: 'bad', family: 'test', ask: async () => ({ text: n++ ? 'still not json' : '{"preferred":"A"}' }) };
     await expect(
       judgePair({ loaded: loadCase(EXAMPLE), facts, x: artifact('a', 'x'), y: artifact('b', 'y'), judge, outDir: tempDir() }),
     ).rejects.toThrow(/bad gave no usable judgment .*no JSON/);
-    expect(n).toBe(2);
+    expect(n).toBe(5);
   });
 });
 

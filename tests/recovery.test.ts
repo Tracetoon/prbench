@@ -24,11 +24,12 @@ test('transport and one format repair share a persisted budget; accepted orders 
  await judgePair(opts);expect(calls).toBe(4);expect(readFileSync(file,'utf8')).toBe(bytes);
  expect(pair.orderDigests?.ab).toHaveLength(64);
 });
-test('exhausted format repair cannot be reset by resume',async()=>{
+test('exhausted format attempts cannot be reset by resume',async()=>{
  let calls=0;const judge={id:'fixture:bad',family:'fixture',ask:async()=>{calls++;return{text:'not JSON'};}};
  const opts={loaded,facts,x:artifact('a'),y:artifact('b'),judge,outDir:tempDir()};
- await expect(judgePair(opts)).rejects.toThrow('no usable judgment');expect(calls).toBe(2);
- await expect(judgePair(opts)).rejects.toThrow('persisted recovery limit');expect(calls).toBe(2);
+ // One format repair, then fresh requests: five attempts in all.
+ await expect(judgePair(opts)).rejects.toThrow('no usable judgment');expect(calls).toBe(5);
+ await expect(judgePair(opts)).rejects.toThrow('persisted recovery limit');expect(calls).toBe(5);
  expect(retryDelay(new Error('Retry-After: 12'),100)).toBe(12000);
 });
 test('a judge timeout persisted by a stopped run is retried on resume, within the 3-attempt budget',async()=>{
@@ -65,3 +66,14 @@ test('fresh redacted traces survive sandbox cleanup without credential files',as
  const text=readFileSync(join(out,loaded.case.id,'trace-fixture.traces',status.traces.entries[0].file),'utf8');
  expect(text).toContain('[redacted]');expect(text).not.toContain('secret-value-123456789');
 },30000);
+
+test('random format failures are retried, and a stopped run resumes the remaining attempts',async()=>{
+ let calls=0;const fails=3;
+ const judge={id:'fixture:flaky',family:'fixture',ask:async(prompt:string)=>{calls++;
+  if(calls===1)throw new Error('claude judge failed (1): {"subtype":"error_max_structured_output_retries"}');
+  if(calls===2){expect(prompt).toContain('FORMAT CORRECTION ONLY');return{text:'not JSON'};}
+  if(calls<=fails){expect(prompt).not.toContain('FORMAT CORRECTION ONLY');throw new Error('codex judge produced no structured reply: WARNING');}
+  return{text:valid};}};
+ const pair=await judgePair({loaded,facts,x:artifact('a'),y:artifact('b'),judge,outDir:tempDir()});
+ expect(pair.verdict).toBe('tie');expect(calls).toBe(fails+2);
+});

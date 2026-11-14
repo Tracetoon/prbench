@@ -125,6 +125,14 @@ function evidenceFor(loaded: LoadedCase): string {
  * all, with backoff) instead of invalidating the run.
  */
 const RETRYABLE: string[] = ["transient", "timeout"];
+/** Attempts per order judgment. Format failures are random per call, so they
+ * get one format repair and then fresh requests up to MAX_ATTEMPTS; transient
+ * failures and timeouts keep their budget of RETRY_ATTEMPTS. */
+const MAX_ATTEMPTS = 5;
+const RETRY_ATTEMPTS = 3;
+/** CLI errors that mean "the reply had no usable structured output". */
+const FORMAT_ERROR =
+  /missing structured output|without structured output|error_max_structured_output_retries|Failed to provide valid structured output|produced no structured reply/i;
 
 const sha = (s: string) => createHash("sha256").update(s).digest("hex");
 const safe = (s: string) => s.replace(/[^A-Za-z0-9._-]/g, "_");
@@ -284,23 +292,34 @@ async function judgeOnce(
           return stored;
         }
       }
+      const formatFailure =
+        previous.problems?.length ||
+        previous.failureKind === "format" ||
+        FORMAT_ERROR.test(String(previous.error ?? ""));
       if (
-        (previous.problems?.length && repairUsed) ||
-        (previous.failureKind &&
-          previous.failureKind !== "format" &&
-          !RETRYABLE.includes(previous.failureKind))
+        past.length >= MAX_ATTEMPTS ||
+        (!formatFailure &&
+          ((previous.failureKind &&
+            !RETRYABLE.includes(previous.failureKind)) ||
+            past.length >= RETRY_ATTEMPTS))
       )
         throw new Error(
           `${judge.id} gave no usable judgment for ${meta.case}: persisted recovery limit reached. ${previous.error ?? previous.problems?.join("; ") ?? ""}`,
         );
-      if (previous.problems?.length && !repairUsed) {
+      if (formatFailure) {
+        // One format repair, then fresh requests.
+        request = repairUsed
+          ? prompt
+          : correction(
+              previous.text ?? "",
+              previous.problems ?? [String(previous.error ?? "")],
+            );
         repairUsed = true;
-        request = correction(previous.text, previous.problems);
       }
     }
   }
   let lastError = "";
-  for (let attempt = past.length + 1; attempt <= 3; attempt++) {
+  for (let attempt = past.length + 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const prefix = join(attempts, String(attempt).padStart(3, "0"));
     atomicJson(`${prefix}.request.json`, {
       prompt: request,
@@ -315,11 +334,9 @@ async function judgeOnce(
       reply = await judge.ask(request, judgmentSchema(refs));
     } catch (error) {
       lastError = redactEvidence(String(error));
-      // Some CLI providers signal an empty structured reply as an exception.
-      // It gets the same single format repair as a malformed returned reply.
-      if (
-        /missing structured output|without structured output/i.test(lastError)
-      ) {
+      // Some CLI providers signal an empty or invalid structured reply as an
+      // exception. It is a format failure like a malformed returned reply.
+      if (FORMAT_ERROR.test(lastError)) {
         atomicJson(`${prefix}.result.json`, {
           error: lastError,
           text: "",
@@ -334,9 +351,9 @@ async function judgeOnce(
           detail: lastError,
           durationMs: performance.now() - started,
         });
-        if (repairUsed || attempt === 3) break;
+        if (attempt === MAX_ATTEMPTS) break;
+        request = repairUsed ? prompt : correction("", [lastError]);
         repairUsed = true;
-        request = correction("", [lastError]);
         continue;
       }
       const kind = failureKind(error);
@@ -354,7 +371,7 @@ async function judgeOnce(
       });
       if (
         !RETRYABLE.includes(kind) ||
-        attempt === 3 ||
+        attempt >= RETRY_ATTEMPTS ||
         cancellationSignal()?.aborted
       )
         break;
@@ -390,9 +407,9 @@ async function judgeOnce(
         detail: lastError,
         durationMs: performance.now() - started,
       });
-      if (repairUsed || attempt === 3) break;
+      if (attempt === MAX_ATTEMPTS) break;
+      request = repairUsed ? prompt : correction(reply.text, problems);
       repairUsed = true;
-      request = correction(reply.text, problems);
       continue;
     }
     const stored: StoredJudgment = {

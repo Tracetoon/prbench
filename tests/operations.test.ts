@@ -287,3 +287,24 @@ test('the workflow record carries the stored review plan and reviewer passes', (
     tracetoonTimings(git, { root: '/work', branch: 'feature', startedAt: start }).workflow!.reviewPlan,
   ).toBeUndefined();
 });
+
+test('the lean reviewed path records a workflow without guidance.json', () => {
+  const git = tempDir(),
+    dir = join(git, 'tracetoon', 'runs', '20260101-000000'),
+    start = Date.now();
+  mkdirSync(dir, { recursive: true });
+  const write = (name: string, value: unknown) => writeFileSync(join(dir, name), JSON.stringify(value));
+  write('task.json', { root: '/work', branch: 'feature', startedAt: new Date(start + 1).toISOString() });
+  write('review-input.json', {});
+  write('review-result.json', {});
+  write('review.json', {
+    v: 2,
+    drafter: { mode: 'inline' },
+    reviewer: { mode: 'delegated', agentId: 'r1' },
+    passes: [{ pass: 1, agentId: 'r1', lens: 'general', model: 'haiku', effort: 'xhigh', findings: 1, importedAt: 'x' }],
+  });
+  write('review-plan.json', { v: 1, passes: 2, lenses: ['d'], reviewerModel: 'haiku', reviewerEffort: 'xhigh' });
+  const { workflow } = tracetoonTimings(git, { root: '/work', branch: 'feature', startedAt: start });
+  expect(workflow).toMatchObject({ reviewVersion: 2, declaredIndependentRoles: 1, reviewPlan: { passes: 2, lenses: ['d'] } });
+  expect(workflow!.reviewPasses).toHaveLength(1);
+});

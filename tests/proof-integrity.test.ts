@@ -54,6 +54,24 @@ test("current review proof becomes stale after title, source or head changes", (
   write("final-body.md", "Changed body\n");
   expect(currentTracetoonReview(root, head)).toBe(false);
 });
+test("a lean reviewed run with no guidance file is current only with an empty guidance hash", () => {
+  const root = tempDir(),
+    head = "c".repeat(40),
+    review = { v: 2, inputFingerprint: "fp" };
+  const objectHash = (x: unknown) => digest(JSON.stringify(x));
+  const write = (name: string, value: unknown) =>
+    writeFileSync(join(root, name), typeof value === "string" ? value : JSON.stringify(value));
+  const packet = { fingerprint: "fp", headSha: head, title: "T", body: "B\n", guidanceSha256: "", authorSha256: digest("") };
+  write("review.json", review);
+  write("review-input.json", packet);
+  write("review-result.json", { status: "current", inputFingerprint: "fp", reportSha256: objectHash(review) });
+  write("title.txt", "T\n");
+  write("final-body.md", "B\n");
+  expect(currentTracetoonReview(root, head)).toBe(true);
+  // A guidance file that the packet does not account for makes it stale.
+  write("guidance.json", '{"v":1}\n');
+  expect(currentTracetoonReview(root, head)).toBe(false);
+});
 test("fresh-validation adjudications bind to one actual artifact command", () => {
   const artifact = {
     schema: "prbench.artifact/v1",

@@ -23,7 +23,12 @@ export function currentTracetoonReview(root: string, headSha: string): boolean {
       packet.body !== text("final-body.md")
     )
       return false;
-    if (packet.guidanceSha256 !== textHash(text("guidance.json"))) return false;
+    // The lean reviewed path collects no contributor guidance: Tracetoon then
+    // records an empty guidance hash, and there must be no guidance file.
+    const guidance = existsSync(join(root, "guidance.json"))
+      ? textHash(text("guidance.json"))
+      : "";
+    if (packet.guidanceSha256 !== guidance) return false;
     if (
       packet.authorSha256 !==
       textHash(existsSync(join(root, "author.md")) ? text("author.md") : "")

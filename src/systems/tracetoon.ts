@@ -347,12 +347,15 @@ export function tracetoonTimings(
           packetFile = join(root, "review-input.json");
         if (
           existsSync(reviewFile) &&
-          existsSync(guidanceFile) &&
           existsSync(packetFile) &&
           existsSync(resultFile)
         ) {
           const review = JSON.parse(readFileSync(reviewFile, "utf8")),
-            guidance = JSON.parse(readFileSync(guidanceFile, "utf8"));
+            // Only the three-role workflow writes guidance.json (its researcher
+            // role); the lean reviewed path has none, and its record is still valid.
+            guidance = existsSync(guidanceFile)
+              ? JSON.parse(readFileSync(guidanceFile, "utf8"))
+              : {};
           const roles = [guidance.researcher, review.drafter, review.reviewer],
             ids = roles
               .filter(

@@ -246,6 +246,15 @@ program
         .filter(Boolean),
   )
   .option(
+    "--judges <specs>",
+    "judges replacing the provider's (diagnostic runs only), e.g. claude:claude-sonnet-5-5@medium",
+    (v: string) =>
+      v
+        .split(",")
+        .map((m) => m.trim())
+        .filter(Boolean),
+  )
+  .option(
     "--systems <list>",
     "writer systems (comma-separated): native, baseline, candidate (default all three; baseline and candidate are required). Without native, only candidate vs baseline is judged",
     (v: string) =>

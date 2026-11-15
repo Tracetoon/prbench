@@ -802,7 +802,17 @@ export async function compareV2(opts: CompareOptions) {
     throw new Error("Comparison split must be dev or test.");
   const provider = comparisonProvider(opts.provider),
     MODELS = opts.models?.length ? opts.models : provider.models,
-    JUDGES = provider.judges;
+    // A judge override is for cheap diagnostic rounds only; a confirmation
+    // always uses the provider's pre-registered judges.
+    JUDGES = opts.judges?.length
+      ? (() => {
+          if ((opts.purpose ?? "confirmation") === "confirmation")
+            throw new Error(
+              "--judges is for diagnostic runs only; a confirmation uses the provider's judges.",
+            );
+          return opts.judges;
+        })()
+      : provider.judges;
   if (old && manifestProvider(old.settings).id !== provider.id)
     throw new Error(
       `This experiment was frozen for ${manifestProvider(old.settings).label}; resume it with --provider ${manifestProvider(old.settings).id}.`,

@@ -91,6 +91,15 @@ export function candidateWorkflowGaps(
   ];
 }
 
+/**
+ * Share of candidate drafts that must meet the declared review plan.
+ * Deviation 4 (2026-11-14, approved by the protocol owner after dev-confirm-4):
+ * the plan must be the candidate's normal path; occasional agent deviations
+ * are product behaviour the quality and cost results already include. Every
+ * gap is still listed with the compliance rate.
+ */
+export const WORKFLOW_COMPLIANCE = 0.9;
+
 /** Keep every adoption criterion inside the frozen policy dependency closure. */
 export function adoptionGate(input: {
   complete: boolean;
@@ -114,6 +123,9 @@ export function adoptionGate(input: {
   });
   if (!candidates.length)
     workflowGaps.push("Candidate workflow records are unavailable");
+  const workflowCompliance = candidates.length
+    ? (candidates.length - workflowGaps.length) / candidates.length
+    : 0;
   const failed = input.quality === "failed" || input.performance === "failed";
   const inconclusive =
     !input.policyCurrent ||
@@ -121,7 +133,7 @@ export function adoptionGate(input: {
     input.quality !== "passed" ||
     input.performance !== "passed" ||
     input.pendingCleanup > 0 ||
-    workflowGaps.length > 0;
+    workflowCompliance + 1e-9 < WORKFLOW_COMPLIANCE;
   const status = !input.complete
     ? "incomplete"
     : failed
@@ -133,6 +145,8 @@ export function adoptionGate(input: {
     passed: status === "passed",
     status,
     workflowGaps,
+    workflowCompliance,
+    workflowComplianceRequired: WORKFLOW_COMPLIANCE,
     policyCurrent: input.policyCurrent,
     exitCode:
       status === "incomplete"

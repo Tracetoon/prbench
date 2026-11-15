@@ -89,19 +89,22 @@ test("validation unavailable to both writers in every pair is a stated limitatio
     validationUnavailable: false,
     validationLimitation: null,
   });
-  // A mix of matched and both-unknown pairs keeps blocking.
+  // A mix of matched and both-unknown pairs: both arms validated equally often,
+  // so cost counts (deviation 4); it is not "unavailable".
   const mixed = rows(0.8).map((r) =>
     r.case === "one" ? { ...r, validation: undefined } : r,
   );
   expect(performanceReport(mixed, 18)).toMatchObject({
-    status: "inconclusive",
+    status: "passed",
     validationUnavailable: false,
+    validationBalance: { baselineCompleted: 12, candidateCompleted: 12 },
   });
   // A pair where one writer completed some validation is not "unavailable".
   const partial = noValidation(0.8);
   partial[0] = rows(0.8)[0]!;
   expect(performanceReport(partial, 18).status).toBe("inconclusive");
-  // Unmatched coverage keeps blocking.
+  // Unmatched coverage: different targets, but the candidate validated in as
+  // many pairs as the baseline, so cost counts (deviation 4).
   const unmatched = rows(0.8).map((r) =>
     r.system === "tracetoon-candidate"
       ? {
@@ -118,7 +121,7 @@ test("validation unavailable to both writers in every pair is a stated limitatio
   );
   const unmatchedReport = performanceReport(unmatched, 18);
   expect(unmatchedReport).toMatchObject({
-    status: "inconclusive",
+    status: "passed",
     validationUnavailable: false,
   });
   expect(unmatchedReport.validationComparability[0]!.status).toBe("unmatched");
@@ -150,7 +153,11 @@ test("a paired draft without a priced cost makes the gate inconclusive and is li
   const mainThread = rows(2);
   mainThread[0] = {
     ...mainThread[0]!,
-    pricedCost: { costUsd: 0.1, costSource: "estimated", usageScope: "main-thread" },
+    pricedCost: {
+      costUsd: 0.1,
+      costSource: "estimated",
+      usageScope: "main-thread",
+    },
   };
   const report = performanceReport(missing, 18);
   expect(report.status).toBe("inconclusive");
@@ -162,7 +169,8 @@ test("a paired draft without a priced cost makes the gate inconclusive and is li
       model: "sol",
       replicate: 1,
       system: "tracetoon-candidate",
-      reason: "no priced cost (a model has no price, or token counts are missing)",
+      reason:
+        "no priced cost (a model has no price, or token counts are missing)",
     },
   ]);
   // Even a pricier candidate is inconclusive, not failed, while a draft is unpriced.
@@ -179,5 +187,27 @@ test("the stated rule names the criterion and threshold", () => {
   expect(COST_RULE).toContain("geometric mean of paired per-draft priced cost");
   expect(COST_RULE).toContain("at most 1.000");
   expect(COST_RULE).toContain("inconclusive");
-  expect(COST_RULE).toContain("Writer wall time and token counts are information, not criteria");
+  expect(COST_RULE).toContain(
+    "Writer wall time and token counts are information, not criteria",
+  );
+});
+
+test("cost counts when the candidate validated at least as often as the baseline (deviation 4)", () => {
+  // Only the baseline failed to validate in one pair: the candidate did not skip work.
+  const baselineGap = rows(0.5);
+  baselineGap.find(
+    (r) => r.system === "tracetoon-baseline",
+  )!.validation!.commands[0]!.outcome = "interrupted";
+  const report = performanceReport(baselineGap, 18);
+  expect(report.status).toBe("passed");
+  expect(report.validationBalance).toEqual({
+    baselineCompleted: 17,
+    candidateCompleted: 18,
+  });
+  // Only the candidate failed to validate: a cost win could come from skipped work.
+  const candidateGap = rows(0.5);
+  candidateGap.find(
+    (r) => r.system === "tracetoon-candidate",
+  )!.validation!.commands[0]!.outcome = "interrupted";
+  expect(performanceReport(candidateGap, 18).status).toBe("inconclusive");
 });

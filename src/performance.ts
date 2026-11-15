@@ -231,7 +231,21 @@ export function performanceReport(
         !p.baseline.coverage.length &&
         !p.candidate.coverage.length,
     );
-  const validationUsable = validationComparable || validationUnavailable;
+  // Deviation 4 (2026-11-14): validation is also usable when the candidate
+  // completed validation in at least as many pairs as the baseline, so a cost
+  // win cannot come from skipping validation the baseline ran.
+  const completed = (side: "baseline" | "candidate") =>
+    validationComparability.filter((p) => p[side].coverage.length > 0).length;
+  const validationBalance = {
+    baselineCompleted: completed("baseline"),
+    candidateCompleted: completed("candidate"),
+  };
+  const validationBalanced =
+    validationComparability.length === expectedPairs &&
+    validationComparability.length > 0 &&
+    validationBalance.candidateCompleted >= validationBalance.baselineCompleted;
+  const validationUsable =
+    validationComparable || validationUnavailable || validationBalanced;
   const unavailableReasons = [
     ...new Set(
       validationUnavailable
@@ -258,15 +272,17 @@ export function performanceReport(
     validationComparability,
     validationComparable,
     validationUnavailable,
+    validationBalance,
     validationLimitation,
     rule: COST_RULE,
-    status: !validationUsable || !priced
-      ? "inconclusive"
-      : failures.length
-        ? "failed"
-        : unknown
-          ? "inconclusive"
-          : "passed",
+    status:
+      !validationUsable || !priced
+        ? "inconclusive"
+        : failures.length
+          ? "failed"
+          : unknown
+            ? "inconclusive"
+            : "passed",
     passed: !failures.length && !unknown,
     failures,
     pairs: pairs.length,

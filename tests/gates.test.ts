@@ -167,8 +167,20 @@ test("lean reviewed path gaps name the requirement that failed", () => {
     ],
     [
       {
-        reviewPlan: { passes: 1, lenses: [], reviewerModel: "luna", runner: "tracetoon" },
-        reviewPasses: [{ agentId: "s1", model: "luna", source: "tracetoon-run", verifiedModel: null }],
+        reviewPlan: {
+          passes: 1,
+          lenses: [],
+          reviewerModel: "luna",
+          runner: "tracetoon",
+        },
+        reviewPasses: [
+          {
+            agentId: "s1",
+            model: "luna",
+            source: "tracetoon-run",
+            verifiedModel: null,
+          },
+        ],
       },
       "not tool-run with a verified model",
     ],
@@ -178,14 +190,48 @@ test("lean reviewed path gaps name the requirement that failed", () => {
     expect(result.passed).toBe(false);
     expect(result.status).toBe("inconclusive");
     expect(gaps(change)).toContain(message);
-    expect(gaps(change)).toContain("three-role path: 1 of 3 independent roles declared");
+    expect(gaps(change)).toContain(
+      "three-role path: 1 of 3 independent roles declared",
+    );
   }
   expect(
     lean({
-      reviewPlan: { passes: 1, lenses: [], reviewerModel: "luna", runner: "tracetoon" },
+      reviewPlan: {
+        passes: 1,
+        lenses: [],
+        reviewerModel: "luna",
+        runner: "tracetoon",
+      },
       reviewPasses: [
-        { agentId: "s1", model: "luna", source: "tracetoon-run", verifiedModel: "gpt-6-luna" },
+        {
+          agentId: "s1",
+          model: "luna",
+          source: "tracetoon-run",
+          verifiedModel: "gpt-6-luna",
+        },
       ],
     }).passed,
   ).toBe(true);
+});
+
+test("workflow: at least 90% of candidate drafts must meet the review plan (deviation 4)", () => {
+  const ok = input.writers[0]!;
+  const bad = { ...ok, workflow: { ...ok.workflow, reviewCurrent: false } };
+  const writers = (good: number, gaps: number) => [
+    ...Array.from({ length: good }, (_, i) => ({ ...ok, case: `g${i}` })),
+    ...Array.from({ length: gaps }, (_, i) => ({ ...bad, case: `b${i}` })),
+  ];
+  const pass = adoptionGate({ ...input, writers: writers(76, 5) });
+  expect(pass).toMatchObject({
+    status: "passed",
+    workflowComplianceRequired: 0.9,
+  });
+  expect(pass.workflowCompliance).toBeCloseTo(76 / 81, 6);
+  expect(pass.workflowGaps).toHaveLength(5);
+  expect(adoptionGate({ ...input, writers: writers(9, 1) }).status).toBe(
+    "passed",
+  );
+  expect(adoptionGate({ ...input, writers: writers(8, 2) }).status).toBe(
+    "inconclusive",
+  );
 });

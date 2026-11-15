@@ -186,3 +186,24 @@ It reports combined and per-judge results (correct, wrong, sent to a human) and 
 **Cost:** the reported cost covers Claude calls only. Codex runs on the subscription.
 
 **`--apply`:** writes applied rulings with provenance from the judges' cited evidence. An accepted addition with no resolvable reference goes to `human-review.md`.
+
+## Accuracy adjudication (`prbench accuracy-review`)
+
+The adoption gate counts a pairwise judge's accuracy flag only after a reviewer confirms it with hash-checked source proof.
+
+```sh
+bun run prbench accuracy-review --run <comparison run> --cases <dir> --out <dir> --write
+bun run prbench compare ... --out <comparison run> --resume --report-only   # rebuild the gate
+```
+
+**Per case:**
+- Two independent judges read the case's evidence and every flagged statement in that case's drafts. The defaults are Fable 5.1 and GPT-6 Astra at xhigh, with `--decider` defaulting to the first.
+- Each draft appears as `drafts/dN.md`, with its captured commands in `drafts/dN.validation.json`. Nothing says which system wrote it.
+- For each flag, the judges rule confirmed or false-positive and give a reason and evidence references.
+- If the judges agree, that ruling stands; a split is decided by the decider.
+
+**Evidence references:** they are resolved to adjudication sources that the comparison re-verifies when it rebuilds the gate: the diff, a commit, a file at base or head, a session transcript, or the draft's own captured command. A ruling with no verifiable reference is left out, so its flag stays unresolved.
+
+**Output:** `--write` puts `adjudications.json` into the run.
+
+**What it doesn't change:** the tool imports nothing into the writer, judge or gate contracts, so adding it doesn't change a frozen harness's identity.

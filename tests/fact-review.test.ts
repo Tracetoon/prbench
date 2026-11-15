@@ -37,6 +37,7 @@ import {
   decideFinished,
   factDebate,
 } from "../src/factreview/debate.ts";
+import { adjudicationSource } from "../src/factreview/accuracy.ts";
 import { canaryEntries, unanimousEntries } from "../scripts/fact-control.ts";
 import { refOf, resolveRef } from "../src/factreview/record.ts";
 import { cleanupTemps, copyExample, ROOT, tempDir } from "./helpers.ts";
@@ -1466,5 +1467,45 @@ describe("historical-digest sources", () => {
     expect(refOf(s!, "a")).toBe("fact-sources/digest.json:L2-L3");
     expect(resolveRef("fact-sources/digest.json:L2-L99", ctx)).toBeUndefined();
     expect(resolveRef("fact-sources/other.json:L1-L2", ctx)).toBeUndefined();
+  });
+});
+
+describe("accuracy adjudication sources", () => {
+  test("diff and validation references become re-verifiable sources; others are refused", () => {
+    const { dir } = reviewedCase("acc-src");
+    const loaded = loadCase(dir);
+    const ctx = {
+      caseDir: dir,
+      bare: bareOf(dir),
+      base: loaded.case.repo.base,
+      head: loaded.case.repo.head!,
+      sessions: [],
+    };
+    const artifact = {
+      title: "t",
+      body: "b",
+      validation: {
+        commands: [{ id: "V1", command: "bun test", outcome: "passed" }],
+      },
+    } as any;
+    const drafts = new Map([["d1", artifact]]);
+    const diff = adjudicationSource("diff.patch:L1-L2", ctx, drafts);
+    expect(diff).toMatchObject({ kind: "diff", startLine: 1, endLine: 2 });
+    expect((diff as any).sha256).toMatch(/^[a-f0-9]{64}$/);
+    const v = adjudicationSource("drafts/d1.validation.json:V1", ctx, drafts);
+    expect(v).toMatchObject({
+      kind: "validation",
+      commandId: "V1",
+      startLine: 1,
+    });
+    expect(
+      adjudicationSource("drafts/d9.validation.json:V1", ctx, drafts),
+    ).toBeUndefined();
+    expect(
+      adjudicationSource("drafts/d1.validation.json:V0", ctx, drafts),
+    ).toBeUndefined();
+    expect(
+      adjudicationSource("diff.patch:L1-L99999", ctx, drafts),
+    ).toBeUndefined();
   });
 });

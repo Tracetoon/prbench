@@ -39,6 +39,7 @@ import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
+import { accuracyReview, accuracySummaryLines } from "./factreview/accuracy.ts";
 import {
   DEFAULT_JUDGES,
   decideFinished,
@@ -766,6 +767,81 @@ program
         console.error(
           opts.aggregateOnly
             ? "fact-decide failed"
+            : error instanceof Error
+              ? error.message
+              : String(error),
+        );
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("accuracy-review")
+  .description(
+    "Adjudicate a comparison's accuracy flags with expert judges (Fable 5.1 and GPT-6 Astra; the decider settles splits) and write source-backed adjudications.json",
+  )
+  .requiredOption("--run <dir>", "a finished comparison run")
+  .requiredOption("--cases <dir>", "the cases directory the comparison ran on")
+  .requiredOption(
+    "--out <dir>",
+    "review folder (calls, rulings, adjudications)",
+  )
+  .option(
+    "--judge <provider/model>",
+    "an independent judge (repeatable; default claude/claude-fable-5-1 and codex/gpt-6-astra)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option(
+    "--decider <model>",
+    "the judge whose ruling settles splits (default: the first judge)",
+  )
+  .option(
+    "--case <id>",
+    "only this case (repeatable; trials only, never with --write)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--effort <effort>", "judge reasoning effort", "xhigh")
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option("--resume", "reuse finished calls in --out")
+  .option(
+    "--write",
+    "write the adjudications into the run (then rebuild with compare --resume --report-only)",
+  )
+  .option("--overwrite", "with --write, replace an existing adjudications.json")
+  .option("--aggregate-only", "print counts only (sealed runs)")
+  .action(
+    async (opts: {
+      run: string;
+      cases: string;
+      out: string;
+      judge: string[];
+      decider?: string;
+      case: string[];
+      effort: string;
+      packets: string;
+      parallel: number;
+      resume?: boolean;
+      write?: boolean;
+      overwrite?: boolean;
+      aggregateOnly?: boolean;
+    }) => {
+      try {
+        if (opts.write && opts.case.length)
+          throw new Error("--write needs every case: drop --case");
+        const s = await accuracyReview({
+          ...opts,
+          judges: opts.judge,
+          caseIds: opts.case,
+        });
+        for (const line of accuracySummaryLines(s)) console.log(line);
+      } catch (error) {
+        console.error(
+          opts.aggregateOnly
+            ? "accuracy-review failed"
             : error instanceof Error
               ? error.message
               : String(error),

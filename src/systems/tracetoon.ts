@@ -202,11 +202,14 @@ export function tracetoonDraft(
           startedAt?: string;
         })
       : undefined;
+    // A run belongs to this invocation when it is in the same checkout and
+    // started after the writer did. The branch is not compared: a writer may
+    // switch branches mid-task (a repository's own tooling did), and the run
+    // it finished on is the one it published.
     if (
       invocation &&
       (!task ||
         task.root !== invocation.root ||
-        task.branch !== invocation.branch ||
         !Number.isFinite(Date.parse(task.startedAt ?? "")) ||
         Date.parse(task.startedAt!) < invocation.startedAt)
     )
@@ -217,13 +220,17 @@ export function tracetoonDraft(
       rendered,
       run,
       state: task?.state,
+      startedAt: Date.parse(task?.startedAt ?? "") || 0,
     });
   }
-  if (invocation && candidates.length > 1)
-    throw new Error(
-      "More than one draft belongs to this invocation; select an explicit run rather than guessing.",
-    );
-  return candidates[0];
+  if (!candidates.length) return undefined;
+  // Several runs in one invocation: Tracetoon's latest pointer names the
+  // active one; otherwise the most recently started run.
+  const chosen =
+    candidates.find((c) => c.run === selected) ??
+    [...candidates].sort((a, b) => b.startedAt - a.startedAt)[0]!;
+  const { startedAt: _started, ...draftOut } = chosen;
+  return draftOut;
 }
 
 const optionalString = (value: unknown) =>
@@ -290,6 +297,7 @@ export function tracetoonTimings(
   const counts: Record<string, number> = {},
     seen = new Set<string>();
   let workflow: WorkflowRecord | undefined;
+  let workflowStartedAt = -Infinity;
   const runs = join(gitDir, "tracetoon", "runs");
   const headSha = exec([
     "git",
@@ -307,9 +315,9 @@ export function tracetoonTimings(
       if (!existsSync(task)) continue;
       try {
         const t = JSON.parse(readFileSync(task, "utf8"));
+        // Same checkout, started after the writer; any branch (see tracetoonDraft).
         if (
           t.root !== invocation.root ||
-          t.branch !== invocation.branch ||
           !Number.isFinite(Date.parse(t.startedAt)) ||
           Date.parse(t.startedAt) < invocation.startedAt
         )
@@ -347,11 +355,15 @@ export function tracetoonTimings(
           resultFile = join(root, "review-result.json"),
           guidanceFile = join(root, "guidance.json"),
           packetFile = join(root, "review-input.json");
+        // With several reviewed runs (a branch switch), the record comes from
+        // the most recently started one, the run the writer finished on.
         if (
           existsSync(reviewFile) &&
           existsSync(packetFile) &&
-          existsSync(resultFile)
+          existsSync(resultFile) &&
+          Date.parse(t.startedAt) >= workflowStartedAt
         ) {
+          workflowStartedAt = Date.parse(t.startedAt);
           const review = JSON.parse(readFileSync(reviewFile, "utf8")),
             // Only the three-role workflow writes guidance.json (its researcher
             // role); the lean reviewed path has none, and its record is still valid.

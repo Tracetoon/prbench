@@ -201,6 +201,9 @@ describe('createSandbox', () => {
     try {
       // Without a display, an editor reached outside the shims (PATH reset to /usr/bin) cannot open a window either.
       for (const k of ['DISPLAY', 'WAYLAND_DISPLAY', 'DBUS_SESSION_BUS_ADDRESS']) expect(sb.env[k]).toBeUndefined();
+      // No fallback display or bus sockets: the runtime dir is private to the sandbox and empty.
+      expect(sb.env.XDG_RUNTIME_DIR!.startsWith(sb.root)).toBe(true);
+      expect(readdirSync(sb.env.XDG_RUNTIME_DIR!)).toEqual([]);
       for (const name of GUI_LAUNCHERS) {
         const cmd = process.platform === 'win32' ? ['cmd', '/d', '/c', name, '.'] : [name, '.'];
         const r = exec(cmd, { cwd: sb.repo, env: sb.env });

@@ -275,6 +275,12 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
   for (const k of Object.keys(env)) if (k.toUpperCase() === 'PATH' || DROPPED_PREFIXES.some((p) => k.toUpperCase().startsWith(p)) || DROPPED_ENV.includes(k.toUpperCase()) || VOLATILE_ENV.includes(k.toUpperCase())) delete env[k];
   const appdata = join(sb.root, 'appdata');
   for (const d of ['roaming', 'local', 'config', 'data', 'state', 'cache']) mkdirSync(join(appdata, d), { recursive: true });
+  // A private, empty runtime dir: with WAYLAND_DISPLAY and the session bus
+  // dropped, libwayland and libdbus still fall back to wayland-0 and bus in
+  // $XDG_RUNTIME_DIR, and an editor launched by absolute path (PATH reset by a
+  // test) opened windows on the host through them.
+  const runtime = join(sb.root, 'runtime');
+  mkdirSync(runtime, { recursive: true, mode: 0o700 });
   Object.assign(env, {
     [pathKey]: `${sb.bin}${delimiter}${path}`,
     HOME: sb.home,
@@ -286,6 +292,7 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
     XDG_DATA_HOME: join(appdata, 'data'),
     XDG_STATE_HOME: join(appdata, 'state'),
     XDG_CACHE_HOME: join(appdata, 'cache'),
+    XDG_RUNTIME_DIR: runtime,
     GIT_CONFIG_GLOBAL: join(sb.home, '.gitconfig'),
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_ALLOW_PROTOCOL: 'file',

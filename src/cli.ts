@@ -39,6 +39,9 @@ import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
+import { freezeRuntime } from "./run/runtimeFreeze.ts";
+import { comparisonProvider } from "./run/provider.ts";
+import { exec } from "./util/exec.ts";
 import { accuracyReview, accuracySummaryLines } from "./factreview/accuracy.ts";
 import {
   DEFAULT_JUDGES,
@@ -850,6 +853,31 @@ program
       }
     },
   );
+
+program
+  .command("runtime-freeze")
+  .description(
+    "Record the exact writer CLI binary (sha256) for a provider in frozen-runtimes.json; compare then refuses any other binary",
+  )
+  .requiredOption("--provider <id>", "claude or codex")
+  .action((opts: { provider: string }) => {
+    const provider = comparisonProvider(opts.provider);
+    const version = exec([...provider.command(), "--version"]);
+    if (version.code) {
+      console.error(`${provider.label} CLI unavailable.`);
+      process.exitCode = 2;
+      return;
+    }
+    const entry = freezeRuntime(
+      resolve(import.meta.dir, ".."),
+      provider.id,
+      provider.command(),
+      version.stdout.trim(),
+    );
+    console.log(
+      `frozen ${entry.provider}: ${entry.version} ${entry.path} sha256 ${entry.sha256}`,
+    );
+  });
 
 program
   .command("validate")

@@ -98,6 +98,7 @@ import {
 } from "./run/identity.ts";
 import { systemOrder } from "./run/schedule.ts";
 import { controllerLock } from "./run/controller.ts";
+import { checkFrozenRuntime } from "./run/runtimeFreeze.ts";
 import {
   verifyValidationProof,
   type AdjudicationSource,
@@ -841,6 +842,8 @@ export async function compareV2(opts: CompareOptions) {
   );
   const cli = exec([...provider.command(), "--version"]);
   if (cli.code) throw new Error(`${provider.label} CLI unavailable.`);
+  // A frozen runtime (frozen-runtimes.json at the harness root) must be the exact binary in use.
+  checkFrozenRuntime(harness, provider.id, provider.command());
   const common = ["package.json", "bun.lock", "tsconfig.json"];
   const writerEntries = COMPARISON_WRITER_ENTRIES;
   const writerContract = implementationDigest(harness, writerEntries);
@@ -884,8 +887,7 @@ export async function compareV2(opts: CompareOptions) {
       judges: JUDGES,
       effort: provider.effort,
       // Frozen in the identity and writer keys: a resume keeps the recorded value.
-      timeoutMs:
-        opts.timeoutMs ?? old?.settings.timeoutMs ?? writerTimeoutMs(),
+      timeoutMs: opts.timeoutMs ?? old?.settings.timeoutMs ?? writerTimeoutMs(),
       rubricVersion: RUBRIC_VERSION,
       replicates,
       purpose,

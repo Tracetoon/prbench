@@ -342,7 +342,15 @@ export function rebuildComparison(
   root: string,
   manifest: ComparisonManifest,
   preflightCache: string,
+  /**
+   * Diagnostic re-score: evaluate the saved run under the current gate policy
+   * and write every output to `outDir`, leaving the run untouched. Never a
+   * gate decision: the run's own summary keeps its frozen policy.
+   */
+  diagnostic?: { outDir: string },
 ) {
+  const outRoot = diagnostic?.outDir ?? root;
+  if (diagnostic) mkdirSync(outRoot, { recursive: true });
   const profile = verifyFrozen(root, manifest);
   if (manifest.settings.rubricVersion !== RUBRIC_VERSION)
     throw new Error(
@@ -376,7 +384,7 @@ export function rebuildComparison(
             if (!existsSync(file)) continue;
             const artifact = read<PRArtifact>(file),
               receipt = read(file.replace(/\.json$/, ".receipt.json"));
-            assertScope(artifact, file, manifest.id);
+            assertScope(artifact, file, manifest.id, !diagnostic);
             if (
               checkArtifact(artifact).length ||
               artifact.system !== system ||
@@ -497,11 +505,13 @@ export function rebuildComparison(
             facts,
             splitOf,
           });
-          atomicJson(join(base, comparison, "report.json"), report);
-          writeFileSync(
-            join(base, comparison, "report.md"),
-            reportMarkdown(report),
-          );
+          if (!diagnostic) {
+            atomicJson(join(base, comparison, "report.json"), report);
+            writeFileSync(
+              join(base, comparison, "report.md"),
+              reportMarkdown(report),
+            );
+          }
           reports.push({ model, replicate, comparison, report });
           allPairs.push(...pairs.map((pair) => ({ model, replicate, pair })));
         }
@@ -530,7 +540,7 @@ export function rebuildComparison(
       (r) => r.report.coverage.completed === r.report.coverage.expected,
     );
   const findings = accuracyFindings(allPairs, allArtifacts);
-  atomicJson(join(root, "accuracy-findings.json"), {
+  atomicJson(join(outRoot, "accuracy-findings.json"), {
     schema: "prbench.accuracy-findings/v1",
     experiment: manifest.id,
     findings,
@@ -602,11 +612,12 @@ export function rebuildComparison(
     pendingCleanup: operations.pendingCleanup,
     writers: metrics,
     policyCurrent:
+      !!diagnostic ||
       manifest.gatePolicyHash ===
-      implementationDigest(resolve(import.meta.dir, ".."), [
-        "src/gates.ts",
-        "src/performance.ts",
-      ]),
+        implementationDigest(resolve(import.meta.dir, ".."), [
+          "src/gates.ts",
+          "src/performance.ts",
+        ]),
   });
   const { status } = adoption;
   const summary = {
@@ -704,7 +715,7 @@ export function rebuildComparison(
   ];
   const markdown = lines.join("\n") + "\n";
   const reportKey = stageKey("report", { summary, markdown });
-  const reportCache = new StageCache(join(root, "derived-reports"));
+  const reportCache = new StageCache(join(outRoot, "derived-reports"));
   if (summary.adjudicationSha256)
     reportCache.put("adjudication", summary.adjudicationSha256, {
       raw: auditRaw,
@@ -713,6 +724,27 @@ export function rebuildComparison(
     summary,
     markdown,
   });
+  if (diagnostic) {
+    const note = {
+      diagnostic: true,
+      note: "Re-scored under the current gate policy, not the one frozen with this run: diagnostic only, never a gate decision.",
+      frozenPolicy: manifest.gatePolicyHash,
+      currentPolicy: implementationDigest(resolve(import.meta.dir, ".."), [
+        "src/gates.ts",
+        "src/performance.ts",
+      ]),
+    };
+    atomicJson(join(outRoot, "summary.json"), {
+      ...summary,
+      reportKey,
+      policyDiagnostic: note,
+    });
+    writeFileSync(
+      join(outRoot, "summary.md"),
+      `> **Diagnostic re-score.** ${note.note}\n\n${markdown}`,
+    );
+    return summary;
+  }
   atomicJson(join(root, "summary.json"), { ...summary, reportKey });
   writeFileSync(join(root, "summary.md"), markdown);
   return summary;

@@ -40,6 +40,7 @@ import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
 import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
 import { freezeRuntime } from "./run/runtimeFreeze.ts";
+import { rebuildComparison } from "./comparison.ts";
 import { comparisonProvider } from "./run/provider.ts";
 import { exec } from "./util/exec.ts";
 import { accuracyReview, accuracySummaryLines } from "./factreview/accuracy.ts";
@@ -876,6 +877,35 @@ program
     );
     console.log(
       `frozen ${entry.provider}: ${entry.version} ${entry.path} sha256 ${entry.sha256}`,
+    );
+  });
+
+program
+  .command("rescore")
+  .description(
+    "Diagnostic re-score of a finished comparison under the current gate policy, written to --out; the run itself and its gate decision are untouched",
+  )
+  .requiredOption("--run <dir>", "a finished comparison run")
+  .requiredOption("--out <dir>", "folder for the re-scored summary")
+  .action((opts: { run: string; out: string }) => {
+    const root = resolve(opts.run);
+    const manifest = JSON.parse(
+      readFileSync(join(root, "manifest.json"), "utf8"),
+    );
+    const cache = resolve(
+      process.env.PRBENCH_PREFLIGHT_CACHE ??
+        join(
+          resolve(import.meta.dir, ".."),
+          "node_modules",
+          ".cache",
+          "prbench-preflight",
+        ),
+    );
+    const s = rebuildComparison(root, manifest, cache, {
+      outDir: resolve(opts.out),
+    });
+    console.log(
+      `diagnostic re-score (not a gate decision): status ${s.status}; quality ${s.qualityGate.status}; performance ${s.performanceGate.status}; workflow compliance ${s.adoptionGate.workflowCompliance?.toFixed(3) ?? "-"}`,
     );
   });
 

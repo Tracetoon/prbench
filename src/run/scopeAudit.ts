@@ -10,6 +10,8 @@ export function assertWriterScope(
   artifact: PRArtifact,
   file: string,
   experiment: string,
+  /** False for a diagnostic re-score, which must not write into the run. */
+  persist = true,
 ) {
   const audit = {
     experiment,
@@ -20,12 +22,18 @@ export function assertWriterScope(
     findings: hostAgentStateFindings(artifact.validation?.commands ?? []),
   };
   const key = stageKey("scope-audit", audit);
-  new StageCache(join(dirname(file), ".scope-audits")).put("audit", key, audit);
-  atomicJson(file.replace(/\.json$/, ".scope-audit.json"), { key, ...audit });
+  if (persist) {
+    new StageCache(join(dirname(file), ".scope-audits")).put(
+      "audit",
+      key,
+      audit,
+    );
+    atomicJson(file.replace(/\.json$/, ".scope-audit.json"), { key, ...audit });
+  }
   if (!audit.findings.length) return;
   const failure = file.replace(/\.json$/, ".isolation-failure.json");
   // Keep the original rejection as history even after a corrected checker passes.
-  if (!existsSync(failure)) atomicJson(failure, audit);
+  if (persist && !existsSync(failure)) atomicJson(failure, audit);
   throw new Error(
     `Host agent state or outside case inputs were accessed: ${audit.findings.map((f) => f.commandId).join(", ")}. Preserved artifact rejected.`,
   );

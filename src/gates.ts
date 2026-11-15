@@ -1,4 +1,7 @@
-import { COVERAGE_GUARD } from "./report/score.ts";
+import { caseClustered, COVERAGE_GUARD } from "./report/score.ts";
+
+/** Non-inferiority margin: confirmed errors per draft, candidate minus baseline (upper 95% bound). */
+export const ACCURACY_MARGIN = 0.05;
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { stageKey } from "./run/cache.ts";
@@ -272,6 +275,13 @@ export interface Adjudication {
 export interface AccuracyComparison {
   /** Drafts scored in candidate-vs-baseline pairs; each arm's rate divides by this. */
   scoredDrafts: number;
+  /** Candidate minus baseline confirmed errors per draft, case-clustered, once all flags are adjudicated. */
+  difference?: {
+    mean: number;
+    ci: [number, number];
+    margin: number;
+    cases: number;
+  };
   candidate: { flags: number; confirmed: number; rate: number | null };
   baseline: { flags: number; confirmed: number; rate: number | null };
   /** Confirmed flags on drafts outside the shared pairs: adjudicated but not counted. */
@@ -323,15 +333,36 @@ export function qualityGate(
     );
   const rate = (t: { confirmed: number; rate: number | null }) =>
     `${t.rate!.toFixed(3)} (${t.confirmed}/${shared.size})`;
-  // Compare only once every flag on both arms is adjudicated.
-  if (
-    !accuracy.unresolved &&
-    shared.size &&
-    accuracy.candidate.rate! > accuracy.baseline.rate! + 1e-9
-  )
-    failures.push(
-      `Candidate confirmed accuracy errors per scored draft ${rate(accuracy.candidate)} exceed baseline ${rate(accuracy.baseline)}`,
-    );
+  // Non-inferiority on confirmed errors per draft, compared only once every
+  // flag on both arms is adjudicated: the upper bound of the case-clustered
+  // 95% interval of (candidate - baseline) must stay within ACCURACY_MARGIN.
+  // Small flag counts make a point comparison noisy in both directions.
+  if (!accuracy.unresolved && shared.size) {
+    const perDraft = new Map<string, { case: string; value: number }>();
+    for (const key of shared) {
+      const kase = key.split("/").slice(-2, -1)[0]!;
+      perDraft.set(key, { case: kase, value: 0 });
+    }
+    for (const finding of findings) {
+      const audit = adjudications.find((a) => a.finding === finding.id);
+      const key = draftKey(finding.model, finding.replicate, finding.case);
+      if (audit?.outcome !== "confirmed" || !perDraft.has(key)) continue;
+      perDraft.get(key)!.value +=
+        findingArm(finding) === "tracetoon-candidate" ? 1 : -1;
+    }
+    const diff = caseClustered([...perDraft.values()], 7);
+    accuracy.difference = {
+      mean: diff.mean,
+      ci: diff.ci,
+      margin: ACCURACY_MARGIN,
+      cases: diff.cases,
+    };
+    const upper = Number.isFinite(diff.ci[1]) ? diff.ci[1] : diff.mean;
+    if (upper > ACCURACY_MARGIN + 1e-9)
+      failures.push(
+        `Candidate confirmed accuracy errors per scored draft ${rate(accuracy.candidate)} vs baseline ${rate(accuracy.baseline)}: difference ${diff.mean.toFixed(3)} [${diff.ci.map((x) => x.toFixed(3)).join(", ")}], upper bound above the non-inferiority margin ${ACCURACY_MARGIN}`,
+      );
+  }
   let improved = false,
     totalWins = 0,
     totalLosses = 0;

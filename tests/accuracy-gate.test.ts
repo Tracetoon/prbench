@@ -115,29 +115,44 @@ test("confirmed candidate errors pass when the baseline is worse", () => {
   });
 });
 
-test("equal rates pass; a higher candidate rate fails with both rates", () => {
+test("accuracy is non-inferiority: the upper 95% bound of candidate minus baseline must stay within the margin", () => {
+  // Equal errors in every case: difference 0 with a tight interval, passes.
   const { findings, scored } = run([
-    pair("c1", ["a", "b"], ["c"]),
-    pair("c2", [], ["d"]),
+    pair("c1", ["a"], ["b"]),
+    pair("c2", ["c"], ["d"]),
   ]);
-  expect(
-    gate(
-      findings,
-      findings.map((f) => audit(f, "confirmed")),
-      scored,
-    ).status,
-  ).toBe("passed");
-  const result = gate(
+  const equal = gate(
     findings,
-    findings.map((f) =>
-      audit(f, f.claim === "d" ? "false-positive" : "confirmed"),
-    ),
+    findings.map((f) => audit(f, "confirmed")),
     scored,
   );
-  expect(result.status).toBe("failed");
-  expect(result.failures).toContain(
-    "Candidate confirmed accuracy errors per scored draft 1.000 (2/2) exceed baseline 0.500 (1/2)",
+  expect(equal.status).toBe("passed");
+  expect(equal.accuracy.difference).toMatchObject({
+    mean: 0,
+    margin: 0.05,
+    cases: 2,
+  });
+  // A higher candidate rate fails, naming both rates and the interval.
+  const { findings: f2, scored: s2 } = run([
+    pair("c1", ["a", "b"], ["c"]),
+    pair("c2", ["e"], ["d"]),
+  ]);
+  const worse = gate(
+    f2,
+    f2.map((f) => audit(f, f.claim === "d" ? "false-positive" : "confirmed")),
+    s2,
   );
+  expect(worse.status).toBe("failed");
+  expect(worse.failures).toContain(
+    "Candidate confirmed accuracy errors per scored draft 1.500 (3/2) vs baseline 0.500 (1/2): difference 1.000 [1.000, 1.000], upper bound above the non-inferiority margin 0.05",
+  );
+  // A lower candidate rate passes.
+  const better = gate(
+    f2,
+    f2.map((f) => audit(f, f.arm === CAND ? "false-positive" : "confirmed")),
+    s2,
+  );
+  expect(better.status).toBe("passed");
 });
 
 test("an unresolved flag on either arm is inconclusive and names its arm", () => {

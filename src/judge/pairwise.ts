@@ -18,6 +18,7 @@ import { extractJson, type JudgeProvider } from "./providers.ts";
 import {
   buildPrompt,
   checkJudgment,
+  reconcileErrorLists,
   judgmentSchema,
   RUBRIC_VERSION,
   type Judgment,
@@ -53,6 +54,8 @@ export interface StoredJudgment {
   /** Which system each label stood for. */
   labels: { A: string; B: string };
   judgment: Judgment;
+  /** Error lists rebuilt from the judge's own claim assessments (see reconcileErrorLists). */
+  derivedLists?: string[];
   costUsd?: number;
   at: string;
 }
@@ -272,6 +275,7 @@ async function judgeOnce(
       const previous = JSON.parse(readFileSync(last, "utf8"));
       if (!force && previous.text && !previous.problems?.length) {
         const parsed = extractJson(previous.text);
+        const derived = reconcileErrorLists(parsed);
         if (!validate(parsed).length) {
           const stored: StoredJudgment = {
             rubricVersion: RUBRIC_VERSION,
@@ -279,6 +283,7 @@ async function judgeOnce(
             judge: judge.id,
             ...meta,
             judgment: parsed as Judgment,
+            ...(derived.length ? { derivedLists: derived } : {}),
             at:
               previous.at ??
               JSON.parse(readFileSync(join(attempts, past.at(-1)!), "utf8")).at,
@@ -384,8 +389,10 @@ async function judgeOnce(
     }
     let parsed: unknown;
     let problems: string[];
+    let derivedLists: string[] = [];
     try {
       parsed = extractJson(reply.text);
+      derivedLists = reconcileErrorLists(parsed);
       problems = validate(parsed);
     } catch (error) {
       problems = [String(error)];
@@ -418,6 +425,7 @@ async function judgeOnce(
       judge: judge.id,
       ...meta,
       judgment: parsed as Judgment,
+      ...(derivedLists.length ? { derivedLists } : {}),
       ...(reply.costUsd !== undefined ? { costUsd: reply.costUsd } : {}),
       at: new Date().toISOString(),
     };

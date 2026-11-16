@@ -6,7 +6,7 @@ import { FACTS_SCHEMA, loadCase, type Facts } from '../src/schema/case.ts';
 import { normalizeBody, wordCount } from '../src/judge/normalize.ts';
 import { combine, judgePair, judgmentPath, type StoredJudgment } from '../src/judge/pairwise.ts';
 import { extractJson, parseJudge, type JudgeProvider } from '../src/judge/providers.ts';
-import { buildPrompt, checkJudgment, judgmentSchema, JUDGMENT_SCHEMA, PREPARATION_NOTE, RUBRIC_KEYS, RUBRIC_VERSION, type Judgment, type SideJudgment } from '../src/judge/rubric.ts';
+import { buildPrompt, checkJudgment, reconcileErrorLists, judgmentSchema, JUDGMENT_SCHEMA, PREPARATION_NOTE, RUBRIC_KEYS, RUBRIC_VERSION, type Judgment, type SideJudgment } from '../src/judge/rubric.ts';
 import { sessionEvidence, sessionItems } from '../src/judge/evidence.ts';
 import { agreedResults, buildReport, reportMarkdown } from '../src/report.ts';
 import { bootstrapMeanCI, cohenKappa, signTest } from '../src/stats.ts';
@@ -99,6 +99,28 @@ describe('rubric', () => {
     delete bad.B.trapsHit;
     bad.A.rubric.scope = 3;
     expect(checkJudgment(bad)).toEqual(['preferred: expected A, B, tie or inconclusive', 'A.rubric.scope: expected 0, 1, 2 or null', 'B.trapsHit: expected strings']);
+  });
+
+  test('error lists that disagree with the claim assessments are rebuilt from them, not re-requested', () => {
+    const a = side();
+    a.claimAssessments = [
+      { claim: 'x is new', status: 'contradicted', evidenceRefs: ['D'], reason: 'existed before' },
+      { claim: 'y always runs', status: 'unsupported', evidenceRefs: ['D'], reason: 'only on one branch' },
+      { claim: 'z changed', status: 'supported', evidenceRefs: ['D'], reason: 'shown' },
+    ];
+    a.factualErrors = [];
+    a.unsupportedClaims = ['y always runs', 'z changed'];
+    const j: Judgment = { A: a, B: side(), preferred: 'B', preferenceDependsOnMissingEvidence: false, reason: 'r' };
+    expect(checkJudgment(j).some((p) => p.includes('must match'))).toBe(true);
+    const notes = reconcileErrorLists(j);
+    expect(notes).toEqual([
+      'A.factualErrors: rebuilt from contradicted assessments (0 given, 1 assessed)',
+      'A.unsupportedClaims: rebuilt from unsupported assessments (2 given, 1 assessed)',
+    ]);
+    expect(j.A.factualErrors).toEqual(['x is new']);
+    expect(j.A.unsupportedClaims).toEqual(['y always runs']);
+    expect(checkJudgment(j)).toEqual([]);
+    expect(reconcileErrorLists(j)).toEqual([]);
   });
 
   test('the schema requires every rubric item', () => {

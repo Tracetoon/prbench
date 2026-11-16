@@ -19,6 +19,7 @@
  *   bun run scripts/check-runnability.ts --cases <dir> [--preparation <file>]
  *     [--only a,b] [--jobs 4] [--timeout-ms 1500000] [--out <json>] [--keep]
  *     [--log-dir <dir>]   (full check output per case, for diagnosis)
+ *   bun run scripts/check-runnability.ts --renote [--out <json>]   (refresh known causes)
  *
  * --preparation defaults to <cases>/preparation.json. --out is merged per case,
  * so --only reruns update their rows and keep the others.
@@ -78,6 +79,10 @@ const NOTES: { case?: RegExp; failing?: RegExp; note: string }[] = [
     note: "real at head: concurrent review passes merge in nondeterministic order (the test expects a fixed pass order)",
   },
   {
+    failing: /OpenTUI learning interface > opens progress and command reference as dismissible Home screens/,
+    note: "unexplained: fails deterministically when run alone too (scripted TUI waits for 'Enter/Esc return to Home'); not traced to the sandbox",
+  },
+  {
     case: /^aifirstcli-hooks-path$/,
     note: "real at head: committed books/ match @aifirst/content 1.6.0 while src/content/embedded.generated.ts says 1.5.0, so `sync-content --check` fails before tests run",
   },
@@ -87,7 +92,7 @@ const NOTES: { case?: RegExp; failing?: RegExp; note: string }[] = [
   },
   {
     failing: /\[\d{4,}(\.\d+)?ms\]/,
-    note: "some failures are bun's 5s per-test timeout under concurrent load (subprocess-heavy tests); they pass or vary when run alone",
+    note: "timeouts: bun's default 5s per-test limit; these subprocess-heavy tests take about 5-6s on this host even when run alone (~0.5s per CLI spawn) and longer under concurrent load; bun has no env or global-bunfig override for the test timeout",
   },
 ];
 
@@ -220,6 +225,18 @@ if (import.meta.main) {
   const timeoutMs = Number(arg("--timeout-ms") ?? 1_500_000);
   const keep = process.argv.includes("--keep");
   const worker = arg("--worker");
+  if (process.argv.includes("--renote")) {
+    // Re-derive known causes for saved rows after NOTES change, without rerunning.
+    const saved = JSON.parse(readFileSync(out, "utf8"));
+    for (const row of Object.values<Row>(saved.cases)) {
+      if (row.status !== "fail" && row.status !== "env-error") continue;
+      const note = notesFor(row.case, row.summary);
+      if (note) row.reason = note;
+      else delete row.reason;
+    }
+    atomicJson(out, { ...saved, updatedAt: new Date().toISOString() });
+    process.exit(0);
+  }
   const profile = absolutePreparation(prepFile);
 
   if (worker) {

@@ -8,6 +8,7 @@
 //   <root>/codex        CODEX_HOME
 //   <root>/appdata      APPDATA, LOCALAPPDATA and XDG_* directories
 //   <root>/bin          a fake `gh` that records PRs instead of posting them
+//   <root>/tmp          TMPDIR / TMP / TEMP
 //
 // The checkout has `main` and `origin/main` at the case's base commit, so
 // tools see an ordinary feature branch. Git may only use local repositories
@@ -242,6 +243,12 @@ const DROPPED_ENV = [
   // runs the real editor by absolute path still cannot open a window.
   'DISPLAY',
   'WAYLAND_DISPLAY',
+  // Without a display, a desktop session type misleads GUI toolkits: Electron
+  // (VS Code extension tests under xvfb-run) picks Wayland from it and exits.
+  'XDG_SESSION_TYPE',
+  // The color depth of the terminal prbench was started from; writers run
+  // without one, and TUI tests that assert a palette change with it.
+  'COLORTERM',
   'DBUS_SESSION_BUS_ADDRESS',
   'PRBENCH_JUDGE_TIMEOUT_MS',
   'PRBENCH_WRITER_TIMEOUT_MS',
@@ -266,6 +273,19 @@ const DROPPED_ENV = [
 // which would otherwise reach a writer's Claude Code.
 const DROPPED_PREFIXES = ['CODEX_', 'ANTHROPIC_', ...VOLATILE_PREFIXES];
 
+/**
+ * PATH without the host Claude Code session's plugin directories
+ * (~/.claude/plugins/...): like the CLAUDE_* variables, they describe the
+ * session that launched prbench, not the writer's machine, and they put the
+ * real home's .claude path in front of every tool and test the writer runs.
+ */
+export function sandboxPath(path: string): string {
+  return path
+    .split(delimiter)
+    .filter((entry) => !/[\\/]\.claude[\\/]plugins(?:[\\/]|$)/.test(entry))
+    .join(delimiter);
+}
+
 function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: string }, c: Case): Record<string, string> {
   const env: Record<string, string> = {};
   for (const [k, v] of Object.entries(process.env)) if (v !== undefined) env[k] = v;
@@ -281,8 +301,16 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
   // test) opened windows on the host through them.
   const runtime = join(sb.root, 'runtime');
   mkdirSync(runtime, { recursive: true, mode: 0o700 });
+  // A private temp dir. The sandbox itself lives under the OS temp dir, so
+  // with the host's TMPDIR every path a writer works in (the checkout, HOME)
+  // is "under temp", which tools that treat temp paths as scratch (Showtail's
+  // project detection and its tests) then refuse. Stray temp files also go
+  // away with the sandbox.
+  const tmp = join(sb.root, 'tmp');
+  mkdirSync(tmp, { recursive: true, mode: 0o700 });
+  for (const k of Object.keys(env)) if (['TMPDIR', 'TMP', 'TEMP'].includes(k.toUpperCase())) delete env[k];
   Object.assign(env, {
-    [pathKey]: `${sb.bin}${delimiter}${path}`,
+    [pathKey]: `${sb.bin}${delimiter}${sandboxPath(path)}`,
     HOME: sb.home,
     USERPROFILE: sb.home,
     CODEX_HOME: sb.codexHome,
@@ -293,6 +321,9 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
     XDG_STATE_HOME: join(appdata, 'state'),
     XDG_CACHE_HOME: join(appdata, 'cache'),
     XDG_RUNTIME_DIR: runtime,
+    TMPDIR: tmp,
+    TMP: tmp,
+    TEMP: tmp,
     GIT_CONFIG_GLOBAL: join(sb.home, '.gitconfig'),
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_ALLOW_PROTOCOL: 'file',

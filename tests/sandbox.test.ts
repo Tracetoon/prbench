@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, test } from 'bun:test';
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { delimiter, join } from 'node:path';
 import { loadCase } from '../src/schema/case.ts';
-import { claudeProjectDir, createSandbox, GUI_LAUNCHERS, msysPath, pathPairs, rewritePaths } from '../src/run/sandbox.ts';
+import { claudeProjectDir, createSandbox, GUI_LAUNCHERS, msysPath, pathPairs, rewritePaths, sandboxPath } from '../src/run/sandbox.ts';
 import { exec, git } from '../src/util/exec.ts';
 import { cleanupTemps, copyExample, EXAMPLE, tempDir } from './helpers.ts';
 
@@ -194,6 +194,34 @@ describe('createSandbox', () => {
     } finally {
       sb.dispose();
     }
+  });
+
+  test('temp files, PATH, session type and terminal describe the sandbox, not the host session', () => {
+    const saved = { PATH: process.env.PATH, TMPDIR: process.env.TMPDIR, XDG_SESSION_TYPE: process.env.XDG_SESSION_TYPE, COLORTERM: process.env.COLORTERM };
+    const plugin = join(tempDir(), '.claude', 'plugins', 'cache', 'p', '1.0', 'bin');
+    const parent = tempDir();
+    process.env.PATH = `${plugin}${delimiter}${saved.PATH ?? ''}`;
+    process.env.TMPDIR = parent;
+    process.env.XDG_SESSION_TYPE = 'wayland';
+    process.env.COLORTERM = 'truecolor';
+    let sb;
+    try {
+      sb = createSandbox(loaded, { parent });
+      // The sandbox lives under the host temp dir; its own temp dir must not
+      // contain the checkout or HOME, or temp-path checks treat them as scratch.
+      for (const k of ['TMPDIR', 'TMP', 'TEMP']) expect(sb.env[k]).toBe(join(sb.root, 'tmp'));
+      expect(statSync(sb.env.TMPDIR!).isDirectory()).toBe(true);
+      expect(sb.repo.startsWith(sb.env.TMPDIR!)).toBe(false);
+      expect(sb.home.startsWith(sb.env.TMPDIR!)).toBe(false);
+      expect(sb.env.PATH!.split(delimiter)).not.toContain(plugin);
+      expect(sb.env.PATH!.split(delimiter)[0]).toBe(sb.bin);
+      expect(sb.env.XDG_SESSION_TYPE).toBeUndefined();
+      expect(sb.env.COLORTERM).toBeUndefined();
+    } finally {
+      sb?.dispose();
+      for (const [k, v] of Object.entries(saved)) if (v === undefined) delete process.env[k]; else process.env[k] = v;
+    }
+    expect(sandboxPath(['/usr/bin', '/h/.claude/plugins/x/bin', '/h/.claude/local'].join(delimiter))).toBe(['/usr/bin', '/h/.claude/local'].join(delimiter));
   });
 
   test('editors and desktop openers are no-ops inside the sandbox', () => {

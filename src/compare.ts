@@ -22,6 +22,8 @@ export interface CompareOptions {
   development?: string;
   reuseFrom?: string;
   recoverLock?: boolean;
+  /** With --resume: keep the recorded writer environment hash after the launching environment changed (logged in environment-overrides.json). */
+  acceptEnvironmentChange?: boolean;
   /** codex (default) or claude; `both` is expanded by the CLI into two runs. */
   provider?: string;
   /** Concurrent writer/judge jobs for this provider (default 4). */

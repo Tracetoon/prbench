@@ -245,6 +245,28 @@ export function writerEnvironmentHash(
   const legacy = provider.legacyEnvironmentHash();
   return recorded.includes(legacy) ? legacy : current;
 }
+/**
+ * Explicit, opt-in resume across a changed launching environment (for example a
+ * reboot or a new desktop session, whose per-login variables cannot be
+ * recreated). Only with --resume and --accept-environment-change: the recorded
+ * hash is kept so the experiment identity and writer keys hold, and every use is
+ * appended to environment-overrides.json beside the manifest for disclosure.
+ */
+export function acceptedEnvironmentHash(
+  root: string,
+  opts: { resume?: boolean; acceptEnvironmentChange?: boolean },
+  old: ComparisonManifest | undefined,
+  current: string,
+): string {
+  const recorded = old?.settings?.toolchain?.environmentHash;
+  if (!opts.acceptEnvironmentChange || !opts.resume || !recorded || recorded === current)
+    return current;
+  const file = join(root, "environment-overrides.json");
+  const log = existsSync(file) ? read<unknown[]>(file) : [];
+  log.push({ at: new Date().toISOString(), recorded, current });
+  writeFileSync(file, JSON.stringify(log, null, 2) + "\n");
+  return recorded;
+}
 function writerKey(
   manifest: ComparisonManifest,
   profile: Preparation | undefined,
@@ -941,15 +963,20 @@ export async function compareV2(opts: CompareOptions) {
         node: process.version,
         platform: process.platform,
         arch: process.arch,
-        environmentHash: writerEnvironmentHash(
-          provider,
+        environmentHash: acceptedEnvironmentHash(
+          root,
+          opts,
           old,
-          opts.reuseFrom &&
-            existsSync(join(resolve(opts.reuseFrom), "manifest.json"))
-            ? read<ComparisonManifest>(
-                join(resolve(opts.reuseFrom), "manifest.json"),
-              )
-            : undefined,
+          writerEnvironmentHash(
+            provider,
+            old,
+            opts.reuseFrom &&
+              existsSync(join(resolve(opts.reuseFrom), "manifest.json"))
+              ? read<ComparisonManifest>(
+                  join(resolve(opts.reuseFrom), "manifest.json"),
+                )
+              : undefined,
+          ),
         ),
         authProfileHash: provider.authProfileHash(),
         executableSha256: digest(readFileSync(process.execPath)),

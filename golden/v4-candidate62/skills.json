@@ -1,0 +1,52 @@
+{
+ "schema": "prbench.golden-skills/v1",
+ "note": "Identities of the two Tracetoon skill bundles used by the golden run. treeSha256 = sha256 of the sorted 'sha256  path' list of every file in the bundle directory (see README). The manifest identity (version, buildId, binary sha256) is what prbench freezes in the experiment.",
+ "baseline": {
+  "role": "tracetoon-baseline (the original Tracetoon workflow)",
+  "tracetoon": {
+   "tag": "v1.0.0-rc.24",
+   "commit": "9ac29c4918ab485fb8132cac2464a05df134d2f2"
+  },
+  "bundleDir": "results/evgraph-skills/baseline",
+  "manifestIdentity": {
+   "version": "1.0.0-rc.24",
+   "buildId": "dbdff58866721e9b52186d9ff1637a419d1212538c018244c3b6da8477699193",
+   "sha256": "64272ea29222e0f731ad624ab7343e001aeb50f15c72933f9ee00b8f6458dbdd",
+   "outputReceiptSha256": "7ac80aa3bf354759654d0adb8385f6ea04347599edb74818ddb5bf6846ead16d"
+  },
+  "manifestHash": "d563b7bc88eb10a21e25362887e21b01c09700ddb94ccc98ea65ecd38534af3e",
+  "runtime": "tracetoon-linux-x64",
+  "treeSha256": "407139541754da6a6068e3217a69c6868deded84a1a39a01f51ca0275da1c7e7",
+  "files": 20,
+  "showtailDependency": {
+   "name": "@showtail/agent-traces",
+   "revision": "dd0b6f40a09e206c1571a0440f2bdc2b78222c18",
+   "packageTree": "6eb00aad7a5c9aa7d54b6dbe3bdb1cd4cb17957e",
+   "sha256": "93ff323d6a1b62fe571a771facbbb17186c0530d7372b5b68b8763838fad78de"
+  }
+ },
+ "candidate": {
+  "role": "tracetoon-candidate (evidence-graph workflow, candidate62)",
+  "tracetoon": {
+   "tag": "candidate62",
+   "commit": "8d9783fbe9d343a1d842c41693b04adf5021481e"
+  },
+  "bundleDir": "results/evgraph-skills/candidate62",
+  "manifestIdentity": {
+   "version": "1.0.0-rc.24",
+   "buildId": "d9db47254d1c342324c99c476cb674567336da8feeea64d3365296b70d593f77",
+   "sha256": "d125f6f8bddac6019f51ae0bece4bdd18a8a384536019b660e6d65b801003bb0",
+   "outputReceiptSha256": "90f21bbe6f18d34eab73e42e334fc7fcf8267b67e740c600358ef43430e67a22"
+  },
+  "manifestHash": "8d1194c8862301cb16b42771bc7b427cd7d01b03f9e44f091f39f24399cbd60d",
+  "runtime": "tracetoon-linux-x64",
+  "treeSha256": "4cd7382b2dbb6ea0d697ad74ea0afdaad554243a307512b8c3084d71b1128917",
+  "files": 32,
+  "showtailDependency": {
+   "name": "@showtail/agent-traces",
+   "revision": "dd0b6f40a09e206c1571a0440f2bdc2b78222c18",
+   "packageTree": "6eb00aad7a5c9aa7d54b6dbe3bdb1cd4cb17957e",
+   "sha256": "93ff323d6a1b62fe571a771facbbb17186c0530d7372b5b68b8763838fad78de"
+  }
+ }
+}

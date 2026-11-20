@@ -1,0 +1,3927 @@
+{
+ "schema": "prbench.accuracy-findings/v1",
+ "experiment": "9342197eb0fc62b2ad4575b4fc387cdad44dcd2de05db4bfad8191dfeb455932",
+ "findings": [
+  {
+   "id": "3bd19e0d265330fb7d3eff0911cc3dd1e34cff35c37ebeab8d0912f218ddb9c1",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcli-book-walk",
+   "artifactDigest": "377b59ba8b36a5ccb931e1c5097304e25a7ae69e8bfcb087f79a1eaba5078ba8",
+   "claim": "No completed full book-walk result is captured in the available evidence.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X5"
+     ],
+     "reason": "The supplied hand-checked historical evidence records a completed local Docker/Xvfb walk passing 163/163 steps and 2/2 smokes before the commit. A fresh writer-run walk remains unknown."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X5"
+     ],
+     "reason": "The shared historical evidence records a completed local Docker walk passing 163 steps and both smokes. A fresh capture gap does not erase that result."
+    }
+   ]
+  },
+  {
+   "id": "6453bfe9b88e2e88f13adebc5b97f382ce22762bec45a49695643946a37480cb",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcli-book-walk",
+   "artifactDigest": "377b59ba8b36a5ccb931e1c5097304e25a7ae69e8bfcb087f79a1eaba5078ba8",
+   "claim": "The replay and learning changes cover the execution and failure paths used by the walk.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C8"
+     ],
+     "reason": "Replay is used by the walk, but the changed native-learning failure renderer belongs to learn. The harness invokes run and replay execute, not native learning."
+    }
+   ]
+  },
+  {
+   "id": "57b6185ef160f9d2cd122624f726f51063b43972c1871ff96519d972d07d4fcc",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "04282505b318645f8f5f1178f58193e8ab7f2399dcc7e06ef7a684af3adfb5fe",
+   "claim": "fix: make Claude integration independent of CLI PATH",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "Together with the opening's 'throughout' assertion, this promises integration-wide independence. The reachable workflow that executes the hook-supplied canonicalReplay still receives bare replay commands from unchanged replay.ts; generated skill text does not rewrite them."
+    }
+   ]
+  },
+  {
+   "id": "3c34d714cd6dbbadfdd3b865ecc24e780a0b51e2604561e183d86683906669d0",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "04282505b318645f8f5f1178f58193e8ab7f2399dcc7e06ef7a684af3adfb5fe",
+   "claim": "uses it throughout the Claude integration.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The asserted breadth includes hook-supplied replay execution. That path still uses bare commands supplied by unchanged replay.ts, and the skill only directs Claude to execute canonicalReplay. Launcher permissions do not rewrite those commands."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "Throughout asserts integration-wide use. The skill also instructs Claude to execute the hook-supplied canonicalReplay command, whose unchanged producer supplies bare aifirst replay execute. Rendering the skill's explicit instructions does not rewrite that supplied command."
+    }
+   ]
+  },
+  {
+   "id": "899f8edfd5f398ede29f00aa2c28edb99e451119b274a963b5a7c28e3ef543bb",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "04282505b318645f8f5f1178f58193e8ab7f2399dcc7e06ef7a684af3adfb5fe",
+   "claim": "This change installs a Claude-owned Bash launcher pointing to the current CLI and uses it throughout the Claude integration.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The breadth of “throughout the Claude integration” includes hook-supplied replay commands. The hook still supplies a bare `aifirst replay execute` command, and the skill directs Claude to execute the supplied canonical replay rather than rendering it through the launcher."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "U4"
+     ],
+     "reason": "Installation writes a launcher, but 'throughout the Claude integration' includes hook-supplied replay execution commands that are not shown to be rendered through it. The replay command builder is unchanged."
+    }
+   ]
+  },
+  {
+   "id": "3af5d229b3e1f9085eb0f9334ebb7108465a19e714dd60055a227da59d8ed585",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "9c3b2be87fb1a50a0869e4aeb764d1ca59949a2a3f5360bb23b5b303090fcae2",
+   "claim": "filename coverage checks that `math.py` is isolated from later Python imports.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C7",
+      "C8"
+     ],
+     "reason": "The filename test checks the py-2-12/math.py mapping; it does not execute or check later Python imports. The scaffold placement supplies the isolation."
+    }
+   ]
+  },
+  {
+   "id": "a0b7817aa9ce9995304e0d4cbdb48a8dff83023651ae3ff2b9c76d8918b57722",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "9c3b2be87fb1a50a0869e4aeb764d1ca59949a2a3f5360bb23b5b303090fcae2",
+   "claim": "filename coverage checks that `math.py` is isolated from later Python imports",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C7",
+      "C8"
+     ],
+     "reason": "The filename test checks the py-2-12 path mapping; the supplied evidence does not show it exercising later Python imports. The scaffold's isolation effect is supported separately."
+    }
+   ]
+  },
+  {
+   "id": "42e5ee434ce85aa216276c4728f611d2299573a956a6bc113200c9f608064ccc",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstextension-apache-license",
+   "artifactDigest": "66a47d990f81b879b4dbc5f7cb2f1c9300ead0639a1010803cb12a7a116e3aca",
+   "claim": "that confirmation is not established by the available evidence.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S230"
+     ],
+     "reason": "The user explicitly selected “Yes, rights confirmed (Recommended)” for the complete committed content repository."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S230"
+     ],
+     "reason": "The recorded answer explicitly selects 'Yes, rights confirmed (Recommended)' for the complete committed aifirstcontent repository."
+    }
+   ]
+  },
+  {
+   "id": "caa86bfd72c1793789905e75542bbc82b8d1e2ede69d8c8ef3ea003e646da7f2",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstextension-apache-license",
+   "artifactDigest": "66a47d990f81b879b4dbc5f7cb2f1c9300ead0639a1010803cb12a7a116e3aca",
+   "claim": "The licensing decision was subject to confirming the rights to book-derived content distributed through `aifirstcontent`; that confirmation is not established by the available evidence.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S230"
+     ],
+     "reason": "The recorded answer explicitly confirmed rights to release the complete committed content repository under Apache-2.0."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S230"
+     ],
+     "reason": "The recorded answer explicitly confirms rights to release the complete committed content repository under Apache-2.0."
+    }
+   ]
+  },
+  {
+   "id": "0c6acfffaf86f17d456607af928943641333282674d924df7260cfd4b106f5e6",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "cbba8ffa6b9091a7c83f2bb339093ae336acad092e1550faced8571cc7446a7a",
+   "claim": "the corresponding upstream change should be reconciled before the next sync.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "S39",
+      "S51"
+     ],
+     "reason": "The matching CLI change was already made, and the hosted copy was confirmed byte-identical. The statement misleadingly presents reconciliation as outstanding."
+    }
+   ]
+  },
+  {
+   "id": "e4df2920f5aa60a5af5f652c37ae7cef34de1a32dc4efc2bcd769584a9e65c34",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "pr10",
+   "artifactDigest": "2b173d2e137214346c3c6be239746ae50a340929b597535be78ed69a8e5281c5",
+   "claim": "so they check the surrounding logic rather than the real steps.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "S48",
+      "S60"
+     ],
+     "reason": "The fake image provider does not replace the actual CLI workflow: the end-to-end tests exercise page drawing orchestration, rendering, proofreading output, overlay, reroll and configuration validation. The sentence incorrectly discounts these real steps."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "A.V9",
+      "A.V13"
+     ],
+     "reason": "This broadly discounts the tests beyond what collaborator fakes establish. The tests exercise actual CLI workflows, rendering, reroll and configuration validation, while substituting for external collaborators."
+    }
+   ]
+  },
+  {
+   "id": "cea5ff3e379fc011ee3eaee2259f5815e7e1ba1cb7b92cbc5b0006cbd2dd77b7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "pr10",
+   "artifactDigest": "2b173d2e137214346c3c6be239746ae50a340929b597535be78ed69a8e5281c5",
+   "claim": "The changed comic tests use fakes or stubs for collaborators, so they check the surrounding logic rather than the real steps.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12"
+     ],
+     "reason": "Some end-to-end coverage uses a fake Codex, but the blanket characterization is broader than that evidence: the tests also exercise real checks, prompts, composition and rendering logic."
+    }
+   ]
+  },
+  {
+   "id": "f95fd2630404b249fafc62562df2857369dd07bc2b5a50bf34cd82f70d3ce109",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "pr11",
+   "artifactDigest": "55aaede764bc002641d91ec5700ee42ab6cdd7741ad382a3383f2eecea3412e8",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S24",
+      "U3"
+     ],
+     "reason": "The final historical chain removed the bottom-5% instruction before running the full suite and bundled tests. Their raw output is missing, but their execution order is established."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final chained command removed the footer instruction before running the full and bundled tests, with no subsequent edits before committing. Missing raw output limits the historical outcome evidence, not that ordering."
+    }
+   ]
+  },
+  {
+   "id": "e4210ba701cd415f5e1f8be9ff490ffcbccf067cdafa8c5b658ebb0ebcc6478b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "pr11",
+   "artifactDigest": "55aaede764bc002641d91ec5700ee42ab6cdd7741ad382a3383f2eecea3412e8",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V13"
+     ],
+     "reason": "The session's later chained full and bundled tests ran after the final prompt edit on the committed content. The fresh check did run later."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "A.V13"
+     ],
+     "reason": "The session's full and bundled test runs were in the chain after the bottom-5% line was removed, with no subsequent edits before the commit. The fresh check did run on the submitted content."
+    }
+   ]
+  },
+  {
+   "id": "bec84163aa3ad87884537bf7da51c165d563dd854464268ea0d30fcb1b0d0a74",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "pr5",
+   "artifactDigest": "e9af1bb1859c920bc96a86142b52ae30eb1e86c9e56712f7ceef13ce1539f8c2",
+   "claim": "Git truth can target a specified head, recognizes binary diff paths, and recognizes quiet commits when a `git commit` command includes a subject of at least 12 characters.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The head and binary clauses are correct, but the final clause assigns session commit recognition to Git truth. That behavior belongs to commitMoments in src/correlate/correlate.ts; prTruth supplies commit subjects and does not inspect session commands."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C9"
+     ],
+     "reason": "The head option and binary parsing belong to Git truth, but quiet-commit recognition belongs to commitMoments in src/correlate/correlate.ts. Git truth supplies commit metadata; it does not perform that recognition. The matching mechanism itself is otherwise described accurately."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "C9",
+      "D"
+     ],
+     "reason": "Git truth owns the head option and binary diff parsing, but quiet-commit recognition is performed by commitMoments in the correlation module, not by Git truth."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C9"
+     ],
+     "reason": "Git truth owns the head option and binary diff parsing, but quiet-commit recognition is performed by commitMoments in correlation, not by prTruth."
+    }
+   ]
+  },
+  {
+   "id": "a88525876612b2236cc2598199001f563dfad882d0f20229b075cb142001755f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "16e05a50f5c89fb70832b9d70a555e9dcce6e79e022d3112be3ae3935370f69a",
+   "claim": "the Codex identity remains compatible with frozen runs.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C3",
+      "T7",
+      "D"
+     ],
+     "reason": "The surrounding identity discussion asserts frozen-run compatibility, not merely an unchanged settings encoding. Pre-change frozen experiments have different writer/judge contract digests over edited files, so whole-identity resume checks refuse them."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C3",
+      "T7",
+      "D"
+     ],
+     "reason": "The surrounding identity discussion asserts compatibility with existing frozen runs. Codex retains its settings and environment hashing, but edited writer/judge contract files change the whole frozen identity, so pre-change experiments cannot resume."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "Although Codex settings and hashes retain their encoding, the complete frozen identity includes contract digests over changed files, so pre-change frozen runs cannot resume."
+    }
+   ]
+  },
+  {
+   "id": "6f4e6295475ddf87b5f62a05fd80ec76b2883a5d624a247b71bcc8acbb59af7d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "16e05a50f5c89fb70832b9d70a555e9dcce6e79e022d3112be3ae3935370f69a",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts;",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The hand-checked history establishes that typecheck and the full suite ran after the last edit, in the command that made final commit f7ec46e. Calling the session's last build earlier misstates that chronology."
+    }
+   ]
+  },
+  {
+   "id": "1d6723150100505f6b546d4e81c81f9592049c6c07ef287cae272f3537372773",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "16e05a50f5c89fb70832b9d70a555e9dcce6e79e022d3112be3ae3935370f69a",
+   "claim": "Judge requests receive a per-prompt schema restricting references to the IDs available to each side, with additional judgment validation retained.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C8"
+     ],
+     "reason": "The sentence states the restriction without qualification, but a fact category with no allowed IDs remains an unrestricted string list. Validation remains in place."
+    }
+   ]
+  },
+  {
+   "id": "49edf204bdf3af10520764e1435f649d347e54ac8d4ec35d396788ec4cf915ab",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "16e05a50f5c89fb70832b9d70a555e9dcce6e79e022d3112be3ae3935370f69a",
+   "claim": "The Claude environment identity excludes launch-directory variables, so it can be reused from another directory; the Codex identity remains compatible with frozen runs.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "Claude excludes launch bookkeeping, but pre-change frozen Codex runs fail the full identity check because changed contract digests also participate."
+    }
+   ]
+  },
+  {
+   "id": "9a036f8bc601ba15a72489c486dfd58dbb97e32ec60a5cb093ae3ec8f0ff5566",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-scoring",
+   "artifactDigest": "ba2ee4d155fdce6d48ed3c30a63569dbe5f57f18d415eddefaaf943344eaafb5",
+   "claim": "No-draft, scope-rejected and timed-out writer attempts are retried up to three times and counted in the reliability report.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "The failure kinds are retryable and counted, but the loop allows three total attempts, hence at most two retries, rather than three retries."
+    }
+   ]
+  },
+  {
+   "id": "d55879daefc8ba752c4e9ef5365dabb3f2ce686836b0881e9e58be739c1915a3",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-scoring",
+   "artifactDigest": "ba2ee4d155fdce6d48ed3c30a63569dbe5f57f18d415eddefaaf943344eaafb5",
+   "claim": "No-draft, scope-rejected and timed-out writer attempts are retried up to three times",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The loop allows three total attempts, meaning at most two retries after the initial failure. The description instead states up to three retries."
+    }
+   ]
+  },
+  {
+   "id": "e6840faeee466638826d8df168231a326ec587cf6a6adce117139658a8f37327",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "3831266b3785fbd934024d1ada92cfe89ede2b4598c99129f5e4f3fb9b2c00a0",
+   "claim": "The commit describes a Claude comparison that could not resume from a new shell when per-process variables changed the environment identity, and host session settings such as `CLAUDE_EFFORT` reaching writers.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "X1",
+      "X3",
+      "U4",
+      "S130"
+     ],
+     "reason": "A comparison was refused and CLAUDE_EFFORT reached writers, but the evidence does not establish that per-process variables caused the observed hash change. The visible commit excerpt does not establish that specific causal attribution either."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "X1",
+      "X3",
+      "U4",
+      "S130"
+     ],
+     "reason": "The refusal and writer exposure are supported, and the commit gives the stated explanation. However, the evidence does not establish that a changed per-process variable caused the observed refusal; the original environment could not be reconstructed."
+    }
+   ]
+  },
+  {
+   "id": "61ece4f4cf3b473c8ebeabdcb2b542ab8540fad0e08765c6fe1ecf607fd5a30c",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "showtail-windows-cmd",
+   "artifactDigest": "44216fc72afc4ae4eb3bd3c796fc5cf9fa2efb62fe124d03b756027e2c62254a",
+   "claim": "No test result was captured in the available development evidence",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S18"
+     ],
+     "reason": "The shared development evidence establishes passing targeted tests and a passing full Linux Docker suite. Missing fresh executions do not negate those historical results."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "S12",
+      "S14",
+      "S15",
+      "S18"
+     ],
+     "reason": "The shared development evidence establishes historical targeted checks and a full Linux Docker suite pass. The sentence is not limited to fresh writer executions."
+    }
+   ]
+  },
+  {
+   "id": "c6d0bb018efabd215863f4a21ab51028e0467ed29f608800843e35e805326728",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "showtail-windows-cmd",
+   "artifactDigest": "44216fc72afc4ae4eb3bd3c796fc5cf9fa2efb62fe124d03b756027e2c62254a",
+   "claim": "No test result was captured in the available development evidence; actual Windows execution still needs verification.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "S14",
+      "S18",
+      "U1"
+     ],
+     "reason": "The original development evidence records passing targeted checks and a full Linux Docker suite. The separate statement that actual Windows execution still needs verification is supported."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "S14",
+      "S18",
+      "U1"
+     ],
+     "reason": "The historical development evidence records passing targeted tests and a full Linux Docker suite, so the claim that no test result was captured is false. The separate qualification that actual Windows execution still needs verification is supported."
+    }
+   ]
+  },
+  {
+   "id": "3e3416e54c72d4d8a98d643ec1c6e18a02330531722246da4bb6bc909cc7a211",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "d87539d54931d2e6c61663c7e3359e08ad557309d89e37347e41ef8773c8b735",
+   "claim": "direction labels do not consume extra code-cell budget.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C5"
+     ],
+     "reason": "The code subtracts a flat six characters. For an unclipped removed line, replacing '- ' with 'removed: ' adds seven characters, so that candidate costs one more character than before. The discount is real, but the stated no-extra-cost guarantee is too broad."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C5"
+     ],
+     "reason": "The implementation provides a flat six-character discount. Replacing '- ' with 'removed: ' adds seven characters, leaving one extra charged character. A removal candidate at the old budget boundary can therefore exceed the budget."
+    }
+   ]
+  },
+  {
+   "id": "836a77d29ce6e14729040e981ee5ec7b72671b1452e8476dde65ec0014cce63a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "d87539d54931d2e6c61663c7e3359e08ad557309d89e37347e41ef8773c8b735",
+   "claim": "Previously, paired code evidence split on the literal `  ⇒  + ` separator; it now accepts whitespace around that separator.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D"
+     ],
+     "reason": "The changed split is in conflictRows, where it selects the added side for conflict checking. The statement attributes that change to paired code evidence generally, rather than to that check."
+    }
+   ]
+  },
+  {
+   "id": "7cf29725fe4966e3641fb55115310040454c13a975110f0c755b6d1d1089396f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "d87539d54931d2e6c61663c7e3359e08ad557309d89e37347e41ef8773c8b735",
+   "claim": "Value fallbacks remain value changes, and direction labels do not consume extra code-cell budget.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C5"
+     ],
+     "reason": "The tested value fallback remains a value change. Separately, the flat six-character discount does not fully offset the seven-character increase from `- ` to `removed: `, so the budget guarantee is too broad."
+    }
+   ]
+  },
+  {
+   "id": "10efc39a9d48be50f0b742b35de4bf8f0b8be751282cbfa676d1fb037629ff97",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "f415e4b548621d7914275726f5d537bc84d8469b14617be691b8035b07505396",
+   "claim": "The fork publication changes were found while publishing Tingsters/tracetoon#53, according to the commit history.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X3",
+      "S50",
+      "S54",
+      "K1",
+      "K2"
+     ],
+     "reason": "The remaining target issues were investigated in response to the user's issue #52 question. The earlier fork-publishing work arrived through an upstream merge; the supplied history does not attribute its discovery to publishing PR #53."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X3",
+      "S50",
+      "S54",
+      "S88",
+      "S115"
+     ],
+     "reason": "The work was prompted by the user's issue #52 question; the remaining targeting fixes became PR #55. The retained history does not attribute their discovery to publishing PR #53."
+    }
+   ]
+  },
+  {
+   "id": "c87f72411e604c639fa63964d42305f40742c0cfcfdb2b399ea13e4170e3aa9c",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "7990b422abd7313e4d373a90c602af5303989f6c1698d6a779dbbda2c3831133",
+   "claim": "multiple test segments are combined with an unknown outcome",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The changed commandRuns path records one run per check. Combining multiple test segments into one unknown test run describes the removed commandRun behavior; unknown status now handles ambiguous failing exits across several checks."
+    }
+   ]
+  },
+  {
+   "id": "dd5851a6d7955b8f55814760108f4b9f0d30045f8fb3ac55c007ad617d7a2816",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "7990b422abd7313e4d373a90c602af5303989f6c1698d6a779dbbda2c3831133",
+   "claim": "Chained verification checks are recorded by kind; multiple test segments are combined with an unknown outcome, and the full merge-base hash is retained for source lookup.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The new commandRuns behavior records one run per check; combining multiple test segments was the replaced behavior. The full-hash clause is supported."
+    }
+   ]
+  },
+  {
+   "id": "0be9ee84b76b69fed7641760226241e466d0a125bd8da942a9fbbc406ff9ed18",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "73c79bf6da7c89ef3213be6798a4bda197e952515667b4ce4489d029aa50fc4b",
+   "claim": "with blank, brace-only and import lines last.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "Blank lines are filtered out altogether. Brace-only and import lines survive only when there are no substantive candidates, rather than filling remaining slots after them. For example, a hunk containing a definition and an import retains the definition and drops the import even with spare capacity."
+    }
+   ]
+  },
+  {
+   "id": "697a8ae825765fcf7a6fc493ecd53c494950f835fbc7ce2b505aff8e6b42e034",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "73c79bf6da7c89ef3213be6798a4bda197e952515667b4ce4489d029aa50fc4b",
+   "claim": "with blank, brace-only and import lines last",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "Blank lines are dropped, while brace-only and import lines are retained only if no higher-priority candidates exist; they are not simply appended last."
+    }
+   ]
+  },
+  {
+   "id": "a5376e98e0fce777d2427e0ca72b83c87a078b7c4c2f910d3739f696602a4053",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "73c79bf6da7c89ef3213be6798a4bda197e952515667b4ce4489d029aa50fc4b",
+   "claim": "findings already reported in the run are listed as repeated",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "This general statement includes unbackedNames findings, which demoteRepeats does not move to repeated."
+    }
+   ]
+  },
+  {
+   "id": "719b245a753f64c7a8dc3fda024de58aa0c37c402b6465dde035ccc8527b6f62",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "46cd32342a0e130e98ca7ef8dbe318ee670b6560d5f4dd06203f3b9bee2a1724",
+   "claim": "Render now lists previously reported brief findings as repeated rather than blocking again",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The statement covers previously reported brief findings generally, but unbackedNames findings are not demoted by demoteRepeats and can remain blocking."
+    }
+   ]
+  },
+  {
+   "id": "5a37c1f6959dabb08d987584373779a9c37ea49a1dcb33b3d4bc2bb401734b5d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "8092aa34136cb6f6a8bfa73d6446dbb31722eff188e102801810bddcc4748482",
+   "claim": "Receipts now quote arguments containing shell characters or spaces",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C2",
+      "C3",
+      "D"
+     ],
+     "reason": "The asserted category includes shell redirection characters, but < and > are explicitly safe. The reachable, tested argument CLI=<repo>/dist/x.mjs remains unquoted despite containing those shell characters."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "This states a quoting rule for arguments containing shell characters, but shellJoin explicitly allows < and > without quoting. The added env CLI=<repo>/dist/x.mjs test supplies a concrete counterexample within receipt formatting."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C2",
+      "D"
+     ],
+     "reason": "The statement covers shell characters generally, but the safe set includes < and >. For example, the test expects an argument containing <repo> to remain unquoted."
+    }
+   ]
+  },
+  {
+   "id": "c4e8716f1b789dfc1dd982e2430f11d63433e80c790e9fc20fd8c37fb2af5dd4",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "8092aa34136cb6f6a8bfa73d6446dbb31722eff188e102801810bddcc4748482",
+   "claim": "Receipts now quote arguments containing shell characters or spaces and represent repository paths with `<repo>` before scrubbing; when the repository root resolves to a different real path, that form is handled too.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C1",
+      "C2",
+      "D"
+     ],
+     "reason": "The path and realpath clauses are supported, but the quoting clause covers shell characters generally. The safe set includes `<` and `>`, so an argument containing those shell-significant characters can remain unquoted."
+    }
+   ]
+  },
+  {
+   "id": "5b9e1817fc476c311939b7e7d3ae8fd731b75bfa3e5e0a102936f4d1c7efab44",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-review-run-all",
+   "artifactDigest": "988720fbe19f1d4d7439495d1672546b78ffd0f78bff7776c7adc48655130e95",
+   "claim": "the drafter’s separate review and recheck steps roughly doubled its cached input per draft",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X1",
+      "S21"
+     ],
+     "reason": "Cached input roughly doubled, and the session attributed the increase to the longer loop. The comparison also differed in build, so it does not establish the steps themselves caused that doubling."
+    }
+   ]
+  },
+  {
+   "id": "45adad5d754a9c5c787e2080ab1657e4ad176aba76701e925c04ef48fa1accd7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "33096e912acaa70f0cafd0a5dc7ed57f7549d456a880e647d1f0d21c7ad779fd",
+   "claim": "provides SQL forms for the named queries and brief derivation.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C2"
+     ],
+     "reason": "The grammatical subject is 'The SQLite loader.' The SQL forms instead belong to the shared query and derivation implementations in queries.ts and derive.ts, as the proposed diff shows."
+    }
+   ]
+  },
+  {
+   "id": "086cfa84169873e3d34fc7bbc0c0358c17e9d7984e0c3debf86b7c733a07b6d3",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "33096e912acaa70f0cafd0a5dc7ed57f7549d456a880e647d1f0d21c7ad779fd",
+   "claim": "Where to start: `saveGraph` in `src/graph/evidence.ts`, which selects SQLite when the engine setting requests it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C1"
+     ],
+     "reason": "saveGraph checks the already-selected engine to attempt an export. General evidence-engine selection belongs to src/graph/store.ts; this pointer assigns that behavior to the wrong function."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C1"
+     ],
+     "reason": "General evidence-engine selection belongs to src/graph/store.ts. saveGraph consults that selection to attempt a convenience SQLite export; it does not select the engine used for queries and briefs. The review pointer assigns the broader selection responsibility to the export caller."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C1"
+     ],
+     "reason": "Engine selection belongs to the store selection layer. saveGraph checks the selected engine to attempt an export; it does not select the engine for evidence queries."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C1"
+     ],
+     "reason": "Engine selection belongs to the store selection code. saveGraph checks the selected engine to attempt an export; it does not select the engine used by callers."
+    }
+   ]
+  },
+  {
+   "id": "63a9f85cce6790170175b069b9812f942b2e84b4ece5319bba2941029029ff02",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "tracetoon-update-command",
+   "artifactDigest": "9dbbcdb4d4e8200f45b2e9ba92e06c3a7e2f33d48c544b7f02b74acf34e2c37a",
+   "claim": "`--exit-code` returns 10 when a newer release is available.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "This clause omits the required --check condition. A successful update --exit-code with a newer target reaches installation without assigning exit code 10; the assignment exists only inside the opts.check branch."
+    }
+   ]
+  },
+  {
+   "id": "a4eea56c75e86688cb68a11b7029f130f9d8cd2282c18e5deade1f7a8df89f65",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "vexagent-cli-snap",
+   "artifactDigest": "5505c9242294e241b9f58d259eec2ecf9bfbed6a9bc9321e921a35ea75143352",
+   "claim": "Previously it reported only the timeout.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "As worded, this describes the previous reporting for a timed-out execution as containing only the timeout. The base also emitted captured stdout and stderr in text, and stdout, stderr, timed_out, ok and elapsed_ms in JSON. Only the additional truncation diagnostic was absent."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base already reported stdout and stderr alongside the timeout; JSON also included ok and elapsed_ms. The explicit 'only' misdescribes the old reporting."
+    }
+   ]
+  },
+  {
+   "id": "3d8d183b137c0aadd2049247ec494adfe4f82346dc8c3f5ee5e15f622a7bbf64",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "vexaim",
+   "artifactDigest": "470ef96172b39c989d5c7d9db05aafd767df45077bf02eb0373a4c99ab15ef60",
+   "claim": "`behaviors.find` now stops for up to eight views, sample each view up to three times and turn 45 degrees between views, subject to the search and activity deadlines",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "The claim names behaviors.find without restricting its target; cargo targets still use the continuous sweep. The stated stationary-view behavior applies to tags."
+    }
+   ]
+  },
+  {
+   "id": "4b566536e7b44efc7e63892af49578fe42965b52698a7d326cd82b7ed61752ae",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 1,
+   "case": "winapps-adobe-2026",
+   "artifactDigest": "222e901b1eed1cc357d0b26826588ea7d776556f65fedcd67378ba8436441c8c",
+   "claim": "`bash -n` passed for both `info` files",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "B.V11",
+      "B.V13"
+     ],
+     "reason": "The recorded command supplies both paths to one bash invocation, but bash treats the second path as a positional argument; the execution establishes a syntax check of the first file, not both."
+    }
+   ]
+  },
+  {
+   "id": "c262aad1d166592879360c0c6a08c1be614f1212245209d9e3d1099dfe78ff34",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcli-book-walk",
+   "artifactDigest": "6c41181fb1c3177340fabac52dcfc4291fa58f037ceca931624dc7cafe49e83b",
+   "claim": "gates release builds.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "book-walk gates the release job. The platform build jobs are separate prerequisites alongside book-walk, so their execution is not gated by the walk."
+    }
+   ]
+  },
+  {
+   "id": "2fdfcb831355c151e21429357dc5d0c8d3143309bce3c3180eb1683c186303e7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcli-javafx-maven",
+   "artifactDigest": "ff97001a3bc549ec4b9d1e1b987c4187c1add34c31fa1d96aabe46456a978a61",
+   "claim": "this environment runs 1.3.14",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V14"
+     ],
+     "reason": "The very full-suite execution being discussed reports bun test v1.4.0, not 1.3.14."
+    }
+   ]
+  },
+  {
+   "id": "425b62a0f345ea20a0b43cedad501f36fd5562a466b0773d2ad42232bc724e1f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "df7fac00216f93e9a56d1ed9751773fb4e04997ebc086b6c085b0990c23a11e6",
+   "claim": "when enabled, replay the scenarios through Claude.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C6",
+      "T6"
+     ],
+     "reason": "The enabled suite invokes Claude only for its version. Its replay driver launches aifirst learn over subprocess pipes, with replies supplied by the local book responder."
+    }
+   ]
+  },
+  {
+   "id": "e05397c4c315c153511c0bf839cf1fa9aa37c4bd7e4096284f5e45e6cc477d1c",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "df7fac00216f93e9a56d1ed9751773fb4e04997ebc086b6c085b0990c23a11e6",
+   "claim": "when enabled, replay the scenarios through Claude",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "T6",
+      "D"
+     ],
+     "reason": "The enabled suite invokes the Python driver to run aifirst learn with the local book responder. Claude is invoked only for its version, not to supply replay responses."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "T6",
+      "D"
+     ],
+     "reason": "The enabled suite checks Claude's version, then replays the generated book through `aifirst learn` using the local responder; it does not run the scenarios through Claude."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "T6",
+      "D"
+     ],
+     "reason": "The live suite checks the installed Claude version, then replays committed content through aifirst learn; it does not replay the scenarios through a real Claude model session."
+    }
+   ]
+  },
+  {
+   "id": "221d63374ea7b20fd1e1a8a831fc242472a01c272b566f00701e9a54050eaab7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcli-tui-responsive",
+   "artifactDigest": "ed5148151462c54cd2b5278de0d65ed5182afe714d5c48f40f89b49bbc363f06",
+   "claim": "A working indicator accepts Escape or Ctrl+C to cancel a running task.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "This unqualified task-cancellation statement covers the replay commands wrapped by withTaskRunning. A reachable <shell> command receives that indicator, but its executor ignores the abort signal; the keys abort the controller without canceling that task."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The unqualified task-cancellation statement covers replay commands placed in withTaskRunning. A reachable non-graphical <shell> command enters that box but ignores the supplied abort signal, so these keys do not cancel that running command."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The indicator aborts a signal, but the reachable replay <shell> branch ignores that signal, so its running task is not cancelled by those keys."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The indicator aborts its signal, but the replay <shell> branch ignores that signal, so a command running under the indicator need not stop."
+    }
+   ]
+  },
+  {
+   "id": "1527d687bcfc3c1f0c54ab76d4de103536c2394cee3c54f4a7da0e85c25c479e",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "252055e8840327e6e68931045a3efba3210a183bd8f6bb9e0e7140579600222d",
+   "claim": "this change does not establish that confirmation.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S3",
+      "X2",
+      "U1"
+     ],
+     "reason": "In this paragraph, the clause leaves the requested rights confirmation unresolved, but the user explicitly selected 'Yes, rights confirmed' for all committed content. Publisher documentation and legal review remain unestablished; that is different from absence of the requested confirmation."
+    }
+   ]
+  },
+  {
+   "id": "4851f0fb8a60d303d05de49fafe2e572cd76bec9aeb43a1bc6204f76017041ad",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-portable-replays",
+   "artifactDigest": "af54b8942242dd486c3bd662eecdfa4de3d63f26283b9e6010c5626ee544a9c8",
+   "claim": "The Python chapter audit covers portable execution for captured shell commands",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6"
+     ],
+     "reason": "The chapter audit asserts the presence of a <shell> portable command; that assertion does not itself establish execution of those commands."
+    }
+   ]
+  },
+  {
+   "id": "f4854b975e2876d69eeebe4fc8084bf7513c752dde029f483a54d8abc6a3b8bd",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "5f47be093e28e1a03234478c9b22aa6398442f17188c6a23363d7bf0e1de621b",
+   "claim": "No plan or decision was recorded in the session.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S20",
+      "X3"
+     ],
+     "reason": "The user explicitly decided to use the safe workaround, wait for a durable release fix, and add the recommended smoke test."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S20",
+      "X3"
+     ],
+     "reason": "The user explicitly decided to use the safe workaround, wait for a released fix, and add the recommended smoke test."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S20",
+      "X3"
+     ],
+     "reason": "The user explicitly chose the safe workaround and waiting for the durable fix in a release."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S20",
+      "X3"
+     ],
+     "reason": "The user explicitly chose the safe workaround, waiting for a durable release, and the recommended smoke test."
+    }
+   ]
+  },
+  {
+   "id": "e88076110d857a8b90068eb6abe04d3c585d039ff975a1476ab5a25a767376ed",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "e5557ac24ef67a4bc15846f67a8f80799bbcc491a33f5768577611b3467070be",
+   "claim": "evidence of the corresponding upstream change or synchronization was not captured here.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "S26",
+      "S38",
+      "S39",
+      "S51",
+      "X4"
+     ],
+     "reason": "The shared evidence establishes the matching CLI change, website synchronization, byte identity, and separate CLI commit. Fresh packet omissions do not erase that historical evidence."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "S26",
+      "S38",
+      "S39"
+     ],
+     "reason": "The supplied session captures the CLI-side change, the website change and a comparison; the fact sheet confirms byte-identical synchronization."
+    }
+   ]
+  },
+  {
+   "id": "1bde9b0080989510db3fda33edf65bc2d4b5b2996b00a66bd482cde82d5b82a4",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "e5557ac24ef67a4bc15846f67a8f80799bbcc491a33f5768577611b3467070be",
+   "claim": "The repository documents the static installer as a copy of the CLI repository's installer; evidence of the corresponding upstream change or synchronization was not captured here.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S26",
+      "S39",
+      "C5"
+     ],
+     "reason": "The supplied historical evidence records the matching CLI change and comparison; the fact sheet confirms byte-identical synchronization."
+    }
+   ]
+  },
+  {
+   "id": "e63d59ea424942aaf9901bea8143efc424bacfe162f193b3d61bc5b6a83fa4d5",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "pr10",
+   "artifactDigest": "84a55cc64bf43701b31de11f1a23271dab2b918f23b817a80c0f3a8f15160bb9",
+   "claim": "The changed comic tests replace collaborators with fakes or stubs, so they check the surrounding logic rather than the real steps.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "B.V15"
+     ],
+     "reason": "Faking external collaborators does not establish this broad characterization of all changed comic tests. The evidence includes direct page validation, prompt/footer checks and an end-to-end CLI workflow using a fake Codex provider; those exercise actual implementation steps."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "S83"
+     ],
+     "reason": "The test changes include direct checks of page validation, prompts, footer composition, overlay grids and continuity, in addition to a fake-Codex end-to-end run. The blanket characterization dismisses real logic exercised by those tests."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12"
+     ],
+     "reason": "Although the end-to-end run uses fake Codex, the changed tests also exercise real page validation, prompt and footer generation, overlay layout and other implementation logic. The blanket characterization understates what they check."
+    }
+   ]
+  },
+  {
+   "id": "4129fb71b3c787faed6b8203cd74ab8ac894e802cd60658e71c0f842f5b54614",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "pr11",
+   "artifactDigest": "afa559ff93f8b6ca0087473c17b37ff0b0dab13f10d0b4adf08f0644e8c2219d",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final chained command removed the bottom-5% instruction before running the full and bundled tests, with no subsequent edits before committing. Missing raw output limits the historical result evidence, not this ordering."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final historical command removed the bottom-5% instruction before running the full and bundled suites, with no intervening edits before the commit."
+    }
+   ]
+  },
+  {
+   "id": "047ff0bf506c09a01ecd047cdbc7755a0cf32c60c95d96a3792a6b71034a7589",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "pr11",
+   "artifactDigest": "afa559ff93f8b6ca0087473c17b37ff0b0dab13f10d0b4adf08f0644e8c2219d",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V15"
+     ],
+     "reason": "The historical chained full and bundled tests ran after the final prompt edit, on the committed content. The fresh full-suite check did run afterward."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S24",
+      "U3",
+      "A.V14",
+      "A.V15"
+     ],
+     "reason": "The historical chained command removed the 5% line before running the full and bundled tests, with no intervening edits before the commit. The fresh checks did come later."
+    }
+   ]
+  },
+  {
+   "id": "cc5f5e43e9c8d1f56122745f858515f0b8eb07ef47b93a8319e18ffafd61f6a9",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "pr5",
+   "artifactDigest": "d1000d50f2f1ec17062e8dc29d6f7a6c54e3cb70925bea87e0d53b26549932ee",
+   "claim": "then the test and feedback extraction and the regression cases in `tests/summary-fixes.test.ts`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The named file owns regression cases, but test extraction is implemented in src/digest/build.ts and feedback extraction in src/trace/claude.ts. The pointer conflates implementation with its tests."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The named test file owns regression cases, not extraction. Test-output extraction is implemented in src/digest/build.ts and Claude feedback extraction in src/trace/claude.ts."
+    }
+   ]
+  },
+  {
+   "id": "9ebba828b8b7a9eb4b2071b81811a07f123ad2dda8803866093a45546c9cee5d",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "pr8",
+   "artifactDigest": "a09cceeb43ab7afc308ac8fe78e734e91eeceaa204ba2d6e74c652231a1bad46",
+   "claim": "Render and preview now print absolute `file:///` URLs for the HTML preview, expose `previewUrl` in JSON alongside `previewPath`, and print a file URL for the comic image when present.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "The final coordinated predicate applies to both named commands, but only preview prints the comic image URL. The shown render output branch merely adds 'with comic' when a comic exists; it does not print its image URL. The HTML URL and JSON clauses are supported independently."
+    }
+   ]
+  },
+  {
+   "id": "b1096c8c64dd817de512b56779b514e7feed05f66750aa39cd1edd2f92900487",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "ef7638e582dd7cd214454446b09d6e7331ebfc93c52733d76e34f5bd14e999b8",
+   "claim": "`bun run test` is running.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "A.V8",
+      "A.V19"
+     ],
+     "reason": "The fresh suite completed with 296 passes, one skip and zero failures. A later execution attempted to replace this stale running statement with the completed result."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "B.V8",
+      "B.V19"
+     ],
+     "reason": "The fresh test execution completed with 296 passes, one skip and zero failures. The later body-update execution also shows the running sentence was stale; the evaluated description still contains it."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "B.V8",
+      "B.V19"
+     ],
+     "reason": "The recorded suite completed with 296 passes, one skip and zero failures; a subsequent body-update command recognized that result. The supplied description retains the stale running status."
+    }
+   ]
+  },
+  {
+   "id": "ec18e65558be57c1899154ece9c28216e00d57810fa7af00617868d87be6bb3f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "5cb9a7a4818f2b47c5415ad9382796ce626dee7a7c4a6120af97adcc68c0db81",
+   "claim": "In the context of optimizing graph construction and retrieval for PR descriptions, this change filters shell bookkeeping from sandbox environments and from the comparable Claude environment, so those values do not distinguish otherwise equivalent runs.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S74",
+      "S123",
+      "S130",
+      "X1",
+      "X3"
+     ],
+     "reason": "The filtering behavior is supported, but the sentence connects this change to graph optimization without evidence of that relationship. The graph request concerns separate work; the documented motivations here are comparison identity and writer isolation."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S74",
+      "X1",
+      "X3",
+      "D"
+     ],
+     "reason": "The filtering and hash effect are supported, but the retained graph-optimization request does not establish that context as a motivation or causal frame for this separate change."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S74",
+      "D",
+      "U4"
+     ],
+     "reason": "The filtering and its effect on the hash are supported, but the paragraph associates this change with graph optimization without evidence that the graph work motivated or explains this fix."
+    }
+   ]
+  },
+  {
+   "id": "3e2aa17089f5d143469ce5848d1bedd3b68cbc9ab76b498b42ecad9f1798cc20",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "5cb9a7a4818f2b47c5415ad9382796ce626dee7a7c4a6120af97adcc68c0db81",
+   "claim": "In the context of optimizing graph construction and retrieval for PR descriptions",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S74",
+      "X1",
+      "X2",
+      "X3"
+     ],
+     "reason": "The earlier graph request establishes surrounding session activity, but does not establish that this environment-filtering change served graph optimization."
+    }
+   ]
+  },
+  {
+   "id": "48a39313644acb23ab0d1bb80f85cd12ec9c6891d5f2240a3c95b1752012f364",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "58b102dc8a4084385e5a18038598e3156a263f6fd33520d54181a613f6cd5f99",
+   "claim": "The commit notes that Claude comparisons could not resume from a new shell because per-process variables changed the environment hash",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X1",
+      "U4",
+      "S130"
+     ],
+     "reason": "The commit attributes the refusal to inherited variables, but the investigation did not identify the variable that changed the hash or establish that per-process variables caused the observed refusal."
+    }
+   ]
+  },
+  {
+   "id": "50398b2e5ba8b71bb840470a1366fa8340bc78e622a8f946e8dceaaf2fe3a60c",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "58b102dc8a4084385e5a18038598e3156a263f6fd33520d54181a613f6cd5f99",
+   "claim": "The commit notes that Claude comparisons could not resume from a new shell because per-process variables changed the environment hash, and that inherited Claude settings could affect writers.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S130",
+      "X1",
+      "X3",
+      "U4"
+     ],
+     "reason": "The commit makes that attribution and the writer-isolation concern is supported, but the retained investigation did not identify the variable that changed dev7's hash. The causal explanation for the observed refusal is therefore not established."
+    }
+   ]
+  },
+  {
+   "id": "99ab4f3a9330c45d233cb6fb7a8415b97e23efd7529c0c000662d045450d0f9b",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "showtail-self-upgrade",
+   "artifactDigest": "ab4d08ef1fd60d50ef8351569c21c3817b5bed7dbbedf9dac8e881322fc602b5",
+   "claim": "No validation result was captured in the available session evidence.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S39",
+      "S40",
+      "S41",
+      "X3"
+     ],
+     "reason": "The shared session records final-edit typechecking and focused tests, a full suite with 693 passes and zero failures, and compiled-command help verification. Missing fresh executions do not negate these captured historical results."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S39",
+      "S40",
+      "S41",
+      "X3"
+     ],
+     "reason": "The shared session evidence records final-edit typechecking and focused tests, a full suite with 693 passing and four skipped tests, and compiled-command help verification. No fresh test receipt in B's packet does not erase those historical results."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S39",
+      "S40",
+      "S41",
+      "X3"
+     ],
+     "reason": "The historical session records focused tests, typechecking, a full-suite result and compiled-binary help verification after the final code edit."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S39",
+      "S40",
+      "S41",
+      "X3"
+     ],
+     "reason": "The shared work-session evidence records focused tests, a full-suite result and compiled-binary help after the final code edit."
+    }
+   ]
+  },
+  {
+   "id": "227e75fa792e9f592ba154b0f4e1d04e33b81cfbe1953a6eab956a50c36c8fbc",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "showtail-signpath",
+   "artifactDigest": "08a5bb04dded0416990adac904cb547733e389df5652f9f0125502508a5288fa",
+   "claim": "`tests/signingReadiness.test.ts` covers policy information, Bun and Windows metadata requirements, origin-verified signing and pinned actions.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C10"
+     ],
+     "reason": "The test checks text and step order; it does not exercise origin-verified signing, and its action-pin regex skips list-item uses lines. The wording does not disclose those limits."
+    }
+   ]
+  },
+  {
+   "id": "729c4f447cd9e7deee161fe6ca4fe5404ff1bc3e8475786951a9b5ae7f16bd25",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "04c3685494a162eb4ce10b6fd8e0fa55f11b04a29b984a8006a336cb6d4d524a",
+   "claim": "The `added:` and `removed:` labels use the same code-cell budget as the short signs they replace.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C5"
+     ],
+     "reason": "The implementation applies a flat six-character discount. Replacing `+ ` with `added: ` adds five characters, while replacing `- ` with `removed: ` adds seven, so their resulting costs are not equal to the original sign costs."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C5"
+     ],
+     "reason": "Both labels receive a flat six-character discount. That offsets the extra characters in `added:` relative to `+`, but `removed:` is two characters longer than `added:`, so its net cost is not the same as the `-` form."
+    }
+   ]
+  },
+  {
+   "id": "59d35aa5257fac3d6be90534083d830b7edeed0be46059b290153ceb4c95d02a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "acf5c5432aa7396bd776ee34360b12a41180cf7260f63fcf297115d399bc98c0",
+   "claim": "destroys and unreferences a killed child's pipes",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "finish destroys stdout and stderr, but calls unref on the child process, not its pipes."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C2",
+      "D"
+     ],
+     "reason": "The runner destroys stdout/stderr streams and unreferences the child process. It does not unreference the pipes; cleanup also runs for normal completion."
+    }
+   ]
+  },
+  {
+   "id": "5cb287753b037b08414cdc00a1cd0e6faef6293c9101eac20383bf4ce4e4496c",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "acf5c5432aa7396bd776ee34360b12a41180cf7260f63fcf297115d399bc98c0",
+   "claim": "The runner passes a per-test timeout, destroys and unreferences a killed child's pipes, and flushes output before the source and packaged runners exit.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C3"
+     ],
+     "reason": "The timeout and flush clauses are supported, but the runner destroys the pipes and calls unref on the child process, not on the pipes."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C3"
+     ],
+     "reason": "The runner destroys the pipes but unreferences the child process, not the pipes. The timeout and runner-flush clauses are supported."
+    }
+   ]
+  },
+  {
+   "id": "67fed9f17003e3d483838033841d36104b028412c1ab9ac74de622ace5a8c777",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "3ef81b7b5bf45d9760850f4496cb0c5fa3dbe46c8f182ad5d7d2b72d9f5543c9",
+   "claim": "multiple test commands are grouped into one unknown test run",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The change replaces the old grouped-test behavior with commandRuns, recording one run per check. Ambiguous chain failure status becomes unknown; it does not require grouping the checks."
+    }
+   ]
+  },
+  {
+   "id": "d84436134761b7465d29ee3297e182a715313daba87e795ed3ba7b4cc6516417",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "1691fdda95bd1c7ddd5757863f95fe263e1c39805df13a6b9964e3bd47a7b695",
+   "claim": "Receipts now quote arguments containing spaces or shell characters while leaving the `<repo>` placeholder unquoted",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C2"
+     ],
+     "reason": "The asserted shell-character rule has exceptions beyond the named placeholder: shellJoin also leaves arbitrary < and > characters unquoted. For example, a recorded argument a>b remains a>b. The space-quoting and placeholder clauses are individually correct, but the broader shell-character clause is not."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C2"
+     ],
+     "reason": "The asserted shell-character coverage exceeds the implementation. Besides the placeholder exception, arbitrary arguments containing < or > remain unquoted: shellJoin(['echo', 'a>b']) produces echo a>b."
+    }
+   ]
+  },
+  {
+   "id": "6e3a3f1f1f48960274a038b1a2f060eaf8840a2d5057fb7a0f5b02f5666b0d54",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "1691fdda95bd1c7ddd5757863f95fe263e1c39805df13a6b9964e3bd47a7b695",
+   "claim": "Receipts now quote arguments containing spaces or shell characters while leaving the `<repo>` placeholder unquoted, and replace repository-root paths with that placeholder, including the resolved root when it differs.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.D",
+      "C1",
+      "C2"
+     ],
+     "reason": "Root and realpath replacement is supported, but the quoted rule is broader than the implementation: `<` and `>` are shell-significant characters in the safe set, including outside a placeholder."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.D",
+      "C1",
+      "C2"
+     ],
+     "reason": "The path rewrite and resolved-root handling are supported, but the quoting claim is broader than the implementation: `<` and `>` remain unquoted even when they occur outside the `<repo>` placeholder."
+    }
+   ]
+  },
+  {
+   "id": "1d3dffb918a539b299c6963f1d26529f692fbbee49820b2c20f8f2738c1e3d56",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "d4b8c891ece936ddc402d46a22cc0cc756bd5c9ab0bab205ffb7f58d4c61c348",
+   "claim": "context reads are associated with surviving edits using the interval since the preceding edit.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6",
+      "K3"
+     ],
+     "reason": "The boundary is the preceding surviving edit in the same session. An intervening edit that does not survive does not reset the context interval; the description's unqualified preceding-edit boundary misstates this fix."
+    }
+   ]
+  },
+  {
+   "id": "05f53a4aeb96addd0ecc7fef152278bb982fc83ad9cbeb8d350c64bbdae2f7a1",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "vex-v5-serial-aim-port",
+   "artifactDigest": "5cf386dcfc081a41ba06a7754bde19da0ecf5c10f55c684c360fc595e7c8cbe0",
+   "claim": "No test result was captured in the available session evidence.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S7",
+      "C6"
+     ],
+     "reason": "Historical session evidence explicitly records three passing tests. This does not establish a fresh final-content pass, but contradicts the blanket absence claim."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S7",
+      "C6"
+     ],
+     "reason": "The shared historical evidence explicitly captures three passing tests, and the fact sheet records serial-feature passes on both commit states. Those historical results do not establish a fresh final-content pass, but they contradict the blanket assertion that no result was captured."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S7",
+      "C6"
+     ],
+     "reason": "The available original session evidence includes a three-test passing result; the fact sheet also records serial-feature test passes on both commit states."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S7",
+      "C6"
+     ],
+     "reason": "The supplied historical session evidence records a three-test pass, and the fact sheet records serial-feature test passes on both commit states."
+    }
+   ]
+  },
+  {
+   "id": "00d3c7282bc851b44b5c4d458c90a97c953e917ac000913734e0f64bfeb32497",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 2,
+   "case": "vexagent-cli-snap",
+   "artifactDigest": "a45bde5c1eabf6c0f9e297aef2ed863dead01e37ded7d3cafaf29b1a6205cc7a",
+   "claim": "It reads eight frames, saves the last available MJPEG frame after trimming trailing zero padding, and returns the path, dimensions, and byte count.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C3"
+     ],
+     "reason": "It retains the last successful frame regardless of format, then errors if that frame is not MJPEG. For example, an earlier MJPEG frame followed by a successful non-MJPEG frame would not be saved. The eight reads, zero trimming and returned metadata are otherwise supported."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C3"
+     ],
+     "reason": "It retains the last successful read, then checks its format. If that frame is not MJPEG, it errors even if an earlier successful read was MJPEG; it does not select the last available MJPEG frame. The eight reads, zero trimming and returned metadata are supported."
+    }
+   ]
+  },
+  {
+   "id": "68b273e3853b4b6876b3ec5aa5574079fcade1dc30bfa4c37d3eea4fbcb8eecf",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-duckling-wheels",
+   "artifactDigest": "17806836755e16ae26f53c7c52a92ed9b9d1423787d95a924c625dc6da2d4f46",
+   "claim": "so dependency checks and installation use the new distribution name while exercises continue to import `pygame`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Installation receives the declared pygame-ce package name, and exercises retain pygame imports. However, dependency availability checks still test the pygame import module; they do not switch to checking the new distribution name."
+    }
+   ]
+  },
+  {
+   "id": "a3bc8db87556baf9deb9a3bb1b61d973c4faa7c6e6ae897bfc9977abd1d7ddfd",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-duckling-wheels",
+   "artifactDigest": "17806836755e16ae26f53c7c52a92ed9b9d1423787d95a924c625dc6da2d4f46",
+   "claim": "so dependency checks and installation use the new distribution name while exercises continue to import `pygame`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Installation uses the declared pygame-ce distribution name, but the dependency check tests whether the pygame module is importable. The sentence incorrectly assigns the distribution name to the check as well."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Installation uses the declared distribution name, but dependency checks still check whether the pygame module is importable."
+    }
+   ]
+  },
+  {
+   "id": "850144bbf8dd8e3726c5a52e92872aa250d8a8b424e2561c656208db2eeaf4a2",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "fd16a7c4f912b56a673146ee6eb355ee8a5369d119919a058780f86231cd22d7",
+   "claim": "the failure may reflect this environment rather than the change.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V19",
+      "B.V36"
+     ],
+     "reason": "This is explicitly tentative, but the offered environmental explanation lacks diagnostic support. The available log establishes a content mismatch, not a relationship between that mismatch and the Bun version."
+    }
+   ]
+  },
+  {
+   "id": "174e48fd722a1ea87b98d9916bda8b0cae1c6b0084253b6ff0d3f2902dc6ec17",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-javafx-maven",
+   "artifactDigest": "c17014d6bddba7bb26912a0c97d5709fdce3075fe8a255cdedb3e87ff1bfba6c",
+   "claim": "this environment runs 1.3.14",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V16"
+     ],
+     "reason": "The fresh full-suite execution explicitly reports Bun 1.4.0. This incorrect explanation is repeated for both failures."
+    }
+   ]
+  },
+  {
+   "id": "ffda24dac4fa68a126202d9eb4680682f766fc04a02e625fa5b3a5455f81ec36",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "8fad063f457014faedc07edd27c2bbe1ccd1886eab14324bd1bccc4b46599005",
+   "claim": "Learners can return to the previous prompt or exit when the corresponding prompt action is selected.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C2",
+      "D"
+     ],
+     "reason": "Exit is supported, but the back action returns to the built-in learning menu, not the previous prompt. nativeLearn handles back by continuing its selection loop."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C2",
+      "D"
+     ],
+     "reason": "Escape returns to the built-in learning menu, not the previous prompt; Ctrl+C exits built-in learning."
+    }
+   ]
+  },
+  {
+   "id": "6f7d176031091fef0937371b382b8b6cddb6385784f35607a9176bb09807d233",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "8fad063f457014faedc07edd27c2bbe1ccd1886eab14324bd1bccc4b46599005",
+   "claim": "Replay commands use the asynchronous executor, which delegates non-shell commands to the synchronous runner; demo and resolve paths skip execution when matching a prompt.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The described async delegation and matching exceptions are present, but the broad claim that replay commands use the async executor overlooks the book-mode responder's execute(), which still uses the synchronous executor."
+    }
+   ]
+  },
+  {
+   "id": "127186082506fa19e7a43961ed57351e051de533a723a8baf210ee430630c116",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "6698e6779a6ecf0466ecc3b3183fc4c2e8c4b65e5e78068cf9e662dbdf4165d4",
+   "claim": "It also pins Bun in workflows and updates the Claude Code version.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C5",
+      "K1",
+      "K2",
+      "T5"
+     ],
+     "reason": "Bun pinning belongs to the SignPath change, but the Claude Code bump is a separate automated commit, not part of that work."
+    }
+   ]
+  },
+  {
+   "id": "d8982b9f061f103d4595093a2890a216d7155a9b2d6e8e9adcec110cc54e6398",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcli-tui-responsive",
+   "artifactDigest": "351fdc8a1e347654943b3c75999e056b60ec86c4933fcea1f833623d3d7d313a",
+   "claim": "Previously, prompt animation stopped on cancellation and the renderer accepted space or Enter to skip typing.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "The base exercise-prompt renderer handled cancellation but did not skip typing on Space or Enter. Those keys skipped ordinary Markdown blocks."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "C2"
+     ],
+     "reason": "The base exercise-prompt renderer stopped on cancellation but did not implement Space or Enter skipping. Space/Enter skipping belonged to ordinary Markdown rendering."
+    }
+   ]
+  },
+  {
+   "id": "4d5c8b98c69e43aabbaf9d7d09cb3ec70dc37c3f25f2e61f9b5651c67fe938b7",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "f6982804dad7f6095d2a2b53f5d2aaae255a26476d49f2defe6d320134b913d2",
+   "claim": "that confirmation is not recorded here.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S3",
+      "X2"
+     ],
+     "reason": "The recorded answer is “Yes, rights confirmed.” This is user confirmation, although it is not publisher documentation or legal review."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S3",
+      "X2"
+     ],
+     "reason": "The recorded answer explicitly selects 'Yes, rights confirmed'. This is user confirmation, although it is not publisher documentation or legal review."
+    }
+   ]
+  },
+  {
+   "id": "3fff72e7eb0c0d7a1df6f5d2d6e31716eeab0ecd927802ff1c1256c31aa80007",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "f6982804dad7f6095d2a2b53f5d2aaae255a26476d49f2defe6d320134b913d2",
+   "claim": "The original licensing request called for confirming the rights to release book-derived prompts, explanations, and examples under Apache 2.0; that confirmation is not recorded here.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S3",
+      "X2",
+      "U1"
+     ],
+     "reason": "The recorded answer confirms rights to release all committed content. The record does not show a publisher agreement or legal review, but it does show the user's confirmation."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S3",
+      "X2",
+      "U1"
+     ],
+     "reason": "The request for confirmation is accurate, but the recorded answer explicitly says rights were confirmed. No publisher agreement or legal review is shown."
+    }
+   ]
+  },
+  {
+   "id": "a85a9621a9eec06500ffab71d3afa1f3c720c5e4a636a981ff82bfa71de21f86",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-replay-start-state",
+   "artifactDigest": "e1919a3bd0da62a9b2db47f485003f75b20bbdabefd8e2a54f4731d9e3da4f7c",
+   "claim": "Consumers must use this metadata to supply the starting files.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X2",
+      "U1"
+     ],
+     "reason": "The intended consumer uses the metadata to choose captured execution when the workspace matches, or existing full-file fallback operations otherwise. Supplying the prerequisite starting files is not required."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X2",
+      "S45",
+      "U1"
+     ],
+     "reason": "The consumer design uses the metadata to select captured operations when the workspace matches, otherwise using existing full-file fallback operations. Supplying prerequisite starting files is not a required consumer action."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X2",
+      "U1",
+      "T2"
+     ],
+     "reason": "The CLI uses the metadata to choose the captured sequence when the workspace matches, and otherwise falls back to full-file operations. The metadata does not require consumers to supply the starting files."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X2",
+      "U1",
+      "T2"
+     ],
+     "reason": "The documented CLI approach checks whether the workspace matches the referenced scaffold and otherwise uses full-file fallback operations; it does not require supplying the starting files."
+    }
+   ]
+  },
+  {
+   "id": "d83fa546a50756eebf882cca84adf607e7b2f0b28be37c5865f10214a610e8cd",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "0d86856b9376f265190cc25f9fd27ee4931ba8d964931cbd66616f18a6a2fe20",
+   "claim": "a corresponding upstream change or synchronization has not been established.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "S38",
+      "S39",
+      "S51"
+     ],
+     "reason": "The shared historical evidence establishes the matching CLI workaround and byte-identical synchronization. A.V13 describes a narrower checkout-based evidence limitation and does not negate that history."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "X4",
+      "S38",
+      "S39",
+      "S51"
+     ],
+     "reason": "Shared historical evidence establishes the matching CLI change and byte-identical website synchronization. B.V13's narrower checkout limitation does not negate that evidence."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "S39",
+      "S51"
+     ],
+     "reason": "The shared evidence establishes both the matching CLI change and byte-identical synchronization. The fresh guidance check's narrower checkout limitation does not negate that evidence."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C5",
+      "X4",
+      "S39",
+      "S51",
+      "S52"
+     ],
+     "reason": "The shared evidence establishes the matching CLI change and byte-identical synchronization. The fresh guidance check's narrower checkout limitation does not negate that evidence."
+    }
+   ]
+  },
+  {
+   "id": "d981be5c82bcd2f4fe140f0f6e5e2d63827ecdd52f514357469734e9e644bb66",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "pr10",
+   "artifactDigest": "cedabea7c8b7737fa8c9636079423fa784f3739713ad1e96a20c9b216c0bdf57",
+   "claim": "so they check the surrounding logic rather than the real steps.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "B.V15",
+      "B.V16"
+     ],
+     "reason": "Stubbed collaborators do not replace the actual CLI workflow. The tests execute real preparation and rendering logic, including whole-page drawing orchestration, footer composition, overlay, reroll, and configuration validation."
+    }
+   ]
+  },
+  {
+   "id": "aa914ad36a0be98d9d486d3fce7aa60676dabc8716259fb6f510f36da2c4fc2b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "pr10",
+   "artifactDigest": "cedabea7c8b7737fa8c9636079423fa784f3739713ad1e96a20c9b216c0bdf57",
+   "claim": "The changed comic tests use fakes or stubs for collaborators, so they check the surrounding logic rather than the real steps.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "A.V16"
+     ],
+     "reason": "Fake collaborators limit external-provider validation, but the end-to-end tests execute actual CLI drawing, rendering, overlay, reroll and config-validation steps. The conclusion incorrectly dismisses those real steps."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12",
+      "S60",
+      "S83"
+     ],
+     "reason": "The tests include real page validation, prompts, footer and composition behavior as well as an end-to-end fake-Codex flow; the blanket characterization discounts real steps being exercised."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C12"
+     ],
+     "reason": "Fakes are used in the end-to-end run, but the blanket characterization understates tests of actual page validation, prompts, composition and CLI behavior."
+    }
+   ]
+  },
+  {
+   "id": "2dd03bda0c719452ea130c53dc7968823528740be892b45f744e17525c52ae1c",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "0010f59b66af02535d4b4b5ed7164f77a293b0e78b1ca4075c1816a4cd242051",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final historical chain removed the bottom-5% instruction before running the full and bundled tests. Those tests therefore ran after the final provider edit on the committed content, although their raw output was unrecorded."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S24",
+      "U3"
+     ],
+     "reason": "The final session chain removed the bottom-5% instruction before running the full suite and bundled tests, then committed without intervening edits. Missing raw test output limits proof of results, not this ordering."
+    }
+   ]
+  },
+  {
+   "id": "9ff615afe42600cf2336d311d830130d626c3ab084c2664329dfc2b6044ef547",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "0010f59b66af02535d4b4b5ed7164f77a293b0e78b1ca4075c1816a4cd242051",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V13",
+      "B.V14",
+      "B.V15",
+      "B.V16"
+     ],
+     "reason": "The historical full and bundled test commands ran after the final prompt edit in the same chain, with no subsequent edits before the commit. Fresh checks did run later, but that does not repair the first clause."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "S24",
+      "U3",
+      "A.V14"
+     ],
+     "reason": "The original session's full and bundled test runs occurred in the chain after the 5% prompt line was removed and on the committed content. The fresh check did run later."
+    }
+   ]
+  },
+  {
+   "id": "8a9d11d529dac85dee7509be3537b5b03732dbbaf3be24130acefb60988d9c75",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "pr9",
+   "artifactDigest": "b5660f8b792942ac71a7d7d66d866b9b63b28e054a3db666d10b0d88e4da6eeb",
+   "claim": "Checks passed on the submitted content: `bun run typecheck`, `bun test` (76 pass, 0 fail, Ran 76 tests across 7 files. [65.54s]), `bun run bundle`, `env TRACETOON_TEST_CLI=plugin/skills/tracetoon/dist/tracetoon.mjs bun test tests/flow.test.ts tests/comic.test.ts` (20 pass, 0 fail, Ran 20 tests across 2 files. [25.93s]).",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V13",
+      "B.V14",
+      "B.V15",
+      "B.V16",
+      "B.V18"
+     ],
+     "reason": "Typecheck, the full suite, and bundling passed as stated. However, the 20-test pass belongs to an absolute TRACETOON_TEST_CLI path. The description substitutes a relative path, equivalent to the relative-path invocation that failed. Removing './' does not make that path absolute."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V13",
+      "A.V14",
+      "A.V15",
+      "A.V16",
+      "A.V18"
+     ],
+     "reason": "Typecheck, the full suite and bundling passed on the submitted content. The 20-test pass used an absolute TRACETOON_TEST_CLI path, however; the description substitutes a relative path, equivalent to the relative-path invocation that failed. The passing result should be retained with its actual absolute-path command."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V13",
+      "B.V14",
+      "B.V15",
+      "B.V16",
+      "B.V18",
+      "D"
+     ],
+     "reason": "The first three checks passed, but the 20-pass bundled run used an absolute CLI path. The materially equivalent relative-path invocation with `./` failed 7 pass / 13 fail; the stated relative path does not identify the passing execution."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V13",
+      "A.V14",
+      "A.V15",
+      "A.V16",
+      "A.V18"
+     ],
+     "reason": "Typecheck, the full suite, and bundle passed. The 20-pass bundled run used an absolute CLI path, whereas the description gives a relative path. The recorded equivalent relative-path invocation failed with 7 pass and 13 fail."
+    }
+   ]
+  },
+  {
+   "id": "d72a728957a257b71515f6b6ee0152b0a7de304877272e320d9289b7902dd49d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "1de739a0e67c39d35a64e934fd3d54d57614eb1c75f8b384cf74e13cf97c5199",
+   "claim": "Previously, paired-delta built its full result in its command entry point",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base command entry point already called the separate pairedDelta helper to construct the result. The change adds aggregate projection and output selection, rather than moving result construction out of the entry point."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The old command entry point already delegated result construction to pairedDelta(...). This diff changes output selection, rather than moving result construction out of the entry point."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base command entry point called the existing pairedDelta function to build the result; it did not build the full result itself."
+    }
+   ]
+  },
+  {
+   "id": "006709295ffae9308b6c80cf4aaa8c9ea37f5f5ba2c8d6f0d910d06a3b4db9d3",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "74482d071d89fd7dba384e93898ab4abf6f54178f8cb15d9aadb0f6044881d92",
+   "claim": "A bounded pipeline schedules writers, isolation probes and judges as dependencies become ready.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Writers and judges form the dependency graph. Isolation probes execute separately before that graph, using their own bounded pool."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "The asserted dependency pipeline includes isolation probes, but probes run in a separate pool before the writer/judge job graph. Only the writer/judge graph has the described draft dependencies."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Writer and judge jobs form the dependency graph; isolation probes run separately with the same concurrency limit."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C4"
+     ],
+     "reason": "Writers and judges form the dependency graph; isolation probes run separately, rather than being scheduled as dependencies in that pipeline."
+    }
+   ]
+  },
+  {
+   "id": "c0ea60a05659984baaa3ee155a12ee543d7be3df99a01d06eec523a6bda67b5c",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "74482d071d89fd7dba384e93898ab4abf6f54178f8cb15d9aadb0f6044881d92",
+   "claim": "one skipped because PowerShell was unavailable",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "A.V10",
+      "S117"
+     ],
+     "reason": "One PowerShell test was skipped, but its condition is a non-Windows host, not a check for PowerShell availability."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "B.V10",
+      "S117",
+      "U2"
+     ],
+     "reason": "One test was skipped, but its source skips when process.platform is not win32. The evidence establishes a Windows-only test skipped on Linux, not a check for PowerShell availability."
+    }
+   ]
+  },
+  {
+   "id": "f6fc3e72b56e33e09820cc6d9bb216ff96389fe166f518a4862577e3bb994224",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "74482d071d89fd7dba384e93898ab4abf6f54178f8cb15d9aadb0f6044881d92",
+   "claim": "The change also constrains judge citations to the IDs available to each side",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C8"
+     ],
+     "reason": "A fact category with no IDs remains an unrestricted string list, so the statement omits an exception to its asserted constraint."
+    }
+   ]
+  },
+  {
+   "id": "cdddb6b77307ccc0c572c98621b436993fedb6e73905ce03b77afec5cabeeee4",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "74482d071d89fd7dba384e93898ab4abf6f54178f8cb15d9aadb0f6044881d92",
+   "claim": "In the coordinator terminal, `bun run typecheck` passed and `bun run test` passed with 229 passing, one skipped because PowerShell was unavailable, and no failures.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "B.V9",
+      "B.V10",
+      "S117"
+     ],
+     "reason": "The fresh executions support the passes and counts, but the skipped test is conditional on the host not being Windows; the evidence does not establish that PowerShell was unavailable."
+    }
+   ]
+  },
+  {
+   "id": "48bed75784bf7e99b9219a0469f416be13de4255b201eb2422a5e98084dfe62e",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "1fd66a7945949304462a77022ea9b702952f2293165186db36d91cdfd3aa60f2",
+   "claim": "The commit notes that Claude comparisons could not resume from a new shell because per-process environment values changed the comparison hash, and host Claude settings could reach writers.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X1",
+      "X3",
+      "U4",
+      "S130"
+     ],
+     "reason": "The refusal, changed hash, and host settings reaching writers are supported. The specific cause of the observed hash change was not established, however; the compared per-process variables were identical, and the original shell was gone."
+    }
+   ]
+  },
+  {
+   "id": "efcd5e0a6886fa9983638476fa82486eb5686af08ed5fe0816278630af75fdba",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "showtail-signpath",
+   "artifactDigest": "93fb6555cea3f2ddff9a1f39740df4a4ba2d5dbbfda0cc34b625a2b8aca95665",
+   "claim": "the tested content was not verified.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X5"
+     ],
+     "reason": "As written, this qualifies the historical development pass. The supplied evidence identifies that pass with the clean PR worktree at the first commit. Its relationship to the final head is limited by later edits, but the historical tested content is established."
+    }
+   ]
+  },
+  {
+   "id": "8653b999f6951c307a38aa40c3280585d7594579b7867ef917ba0b6e6e5d54eb",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-chained-runs",
+   "artifactDigest": "e254b2aa88fb65f4597a7bd177f7418a661dd7e6e99eaa8d8164e9f3f26737f9",
+   "claim": "Where to start: `commandRun` in `src/digest/build.ts`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "C5"
+     ],
+     "reason": "The named function is now a one-line compatibility wrapper. The new enumeration, filtering, and failure handling live in `commandRuns`, while `sessionDigest` consumes its results; the pointer names the wrong owner for reviewing the main change."
+    }
+   ]
+  },
+  {
+   "id": "71dae5264b149d19b82522a9589cbf05fb9dab0d1f4a8079989588788e6e4296",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "303e504101d6208bcbd2ee6e735fa0ff405f315b08fe987f59b2617697efc8cd",
+   "claim": "When a target is known, PR and repository metadata calls pass it with `--repo`, including recent-comic and title-rule lookups",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C11"
+     ],
+     "reason": "The assertion includes repository metadata calls. With a fork origin and upstream target, doctor's pushAccess calls gh repo view with the origin as a positional argument, not the target through --repo. The recent-comic and title-rule portions are individually correct."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C11"
+     ],
+     "reason": "The asserted breadth includes repository metadata calls. With a known upstream target and a fork origin, doctor's pushAccess intentionally queries origin, using a positional repository argument rather than --repo with the target."
+    }
+   ]
+  },
+  {
+   "id": "bf0a90acb9abc018ab997da8fd697681eccd4141f63fa3e6c962603572836a2f",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "68de48719134c32634ea00fb2dd2b9d428ebed4972900cf42f4597cfcdd64a54",
+   "claim": "Receipt summaries prefer stderr",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "checkSummary reads stderr first and stdout last, so wrapper totals on stdout take precedence."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "stderr is read first so later wrapper totals on stdout take precedence."
+    }
+   ]
+  },
+  {
+   "id": "a40620aed5526e3854beb2ab4b0b0e8cd6ee9389de58698b661e7cbfd60595bd",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "68de48719134c32634ea00fb2dd2b9d428ebed4972900cf42f4597cfcdd64a54",
+   "claim": "The commit notes say the fork issue was found while publishing PR #53.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X3",
+      "S50",
+      "S54",
+      "U4"
+     ],
+     "reason": "The recorded trigger was the user's question about issue #52; the subsequent fork publication exercised PR #55."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "X3",
+      "S50",
+      "S53",
+      "S54"
+     ],
+     "reason": "The recorded target work followed the user's question about issue 52 and investigation of merged upstream work, rather than being found while publishing PR #53."
+    }
+   ]
+  },
+  {
+   "id": "0c26948abb24137685e2692cdfd63858f4f1085d0c8fe4a6dd5d2c9936726b44",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "303e504101d6208bcbd2ee6e735fa0ff405f315b08fe987f59b2617697efc8cd",
+   "claim": "When a target is known, PR and repository metadata calls pass it with `--repo`, including recent-comic and title-rule lookups; the target line notes a different push repository or an ignored stale default.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C11"
+     ],
+     "reason": "The recent-comic and title-rule calls use --repo, but doctor passes its selected repository as a positional argument to repo view, and target discovery itself calls repo view without --repo. Thus the broader claim about repository metadata calls is false. The target-line clause is supported."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The named recent-comic and title-rule lookups use --repo, and the target line has the stated notes. But doctor’s push-access repo view passes its repository positionally, and target resolution itself calls repo view without --repo. The broad claim about repository metadata calls is therefore inaccurate."
+    }
+   ]
+  },
+  {
+   "id": "90d6fa1b1649b4ac8ade2e09ce4b1f189e035029d9a3286cfb25a4f013c286f3",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "303e504101d6208bcbd2ee6e735fa0ff405f315b08fe987f59b2617697efc8cd",
+   "claim": "The runner passes a 120-second per-test timeout, and the CLI test helpers redirect output to files.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C3",
+      "C6"
+     ],
+     "reason": "The runner passes 120000, and the review-run and review-lean helpers redirect output to files. The wording covers CLI test helpers generally, but other helpers use spawnSync without file redirection, including the helper in receipts-and-fork.test.ts."
+    }
+   ]
+  },
+  {
+   "id": "a6ecdc935c307803ff7b3a9649090c994f1ef293a47968750a5861a255f792af",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "68de48719134c32634ea00fb2dd2b9d428ebed4972900cf42f4597cfcdd64a54",
+   "claim": "Receipt summaries prefer stderr and recognize wrapper totals, and environment identity excludes transient terminal and temporary-directory variables.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "The summary code reads stderr before stdout so a wrapper total on stdout can win; it does not prefer stderr. The environment-variable clause is supported."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The environment exclusions are correct, but stderr is read before stdout so a wrapper total on stdout can win; the summary does not prefer stderr."
+    }
+   ]
+  },
+  {
+   "id": "8ba912754020135ee11f1013d51a8d84a56a4361e35bfaeaa1ec41f05c01c00e",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "101ff6b7fbe88f019a39560ffef3a515e132471354161ad90b66a4bf390d188b",
+   "claim": "multiple test commands are grouped with an unknown outcome.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The change records one run per recognized check. Grouping multiple test commands into one unknown-outcome run describes the removed commandRun implementation, not the new behavior."
+    }
+   ]
+  },
+  {
+   "id": "da2fb6d5b8bdf98afb5c77bcb6827ddaa241176cd1023419a01c9bed0f229d72",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "d9e8af7ab0b3c994c9af13e1dfe4c7beb88ddb1aae46c36b70fb0b1f3a95603a",
+   "claim": "The lean review tests cover packet selection, findings validation, placeholder IDs, quote matching, and importing current, stale and incomplete reviews.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C10",
+      "D"
+     ],
+     "reason": "The tests cover the listed packet and findings cases, and render imported reviews as current or incomplete. The stale case instead refuses import when the quoted claim is no longer present."
+    }
+   ]
+  },
+  {
+   "id": "2148143d8625df5e08906be5ef0154770a6fbd3f08dcf85477effeaa858f03fe",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "b0b200a851b4ca199e04ed096e12b962ff923a9d672499bdd189216d09a55e34",
+   "claim": "The render brief check also moves brief findings already reported in the same run into a nonblocking repeated list",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "This unqualified description covers previously reported brief findings generally. demoteRepeats handles five categories but leaves unbackedNames unchanged, so a repeated unbacked-name finding remains blocking."
+    }
+   ]
+  },
+  {
+   "id": "d9677d506b4a0433e6be8a92cd38a8fbdfdd0af20a25f168e5d108c2bfa10ebc",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "Checks passed on the submitted content: `bun run build:check`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V16",
+      "B.V17",
+      "B.V25"
+     ],
+     "reason": "The check passed on regenerated tracked artifacts, which were subsequently restored. It does not establish a pass on the submitted content."
+    }
+   ]
+  },
+  {
+   "id": "64e68278327eb3830197916b43bc76f710b0eeb90c523b7dd8b3a378781b4fff",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "`bun run test:bundled`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V18",
+      "B.V25"
+     ],
+     "reason": "Under the explicit submitted-content heading, this incorrectly binds a genuine pass on regenerated artifacts to the restored final tree."
+    }
+   ]
+  },
+  {
+   "id": "6cd5d3cb9d08d6d7e783c528b7c85e41695331ecbc4a6523e8be2de8c819fec9",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "`bun run build`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V19",
+      "B.V25"
+     ],
+     "reason": "The successful execution used the changed artifact fingerprint, not the final restored content."
+    }
+   ]
+  },
+  {
+   "id": "1a4b4db9654b79ae8c08d8560866a1b36a9b8e42c086d4f53919a7a60556faaf",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "`bun run test:compiled` (Ran 2 tests across 1 file. [11.88s])",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V20",
+      "B.V25"
+     ],
+     "reason": "The result and totals are real, but the surrounding claim that they apply to submitted content conflicts with the tested fingerprint and restoration."
+    }
+   ]
+  },
+  {
+   "id": "cd0dc0a9f4fd7eabb8fc60aa2662fdff6ce20b9cd4a88990d93347097441ceed",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "`bun run build:reproduce`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V21",
+      "B.V25"
+     ],
+     "reason": "This passed on the regenerated tree, so its inclusion among submitted-content passes is incorrect."
+    }
+   ]
+  },
+  {
+   "id": "9c1d83e077aa6ea1a51d4f83a9f4394385c2f33b95b7927bd4079cd20f211c73",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "<sub>From runs on the submitted content.</sub>",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V17",
+      "A.V18",
+      "A.V19",
+      "A.V20",
+      "A.V21",
+      "A.V25"
+     ],
+     "reason": "Every subsequently listed pass ran on the changed 9f4d1453 tree, whereas the submitted tree is bd212280. Restoring generated files does not retroactively validate the restored content."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V16",
+      "B.V17",
+      "B.V18",
+      "B.V19",
+      "B.V20",
+      "B.V21",
+      "B.V25"
+     ],
+     "reason": "The listed runs occurred after bundle changed tracked validation inputs and before those files were restored; their observed fingerprint differs from the submitted content."
+    }
+   ]
+  },
+  {
+   "id": "e1b08c7ca01c898421a2a9b457f723c889f043b565f17084933e937ff0ae8197",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4240337b25026ceffc269be1f3e0f710e029cf779665b619df23967c9c0ff890",
+   "claim": "Checks passed on the submitted content: `bun run build:check`, `bun run test:bundled`, `bun run build`, `bun run test:compiled` (Ran 2 tests across 1 file. [11.88s]), `bun run build:reproduce`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V17",
+      "A.V18",
+      "A.V19",
+      "A.V20",
+      "A.V21",
+      "A.V23",
+      "A.V25"
+     ],
+     "reason": "All five commands have recorded passes, and the compiled-test count and duration match. However, each pass is explicitly associated with the altered generated-artifact tree, not the final submitted tree. The final-content qualification is false for each listed command."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "B.V17",
+      "B.V18",
+      "B.V19",
+      "B.V20",
+      "B.V21",
+      "B.V25"
+     ],
+     "reason": "The executions passed on the changed bundle and metadata, not the final submitted fingerprint. The compiled-test count itself is recorded accurately."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "A.V17",
+      "A.V18",
+      "A.V19",
+      "A.V20",
+      "A.V21",
+      "A.V25"
+     ],
+     "reason": "Those checks passed on the changed fingerprint produced by bundling, not the final submitted fingerprint restored afterward. The test count is supported for that changed content."
+    }
+   ]
+  },
+  {
+   "id": "546deab4d8abf15343195490cf1b92fa9ad13b5f390559b71953ebfa305f7939",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "ed25e706755e1c4a2ddc0fe6b7d68b9d57fc839df78f087d88ade6f4ef46c952",
+   "claim": "Start with `src/workflow/checks.ts` for receipt formatting and its regression test",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "checks.ts owns the formatting implementation; its regression test is in tests/evidence.test.ts. The pointer incorrectly locates the test."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "checks.ts owns the receipt formatting implementation; its regression test is in tests/evidence.test.ts. The named location does not contain both."
+    }
+   ]
+  },
+  {
+   "id": "59028822d186ae1e2b3e2c7b6144752d40d5cea1458a77815fe545e4e5f8d266",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "ed25e706755e1c4a2ddc0fe6b7d68b9d57fc839df78f087d88ade6f4ef46c952",
+   "claim": "The commit reports that the reviewed hybrid won 45–11 head-to-head versus 18–44 before in the dev12-conf21 analysis; that evaluation was not reproduced here.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "U3",
+      "X4"
+     ],
+     "reason": "The pooled figures compare the dev19–conf21 three-role hybrid era with the dev15–18 slim-reviewer brief path, not a dev12–conf21 evaluation of the new default."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "U3"
+     ],
+     "reason": "The figures refer to pooled dev19–conf21 three-role hybrid results against the dev15–18 slim-reviewer brief path, not a dev12–conf21 analysis of the newly introduced reviewed path. The figures do not measure step 2b."
+    }
+   ]
+  },
+  {
+   "id": "249aed08f16805d522679280b51df685d642bed06870ceae3af660dddbd51c58",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "ed25e706755e1c4a2ddc0fe6b7d68b9d57fc839df78f087d88ade6f4ef46c952",
+   "claim": "Start with `src/workflow/checks.ts` for receipt formatting and its regression test, then the skill and generated next-step guidance for the workflow change.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "The formatting implementation is in checks.ts, but its new regression test is in tests/evidence.test.ts."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "The implementation is in checks.ts, but the regression test is in tests/evidence.test.ts."
+    }
+   ]
+  },
+  {
+   "id": "86d44ea3218f12566d6608bddaa4424f70271769679dfa99eababc724be97ca3",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "648867d5a6fe47db89c5bef38bb55b9dbb48031637dd480c03e1cb24d845bfe7",
+   "claim": "The parity utility compares engine answers and brief output for evidence graphs.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4"
+     ],
+     "reason": "It deep-compares structured question answers, including briefParts, rather than comparing rendered brief output. The description presents brief output as an additional comparison."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4"
+     ],
+     "reason": "It deep-compares structured answers, including briefParts, rather than rendered brief output. The separate historical byte comparisons do not change what this utility does."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C4"
+     ],
+     "reason": "It deep-compares structured answers, including briefParts, rather than rendered brief output."
+    }
+   ]
+  },
+  {
+   "id": "3ff87b29e8e3cd8cebbb1d41dd9f269430b2455c4852028cc95cf4ae092872ba",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "648867d5a6fe47db89c5bef38bb55b9dbb48031637dd480c03e1cb24d845bfe7",
+   "claim": "With the extras flag enabled, SQLite includes reads, usage, search and additional brief sections, including a separate rules section, fail-to-pass fixes and per-change effort.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "C6",
+      "A.D"
+     ],
+     "reason": "The sentence places reads, usage and search behind the flag. SQLite loads extras and enables search regardless of that flag; the flag gates the additional brief sections."
+    }
+   ]
+  },
+  {
+   "id": "feeea413f50dac3a5e75f1fb96db61bb68f1b3987670818c2ec85e97fae1c247",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "e2524e1a18c7d229c1b499d5295dbfcb31cbc1912e3f150899c1fd8274e3e7de",
+   "claim": "using VM metadata by default or binary metadata when the third argument is `bin`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "As written, this qualifies both transferred files. Only the .bin extension type follows that selection; slot_N.ini always uses Binary metadata. The qualification should explicitly name the .bin payload."
+    }
+   ]
+  },
+  {
+   "id": "b215a14e8102eb711164ee3eadbfe1c035051aff98c0d30da755613244fa2a0f",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "db4826170221d2117e13324004b5f6c4048af41ab5b273ae283b58c9b1851385",
+   "claim": "Include reference submodule pointers and captured build artifacts.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C6"
+     ],
+     "reason": "Build artifacts are included, but the reference entries are gitlinks without .gitmodules registration, rather than registered submodules."
+    }
+   ]
+  },
+  {
+   "id": "d190acc6eff4ba87cd75639de864809de96a3fd5bf6eed729a043e2582a0eb9a",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "db4826170221d2117e13324004b5f6c4048af41ab5b273ae283b58c9b1851385",
+   "claim": "with 50.2–50.3 ms reported latency.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "U2",
+      "T3"
+     ],
+     "reason": "The numbers are recorded elapsed probe times shaped by the 50 ms read timeout. Describing them as latency gives them a measurement interpretation the evidence does not establish."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "U2",
+      "T3"
+     ],
+     "reason": "The numerical range is accurate, but calling it latency gives the polling-shaped elapsed times an interpretation the evidence does not establish. The script uses a 50 ms serial read timeout."
+    }
+   ]
+  },
+  {
+   "id": "80d114ce1b05ce1688c912b79c4252dee7c5c42e3fe552d7d31b4040ce4276ff",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "e2524e1a18c7d229c1b499d5295dbfcb31cbc1912e3f150899c1fd8274e3e7de",
+   "claim": "`aimupload` transfers `slot_N.ini` and `slot_N.bin` to QSPI without executing the program, using VM metadata by default or binary metadata when the third argument is `bin`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "The transfer and no-run statements are correct, but the stated metadata choice is attached to both files. The ini always uses Binary metadata; the VM-versus-Binary choice applies only to the bin."
+    }
+   ]
+  },
+  {
+   "id": "e201c74b5b5611c1d3696f4ea7eea89a58ab5ba6da34ca6bb8927a2f85310114",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "db4826170221d2117e13324004b5f6c4048af41ab5b273ae283b58c9b1851385",
+   "claim": "The committed `build/pingpong-run1.json` records 10 successful round trips, with 50.2–50.3 ms reported latency.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "U2",
+      "T3"
+     ],
+     "reason": "The JSON records 10 successes and those elapsed times, but presenting them as latency omits that the read-poll interval shapes the roughly 50 ms result."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "U2"
+     ],
+     "reason": "The file records the stated successes and elapsed times, but presenting those times as latency omits that the approximately 50 ms read-poll interval shapes them; they do not establish link latency."
+    }
+   ]
+  },
+  {
+   "id": "db15ecee82c3f2c09db3ec7ccdff32f5521ecba4e01b3e48a8e5370aeee521d4",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-skill",
+   "artifactDigest": "896eb7d44efb7bfed03bf2318594f511a55fd945f80836c4b0bee73341415249",
+   "claim": "the hardware report records observations and outstanding physical checks, including unplug/replug recovery, turns, the kicker, longer moves, real-object vision, and interruption during a move",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C7"
+     ],
+     "reason": "The hardware report records unplug/replug, turns and kicker gaps, but the longer/faster-move, real-object-vision and interruption-during-movement gaps are listed in SKILL.md. The named report does not own that complete inventory."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C2",
+      "C7"
+     ],
+     "reason": "The hardware report records unplug/replug, turns, kicker and return-move gaps. Longer/faster moves, real-object vision and interruption during a move are listed as untested in SKILL.md; this clause incorrectly assigns that combined list to the hardware report."
+    }
+   ]
+  },
+  {
+   "id": "05ec3bc0a55992d7855e5c06c1b05bc8216e00537730bd4cd760a94a813a54d8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexagent-skill",
+   "artifactDigest": "896eb7d44efb7bfed03bf2318594f511a55fd945f80836c4b0bee73341415249",
+   "claim": "The README describes installation and the release build command, while the hardware report records observations and outstanding physical checks, including unplug/replug recovery, turns, the kicker, longer moves, real-object vision, and interruption during a move; LED, emoji, and sound effects need human confirmation.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "tracetoon-baseline",
+     "evidenceRefs": [
+      "D",
+      "C7"
+     ],
+     "reason": "The README and report cover much of this statement, and the skill lists the remaining untested operations. But the hardware report does not identify longer moves, real-object vision, or interruption during a move as outstanding checks; those details are in SKILL.md."
+    }
+   ]
+  },
+  {
+   "id": "d6dfa8d455104a9f9be79469f04cb3746c355d527d89fed7da0fa0b40083a906",
+   "arm": "tracetoon-baseline",
+   "model": "gpt-6.1-terra@medium",
+   "replicate": 3,
+   "case": "vexaim-workshop-norobot",
+   "artifactDigest": "d420148a5324f5d10db339057378d135c7ec22fef09e7f011089ae59da734c86",
+   "claim": "the captured evidence does not identify a test command",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "tracetoon-candidate",
+     "evidenceRefs": [
+      "S15",
+      "S19",
+      "S20"
+     ],
+     "reason": "The captured historical evidence identifies the installer invocation and explicit doctor and info checks. The sentence does not restrict its absence claim to a formal test suite or fresh final-content checks."
+    }
+   ]
+  }
+ ]
+}

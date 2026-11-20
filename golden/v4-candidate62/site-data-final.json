@@ -1,0 +1,1003 @@
+{
+ "suite": {
+  "cases": 61,
+  "repos": 12,
+  "byRepoFamily": {
+   "Tracetoon": 17,
+   "AI First CLI": 10,
+   "prbench": 9,
+   "Showtail": 6,
+   "AI First content": 4,
+   "VEX AIM agent": 4,
+   "AI First website": 3,
+   "VEX AIM workshop": 3,
+   "VEX V5 serial": 1,
+   "WinApps": 2,
+   "AI First extension": 1,
+   "Bazzite login": 1
+  },
+  "sessions": {
+   "claude-code": 33,
+   "codex": 28
+  },
+  "runnable": {
+   "pass": 31,
+   "fail": 17,
+   "noCommand": 13
+  },
+  "factSheets": "drafted from the diff and session logs; reviewed by a 6-model expert panel (3 Opus 5.5 + 3 GPT-6.1 Sol), disputes settled by mirrored debates and two judges (Fable 5.1 + GPT-6 Astra), Fable deciding splits",
+  "replicates": 3,
+  "drafts": 732,
+  "judgeOrders": 1464,
+  "factCounts": {
+   "claims": [
+    4,
+    16,
+    8.6
+   ],
+   "context": [
+    2,
+    6,
+    4.5
+   ],
+   "uncertainties": [
+    2,
+    7,
+    3.9
+   ],
+   "traps": [
+    4,
+    8,
+    5.9
+   ]
+  }
+ },
+ "reference5case": {
+  "source": "published 5-PR report (tracetoon.ai/evidence-graph.html, round 23, rubric v6)",
+  "claude": {
+   "costCut": 0.41,
+   "composite": 5.2
+  },
+  "codex": {
+   "costCut": 0.35,
+   "composite": 3.5
+  }
+ },
+ "generated": "2026-11-18",
+ "run": "prbench bench-v4 (writer side f4f7139), 61 cases x 3 replicates, pre-registered judge pairs, original-workflow drafts reused from the 2026-11-16 run (diagnostic purpose)",
+ "candidate": "candidate62 (Tracetoon 8d9783f)",
+ "previous": {
+  "codex": {
+   "compositeDelta": [
+    2.7,
+    0.6,
+    4.7
+   ],
+   "costRatio": 0.614,
+   "preference": {
+    "wins": 64,
+    "losses": 38,
+    "share": 0.627,
+    "clusterCI": [
+     0.51,
+     0.743
+    ],
+    "bootP_share_le_half": 0.0198
+   }
+  },
+  "claude": {
+   "compositeDelta": [
+    0.8,
+    -1.9,
+    3.4
+   ],
+   "costRatio": 0.717,
+   "preference": {
+    "wins": 54,
+    "losses": 46,
+    "share": 0.54,
+    "clusterCI": [
+     0.43,
+     0.653
+    ],
+    "bootP_share_le_half": 0.2675
+   }
+  }
+ },
+ "codex": {
+  "model": "gpt-6.1-terra@medium",
+  "judges": [
+   "codex:gpt-6.1-sol@medium",
+   "codex:gpt-6.1-terra@medium"
+  ],
+  "preference": {
+   "codex:gpt-6.1-sol@medium": {
+    "wins": 91,
+    "losses": 51,
+    "share": 0.641,
+    "clusterCI": [
+     0.529,
+     0.745
+    ],
+    "bootP_share_le_half": 0.0077
+   },
+   "codex:gpt-6.1-terra@medium": {
+    "wins": 105,
+    "losses": 47,
+    "share": 0.691,
+    "clusterCI": [
+     0.597,
+     0.78
+    ],
+    "bootP_share_le_half": 0.0003
+   },
+   "consensus": {
+    "wins": 79,
+    "losses": 38,
+    "share": 0.675,
+    "clusterCI": [
+     0.56,
+     0.785
+    ],
+    "bootP_share_le_half": 0.0018
+   }
+  },
+  "preferenceUntouched": {
+   "wins": 51,
+   "losses": 21,
+   "share": 0.708,
+   "clusterCI": [
+    0.568,
+    0.838
+   ],
+   "bootP_share_le_half": 0.0025
+  },
+  "caseLevel": {
+   "candidateBetterCases": 40,
+   "cases": 61
+  },
+  "components": {
+   "tracetoon-baseline": {
+    "composite": 71.9735,
+    "claims": 0.7211,
+    "context": 0.2808,
+    "uncertainties": 0.9885,
+    "rubric": 0.8393,
+    "factualErrors": 0.1025,
+    "unsupportedClaims": 0.0123,
+    "traps": 0.0055,
+    "costUsd": 0.4474,
+    "inputTokens": 3970407.6831,
+    "outputTokens": 10185.9235,
+    "compositeCaseMean": 71.97,
+    "errorRate": 0.0902,
+    "subagentThreads": 2.65
+   },
+   "tracetoon-candidate": {
+    "composite": 75.2653,
+    "claims": 0.8208,
+    "context": 0.2887,
+    "uncertainties": 0.9898,
+    "rubric": 0.8624,
+    "factualErrors": 0.1694,
+    "unsupportedClaims": 0.0191,
+    "traps": 0.015,
+    "costUsd": 0.1277,
+    "inputTokens": 1072261.6995,
+    "outputTokens": 10583.5246,
+    "compositeCaseMean": 75.27,
+    "errorRate": 0.1489,
+    "subagentThreads": 0
+   }
+  },
+  "perCaseDelta": {
+   "pr11": -19.37,
+   "aifirstcli-tui-responsive": -17.39,
+   "aifirstcli-showtail-harness": -15.28,
+   "tracetoon-receipt-quoting": -12.51,
+   "tracetoon-brief-owners-rows": -10.2,
+   "tracetoon-sql-row-order": -9.62,
+   "pr5": -8.49,
+   "tracetoon-evidence-graph": -7.84,
+   "bazzite-stale-portal": -5.11,
+   "vexagent-skill": -5.07,
+   "aifirstcli-duckling-wheels": -4.12,
+   "tracetoon-chained-runs": -3.76,
+   "aifirstcli-signpath-release": -3.7,
+   "pr10": -2.96,
+   "vexagent-cli-snap": -2.77,
+   "vexagent-replug-runs": -2.76,
+   "aifirstcli-javafx-maven": -2.4,
+   "aifirstcli-hooks-path": -2.24,
+   "aifirstcli-learner-replay-ux": -1.81,
+   "vexaim-workshop-ci": -1.49,
+   "pr9": -0.12,
+   "vexaim": 0.22,
+   "tracetoon-lean-reviewer": 0.45,
+   "tracetoon-review-run-all": 0.82,
+   "pr12": 1.22,
+   "prbench-judge-retry": 1.49,
+   "showtail-signpath": 2.72,
+   "aifirstcontent-portable-replays": 2.79,
+   "prbench-crossjudge": 2.89,
+   "prbench-parallel-providers": 3.1,
+   "vexaim-workshop-norobot": 3.28,
+   "tracetoon-render-name-check": 4.76,
+   "winapps-sdl-wayland": 4.93,
+   "showtail-self-upgrade": 5.02,
+   "showtail-transcript-migrator": 5.25,
+   "pr8": 5.91,
+   "aifirstcli-homebrew-maven": 5.95,
+   "tracetoon-cli-guard-tests": 6.85,
+   "showtail-claude-exit-codes": 6.95,
+   "aifirstcontent-book-step-verify": 7.45,
+   "prbench-shell-bookkeeping": 7.66,
+   "prbench-scoring": 7.83,
+   "showtail-docker-tests": 9.51,
+   "aifirstextension-apache-license": 9.66,
+   "prbench-aggregate-only": 9.7,
+   "vexagent-repl-usb-iface": 9.85,
+   "aifirstcontent-replay-start-state": 10.42,
+   "vex-v5-serial-aim-port": 10.44,
+   "tracetoon-update-command": 10.95,
+   "aifirstcli-book-walk": 11.85,
+   "aifirstwebsite-guided-install": 11.87,
+   "prbench-graph-compare-doc": 12.41,
+   "winapps-adobe-2026": 12.46,
+   "showtail-windows-cmd": 12.97,
+   "tracetoon-neighborhood": 13.2,
+   "aifirstcontent-apache": 15.34,
+   "prbench-priced-cost-gate": 16.25,
+   "aifirstcli-macos-installer": 16.35,
+   "aifirstwebsite-macos-workaround": 19.33,
+   "aifirstwebsite-signing-policy": 19.78,
+   "prbench-compare-systems": 19.89
+  },
+  "untouchedMeanDelta": 3.41,
+  "tunedMeanDelta": 3.12,
+  "costRatio": 0.3,
+  "costRatioCI": [
+   0.277,
+   0.323
+  ],
+  "writerTimeRatio": 1.065,
+  "writerTimeRatioCI": [
+   0.971,
+   1.168
+  ],
+  "accuracy": {
+   "scoredDrafts": 183,
+   "candidate": {
+    "flags": 81,
+    "confirmed": 61,
+    "rate": 0.3333333333333333
+   },
+   "baseline": {
+    "flags": 47,
+    "confirmed": 30,
+    "rate": 0.16393442622950818
+   },
+   "uncountedConfirmed": 0,
+   "unresolved": 0,
+   "difference": {
+    "mean": 0.16939890710382513,
+    "ci": [
+     3.6400754905742835e-17,
+     0.360655737704918
+    ],
+    "margin": 0.05,
+    "cases": 61
+   }
+  },
+  "gate": {
+   "quality": "failed",
+   "failures": [
+    "Candidate confirmed accuracy errors per scored draft 0.333 (61/183) vs baseline 0.164 (30/183): difference 0.169 [0.000, 0.361], upper bound above the non-inferiority margin 0.05"
+   ],
+   "performance": "passed"
+  },
+  "judgeAgreement": [
+   {
+    "judges": [
+     "codex:gpt-6.1-sol@medium",
+     "codex:gpt-6.1-terra@medium"
+    ],
+    "items": 61,
+    "agreement": 0.6885245901639344,
+    "kappa": 0.5
+   }
+  ],
+  "compositeDelta": [
+   3.3,
+   1.0,
+   5.5
+  ],
+  "rubricItems": {
+   "tracetoon-baseline": {
+    "problem": 1.734,
+    "rationale": 1.283,
+    "validation": 1.728,
+    "consequences": 1.648,
+    "orientation": 2,
+    "entry": 1.464,
+    "economy": 1.962,
+    "scope": 1.921,
+    "feedback": 0.688,
+    "links": 0.869
+   },
+   "tracetoon-candidate": {
+    "problem": 1.689,
+    "rationale": 1.411,
+    "validation": 1.835,
+    "consequences": 1.791,
+    "orientation": 1.943,
+    "entry": 1.939,
+    "economy": 1.303,
+    "feedback": 1.992,
+    "scope": 1.852,
+    "links": 1.117
+   }
+  },
+  "usageByModel": {
+   "tracetoon-baseline": {
+    "gpt-6.1-terra": {
+     "inputTokens": 3970408.0,
+     "cachedInputTokens": 3762056.0,
+     "outputTokens": 10186.0,
+     "costUsd": 0.4474
+    }
+   },
+   "tracetoon-candidate": {
+    "gpt-6.1-terra": {
+     "inputTokens": 1011983.0,
+     "cachedInputTokens": 957420.0,
+     "outputTokens": 3454.0,
+     "costUsd": 0.1197
+    },
+    "gpt-6-luna": {
+     "inputTokens": 60279.0,
+     "cachedInputTokens": 17739.0,
+     "outputTokens": 7130.0,
+     "costUsd": 0.008
+    }
+   }
+  }
+ },
+ "claude": {
+  "model": "claude-sonnet-5-5@medium",
+  "judges": [
+   "claude:claude-opus-5-5@medium",
+   "claude:claude-sonnet-5-5@medium"
+  ],
+  "preference": {
+   "claude:claude-opus-5-5@medium": {
+    "wins": 106,
+    "losses": 52,
+    "share": 0.671,
+    "clusterCI": [
+     0.581,
+     0.755
+    ],
+    "bootP_share_le_half": 0.0
+   },
+   "claude:claude-sonnet-5-5@medium": {
+    "wins": 68,
+    "losses": 27,
+    "share": 0.716,
+    "clusterCI": [
+     0.602,
+     0.825
+    ],
+    "bootP_share_le_half": 0.0
+   },
+   "consensus": {
+    "wins": 60,
+    "losses": 21,
+    "share": 0.741,
+    "clusterCI": [
+     0.615,
+     0.847
+    ],
+    "bootP_share_le_half": 0.0003
+   }
+  },
+  "preferenceUntouched": {
+   "wins": 42,
+   "losses": 11,
+   "share": 0.792,
+   "clusterCI": [
+    0.66,
+    0.915
+   ],
+   "bootP_share_le_half": 0.0
+  },
+  "caseLevel": {
+   "candidateBetterCases": 43,
+   "cases": 61
+  },
+  "components": {
+   "tracetoon-baseline": {
+    "composite": 59.7823,
+    "claims": 0.7743,
+    "context": 0.2668,
+    "uncertainties": 0.6643,
+    "rubric": 0.692,
+    "factualErrors": 0.2869,
+    "unsupportedClaims": 0.1216,
+    "traps": 0.0355,
+    "costUsd": 0.6542,
+    "inputTokens": 211683.5137,
+    "outputTokens": 1682.6721,
+    "compositeCaseMean": 59.78,
+    "errorRate": 0.2391
+   },
+   "tracetoon-candidate": {
+    "composite": 63.2324,
+    "claims": 0.7343,
+    "context": 0.3112,
+    "uncertainties": 0.5667,
+    "rubric": 0.7918,
+    "factualErrors": 0.1352,
+    "unsupportedClaims": 0.1216,
+    "traps": 0.0492,
+    "costUsd": 0.3443,
+    "inputTokens": 638571.8852,
+    "outputTokens": 6796.2514,
+    "compositeCaseMean": 63.23,
+    "errorRate": 0.1161
+   }
+  },
+  "perCaseDelta": {
+   "vexaim": -25.39,
+   "aifirstcontent-book-step-verify": -18.65,
+   "bazzite-stale-portal": -16.98,
+   "tracetoon-receipt-quoting": -12.71,
+   "prbench-graph-compare-doc": -11.81,
+   "aifirstcli-tui-responsive": -10.92,
+   "pr12": -9.46,
+   "vexaim-workshop-ci": -9.32,
+   "vexaim-workshop-norobot": -7.87,
+   "prbench-parallel-providers": -7.0,
+   "vexagent-skill": -6.68,
+   "showtail-self-upgrade": -6.54,
+   "vexagent-replug-runs": -4.22,
+   "aifirstcli-signpath-release": -3.71,
+   "tracetoon-neighborhood": -2.9,
+   "vexagent-repl-usb-iface": -2.36,
+   "prbench-shell-bookkeeping": -2.24,
+   "tracetoon-sql-row-order": -0.89,
+   "showtail-signpath": 0.05,
+   "prbench-aggregate-only": 0.36,
+   "aifirstcli-learner-replay-ux": 0.4,
+   "showtail-windows-cmd": 0.74,
+   "tracetoon-cli-guard-tests": 1.01,
+   "aifirstcli-duckling-wheels": 1.49,
+   "prbench-priced-cost-gate": 1.51,
+   "showtail-transcript-migrator": 1.53,
+   "aifirstcli-hooks-path": 1.94,
+   "pr5": 2.1,
+   "aifirstcontent-portable-replays": 2.34,
+   "aifirstcli-book-walk": 3.3,
+   "showtail-claude-exit-codes": 3.43,
+   "pr10": 4.74,
+   "tracetoon-chained-runs": 4.89,
+   "tracetoon-lean-reviewer": 4.93,
+   "pr9": 5.17,
+   "tracetoon-update-command": 5.53,
+   "prbench-judge-retry": 5.56,
+   "prbench-crossjudge": 5.71,
+   "winapps-adobe-2026": 6.38,
+   "showtail-docker-tests": 6.71,
+   "aifirstwebsite-signing-policy": 7.48,
+   "pr11": 8.0,
+   "aifirstwebsite-guided-install": 8.72,
+   "aifirstcontent-replay-start-state": 9.15,
+   "tracetoon-evidence-graph": 9.38,
+   "vexagent-cli-snap": 11.23,
+   "aifirstcli-macos-installer": 11.4,
+   "aifirstcli-showtail-harness": 13.02,
+   "winapps-sdl-wayland": 13.04,
+   "prbench-scoring": 13.07,
+   "tracetoon-review-run-all": 13.72,
+   "tracetoon-render-name-check": 14.12,
+   "aifirstcli-homebrew-maven": 16.31,
+   "aifirstwebsite-macos-workaround": 17.02,
+   "prbench-compare-systems": 17.04,
+   "vex-v5-serial-aim-port": 17.77,
+   "tracetoon-brief-owners-rows": 18.78,
+   "pr8": 18.92,
+   "aifirstcli-javafx-maven": 19.56,
+   "aifirstextension-apache-license": 21.25,
+   "aifirstcontent-apache": 21.3
+  },
+  "untouchedMeanDelta": 3.99,
+  "tunedMeanDelta": 2.68,
+  "costRatio": 0.573,
+  "costRatioCI": [
+   0.53,
+   0.62
+  ],
+  "writerTimeRatio": 1.567,
+  "writerTimeRatioCI": [
+   1.392,
+   1.778
+  ],
+  "accuracy": {
+   "scoredDrafts": 183,
+   "candidate": {
+    "flags": 119,
+    "confirmed": 86,
+    "rate": 0.46994535519125685
+   },
+   "baseline": {
+    "flags": 187,
+    "confirmed": 154,
+    "rate": 0.8415300546448088
+   },
+   "uncountedConfirmed": 0,
+   "unresolved": 0,
+   "difference": {
+    "mean": -0.371584699453552,
+    "ci": [
+     -0.5846994535519126,
+     -0.15300546448087432
+    ],
+    "margin": 0.05,
+    "cases": 61
+   }
+  },
+  "gate": {
+   "quality": "passed",
+   "failures": [],
+   "performance": "passed"
+  },
+  "judgeAgreement": [
+   {
+    "judges": [
+     "claude:claude-opus-5-5@medium",
+     "claude:claude-sonnet-5-5@medium"
+    ],
+    "items": 61,
+    "agreement": 0.5245901639344263,
+    "kappa": 0.2732128184059162
+   }
+  ],
+  "compositeDelta": [
+   3.5,
+   0.8,
+   6.1
+  ],
+  "rubricItems": {
+   "tracetoon-baseline": {
+    "problem": 1.638,
+    "rationale": 1.138,
+    "validation": 1.197,
+    "consequences": 1.325,
+    "orientation": 1.842,
+    "entry": 0.852,
+    "economy": 1.542,
+    "scope": 1.888,
+    "links": 1.035,
+    "feedback": 0.465
+   },
+   "tracetoon-candidate": {
+    "problem": 1.597,
+    "rationale": 1.146,
+    "validation": 1.601,
+    "consequences": 1.104,
+    "orientation": 1.679,
+    "entry": 1.889,
+    "economy": 1.663,
+    "feedback": 1.97,
+    "scope": 1.72,
+    "links": 0.911
+   }
+  },
+  "usageByModel": {
+   "tracetoon-baseline": {
+    "claude-sonnet-5-5": {
+     "inputTokens": 1451068.0,
+     "cachedInputTokens": 1345721.0,
+     "outputTokens": 20333.0,
+     "costUsd": 0.6542
+    }
+   },
+   "tracetoon-candidate": {
+    "claude-sonnet-5-5": {
+     "inputTokens": 654337.0,
+     "cachedInputTokens": 616026.0,
+     "outputTokens": 6940.0,
+     "costUsd": 0.2842
+    },
+    "claude-haiku-5-5": {
+     "inputTokens": 382301.0,
+     "cachedInputTokens": 266797.0,
+     "outputTokens": 61096.0,
+     "costUsd": 0.0601
+    }
+   }
+  }
+ },
+ "threeWay": [
+  {
+   "provider": "codex",
+   "case": "prbench-compare-systems",
+   "drafts": {
+    "native": {
+     "title": "Support selecting comparison systems",
+     "body": "## Summary\n\n- Add `compare --systems` to select writer systems, allowing baseline and candidate comparisons without a native writer; preserve the selection when resuming and rebuilding experiments.\n- Show cross-model composite score deltas and bootstrap intervals in accuracy reports.\n\n## Validation\n\n- `bun run typecheck` passed.\n- `bun run test` running.\n- `git diff --check origin/main...HEAD` passed.",
+     "costUsd": 0.1076598,
+     "composite": 33.828125
+    },
+    "tracetoon-baseline": {
+     "title": "Add compare system selection and composite score deltas",
+     "body": "`compare` previously ran all three provider systems and judged the candidate against both baseline and native. The new `--systems` option can omit native while retaining the baseline and candidate writers; in that case only candidate versus baseline is judged, in both orders. It accepts short and full system names, defaults to all three, and requires baseline and candidate.\n\nPlanning, execution, rebuilt coverage and the quality gate follow the selected systems. Subsets are frozen in the manifest and experiment identity; all-three runs retain the prior identity, and a resume without `--systems` uses the frozen selection.\n\nThe accuracy view also adds a composite-score delta to its cross-model candidate-versus-baseline table, with a 95% bootstrap interval over shared cases using per-case means.\n\nStart review with system selection in `src/run/provider.ts` and its use in `src/comparison.ts`; the comparison and score tests exercise the subset and composite contrast.\n\nLocal validation: `bun run typecheck` passed. `bun run test` failed (242 passed, 1 skipped, 1 failed): `createSandbox > captures PRs through a fake gh and sends pushes to a local remote` timed out after 30 seconds.",
+     "costUsd": 0.5048136,
+     "composite": 72.265625
+    },
+    "tracetoon-candidate": {
+     "title": "Select comparison systems and report composite deltas",
+     "body": "Comparing graph quality and cost across models calls for a smaller test matrix and a composite score comparison. This change lets a comparison omit the native writer and reports the composite delta across candidate and baseline model arms.\n\nPreviously, comparisons planned and rebuilt judgments against both the baseline and the provider's native system. `compare --systems` now accepts `native`, `baseline`, and `candidate`, their full names, or the provider's native name; it defaults to all three and requires baseline and candidate. Writers follow the selected systems; when native is omitted, candidate is judged against baseline in both orders. Planned counts, rebuild coverage, and quality gates reflect the selection, and plan output includes `systems` and `judgedAgainst`. A subset is stored in manifest settings and experiment identity, while all three retain the previous identity; resuming without `--systems` uses the frozen selection.\n\nFor candidate and baseline arms with shared cases, the accuracy table now includes candidate-minus-baseline composite delta and a 95% bootstrap interval over per-case means. `tests/comparison.test.ts` covers frozen three-system runs, matching-artifact resumes, and planning and resuming without native; `tests/score.test.ts` checks the case-clustered interval. The comparison tests use a fake setup rather than the real comparison setup.\n\n## Validation\n\n<sub>From runs on the submitted content.</sub>\n\n- Checks passed on the submitted content: `bun run test` (243 pass, 0 fail, Ran 244 tests across 34 files. [828.16s]), `bun run typecheck`.\n\nWhere to start: `compareV2` in `src/comparison.ts`, including how resume retains frozen systems.\n\nFeedback wanted: Does requiring both baseline and candidate while making native optional fit the intended comparison workflow?",
+     "costUsd": 0.19088386,
+     "composite": 90.92881944444444
+    }
+   },
+   "facts": {
+    "claims": [
+     "Adds a `compare --systems <list>` option taking a comma-separated list of writer systems (native, baseline, candidate); omitted means all three, as before.",
+     "System names accept the short roles, the full `tracetoon-baseline`/`tracetoon-candidate` names and the provider's native name (e.g. codex-native); unknown names are rejected, and baseline and candidate are both required while native is optional.",
+     "Without native, no native writers are scheduled and the candidate is judged only against the baseline (both orders); the hard-coded [baseline, native] judge loops in the run and in rebuild now use the selected comparisons.",
+     "Planned writer/order counts, rebuild's expected-orders coverage check, the quality gate (native passed as null when absent) and the `--plan` output (new systems and judgedAgainst fields) follow the selected systems.",
+     "A systems subset is recorded in manifest settings and so in the experiment identity; with all three systems the field is omitted. A resume without --systems reuses the frozen systems, and resuming with a different selection fails as changed inputs.",
+     "The score accuracy view's candidate-vs-baseline (any model) table gains a Composite Δ column: candidate minus baseline over per-case means with a case-clustered 95% bootstrap interval.",
+     "Tests: the fake comparison setup is factored into a helper; new tests check the --systems plan (60 writers and 120 orders for 2 models x 5 cases x 3 replicates without native), a complete baseline+candidate fake run that scores with no native rows, and that the paired score table shows only the baseline row when there are no native drafts.",
+     "Score tests cover the Composite Δ column. The existing accuracy-view test now expects single-case rows with no interval (luna vs luna 7.5 [–, –], luna vs sol 0.0 [–, –]). A new test uses baseline-only judgments for two models × three cases × two replicates. It checks a cross-model composite mean of 12.5 (per-case 15, 7.5, 15) with a case-bootstrap interval inside [7.5, 15] where lower < upper, and checks that a repeated call gives identical output."
+    ],
+    "context": [
+     "The user asked for a planning round to close the graph pipeline's gaps and to prune the test matrix to find a recommended default model per provider at lower cost.",
+     "The plan noted that compare always ran the native arm, so the candidate got twice the judgments and native vs baseline was never judged; --systems baseline,candidate was planned to skip native (keeping earlier native results as references), and the cross-model composite to show whether a cheap model with the graph reaches a stronger model's baseline composite.",
+     "Cost was the plan's reason for pruning. Judging made up about 85% of the dev12 Claude run's cost ($81.5 for judges vs $14.6 for writers). Dropping native removes a third of the writers (3 systems → 2) and half of the judge orders (two candidate pairings → one). The planned dev13 runs were budgeted at 2 models × 2 systems × 5 cases × 3 replicates = 60 writers and 120 judge orders, which are the numbers the new --plan test checks.",
+     "The any-model candidate-vs-baseline table (error rate Δ, claims Δ, coverage guard, cost ratio) already existed in accuracyMarkdown, as did the armContrast/caseClustered helpers. The new composite column reuses armContrast on the existing per-draft composites, over cases both arms share. Judge jobs still pair systems within a single writer model, so the change adds a reporting column and introduces no cross-model judging."
+    ],
+    "uncertainties": [
+     "Recorded verification is the subagent's typecheck (clean) and full bun test run (243 pass, 1 skip, 0 fail) before the commit; no CI run or post-commit re-run appears in the retained sessions.",
+     "No real benchmark run with --systems happened in the retained sessions; the new flag and composite column were exercised only with fake fixtures.",
+     "The Claude provider path for --systems is not covered by the new tests, which use the Codex fake fixtures (codex-native)."
+    ],
+    "traps": [
+     "Claiming --systems lets a run drop the baseline (e.g. native,candidate).",
+     "Claiming native vs baseline is now judged, or that all pairs of selected systems are judged.",
+     "Claiming every experiment's manifest identity changes because of the new systems field.",
+     "Reporting benchmark results (e.g. dev13 composite or cost numbers) produced with the new flag.",
+     "Describing the composite Δ interval as a per-draft or normal-approximation interval."
+    ]
+   },
+   "annotations": {
+    "tracetoon-baseline": {
+     "contradicted": [],
+     "unsupported": [],
+     "covered": {
+      "C1": 4,
+      "C2": 3,
+      "C3": 4,
+      "C4": 3,
+      "C5": 4,
+      "C6": 4,
+      "C7": 1,
+      "C8": 1,
+      "X4": 1
+     },
+     "judgments": 4
+    },
+    "tracetoon-candidate": {
+     "contradicted": [],
+     "unsupported": [],
+     "covered": {
+      "C1": 8,
+      "C2": 7,
+      "C3": 8,
+      "C4": 8,
+      "C5": 8,
+      "C6": 8,
+      "C7": 7,
+      "C8": 5,
+      "X1": 8,
+      "X2": 7,
+      "X3": 3,
+      "X4": 1
+     },
+     "judgments": 8
+    },
+    "native": {
+     "contradicted": [
+      "`bun run test` running."
+     ],
+     "unsupported": [],
+     "covered": {
+      "C1": 2,
+      "C3": 4,
+      "C5": 2,
+      "C6": 2
+     },
+     "judgments": 4
+    }
+   }
+  },
+  {
+   "provider": "claude",
+   "case": "prbench-compare-systems",
+   "drafts": {
+    "native": {
+     "title": "compare --systems; cross-model composite delta in score",
+     "body": "## Summary\n- `compare --systems native,baseline,candidate` selects writer systems (default all three; baseline and candidate required; full names and the provider's native name accepted).\n- Without native, no native writers run and only candidate vs baseline is judged (both orders). Planned counts, rebuild coverage, quality gate and `--plan` output follow the selection.\n- A subset is recorded in manifest settings (and the experiment identity); all-three runs keep their previous identity. Resume without `--systems` keeps the frozen systems.\n- Accuracy view's candidate-vs-baseline table gains a composite delta with a case-clustered 95% bootstrap CI.\n\n## Testing\nTests added in tests/comparison.test.ts and tests/score.test.ts. I did not run them as part of opening this PR.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+     "costUsd": 0.0425998,
+     "composite": 53.046875
+    },
+    "tracetoon-baseline": {
+     "title": "compare: --systems to pick writer systems; composite delta in score",
+     "body": "## Summary\n\nAdds `compare --systems native,baseline,candidate` so a run can choose which writer systems take part. The default is still all three. `baseline` and `candidate` are required, and full system names or the provider's native name are accepted.\n\nWithout `native`, no native writers run and only candidate vs baseline is judged (in both orders). Planned counts, rebuild coverage, the quality gate and `--plan` output follow the selected systems. A subset is recorded in the manifest settings, so it becomes part of the experiment identity. Runs with all three systems keep their previous identity. Resuming without `--systems` keeps the frozen systems.\n\nThe accuracy view's candidate-vs-baseline table also gains a composite delta, with a case-clustered 95% bootstrap interval computed from per-case means.\n\n## Testing\n\n\nTests were added in `tests/comparison.test.ts` and `tests/score.test.ts`. No test results are claimed in this description.\n\nThis description was drafted inline by the coordinating agent; an independent agent reviewed it.",
+     "costUsd": 0.4828127999999999,
+     "composite": 55.859375
+    },
+    "tracetoon-candidate": {
+     "title": "Add compare --systems to choose writer systems; cross-model composite delta in score",
+     "body": "Tuning the graph candidate against the baseline needs runs that skip the native writers, and the score report needs a composite delta for candidate vs baseline across models.\n\n`compare --systems native,baseline,candidate` now picks the writer systems; the default is all three, baseline and candidate are required, and both full names and the provider's native name are accepted. `selectSystems`/`manifestSystems` in `src/run/provider.ts` resolve the list, returning the provider's systems when none is given. An unrecognized name throws `Unknown system <name>`. Previously the comparison loop was fixed to `[\"tracetoon-baseline\", provider.native]`; it now iterates the selected comparisons.\n\nWithout native, no native writers run and only candidate vs baseline is judged, in both orders. Planned counts, rebuild coverage, the quality gate and `--plan` output follow the selection; `--plan` gains `systems` and `judgedAgainst` keys. A subset is recorded in manifest settings and so in the experiment identity; runs with all three keep their previous identity. A resume without `--systems` keeps the frozen systems.\n\nIn `accuracyMarkdown` (`src/report/score.ts`), the candidate-vs-baseline table gains a composite delta with a case-clustered 95% bootstrap interval from per-case means; with a single shared case the interval prints as \"–\".\n\nTests were updated in `tests/comparison.test.ts` (restore, fakeComparisonSetup) and `tests/score.test.ts` (write, j). They cover the subset run, resume, and the clustered delta; the comparison tests use a fake setup, so they exercise the surrounding code rather than the real comparison setup.\n\nWhere to start: `compareV2` in `src/comparison.ts`.\n\nFeedback wanted: resuming a subset run with all three systems is currently rejected; is that the right behavior?\n\n## Validation\n\n<sub>From runs on the submitted content.</sub>\n\n- `bun run typecheck`: passed, run on the submitted content.\n- `bun run test`: failed (242 pass, 1 fail, Ran 244 tests across 34 files. [707.93s]), run on the submitted content.",
+     "costUsd": 0.33939035500000003,
+     "composite": 69.34895833333334
+    }
+   },
+   "facts": {
+    "claims": [
+     "Adds a `compare --systems <list>` option taking a comma-separated list of writer systems (native, baseline, candidate); omitted means all three, as before.",
+     "System names accept the short roles, the full `tracetoon-baseline`/`tracetoon-candidate` names and the provider's native name (e.g. codex-native); unknown names are rejected, and baseline and candidate are both required while native is optional.",
+     "Without native, no native writers are scheduled and the candidate is judged only against the baseline (both orders); the hard-coded [baseline, native] judge loops in the run and in rebuild now use the selected comparisons.",
+     "Planned writer/order counts, rebuild's expected-orders coverage check, the quality gate (native passed as null when absent) and the `--plan` output (new systems and judgedAgainst fields) follow the selected systems.",
+     "A systems subset is recorded in manifest settings and so in the experiment identity; with all three systems the field is omitted. A resume without --systems reuses the frozen systems, and resuming with a different selection fails as changed inputs.",
+     "The score accuracy view's candidate-vs-baseline (any model) table gains a Composite Δ column: candidate minus baseline over per-case means with a case-clustered 95% bootstrap interval.",
+     "Tests: the fake comparison setup is factored into a helper; new tests check the --systems plan (60 writers and 120 orders for 2 models x 5 cases x 3 replicates without native), a complete baseline+candidate fake run that scores with no native rows, and that the paired score table shows only the baseline row when there are no native drafts.",
+     "Score tests cover the Composite Δ column. The existing accuracy-view test now expects single-case rows with no interval (luna vs luna 7.5 [–, –], luna vs sol 0.0 [–, –]). A new test uses baseline-only judgments for two models × three cases × two replicates. It checks a cross-model composite mean of 12.5 (per-case 15, 7.5, 15) with a case-bootstrap interval inside [7.5, 15] where lower < upper, and checks that a repeated call gives identical output."
+    ],
+    "context": [
+     "The user asked for a planning round to close the graph pipeline's gaps and to prune the test matrix to find a recommended default model per provider at lower cost.",
+     "The plan noted that compare always ran the native arm, so the candidate got twice the judgments and native vs baseline was never judged; --systems baseline,candidate was planned to skip native (keeping earlier native results as references), and the cross-model composite to show whether a cheap model with the graph reaches a stronger model's baseline composite.",
+     "Cost was the plan's reason for pruning. Judging made up about 85% of the dev12 Claude run's cost ($81.5 for judges vs $14.6 for writers). Dropping native removes a third of the writers (3 systems → 2) and half of the judge orders (two candidate pairings → one). The planned dev13 runs were budgeted at 2 models × 2 systems × 5 cases × 3 replicates = 60 writers and 120 judge orders, which are the numbers the new --plan test checks.",
+     "The any-model candidate-vs-baseline table (error rate Δ, claims Δ, coverage guard, cost ratio) already existed in accuracyMarkdown, as did the armContrast/caseClustered helpers. The new composite column reuses armContrast on the existing per-draft composites, over cases both arms share. Judge jobs still pair systems within a single writer model, so the change adds a reporting column and introduces no cross-model judging."
+    ],
+    "uncertainties": [
+     "Recorded verification is the subagent's typecheck (clean) and full bun test run (243 pass, 1 skip, 0 fail) before the commit; no CI run or post-commit re-run appears in the retained sessions.",
+     "No real benchmark run with --systems happened in the retained sessions; the new flag and composite column were exercised only with fake fixtures.",
+     "The Claude provider path for --systems is not covered by the new tests, which use the Codex fake fixtures (codex-native)."
+    ],
+    "traps": [
+     "Claiming --systems lets a run drop the baseline (e.g. native,candidate).",
+     "Claiming native vs baseline is now judged, or that all pairs of selected systems are judged.",
+     "Claiming every experiment's manifest identity changes because of the new systems field.",
+     "Reporting benchmark results (e.g. dev13 composite or cost numbers) produced with the new flag.",
+     "Describing the composite Δ interval as a per-draft or normal-approximation interval."
+    ]
+   },
+   "annotations": {
+    "tracetoon-baseline": {
+     "contradicted": [],
+     "unsupported": [],
+     "covered": {
+      "C1": 4,
+      "C2": 3,
+      "C4": 4,
+      "C5": 4,
+      "C6": 4,
+      "C3": 3
+     },
+     "judgments": 4
+    },
+    "tracetoon-candidate": {
+     "contradicted": [],
+     "unsupported": [],
+     "covered": {
+      "C1": 8,
+      "C2": 8,
+      "C3": 8,
+      "C4": 8,
+      "C5": 8,
+      "C6": 8,
+      "X2": 4,
+      "C7": 2,
+      "C8": 1,
+      "X1": 2
+     },
+     "judgments": 8
+    },
+    "native": {
+     "contradicted": [],
+     "unsupported": [],
+     "covered": {
+      "C1": 4,
+      "C2": 4,
+      "C3": 4,
+      "C4": 4,
+      "C5": 4,
+      "C6": 4
+     },
+     "judgments": 4
+    }
+   }
+  }
+ ],
+ "tuningRounds": [
+  {
+   "round": "r1",
+   "candidate": "candidate54",
+   "codex": {
+    "before": [
+     25,
+     16
+    ],
+    "picks": [
+     28,
+     14
+    ],
+    "all25Before": 1.1,
+    "all25": 1.5
+   },
+   "claude": {
+    "before": [
+     11,
+     19
+    ],
+    "picks": [
+     18,
+     9
+    ],
+    "all25Before": -5.5,
+    "all25": -0.4
+   }
+  },
+  {
+   "round": "r2",
+   "candidate": "candidate56",
+   "codex": {
+    "before": [
+     25,
+     16
+    ],
+    "picks": [
+     27,
+     14
+    ],
+    "all25Before": 1.1,
+    "all25": 3.4
+   },
+   "claude": {
+    "before": [
+     11,
+     19
+    ],
+    "picks": [
+     17,
+     9
+    ],
+    "all25Before": -5.5,
+    "all25": -0.2
+   }
+  },
+  {
+   "round": "r3",
+   "candidate": "candidate57",
+   "codex": {
+    "before": [
+     25,
+     16
+    ],
+    "picks": [
+     28,
+     17
+    ],
+    "all25Before": 1.1,
+    "all25": 1.2
+   },
+   "claude": {
+    "before": [
+     11,
+     19
+    ],
+    "picks": [
+     19,
+     10
+    ],
+    "all25Before": -5.5,
+    "all25": -1.4
+   }
+  },
+  {
+   "round": "r4",
+   "candidate": "candidate58",
+   "codex": {
+    "before": [
+     25,
+     16
+    ],
+    "picks": [
+     27,
+     17
+    ],
+    "all25Before": 1.1,
+    "all25": 2.8
+   },
+   "claude": {
+    "before": [
+     11,
+     19
+    ],
+    "picks": [
+     19,
+     5
+    ],
+    "all25Before": -5.5,
+    "all25": 3.5
+   }
+  }
+ ],
+ "sessionContext": {
+  "aifirstcli-book-walk": 171926,
+  "aifirstcli-duckling-wheels": 615466,
+  "aifirstcli-homebrew-maven": 694470,
+  "aifirstcli-hooks-path": 282152,
+  "aifirstcli-javafx-maven": 150080,
+  "aifirstcli-learner-replay-ux": 444412,
+  "aifirstcli-macos-installer": 143273,
+  "aifirstcli-showtail-harness": 272773,
+  "aifirstcli-signpath-release": 495260,
+  "aifirstcli-tui-responsive": 461888,
+  "aifirstcontent-apache": 480715,
+  "aifirstcontent-book-step-verify": 239060,
+  "aifirstcontent-portable-replays": 436832,
+  "aifirstcontent-replay-start-state": 228979,
+  "aifirstextension-apache-license": 484552,
+  "aifirstwebsite-guided-install": 402726,
+  "aifirstwebsite-macos-workaround": 143440,
+  "aifirstwebsite-signing-policy": 486395,
+  "bazzite-stale-portal": 139701,
+  "pr10": 498965,
+  "pr11": 546282,
+  "pr12": 583402,
+  "pr5": 859647,
+  "pr8": 172521,
+  "pr9": 307714,
+  "prbench-aggregate-only": 849764,
+  "prbench-compare-systems": 286157,
+  "prbench-crossjudge": 310664,
+  "prbench-graph-compare-doc": 918662,
+  "prbench-judge-retry": 610653,
+  "prbench-parallel-providers": 261463,
+  "prbench-priced-cost-gate": 901226,
+  "prbench-scoring": 162769,
+  "prbench-shell-bookkeeping": 304658,
+  "showtail-claude-exit-codes": 606082,
+  "showtail-docker-tests": 217802,
+  "showtail-self-upgrade": 131705,
+  "showtail-signpath": 429988,
+  "showtail-transcript-migrator": 496014,
+  "showtail-windows-cmd": 275597,
+  "tracetoon-brief-owners-rows": 842311,
+  "tracetoon-chained-runs": 192569,
+  "tracetoon-cli-guard-tests": 356413,
+  "tracetoon-evidence-graph": 246600,
+  "tracetoon-lean-reviewer": 891191,
+  "tracetoon-neighborhood": 402124,
+  "tracetoon-receipt-quoting": 830989,
+  "tracetoon-render-name-check": 162769,
+  "tracetoon-review-run-all": 468056,
+  "tracetoon-sql-row-order": 513849,
+  "tracetoon-update-command": 138842,
+  "vex-v5-serial-aim-port": 566533,
+  "vexagent-cli-snap": 246101,
+  "vexagent-repl-usb-iface": 152187,
+  "vexagent-replug-runs": 317519,
+  "vexagent-skill": 273017,
+  "vexaim-workshop-ci": 507927,
+  "vexaim-workshop-norobot": 548767,
+  "vexaim": 289535,
+  "winapps-adobe-2026": 204413,
+  "winapps-sdl-wayland": 204413
+ }
+}

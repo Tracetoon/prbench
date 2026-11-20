@@ -8,6 +8,7 @@
 //   <root>/codex        CODEX_HOME
 //   <root>/appdata      APPDATA, LOCALAPPDATA and XDG_* directories
 //   <root>/bin          a fake `gh` that records PRs instead of posting them
+//   <root>/tmp          TMPDIR / TMP / TEMP
 //
 // The checkout has `main` and `origin/main` at the case's base commit, so
 // tools see an ordinary feature branch. Git may only use local repositories
@@ -120,12 +121,13 @@ export function rewritePaths(jsonl: string, pairs: [from: string, to: string][])
   }
   const keys = [...map.keys()].sort((a, b) => b.length - a.length);
   if (keys.length === 0) return jsonl;
-  // Whole paths only: not preceded by a path character, and followed by a
+  // Whole paths only: not preceded by a path character (an escaped newline,
+  // tab or return before it starts a new line of output), and followed by a
   // separator, a quote or the end, so "/work" doesn't match ".github/workflows".
   const alt = keys.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   // The tail is JSON-escaped backslash + name segments, stopping at quotes,
   // whitespace and further escapes, so a command's other arguments are kept.
-  const re = new RegExp(`(?<![\\w.\\-~/\\\\])(${alt})((?:\\\\\\\\[^"\\\\\\s]+)*)(?=[\\\\/"'\`\\s]|$)`, 'g');
+  const re = new RegExp(`(?:(?<=(?<!\\\\)\\\\[nrt])|(?<![\\w.\\-~/\\\\]))(${alt})((?:\\\\\\\\[^"\\\\\\s]+)*)(?=[\\\\/"'\`\\s]|$)`, 'g');
   return jsonl.replace(re, (_m, key: string, tail: string) =>
     map.get(key)! + (posixTail.has(key) ? tail.replaceAll('\\\\', '/') : tail));
 }
@@ -143,6 +145,7 @@ export function pathPairs(c: Case, repo: string): [string, string][] {
   const parent = rec.replace(/[\\/]+$/, '').replace(/[\\/][^\\/]+$/, '');
   const repoParent = /^(?:[A-Za-z]:[\\/]|\\\\)/.test(repo) ? win32.dirname(repo) : posix.dirname(repo);
   if (parent && parent !== rec && !/^[A-Za-z]:$|^$/.test(parent)) pairs.push([parent, repoParent]);
+  for (const alias of c.repo.recordedAliases ?? []) if (!pairs.some(([from]) => from === alias)) pairs.push([alias, repo]);
   return pairs;
 }
 
@@ -166,11 +169,16 @@ function placeSession(
   pairs: [string, string][],
 ): string {
   const text = rewritePaths(readFileSync(join(loaded.dir, s.file), 'utf8'), pairs);
-  const cwd = rewritePaths(JSON.stringify(s.cwd), pairs);
+  const projectDir = (session: CaseSession) =>
+    join(sb.home, '.claude', 'projects', claudeProjectDir(JSON.parse(rewritePaths(JSON.stringify(session.cwd), pairs))));
   let dir: string;
   let name = basename(s.file);
-  if (s.agent === 'claude-code') {
-    dir = join(sb.home, '.claude', 'projects', claudeProjectDir(JSON.parse(cwd)));
+  if (s.agent === 'claude-code' && s.subagentOf) {
+    // Claude Code keeps a subagent's transcript in <session id>/subagents/ beside its parent.
+    const parent = loaded.case.sessions!.find((p) => p.file === s.subagentOf)!;
+    dir = join(projectDir(parent), basename(parent.file, '.jsonl'), 'subagents');
+  } else if (s.agent === 'claude-code') {
+    dir = projectDir(s);
   } else {
     // Codex keeps rollouts under sessions/YYYY/MM/DD/rollout-*.jsonl.
     const d = firstTimestamp(text);
@@ -231,6 +239,17 @@ export const VOLATILE_ENV = [
 export const VOLATILE_PREFIXES = ['KONSOLE_', 'CLAUDE_'];
 
 const DROPPED_ENV = [
+  // No display: a tool that resets PATH (so the GUI shims are bypassed) and
+  // runs the real editor by absolute path still cannot open a window.
+  'DISPLAY',
+  'WAYLAND_DISPLAY',
+  // Without a display, a desktop session type misleads GUI toolkits: Electron
+  // (VS Code extension tests under xvfb-run) picks Wayland from it and exits.
+  'XDG_SESSION_TYPE',
+  // The color depth of the terminal prbench was started from; writers run
+  // without one, and TUI tests that assert a palette change with it.
+  'COLORTERM',
+  'DBUS_SESSION_BUS_ADDRESS',
   'PRBENCH_JUDGE_TIMEOUT_MS',
   'PRBENCH_WRITER_TIMEOUT_MS',
   'PRBENCH_PREFLIGHT_CACHE',
@@ -254,6 +273,19 @@ const DROPPED_ENV = [
 // which would otherwise reach a writer's Claude Code.
 const DROPPED_PREFIXES = ['CODEX_', 'ANTHROPIC_', ...VOLATILE_PREFIXES];
 
+/**
+ * PATH without the host Claude Code session's plugin directories
+ * (~/.claude/plugins/...): like the CLAUDE_* variables, they describe the
+ * session that launched prbench, not the writer's machine, and they put the
+ * real home's .claude path in front of every tool and test the writer runs.
+ */
+export function sandboxPath(path: string): string {
+  return path
+    .split(delimiter)
+    .filter((entry) => !/[\\/]\.claude[\\/]plugins(?:[\\/]|$)/.test(entry))
+    .join(delimiter);
+}
+
 function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: string }, c: Case): Record<string, string> {
   const env: Record<string, string> = {};
   for (const [k, v] of Object.entries(process.env)) if (v !== undefined) env[k] = v;
@@ -263,8 +295,22 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
   for (const k of Object.keys(env)) if (k.toUpperCase() === 'PATH' || DROPPED_PREFIXES.some((p) => k.toUpperCase().startsWith(p)) || DROPPED_ENV.includes(k.toUpperCase()) || VOLATILE_ENV.includes(k.toUpperCase())) delete env[k];
   const appdata = join(sb.root, 'appdata');
   for (const d of ['roaming', 'local', 'config', 'data', 'state', 'cache']) mkdirSync(join(appdata, d), { recursive: true });
+  // A private, empty runtime dir: with WAYLAND_DISPLAY and the session bus
+  // dropped, libwayland and libdbus still fall back to wayland-0 and bus in
+  // $XDG_RUNTIME_DIR, and an editor launched by absolute path (PATH reset by a
+  // test) opened windows on the host through them.
+  const runtime = join(sb.root, 'runtime');
+  mkdirSync(runtime, { recursive: true, mode: 0o700 });
+  // A private temp dir. The sandbox itself lives under the OS temp dir, so
+  // with the host's TMPDIR every path a writer works in (the checkout, HOME)
+  // is "under temp", which tools that treat temp paths as scratch (Showtail's
+  // project detection and its tests) then refuse. Stray temp files also go
+  // away with the sandbox.
+  const tmp = join(sb.root, 'tmp');
+  mkdirSync(tmp, { recursive: true, mode: 0o700 });
+  for (const k of Object.keys(env)) if (['TMPDIR', 'TMP', 'TEMP'].includes(k.toUpperCase())) delete env[k];
   Object.assign(env, {
-    [pathKey]: `${sb.bin}${delimiter}${path}`,
+    [pathKey]: `${sb.bin}${delimiter}${sandboxPath(path)}`,
     HOME: sb.home,
     USERPROFILE: sb.home,
     CODEX_HOME: sb.codexHome,
@@ -274,6 +320,10 @@ function sandboxEnv(sb: { home: string; codexHome: string; bin: string; root: st
     XDG_DATA_HOME: join(appdata, 'data'),
     XDG_STATE_HOME: join(appdata, 'state'),
     XDG_CACHE_HOME: join(appdata, 'cache'),
+    XDG_RUNTIME_DIR: runtime,
+    TMPDIR: tmp,
+    TMP: tmp,
+    TEMP: tmp,
     GIT_CONFIG_GLOBAL: join(sb.home, '.gitconfig'),
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_ALLOW_PROTOCOL: 'file',

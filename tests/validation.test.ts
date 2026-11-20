@@ -238,7 +238,7 @@ describe('evidence-aware judging', () => {
     expect(normalizeBody('Validation: full suite failed; focused checks passed.')).toBe('Validation: full suite failed; focused checks passed.');
   });
 
-  test('missing structured output uses the single persisted format-repair budget', async () => {
+  test('missing structured output uses the persisted format budget (one repair, five attempts)', async () => {
     let calls = 0;
     const args = { loaded: loadCase(EXAMPLE), facts, x: artifact('x'), y: artifact('y'), outDir: tempDir() };
     const result = await judgePair({ ...args, judge: { id: 'flaky', family: 'test', ask: async () => {
@@ -251,7 +251,7 @@ describe('evidence-aware judging', () => {
     await expect(judgePair({ ...args, outDir: tempDir(), judge: { id: 'unavailable', family: 'test', ask: async () => {
       calls++; throw new Error('Missing structured output');
     } } })).rejects.toThrow('Missing structured output');
-    expect(calls).toBe(2);
+    expect(calls).toBe(5);
   });
 
   test('fresh evidence follows both label orders and invalidates caches without changing the draft', async () => {

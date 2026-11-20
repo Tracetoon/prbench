@@ -12,7 +12,9 @@
  * - factual-error means per arm, and per-case Δ-of-Δ.
  *
  * Usage:
- *   bun run scripts/paired-delta.ts <runA> <runB> [--dataset id@version | --cases dir] [--model m] [--json]
+ *   bun run scripts/paired-delta.ts <runA> <runB> [--dataset id@version | --cases dir] [--model m] [--json] [--aggregate-only]
+ *
+ * `--aggregate-only` (sealed runs) prints the overall tables only: no per-case rows.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -151,8 +153,21 @@ const f1 = (x: number) => (Number.isFinite(x) ? x.toFixed(1) : "–");
 const f2 = (x: number) => (Number.isFinite(x) ? x.toFixed(2) : "–");
 const sg = (x: number) => (Number.isFinite(x) ? (x >= 0 ? "+" : "") + x.toFixed(1) : "–");
 
-export function pairedDeltaMarkdown(r: PairedDelta): string {
+/** The result without its per-case rows, for sealed runs (`--aggregate-only`). */
+export function aggregatePairedDelta(r: PairedDelta): Omit<PairedDelta, "perCase"> {
+  const { perCase: _perCase, ...aggregate } = r;
+  return aggregate;
+}
+
+export function pairedDeltaMarkdown(r: PairedDelta, options: { aggregateOnly?: boolean } = {}): string {
   const [lo, hi] = r.deltaOfDelta.ci;
+  const perCase = options.aggregateOnly
+    ? ["Per-case rows are sealed (--aggregate-only)."]
+    : [
+        "| Case | Pairs | A better | B better | Equal | Δ-of-Δ |",
+        "|---|---|---|---|---|---|",
+        ...r.perCase.map((c) => `| ${c.case} | ${c.pairs} | ${c.aBetter} | ${c.bBetter} | ${c.equal} | ${sg(c.deltaOfDelta)} |`),
+      ];
   return [
     `# Paired delta: A vs B`,
     "",
@@ -172,9 +187,7 @@ export function pairedDeltaMarkdown(r: PairedDelta): string {
     `| B candidate | ${f1(r.composite.bCandidate)} | ${f2(r.factualErrors.bCandidate)} |`,
     `| B baseline | ${f1(r.composite.bBaseline)} | ${f2(r.factualErrors.bBaseline)} |`,
     "",
-    "| Case | Pairs | A better | B better | Equal | Δ-of-Δ |",
-    "|---|---|---|---|---|---|",
-    ...r.perCase.map((c) => `| ${c.case} | ${c.pairs} | ${c.aBetter} | ${c.bBetter} | ${c.equal} | ${sg(c.deltaOfDelta)} |`),
+    ...perCase,
     "",
     `Δ-of-Δ = (A cand − A base) − (B cand − B base); interval is a case bootstrap (5000 resamples, seed ${SEED}).`,
   ].join("\n");
@@ -190,11 +203,13 @@ async function main(argv: string[]) {
   };
   const json = argv.includes("--json");
   if (json) argv.splice(argv.indexOf("--json"), 1);
+  const aggregateOnly = argv.includes("--aggregate-only");
+  if (aggregateOnly) argv.splice(argv.indexOf("--aggregate-only"), 1);
   const cases = flag("--cases"),
     dataset = flag("--dataset"),
     model = flag("--model");
   if (argv.length !== 2) {
-    console.error("usage: bun run scripts/paired-delta.ts <runA> <runB> [--dataset id@version | --cases dir] [--model m] [--json]");
+    console.error("usage: bun run scripts/paired-delta.ts <runA> <runB> [--dataset id@version | --cases dir] [--model m] [--json] [--aggregate-only]");
     process.exit(2);
   }
   const inputs = await resolveDatasetInputs({ cases, dataset });
@@ -210,7 +225,11 @@ async function main(argv: string[]) {
   }
   const factsFor = (id: string) => facts.get(id);
   const result = pairedDelta(loadRun(argv[0]!, factsFor, model), loadRun(argv[1]!, factsFor, model));
-  console.log(json ? JSON.stringify(result, null, 2) : pairedDeltaMarkdown(result));
+  console.log(
+    json
+      ? JSON.stringify(aggregateOnly ? aggregatePairedDelta(result) : result, null, 2)
+      : pairedDeltaMarkdown(result, { aggregateOnly }),
+  );
 }
 
 if (import.meta.main) await main(process.argv.slice(2));

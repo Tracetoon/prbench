@@ -165,3 +165,36 @@ test('fails the answer-key leak check even for a genuine user message quoting pu
     assertNoPublishedPrText(lines([user(opening)]), 'Other title', opening),
   ).toThrow('published PR leaks');
 });
+
+test('drops records matching extra PR-writing patterns but keeps user input', () => {
+  const draft = {
+    type: 'assistant',
+    timestamp: at,
+    cwd: '/repo',
+    message: { content: [{ type: 'tool_use', name: 'Write', input: { file_path: '/repo/.drafts/pr.md', content: 'x' } }] },
+  };
+  const ask = user('Look at /repo/.drafts/pr.md please');
+  const plain = sliceReplaySession(lines([ask, draft]), from, to);
+  expect(plain.kept).toBe(2);
+  const sliced = sliceReplaySession(lines([ask, draft]), from, to, { writesPrText: [/\.drafts\//] });
+  expect(sliced.kept).toBe(1);
+  expect(sliced.text).toBe(JSON.stringify(ask) + '\n');
+});
+
+test('drops the results of dropped PR-writing calls, for Claude Code and Codex', () => {
+  const call = { type: 'assistant', timestamp: at, cwd: '/repo', message: { content: [{ type: 'tool_use', id: 't1', name: 'Bash', input: { command: 'gh pr create --title x' } }] } };
+  const result = { type: 'user', timestamp: at, cwd: '/repo', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: 'Published body text' }] } };
+  const other = { type: 'user', timestamp: at, cwd: '/repo', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't2', content: 'ok' }] } };
+  expect(sliceReplaySession(lines([user('go'), call, result, other]), from, to).kept).toBe(2);
+  const codexCall = { type: 'response_item', timestamp: at, payload: { type: 'function_call', call_id: 'c1', name: 'exec_command', arguments: '{"cmd":"gh pr edit 3 --body x"}' } };
+  const codexOut = { type: 'response_item', timestamp: at, payload: { type: 'function_call_output', call_id: 'c1', output: 'Published body text' } };
+  const sliced = sliceReplaySession(lines([user('go'), codexCall, codexOut]), from, to);
+  expect(sliced.kept).toBe(1);
+});
+
+test('keeps reviewed records that only mention PR commands', () => {
+  const call = { type: 'assistant', uuid: 'u1', timestamp: at, cwd: '/repo', message: { content: [{ type: 'tool_use', id: 't1', name: 'Bash', input: { command: "git commit -m 'treat gh pr create --help as help'" } }] } };
+  const result = { type: 'user', uuid: 'u2', timestamp: at, cwd: '/repo', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: '230 pass' }] } };
+  expect(sliceReplaySession(lines([user('go'), call, result]), from, to).kept).toBe(1);
+  expect(sliceReplaySession(lines([user('go'), call, result]), from, to, { keep: ['u2'] }).kept).toBe(2);
+});

@@ -4,6 +4,7 @@ import {
   collectDraftScores,
   collectJudgeFailures,
   collectWriterFailures,
+  draftCost,
   scoreMarkdown,
   writerTracesDir,
 } from "./report/score.ts";
@@ -79,6 +80,8 @@ import { buildReport, reportMarkdown } from "./report.ts";
 import {
   qualityGate,
   accuracyFindings,
+  accuracyScoredDrafts,
+  findingArm,
   adoptionGate,
   type Adjudication,
   type ComparisonReport,
@@ -95,6 +98,7 @@ import {
 } from "./run/identity.ts";
 import { systemOrder } from "./run/schedule.ts";
 import { controllerLock } from "./run/controller.ts";
+import { checkFrozenRuntime } from "./run/runtimeFreeze.ts";
 import {
   verifyValidationProof,
   type AdjudicationSource,
@@ -241,6 +245,28 @@ export function writerEnvironmentHash(
   const legacy = provider.legacyEnvironmentHash();
   return recorded.includes(legacy) ? legacy : current;
 }
+/**
+ * Explicit, opt-in resume across a changed launching environment (for example a
+ * reboot or a new desktop session, whose per-login variables cannot be
+ * recreated). Only with --resume and --accept-environment-change: the recorded
+ * hash is kept so the experiment identity and writer keys hold, and every use is
+ * appended to environment-overrides.json beside the manifest for disclosure.
+ */
+export function acceptedEnvironmentHash(
+  root: string,
+  opts: { resume?: boolean; acceptEnvironmentChange?: boolean },
+  old: ComparisonManifest | undefined,
+  current: string,
+): string {
+  const recorded = old?.settings?.toolchain?.environmentHash;
+  if (!opts.acceptEnvironmentChange || !opts.resume || !recorded || recorded === current)
+    return current;
+  const file = join(root, "environment-overrides.json");
+  const log = existsSync(file) ? read<unknown[]>(file) : [];
+  log.push({ at: new Date().toISOString(), recorded, current });
+  writeFileSync(file, JSON.stringify(log, null, 2) + "\n");
+  return recorded;
+}
 function writerKey(
   manifest: ComparisonManifest,
   profile: Preparation | undefined,
@@ -338,7 +364,15 @@ export function rebuildComparison(
   root: string,
   manifest: ComparisonManifest,
   preflightCache: string,
+  /**
+   * Diagnostic re-score: evaluate the saved run under the current gate policy
+   * and write every output to `outDir`, leaving the run untouched. Never a
+   * gate decision: the run's own summary keeps its frozen policy.
+   */
+  diagnostic?: { outDir: string },
 ) {
+  const outRoot = diagnostic?.outDir ?? root;
+  if (diagnostic) mkdirSync(outRoot, { recursive: true });
   const profile = verifyFrozen(root, manifest);
   if (manifest.settings.rubricVersion !== RUBRIC_VERSION)
     throw new Error(
@@ -372,7 +406,7 @@ export function rebuildComparison(
             if (!existsSync(file)) continue;
             const artifact = read<PRArtifact>(file),
               receipt = read(file.replace(/\.json$/, ".receipt.json"));
-            assertScope(artifact, file, manifest.id);
+            assertScope(artifact, file, manifest.id, !diagnostic);
             if (
               checkArtifact(artifact).length ||
               artifact.system !== system ||
@@ -415,6 +449,12 @@ export function rebuildComparison(
               system,
               replicate,
               cleanup: status.cleanup?.state ?? "unknown",
+              pricedCost: draftCost(
+                root,
+                file,
+                artifact.meta as Record<string, any>,
+                model,
+              ),
               validationCommands: validation?.commands.length ?? 0,
               commandsWithKnownDirectory:
                 validation?.commands.filter((c) => !c.cwd.startsWith("unknown"))
@@ -487,11 +527,13 @@ export function rebuildComparison(
             facts,
             splitOf,
           });
-          atomicJson(join(base, comparison, "report.json"), report);
-          writeFileSync(
-            join(base, comparison, "report.md"),
-            reportMarkdown(report),
-          );
+          if (!diagnostic) {
+            atomicJson(join(base, comparison, "report.json"), report);
+            writeFileSync(
+              join(base, comparison, "report.md"),
+              reportMarkdown(report),
+            );
+          }
           reports.push({ model, replicate, comparison, report });
           allPairs.push(...pairs.map((pair) => ({ model, replicate, pair })));
         }
@@ -520,7 +562,7 @@ export function rebuildComparison(
       (r) => r.report.coverage.completed === r.report.coverage.expected,
     );
   const findings = accuracyFindings(allPairs, allArtifacts);
-  atomicJson(join(root, "accuracy-findings.json"), {
+  atomicJson(join(outRoot, "accuracy-findings.json"), {
     schema: "prbench.accuracy-findings/v1",
     experiment: manifest.id,
     findings,
@@ -545,6 +587,7 @@ export function rebuildComparison(
       if (
         !finding ||
         seen.has(entry.finding) ||
+        (entry.arm !== undefined && entry.arm !== findingArm(finding)) ||
         !["confirmed", "false-positive", "unresolved"].includes(
           entry.outcome,
         ) ||
@@ -563,7 +606,7 @@ export function rebuildComparison(
           source,
           preflightCache,
           allArtifacts.get(
-            `${finding.replicate}/${finding.model}/${finding.case}/tracetoon-candidate`,
+            `${finding.replicate}/${finding.model}/${finding.case}/${findingArm(finding)}`,
           ),
         );
     }
@@ -575,6 +618,7 @@ export function rebuildComparison(
     findings,
     adjudications,
     SYSTEMS.includes(provider.native) ? provider.native : null,
+    accuracyScoredDrafts(allPairs),
   );
   const performance = performanceReport(
     metrics,
@@ -590,11 +634,12 @@ export function rebuildComparison(
     pendingCleanup: operations.pendingCleanup,
     writers: metrics,
     policyCurrent:
+      !!diagnostic ||
       manifest.gatePolicyHash ===
-      implementationDigest(resolve(import.meta.dir, ".."), [
-        "src/gates.ts",
-        "src/performance.ts",
-      ]),
+        implementationDigest(resolve(import.meta.dir, ".."), [
+          "src/gates.ts",
+          "src/performance.ts",
+        ]),
   });
   const { status } = adoption;
   const summary = {
@@ -637,6 +682,9 @@ export function rebuildComparison(
       "Writer timing includes service waits and neutral observation overhead; runtime diagnostics may overlap.",
       "Diagnostic reuse cannot establish a fresh performance improvement.",
       "Raw judgments are preserved separately from source-backed adjudications.",
+      ...(performance.validationLimitation
+        ? [performance.validationLimitation]
+        : []),
     ],
   };
   const lines = [
@@ -657,13 +705,22 @@ export function rebuildComparison(
     "",
     "## Gate findings",
     "",
+    `- Accuracy (confirmed errors per scored draft, ${quality.accuracy.scoredDrafts} drafts): candidate ${quality.accuracy.candidate.rate?.toFixed(3) ?? "unknown"} (${quality.accuracy.candidate.confirmed} of ${quality.accuracy.candidate.flags} flags confirmed), baseline ${quality.accuracy.baseline.rate?.toFixed(3) ?? "unknown"} (${quality.accuracy.baseline.confirmed} of ${quality.accuracy.baseline.flags} flags confirmed); unresolved ${quality.accuracy.unresolved}.`,
     ...quality.failures.map((f) => `- ${f}`),
     ...performance.failures.map((f) => `- ${f}`),
     ...quality.unresolvedAccuracy.map((f) => `- Unresolved: ${f}`),
     "",
     "## Paired performance",
     "",
-    `Candidate/baseline geometric mean writer ratio: ${performance.geometricMeanWriterRatio?.toFixed(3) ?? "unknown"}; case-clustered 95% interval: ${JSON.stringify(performance.writerRatio95CI)}.`,
+    `Rule: ${performance.rule}`,
+    "",
+    `Candidate/baseline geometric mean priced cost ratio (criterion): ${performance.geometricMeanCostRatio?.toFixed(3) ?? "unknown"} over ${performance.pricedPairs}/${performance.pairs} pairs; case-clustered 95% interval: ${JSON.stringify(performance.costRatio95CI)}.`,
+    ...performance.unpricedDrafts.map(
+      (d) =>
+        `- Unpriced: ${d.model}, ${d.case}, replicate ${d.replicate}, ${d.system}: ${d.reason}`,
+    ),
+    "",
+    `Candidate/baseline geometric mean writer ratio (information): ${performance.geometricMeanWriterRatio?.toFixed(3) ?? "unknown"}; case-clustered 95% interval: ${JSON.stringify(performance.writerRatio95CI)}.`,
     "",
     ...summary.limitations.map((x) => `- ${x}`),
     "",
@@ -680,7 +737,7 @@ export function rebuildComparison(
   ];
   const markdown = lines.join("\n") + "\n";
   const reportKey = stageKey("report", { summary, markdown });
-  const reportCache = new StageCache(join(root, "derived-reports"));
+  const reportCache = new StageCache(join(outRoot, "derived-reports"));
   if (summary.adjudicationSha256)
     reportCache.put("adjudication", summary.adjudicationSha256, {
       raw: auditRaw,
@@ -689,6 +746,27 @@ export function rebuildComparison(
     summary,
     markdown,
   });
+  if (diagnostic) {
+    const note = {
+      diagnostic: true,
+      note: "Re-scored under the current gate policy, not the one frozen with this run: diagnostic only, never a gate decision.",
+      frozenPolicy: manifest.gatePolicyHash,
+      currentPolicy: implementationDigest(resolve(import.meta.dir, ".."), [
+        "src/gates.ts",
+        "src/performance.ts",
+      ]),
+    };
+    atomicJson(join(outRoot, "summary.json"), {
+      ...summary,
+      reportKey,
+      policyDiagnostic: note,
+    });
+    writeFileSync(
+      join(outRoot, "summary.md"),
+      `> **Diagnostic re-score.** ${note.note}\n\n${markdown}`,
+    );
+    return summary;
+  }
   atomicJson(join(root, "summary.json"), { ...summary, reportKey });
   writeFileSync(join(root, "summary.md"), markdown);
   return summary;
@@ -746,7 +824,17 @@ export async function compareV2(opts: CompareOptions) {
     throw new Error("Comparison split must be dev or test.");
   const provider = comparisonProvider(opts.provider),
     MODELS = opts.models?.length ? opts.models : provider.models,
-    JUDGES = provider.judges;
+    // A judge override is for cheap diagnostic rounds only; a confirmation
+    // always uses the provider's pre-registered judges.
+    JUDGES = opts.judges?.length
+      ? (() => {
+          if ((opts.purpose ?? "confirmation") === "confirmation")
+            throw new Error(
+              "--judges is for diagnostic runs only; a confirmation uses the provider's judges.",
+            );
+          return opts.judges;
+        })()
+      : provider.judges;
   if (old && manifestProvider(old.settings).id !== provider.id)
     throw new Error(
       `This experiment was frozen for ${manifestProvider(old.settings).label}; resume it with --provider ${manifestProvider(old.settings).id}.`,
@@ -818,6 +906,8 @@ export async function compareV2(opts: CompareOptions) {
   );
   const cli = exec([...provider.command(), "--version"]);
   if (cli.code) throw new Error(`${provider.label} CLI unavailable.`);
+  // A frozen runtime (frozen-runtimes.json at the harness root) must be the exact binary in use.
+  checkFrozenRuntime(harness, provider.id, provider.command());
   const common = ["package.json", "bun.lock", "tsconfig.json"];
   const writerEntries = COMPARISON_WRITER_ENTRIES;
   const writerContract = implementationDigest(harness, writerEntries);
@@ -861,8 +951,7 @@ export async function compareV2(opts: CompareOptions) {
       judges: JUDGES,
       effort: provider.effort,
       // Frozen in the identity and writer keys: a resume keeps the recorded value.
-      timeoutMs:
-        opts.timeoutMs ?? old?.settings.timeoutMs ?? writerTimeoutMs(),
+      timeoutMs: opts.timeoutMs ?? old?.settings.timeoutMs ?? writerTimeoutMs(),
       rubricVersion: RUBRIC_VERSION,
       replicates,
       purpose,
@@ -874,15 +963,20 @@ export async function compareV2(opts: CompareOptions) {
         node: process.version,
         platform: process.platform,
         arch: process.arch,
-        environmentHash: writerEnvironmentHash(
-          provider,
+        environmentHash: acceptedEnvironmentHash(
+          root,
+          opts,
           old,
-          opts.reuseFrom &&
-            existsSync(join(resolve(opts.reuseFrom), "manifest.json"))
-            ? read<ComparisonManifest>(
-                join(resolve(opts.reuseFrom), "manifest.json"),
-              )
-            : undefined,
+          writerEnvironmentHash(
+            provider,
+            old,
+            opts.reuseFrom &&
+              existsSync(join(resolve(opts.reuseFrom), "manifest.json"))
+              ? read<ComparisonManifest>(
+                  join(resolve(opts.reuseFrom), "manifest.json"),
+                )
+              : undefined,
+          ),
         ),
         authProfileHash: provider.authProfileHash(),
         executableSha256: digest(readFileSync(process.execPath)),

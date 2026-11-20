@@ -17,7 +17,13 @@ import { DEFAULT_AGENT_OPTIONS, parseBudget } from "./systems/agentShared.ts";
 import { judgePair, type PairResult } from "./judge/pairwise.ts";
 import { parseJudge } from "./judge/providers.ts";
 import { buildReport, reportMarkdown } from "./report.ts";
-import { collectDraftScores, collectJudgeFailures, collectWriterFailures, scoreMarkdown } from "./report/score.ts";
+import {
+  aggregateScores,
+  collectDraftScores,
+  collectJudgeFailures,
+  collectWriterFailures,
+  scoreMarkdown,
+} from "./report/score.ts";
 import { codexLogin } from "./agents/codexAuth.ts";
 import { claudeAuthStatus, saveClaudeToken } from "./agents/claude.ts";
 import { runBothProviders } from "./run/both.ts";
@@ -32,6 +38,18 @@ import { experimentStatus } from "./run/status.ts";
 import { preflight } from "./run/preflight.ts";
 import { calibrateScope } from "./calibration.ts";
 import { admission } from "./admission.ts";
+import { DEFAULT_PANEL, factReview, summaryLines } from "./factreview/panel.ts";
+import { freezeRuntime } from "./run/runtimeFreeze.ts";
+import { rebuildComparison } from "./comparison.ts";
+import { comparisonProvider } from "./run/provider.ts";
+import { exec } from "./util/exec.ts";
+import { accuracyReview, accuracySummaryLines } from "./factreview/accuracy.ts";
+import {
+  DEFAULT_JUDGES,
+  decideFinished,
+  debateSummaryLines,
+  factDebate,
+} from "./factreview/debate.ts";
 import {
   datasetReleases,
   datasetRelease,
@@ -178,6 +196,10 @@ program
     "with --resume, recover an owned lock only after its controller process has exited",
   )
   .option(
+    "--accept-environment-change",
+    "with --resume, keep the recorded writer environment hash when only the launching environment changed (e.g. after a reboot); logged in environment-overrides.json",
+  )
+  .option(
     "--replicates <n>",
     "predeclared samples per case/model/system",
     Number,
@@ -228,6 +250,15 @@ program
         .filter(Boolean),
   )
   .option(
+    "--judges <specs>",
+    "judges replacing the provider's (diagnostic runs only), e.g. claude:claude-sonnet-5-5@medium",
+    (v: string) =>
+      v
+        .split(",")
+        .map((m) => m.trim())
+        .filter(Boolean),
+  )
+  .option(
     "--systems <list>",
     "writer systems (comma-separated): native, baseline, candidate (default all three; baseline and candidate are required). Without native, only candidate vs baseline is judged",
     (v: string) =>
@@ -245,7 +276,10 @@ program
       },
     ) => {
       if (opts.judgeTimeoutMs !== undefined) {
-        if (!Number.isInteger(opts.judgeTimeoutMs) || opts.judgeTimeoutMs <= 0) {
+        if (
+          !Number.isInteger(opts.judgeTimeoutMs) ||
+          opts.judgeTimeoutMs <= 0
+        ) {
           console.error("--judge-timeout-ms must be a positive integer.");
           process.exitCode = 2;
           return;
@@ -279,14 +313,26 @@ program
   .description(
     "Judge candidate drafts of one finished compare run against baseline drafts of another (e.g. different writer models), reusing their saved artifacts",
   )
-  .requiredOption("--candidate <dir>", "run whose tracetoon-candidate drafts are judged")
-  .requiredOption("--baseline <dir>", "run whose tracetoon-baseline drafts are judged")
-  .requiredOption("--out <dir>", "output directory for judgments and the summary")
+  .requiredOption(
+    "--candidate <dir>",
+    "run whose tracetoon-candidate drafts are judged",
+  )
+  .requiredOption(
+    "--baseline <dir>",
+    "run whose tracetoon-baseline drafts are judged",
+  )
+  .requiredOption(
+    "--out <dir>",
+    "output directory for judgments and the summary",
+  )
   .option(
     "--cache <dir>",
     "content-addressed stage cache (default <parent of --out>/.prbench-cache/v2)",
   )
-  .option("--plan", "verify inputs and print the planned judge calls without calling models")
+  .option(
+    "--plan",
+    "verify inputs and print the planned judge calls without calling models",
+  )
   .option("--parallel <n>", "concurrent judge pairs", Number, 4)
   .action(
     async (opts: {
@@ -466,6 +512,415 @@ function readArtifacts(
   }
   return out;
 }
+
+program
+  .command("fact-review")
+  .description(
+    "Review fact sheets with an expert model panel (family consensus; disputed items go to human review)",
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option(
+    "--panel <spec>",
+    "reviewers per model: opus, sol, claude/<model> or codex/<model> with a count",
+    DEFAULT_PANEL,
+  )
+  .option(
+    "--effort <effort>",
+    "reasoning effort for every reviewer and synthesis call",
+    "xhigh",
+  )
+  .option("--rounds <n>", "review round plus vote rounds", Number, 2)
+  .option(
+    "--canaries <n>",
+    "calibration mode: plant known defects in n cases' sheets and score the panel",
+    Number,
+  )
+  .option(
+    "--out <dir>",
+    "run folder (default results/fact-review-expert/<timestamp>)",
+  )
+  .option(
+    "--packets <dir>",
+    "prebuilt fact packets; missing ones are built into the run folder",
+    "results/fact-packets",
+  )
+  .option("--resume", "reuse finished reviewer calls from the run folder")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option(
+    "--aggregate-only",
+    "print counts only: no case names, no fact text (sealed cases)",
+  )
+  .option(
+    "--apply",
+    "write revised facts.json and expert-panel provenance into the case directories",
+  )
+  .option(
+    "--cross-exam",
+    "after round 1, show every reviewer all arguments on each disputed item and take a final vote",
+  )
+  .option(
+    "--focus-run <dir>",
+    "re-review only items changed or added since this earlier run (the rest of the sheet is context)",
+  )
+  .action(
+    async (opts: {
+      cases: string;
+      case: string[];
+      panel: string;
+      effort: string;
+      rounds: number;
+      canaries?: number;
+      out?: string;
+      packets: string;
+      resume?: boolean;
+      parallel: number;
+      aggregateOnly?: boolean;
+      apply?: boolean;
+      crossExam?: boolean;
+      focusRun?: string;
+    }) => {
+      if (opts.resume && !opts.out) {
+        console.error("--resume needs --out <run folder>");
+        process.exitCode = 2;
+        return;
+      }
+      const out = resolve(
+        opts.out ??
+          join(
+            "results",
+            "fact-review-expert",
+            new Date().toISOString().replace(/[:.]/g, "-"),
+          ),
+      );
+      try {
+        const summary = await factReview({
+          cases: opts.cases,
+          caseIds: opts.case,
+          panel: opts.panel,
+          effort: opts.effort,
+          rounds: opts.rounds,
+          canaries: opts.canaries,
+          out,
+          packets: opts.packets,
+          resume: opts.resume,
+          parallel: opts.parallel,
+          aggregateOnly: opts.aggregateOnly,
+          apply: opts.apply,
+          crossExam: opts.crossExam,
+          focusRun: opts.focusRun,
+        });
+        for (const line of summaryLines(summary)) console.log(line);
+        if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
+        if (summary.canary && !summary.canary.pass) process.exitCode = 1;
+      } catch (error) {
+        if (opts.aggregateOnly) {
+          // Errors can quote case names or facts: keep them in the run folder.
+          mkdirSync(out, { recursive: true });
+          writeFileSync(
+            join(out, "error.log"),
+            `${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
+          );
+          console.error(
+            `fact-review failed; details in ${join(out, "error.log")}`,
+          );
+        } else
+          console.error(error instanceof Error ? error.message : String(error));
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("fact-debate")
+  .description(
+    "Settle entries earlier fact-review runs left without family consensus: Opus and Sol each make the case and rebut the other, then one judge rules on the evidence and both debates",
+  )
+  .option(
+    "--from <run>",
+    "an earlier fact-review run whose disputed items and additions are settled (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option(
+    "--control <spec>",
+    "score the judge on explicit entries with expected outcomes (scripts/fact-control.ts); never applied",
+  )
+  .option(
+    "--judge <provider/model>",
+    `an independent judge (repeatable; default ${DEFAULT_JUDGES.join(" and ")})`,
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--judge-effort <effort>", "the judge's reasoning effort", "xhigh")
+  .option(
+    "--decider <model>",
+    "the judge whose ruling decides entries the judges disagree on (default: a human decides)",
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--effort <effort>", "reasoning effort for both debaters", "xhigh")
+  .option(
+    "--out <dir>",
+    "run folder (default results/fact-review-expert/debate-<timestamp>)",
+  )
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option("--resume", "reuse finished calls from the run folder")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option(
+    "--aggregate-only",
+    "print counts only: no case names, no fact text (sealed cases)",
+  )
+  .option("--apply", "write the rulings into the case facts and provenance")
+  .action(
+    async (opts: {
+      from: string[];
+      control?: string;
+      judge: string[];
+      judgeEffort: string;
+      decider?: string;
+      cases: string;
+      case: string[];
+      effort: string;
+      out?: string;
+      packets: string;
+      resume?: boolean;
+      parallel: number;
+      aggregateOnly?: boolean;
+      apply?: boolean;
+    }) => {
+      const out = resolve(
+        opts.out ??
+          join(
+            "results",
+            "fact-review-expert",
+            `debate-${new Date().toISOString().replace(/[:.]/g, "-")}`,
+          ),
+      );
+      try {
+        const s = await factDebate({
+          ...opts,
+          judges: opts.judge,
+          caseIds: opts.case,
+          out,
+        });
+        for (const line of debateSummaryLines(s)) console.log(line);
+        if (!opts.aggregateOnly) console.log(`run folder: ${out}`);
+      } catch (error) {
+        if (opts.aggregateOnly) {
+          mkdirSync(out, { recursive: true });
+          writeFileSync(
+            join(out, "error.log"),
+            `${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`,
+          );
+          console.error(
+            `fact-debate failed; details in ${join(out, "error.log")}`,
+          );
+        } else
+          console.error(error instanceof Error ? error.message : String(error));
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("fact-decide")
+  .description(
+    "Settle the entries a finished fact-debate run left for human review with one judge's ruling (no model calls)",
+  )
+  .requiredOption("--run <dir>", "the finished fact-debate run")
+  .requiredOption(
+    "--decider <model>",
+    "the judge whose ruling is applied, e.g. claude-fable-5-1",
+  )
+  .option("--cases <dir>", "cases directory", "cases-local")
+  .option(
+    "--case <id>",
+    "only this case (repeatable)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option(
+    "--apply",
+    "write the decided rulings into the case facts and provenance",
+  )
+  .option("--aggregate-only", "print counts only (sealed cases)")
+  .action(
+    (opts: {
+      run: string;
+      decider: string;
+      cases: string;
+      case: string[];
+      packets: string;
+      apply?: boolean;
+      aggregateOnly?: boolean;
+    }) => {
+      try {
+        const s = decideFinished({
+          ...opts,
+          caseIds: opts.case,
+          log: opts.aggregateOnly ? undefined : (l) => console.error(l),
+        });
+        const kv =
+          Object.entries(s.outcomes)
+            .sort()
+            .map(([k, v]) => `${k} ${v}`)
+            .join(", ") || "none";
+        console.log(
+          `decided ${s.decided} entries in ${s.cases} case(s) by ${opts.decider}: ${kv}${s.skipped ? `; ${s.skipped} skipped (no longer on the sheet)` : ""}${s.unsourced ? `; ${s.unsourced} unsourced additions` : ""}${opts.apply ? "; applied" : ""}`,
+        );
+      } catch (error) {
+        console.error(
+          opts.aggregateOnly
+            ? "fact-decide failed"
+            : error instanceof Error
+              ? error.message
+              : String(error),
+        );
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("accuracy-review")
+  .description(
+    "Adjudicate a comparison's accuracy flags with expert judges (Fable 5.1 and GPT-6 Astra; the decider settles splits) and write source-backed adjudications.json",
+  )
+  .requiredOption("--run <dir>", "a finished comparison run")
+  .requiredOption("--cases <dir>", "the cases directory the comparison ran on")
+  .requiredOption(
+    "--out <dir>",
+    "review folder (calls, rulings, adjudications)",
+  )
+  .option(
+    "--judge <provider/model>",
+    "an independent judge (repeatable; default claude/claude-fable-5-1 and codex/gpt-6-astra)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option(
+    "--decider <model>",
+    "the judge whose ruling settles splits (default: the first judge)",
+  )
+  .option(
+    "--case <id>",
+    "only this case (repeatable; trials only, never with --write)",
+    (v: string, prev: string[]) => [...prev, v],
+    [] as string[],
+  )
+  .option("--effort <effort>", "judge reasoning effort", "xhigh")
+  .option("--packets <dir>", "prebuilt fact packets", "results/fact-packets")
+  .option("--parallel <n>", "concurrent model calls", Number, 6)
+  .option("--resume", "reuse finished calls in --out")
+  .option(
+    "--write",
+    "write the adjudications into the run (then rebuild with compare --resume --report-only)",
+  )
+  .option("--overwrite", "with --write, replace an existing adjudications.json")
+  .option("--aggregate-only", "print counts only (sealed runs)")
+  .action(
+    async (opts: {
+      run: string;
+      cases: string;
+      out: string;
+      judge: string[];
+      decider?: string;
+      case: string[];
+      effort: string;
+      packets: string;
+      parallel: number;
+      resume?: boolean;
+      write?: boolean;
+      overwrite?: boolean;
+      aggregateOnly?: boolean;
+    }) => {
+      try {
+        if (opts.write && opts.case.length)
+          throw new Error("--write needs every case: drop --case");
+        const s = await accuracyReview({
+          ...opts,
+          judges: opts.judge,
+          caseIds: opts.case,
+        });
+        for (const line of accuracySummaryLines(s)) console.log(line);
+      } catch (error) {
+        console.error(
+          opts.aggregateOnly
+            ? "accuracy-review failed"
+            : error instanceof Error
+              ? error.message
+              : String(error),
+        );
+        process.exitCode = 2;
+      }
+    },
+  );
+
+program
+  .command("runtime-freeze")
+  .description(
+    "Record the exact writer CLI binary (sha256) for a provider in frozen-runtimes.json; compare then refuses any other binary",
+  )
+  .requiredOption("--provider <id>", "claude or codex")
+  .action((opts: { provider: string }) => {
+    const provider = comparisonProvider(opts.provider);
+    const version = exec([...provider.command(), "--version"]);
+    if (version.code) {
+      console.error(`${provider.label} CLI unavailable.`);
+      process.exitCode = 2;
+      return;
+    }
+    const entry = freezeRuntime(
+      resolve(import.meta.dir, ".."),
+      provider.id,
+      provider.command(),
+      version.stdout.trim(),
+    );
+    console.log(
+      `frozen ${entry.provider}: ${entry.version} ${entry.path} sha256 ${entry.sha256}`,
+    );
+  });
+
+program
+  .command("rescore")
+  .description(
+    "Diagnostic re-score of a finished comparison under the current gate policy, written to --out; the run itself and its gate decision are untouched",
+  )
+  .requiredOption("--run <dir>", "a finished comparison run")
+  .requiredOption("--out <dir>", "folder for the re-scored summary")
+  .action((opts: { run: string; out: string }) => {
+    const root = resolve(opts.run);
+    const manifest = JSON.parse(
+      readFileSync(join(root, "manifest.json"), "utf8"),
+    );
+    const cache = resolve(
+      process.env.PRBENCH_PREFLIGHT_CACHE ??
+        join(
+          resolve(import.meta.dir, ".."),
+          "node_modules",
+          ".cache",
+          "prbench-preflight",
+        ),
+    );
+    const s = rebuildComparison(root, manifest, cache, {
+      outDir: resolve(opts.out),
+    });
+    console.log(
+      `diagnostic re-score (not a gate decision): status ${s.status}; quality ${s.qualityGate.status}; performance ${s.performanceGate.status}; workflow compliance ${s.adoptionGate.workflowCompliance?.toFixed(3) ?? "-"}`,
+    );
+  });
 
 program
   .command("validate")
@@ -838,10 +1293,19 @@ program
     "public dataset; defaults to the pinned release when --cases is omitted",
   )
   .option("--json", "print per-draft scores as JSON")
+  .option(
+    "--aggregate-only",
+    "print only overall tables (sealed runs): no per-case rows, deltas or leave-one-case-out ranges; with --json, arm aggregates instead of per-draft scores",
+  )
   .action(
     async (
       roots: string[],
-      opts: { cases?: string; dataset?: string; json?: boolean },
+      opts: {
+        cases?: string;
+        dataset?: string;
+        json?: boolean;
+        aggregateOnly?: boolean;
+      },
     ) => {
       const { cases } = await resolveDatasetInputs(opts);
       const facts = new Map(
@@ -850,8 +1314,19 @@ program
       const all = [];
       for (const root of roots) {
         const drafts = collectDraftScores(resolve(root), (id) => facts.get(id));
-        if (opts.json) all.push(...drafts.map((d) => ({ root, ...d })));
-        else console.log(scoreMarkdown(drafts, `Scores: ${root}`, collectWriterFailures(resolve(root)), collectJudgeFailures(resolve(root))));
+        if (opts.json && opts.aggregateOnly)
+          all.push({ root, ...aggregateScores(drafts) });
+        else if (opts.json) all.push(...drafts.map((d) => ({ root, ...d })));
+        else
+          console.log(
+            scoreMarkdown(
+              drafts,
+              `Scores: ${root}`,
+              collectWriterFailures(resolve(root)),
+              collectJudgeFailures(resolve(root)),
+              { aggregateOnly: opts.aggregateOnly },
+            ),
+          );
       }
       if (opts.json) console.log(JSON.stringify(all, null, 2));
     },

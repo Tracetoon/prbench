@@ -15,7 +15,7 @@ import { join } from "node:path";
 import { describeRun, runClaude } from "../agents/claude.ts";
 import type { Sandbox } from "../run/sandbox.ts";
 import { exec } from "../util/exec.ts";
-import { currentTracetoonReview } from "./tracetoonReview.ts";
+import { tracetoonReviewIssues } from "./tracetoonReview.ts";
 import {
   AGENT_TOOLS,
   agentArtifact,
@@ -26,6 +26,11 @@ import {
   type AgentOptions,
 } from "./agentShared.ts";
 import type { System } from "./types.ts";
+import type {
+  WorkflowRecord,
+  WorkflowReviewPass,
+  WorkflowReviewPlan,
+} from "../schema/artifact.ts";
 
 export function tracetoonCommand(
   env: Record<string, string | undefined> = process.env,
@@ -197,11 +202,14 @@ export function tracetoonDraft(
           startedAt?: string;
         })
       : undefined;
+    // A run belongs to this invocation when it is in the same checkout and
+    // started after the writer did. The branch is not compared: a writer may
+    // switch branches mid-task (a repository's own tooling did), and the run
+    // it finished on is the one it published.
     if (
       invocation &&
       (!task ||
         task.root !== invocation.root ||
-        task.branch !== invocation.branch ||
         !Number.isFinite(Date.parse(task.startedAt ?? "")) ||
         Date.parse(task.startedAt!) < invocation.startedAt)
     )
@@ -212,13 +220,71 @@ export function tracetoonDraft(
       rendered,
       run,
       state: task?.state,
+      startedAt: Date.parse(task?.startedAt ?? "") || 0,
     });
   }
-  if (invocation && candidates.length > 1)
-    throw new Error(
-      "More than one draft belongs to this invocation; select an explicit run rather than guessing.",
-    );
-  return candidates[0];
+  if (!candidates.length) return undefined;
+  // Several runs in one invocation: Tracetoon's latest pointer names the
+  // active one; otherwise the most recently started run.
+  const chosen =
+    candidates.find((c) => c.run === selected) ??
+    [...candidates].sort((a, b) => b.startedAt - a.startedAt)[0]!;
+  const { startedAt: _started, ...draftOut } = chosen;
+  return draftOut;
+}
+
+const optionalString = (value: unknown) =>
+  typeof value === "string" && value.trim() ? value.trim() : undefined;
+
+/** Copy a stored review plan's fields as written; malformed plans are dropped, not repaired. */
+export function workflowReviewPlan(
+  raw: unknown,
+): WorkflowReviewPlan | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const plan = raw as Record<string, unknown>;
+  if (
+    !Number.isInteger(plan.passes) ||
+    (plan.passes as number) < 1 ||
+    (plan.lenses !== undefined &&
+      (!Array.isArray(plan.lenses) ||
+        plan.lenses.some((l) => typeof l !== "string")))
+  )
+    return undefined;
+  const model = optionalString(plan.reviewerModel),
+    effort = optionalString(plan.reviewerEffort),
+    runner = optionalString(plan.runner);
+  return {
+    passes: plan.passes as number,
+    lenses: [...new Set((plan.lenses as string[] | undefined) ?? [])],
+    ...(model ? { reviewerModel: model } : {}),
+    ...(effort ? { reviewerEffort: effort } : {}),
+    ...(runner ? { runner } : {}),
+  };
+}
+
+/** The review record's passes, keeping only the fields the adoption gate reads. */
+export function workflowReviewPasses(
+  raw: unknown,
+): WorkflowReviewPass[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  return raw
+    .filter((p) => p && typeof p === "object")
+    .map((p: Record<string, unknown>) => {
+      const lens = optionalString(p.lens),
+        model = optionalString(p.model),
+        effort = optionalString(p.effort),
+        source = optionalString(p.source);
+      return {
+        agentId: optionalString(p.agentId) ?? "",
+        ...(lens ? { lens } : {}),
+        ...(model ? { model } : {}),
+        ...(effort ? { effort } : {}),
+        ...(source ? { source } : {}),
+        ...(p.verifiedModel === null || typeof p.verifiedModel === "string"
+          ? { verifiedModel: (p.verifiedModel as string | null) || null }
+          : {}),
+      };
+    });
 }
 
 /** Retain self-reported stage timings before the sandbox is removed; unknown stays explicit. */
@@ -230,14 +296,8 @@ export function tracetoonTimings(
     gaps: string[] = [];
   const counts: Record<string, number> = {},
     seen = new Set<string>();
-  let workflow:
-    | {
-        declaredIndependentRoles: number;
-        reviewCurrent: boolean;
-        reviewVersion?: number;
-        limitations: string[];
-      }
-    | undefined;
+  let workflow: WorkflowRecord | undefined;
+  let workflowStartedAt = -Infinity;
   const runs = join(gitDir, "tracetoon", "runs");
   const headSha = exec([
     "git",
@@ -255,9 +315,9 @@ export function tracetoonTimings(
       if (!existsSync(task)) continue;
       try {
         const t = JSON.parse(readFileSync(task, "utf8"));
+        // Same checkout, started after the writer; any branch (see tracetoonDraft).
         if (
           t.root !== invocation.root ||
-          t.branch !== invocation.branch ||
           !Number.isFinite(Date.parse(t.startedAt)) ||
           Date.parse(t.startedAt) < invocation.startedAt
         )
@@ -295,14 +355,21 @@ export function tracetoonTimings(
           resultFile = join(root, "review-result.json"),
           guidanceFile = join(root, "guidance.json"),
           packetFile = join(root, "review-input.json");
+        // With several reviewed runs (a branch switch), the record comes from
+        // the most recently started one, the run the writer finished on.
         if (
           existsSync(reviewFile) &&
-          existsSync(guidanceFile) &&
           existsSync(packetFile) &&
-          existsSync(resultFile)
+          existsSync(resultFile) &&
+          Date.parse(t.startedAt) >= workflowStartedAt
         ) {
+          workflowStartedAt = Date.parse(t.startedAt);
           const review = JSON.parse(readFileSync(reviewFile, "utf8")),
-            guidance = JSON.parse(readFileSync(guidanceFile, "utf8"));
+            // Only the three-role workflow writes guidance.json (its researcher
+            // role); the lean reviewed path has none, and its record is still valid.
+            guidance = existsSync(guidanceFile)
+              ? JSON.parse(readFileSync(guidanceFile, "utf8"))
+              : {};
           const roles = [guidance.researcher, review.drafter, review.reviewer],
             ids = roles
               .filter(
@@ -312,11 +379,26 @@ export function tracetoonTimings(
                   role.agentId.trim(),
               )
               .map((role) => role.agentId);
-          const current = currentTracetoonReview(root, headSha);
+          const reviewIssues = tracetoonReviewIssues(root, headSha);
+          const current = reviewIssues.length === 0;
+          const planFile = join(root, "review-plan.json");
+          let reviewPlan: WorkflowReviewPlan | undefined;
+          try {
+            if (existsSync(planFile))
+              reviewPlan = workflowReviewPlan(
+                JSON.parse(readFileSync(planFile, "utf8")),
+              );
+          } catch {
+            reviewPlan = undefined;
+          }
+          const reviewPasses = workflowReviewPasses(review.passes);
           workflow = {
             declaredIndependentRoles: new Set(ids).size,
             reviewCurrent: current,
+            ...(current ? {} : { reviewIssues }),
             reviewVersion: review.v,
+            ...(reviewPlan ? { reviewPlan } : {}),
+            ...(reviewPasses ? { reviewPasses } : {}),
             limitations: [
               "Role IDs are host-reported; source snapshots and reviews do not independently attest model invocation or semantic correctness.",
             ],

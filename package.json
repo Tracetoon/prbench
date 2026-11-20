@@ -1,6 +1,6 @@
 {
   "name": "prbench",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Evaluate tools that write or change the pull requests AI coding agents produce.",
   "type": "module",
   "license": "Apache-2.0",

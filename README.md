@@ -1,265 +1,195 @@
 # prbench
 
-### Public case library
+prbench measures whether a PR-writing tool helps AI coding agents write better pull requests. It replays real agent work sessions and asks each system to write the pull request. Judges then score every draft against an expert-reviewed fact sheet for the change.
 
-The real replay cases are available as a versioned download, with redacted sessions,
-repository bundles, fact provenance and pinned setup dependencies. No original
-agent logs or checkout on the author's machine are needed.
+The question it answers: **does an agent with this tool write a more accurate and more useful PR than the same agent without it, and at what cost?**
 
-```sh
-bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.3.0/prbench-0.3.0.tgz
-prbench datasets list
-prbench datasets fetch real-cases@1.0.0
-prbench preflight --dataset real-cases@1.0.0
-```
+## What makes it different
 
-`compare` uses this pinned dataset and its preparation profile when `--cases` is
-omitted. Supply your built baseline/candidate skills and add `--prepare-only`
-for a smoke test with no model calls. See [download and run instructions](docs/datasets.md)
-and the [dataset card](datasets/DATASET_CARD.md) for splits, privacy, license and limits.
+- **Real sessions, replayed end to end.** Each case is a real piece of work by Claude Code or Codex: the repository at the commit before the change, the commits that made it, and the session logs, redacted and cut to that change. The writer runs in a sandbox on that checkout, with those logs in its home directory, and opens its PR through a fake `gh`. A PR tool can read the actual session, as it would on a developer's machine.
+- **Expert fact sheets.** Every case has a fact sheet listing the claims a good description makes, the context a reviewer needs, what the evidence leaves open, and tempting wrong statements ("traps"). Each fact cites the exact lines of code or session that support it. Sheets are written from the code and sessions, never from a published PR. A panel of Claude and GPT models reviews each sheet against the raw evidence and accepts a change only when both model families agree; judges settle disputes. Writers never see the sheets.
+- **Two judges, both orders.** Each pair of drafts is judged twice by each of two judges, once in each order, and judges never see which tool wrote which draft. A preference counts only when both orders agree. The headline count needs both judges to agree as well.
+- **Expert accuracy review.** Every claim a judge flags as wrong, on either arm, goes to two further expert models (Claude Fable and GPT-6 Astra) that check it against the source. Confirmed errors are counted per draft, and the quality gate compares the candidate's rate with the baseline's.
+- **Cost and frozen inputs.** Writer tokens are priced per model, subagents included. Skills, binaries, cases, CLI versions and the launch environment are hashed into the experiment identity. A resume accepts only identical inputs, and cached drafts are reused only on exact matches.
 
-### Frozen comparisons
+Methodology: [docs/methodology.md](docs/methodology.md). Related work: [docs/related-work.md](docs/related-work.md).
 
-`bun run prbench compare --baseline-skill <dir> --candidate-skill <dir> --cases <dir> --split dev --out results/<experiment>`
-compares native Codex, baseline Tracetoon and candidate Tracetoon using Sol and
-Terra at medium, the same two judges in both presentation orders, and a 30-minute
-writer timeout. Each skill must include its matching platform binary in `bin/`.
-Comics and connected apps are disabled. Existing single-system commands remain available.
+## Results: the v4 golden run
 
-#### Providers and parallel runs
+Tracetoon's evidence-graph skill (`candidate62`) against Tracetoon's original workflow. The run used 61 real cases × 3 replicates per provider, with two pre-registered judges per provider, each judging every pair in both orders, and an expert accuracy review of every flagged claim. Data, drafts and commands: [golden/v4-candidate62/](golden/v4-candidate62/). Write-up: [the Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html).
 
-`--provider` picks who writes and who judges. A comparison never mixes the two
-families:
-
-| `--provider`      | Writers                                                                                     | Judges                           | Login                                                                |
-| ----------------- | ------------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
-| `codex` (default) | `codex-native`, baseline and candidate Tracetoon on Sol and Terra                           | Sol and Terra                    | `prbench auth codex`                                                 |
-| `claude`          | `claude-native`, baseline and candidate Tracetoon on Claude Opus and Sonnet (effort medium) | Opus and Sonnet                  | `claude setup-token`, then pipe the token into `prbench auth claude` |
-| `both`            | two independent runs, in `<out>/codex` and `<out>/claude`                                   | each provider judges its own run | both                                                                 |
-
-A provider judging drafts from its own models is an accepted limitation; the two
-runs are reported separately, never pooled. A test-split run must use the
-provider of its development run (`--development` points at the same layout).
-
-`--parallel <n>` (default 4) runs up to n writers, judges and isolation probes
-at once per provider. Judges start as soon as the two drafts they compare exist,
-so finished cases report early. `--parallel 1` keeps the serial order. The
-frozen inputs, cache keys and reports do not depend on the setting. Concurrent
-Codex runs share the dedicated login file through a link instead of copying it,
-so refreshed tokens are never overwritten (verified with codex-cli 0.164 under
-concurrent forced refreshes); Windows keeps the exclusive copy mode. Claude runs
-use a long-lived setup token and need no coordination. After a failure no new
-job starts, running jobs finish and are saved, and `--resume` continues.
-
-#### Several controllers at once and timeouts
-
-Several `compare` processes may run at the same time (for example two Codex and
-two Claude controllers, each `--parallel 12`, with `--out results/r10/<run>/<provider>`),
-as long as each has its own `--out`. Each holds its own `controller.lock`,
-ledger and attempts under `--out`; sandboxes and judge scratch folders are
-unique `mkdtemp` folders under `TMPDIR`. The content-addressed stage cache
-(`<parent of --out>/.prbench-cache/v2`, or `--cache`) may be shared: entries are
-immutable and written with an atomic link. The case-bundle inspection mirrors in
-`node_modules/.cache/prbench-preflight` (`PRBENCH_PREFLIGHT_CACHE` moves them)
-are shared by every controller on the checkout; each mirror is cloned beside its
-final path and renamed into place. Every Codex controller links its sandboxes to
-the one dedicated login; a serial (`--parallel 1`) controller or standalone
-Codex judge that would otherwise use an exclusive copy joins the shared link
-whenever another live controller holds a lease, so it never writes a stale copy
-back. `tests/capacity.test.ts` runs four such controllers with fake agents.
-
-Timeouts under load:
-
-| Setting | Default | Notes |
+| | Codex (writer gpt-6.1-terra) | Claude Code (writer claude-sonnet-5-5) |
 | --- | --- | --- |
-| `--timeout-ms <ms>` or `PRBENCH_WRITER_TIMEOUT_MS` | 30 min | Writer hung-job timeout. Part of the experiment identity and writer cache keys, so choose it when freezing; `--resume` keeps the recorded value. |
-| `--judge-timeout-ms <ms>` or `PRBENCH_JUDGE_TIMEOUT_MS` | 15 min | Per judge call. Not part of any identity, so it can be raised on `--resume`; timed-out judges are retried (up to 3 attempts). |
+| Consensus picks, candidate–original | **79–38 (68%)**, CI 56–79% | **60–21 (74%)**, CI 62–85% |
+| Composite score delta (0–100) | **+3.3** [1.0, 5.5] | **+3.5** [0.8, 6.1] |
+| Writer cost, candidate / original | **0.30** [0.28, 0.32] | **0.57** [0.53, 0.62] |
+| Confirmed accuracy errors per draft, candidate vs original | 0.33 vs 0.16 | 0.47 vs 0.84 |
+| Strict accuracy gate (no worse than the original + 0.05) | fails | passes |
 
-These variables never reach writers and are left out of the writer environment identity.
+**How to read the table:**
+- **Consensus picks** count the cases × replicates where both judges, in both orders, preferred the same draft. Ties and split decisions are left out.
+- **Composite score** is 35·claims + 15·context + 15·uncertainties + 35·rubric, minus penalties for factual errors, unsupported claims and traps, averaged per case.
+- **Intervals** are 95% bootstrap intervals clustered by case.
+- **In-sample results.** The pool has no held-out split, and the candidate was tuned on these cases.
+- **Codex accuracy.** The Codex candidate makes more confirmed errors than the original workflow. This is disclosed in the run details, and most of those errors trace to known Validation-section render bugs.
 
-The command freezes skill/runtime bytes and case inputs, records harness and CLI
-identity, rotates system execution order, and serializes credential use. It
-compares candidate against baseline and native separately. `--prepare-only`
-freezes without calling a model; `--resume` accepts only matching inputs and
-hash-verified saved artifacts. Changed inputs require a new output directory.
-Reports and private execution status stay in the ignored experiment directory.
+## Install
 
-Before scoring, six short unscored probes (each model and system) verify the
-actual startup skill catalogue and require zero tool calls. Native must see no
-Tracetoon skill; each tool arm must see exactly its repository-local frozen copy.
-The probes use the synthetic example, never held-out content. `--verify-only`
-stops after this check. Hash-verified isolation receipts are reused on resume.
-Codex runs suppress host skill discovery and remote plugins and explicitly
-disable global Tracetoon entries. These CLI feature flags are version-specific;
-an unavailable flag or an unrecognized catalogue fails before draft collection.
-Every writer receives the same workspace-scope instructions. After collection,
-the comparison audits its neutral command records for observable host agent
-configuration/skill reads, host ancestor instructions and outside case inputs.
-A violation retains the artifact for diagnosis and rejects the comparison before
-judging or issuing its reuse receipt. This complements catalogue probes; neither
-the prompt nor the audit turns the workspace into a filesystem security boundary.
-
-`--preparation <file>` accepts an explicit JSON profile with a `cases` object.
-Each case may have `commands` (nonempty argv arrays, run in the checkout) and
-`fixtures` (`name`, local Git `bundle`, full `revision`), materialized as siblings.
-Bundle paths are relative to the profile. Preparation is identical across systems,
-must leave tracked content unchanged, and is recorded separately from writer checks.
-
-For held-out cases use `--split test --development <passing-dev-experiment>`.
-The baseline, candidate and harness must match the completed development run.
-The quality gate compares factual errors, unsupported claims and claim/context
-coverage against baseline; development pr8 must have no unsupported candidate claims.
-Do not tune on held-out findings and then present another run as untouched validation.
-
-Timing metadata distinguishes installation, authentication waiting, writer
-execution, collection and setup; status files separately record cleanup and total
-time. Legacy `durationMs` retains its existing meaning. Token counts are CLI
-usage, not dollar estimates. The adapter retains invocation-owned internal
-Tracetoon stage timers before cleanup and reports their counts, totals and
-medians alongside the neutral pipeline timings. Invalid or unavailable logs
-remain explicit gaps. Runtime timers are diagnostics, not validation evidence.
-Records may overlap and are not invocation counts; nested stages must not be
-added into a pipeline total. Use the neutral writer clock for elapsed execution.
-When Codex omits an execution directory, the collector can correlate an exact
-command and time window with explicit, statically resolved tool arguments in
-that writer's own rollout. An omitted `workdir` uses only the recorded turn
-context's default directory. It records this as `cwdSource`; ambiguous matches,
-dynamic code and other sessions remain unknown. Transcript code is never executed.
-This does not strengthen boundary fingerprints into atomic test attestations.
-
-Judges can retain a completed JSON stream reply when the CLI omits its output
-file. The same schema and evidence-reference checks still apply. Transport and
-format failures share a bounded three-attempt budget, including at most one
-format-correction request; saved judgments remain
-available for an exact-input resume after an unrecoverable failure.
-Execution content observations remain partial when
-the tool stream does not establish them; preparation never proves writer validation.
-
-A saved draft survives cleanup failure. Retry only owned pending sandboxes with
-`bun run prbench cleanup --experiment <dir>`. Ownership tokens, roots and parents
-are checked before deletion; symlinks and unrelated processes are not followed.
-
-An evaluation harness for tools that write or change the pull requests produced by AI coding agents.
-
-It answers: **does this PR tool produce better pull requests than the agent would have without it?** It runs each system on the same fixed cases, collects the PR each one would have opened, and scores those PRs for accuracy and usefulness to a reviewer.
-
-> **Status: milestone 1.** Five systems (`original`, `claude-native`, `tracetoon`, `codex-native`, `codex-tracetoon`), blind pairwise judging and reports. A dedicated accuracy checker and human calibration come next; see the [roadmap](docs/methodology.md#roadmap).
-
-## Why
-
-No existing benchmark scores the whole PR (title, description, commits and whether the text matches the diff) or compares a PR tool against a baseline. Research shows description–diff mismatch is the strongest sign of a bad agent PR, and that word-overlap metrics like BLEU and ROUGE track human judgment poorly. See [docs/related-work.md](docs/related-work.md).
-
-## Quick start
-
-Needs [Bun](https://bun.sh) 1.3.14 or later and git.
-
-Install the released CLI globally with Bun:
+Needs [Bun](https://bun.sh) 1.3.14 or later and Git. Running comparisons also needs the [Codex CLI](https://github.com/openai/codex) and/or [Claude Code](https://docs.anthropic.com/en/docs/claude-code), signed in with your own account.
 
 ```sh
-bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.3.0/prbench-0.3.0.tgz
-prbench --version
-prbench --help
+git clone https://github.com/Tracetoon/prbench
+cd prbench
+bun install --frozen-lockfile
+bun run prbench --help
 ```
 
-The release is a source package that includes the replay helpers. Bun remains required at runtime. Cases and result paths are relative to your working directory unless explicitly supplied. For development, use the repository commands below.
+A packaged release is also available: `bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.4.0/prbench-0.4.0.tgz` installs the `prbench` command with the v4 harness and the 4.0.0 dataset registry. With the package, drop the `bun run` prefix from the commands below.
+
+## Quick start: a smoke test with no model calls
+
+The repository ships one synthetic case (`cases/example-greet-default`). These commands check it, replay its published PR as a draft, and validate the output, without calling any model:
 
 ```sh
-bun install
-bun run prbench validate                 # check every case under cases/
-bun run prbench systems                  # list systems
-bun run prbench run -s original          # write results/artifacts/<case>/original.json
-bun run prbench check-artifact results/artifacts/example-greet-default/original.json
-bun run test
-bun run typecheck
+bun run prbench validate                  # check every case under cases/
+bun run prbench systems                   # list the systems that can run
+bun run prbench run -s original -o results/smoke/artifacts
+bun run prbench check-artifact results/smoke/artifacts/example-greet-default/original.json
+bun run test && bun run typecheck         # the full suite takes about 6 minutes
 ```
 
-`run --keep-sandbox` leaves the sandbox on disk so you can inspect it.
+## Get the dataset
 
-## Comparing PR tools
+The real cases are distributed as a versioned, checksummed download, kept out of Git. `real-cases@4.0.0` holds the 61 cases of the golden run, all in one `dev` pool. Each case has a repository bundle, redacted sessions, a fact sheet with provenance, and pinned preparation steps.
 
 ```sh
-bun run scripts/import-tracetoon-cases.ts            # real cases -> cases-local/ (git-ignored)
-bun run prbench run -s original      --cases cases-local
-bun run prbench run -s claude-native --cases cases-local --split dev
-bun run prbench run -s tracetoon     --cases cases-local --split dev
-bun run prbench judge --cases cases-local             # both orders, judges: claude and codex
-# -> results/report.md, results/report.json, results/judgments/
+bun run prbench datasets list
+bun run prbench datasets fetch real-cases@4.0.0             # into ~/.cache/prbench/datasets
+bun run prbench datasets fetch real-cases@4.0.0 --out cases-v4   # or into a new local folder
+bun run prbench preflight --dataset real-cases@4.0.0        # checks provenance, no model calls
 ```
 
-- **Claude systems need their own login.** Sandboxes have their own home directory, so run `claude setup-token` and save the token to `~/.prbench/claude-oauth-token`, or set `PRBENCH_CLAUDE_OAUTH_TOKEN`. An `ANTHROPIC_API_KEY` also works.
-- **Model and cost for Claude.** `--model` (default `opus`) and `--max-budget-usd` (default 25 per run) apply to both Claude systems.
-- **Judges** use `claude` with tools/hooks off or ephemeral, read-only `codex exec`. Choose them with `--judges claude:opus,codex`; dedicated Codex login and effort settings are described below.
-- **Caching.** Judgments are cached by prompt, so re-running `judge` only pays for new or changed pairs. `prbench report` rebuilds the report from `results/pairs.json` and the saved judging configuration. Missing judgments are listed explicitly and excluded from judge consensus.
+The 4.0.0 archive is published as the [`cases-v4.0.0` release](https://github.com/Tracetoon/prbench/releases/tag/cases-v4.0.0). Downloads need no account. Every file is verified against the registry's SHA-256 values, and no setup command runs at download time. The [dataset card](datasets/DATASET_CARD.md) covers composition, consent, redaction, licenses and limitations, and [docs/datasets.md](docs/datasets.md) covers the download workflow.
 
-## Sol and Terra through Codex
+## Run a comparison
 
-Run `bun run prbench auth codex` in your terminal and complete the browser sign-in. This creates a separate OAuth cache at `~/.prbench/codex-auth`; `--status` checks it and `--device-auth` selects device-code login. `PRBENCH_CODEX_AUTH_HOME` can choose another dedicated cache. Keep it outside the repository and never paste its contents into chat. See [OpenAI authentication documentation](https://learn.chatgpt.com/docs/auth).
+A comparison runs two (or three) systems on every case: the provider's agent with a **baseline** skill, the same agent with a **candidate** skill, and optionally the agent with no skill (`native`). Each skill directory must contain its platform binary in `bin/`. For Tracetoon, see [building the bundles](docs/reproduce-graph-vs-base.md#build-the-two-skill-bundles).
 
-Each Codex process receives a temporary copy of that dedicated cache, then returns any refreshed credentials and removes the copy. Access is serialized across writers and explicit-effort judges so refreshes cannot race. Interrupted controllers leave a lock with their PID; if a stale-lock error reports that the controller exited, remove that lock file before retrying. Do not sign in again while a benchmark owns the cache. The interactive Codex login is never copied.
-
-After an explicit Codex turn-completion event, the runner allows two seconds for CLI cleanup, then stops cleanup that remains alive. Artifacts record that intervention. This keeps a completed preview's background process from holding the login lock indefinitely; normal process exits retain their actual exit status.
-
-Use separate directories per model and effort. Run these for Sol, then repeat with `gpt-6.1-terra` and `results-codex-terra`:
+Set up a separate benchmark login first. Sandboxes get their own `HOME`, so your interactive login is never copied in:
 
 ```sh
-bun run prbench run -s codex-native --model gpt-6.1-sol --reasoning-effort medium --cases cases-local --split dev --timeout-min 30 --skip-existing -o results-codex-sol/artifacts
-bun run prbench run -s codex-tracetoon --model gpt-6.1-sol --reasoning-effort medium --cases cases-local --split dev --timeout-min 30 --skip-existing -o results-codex-sol/artifacts
-bun run prbench judge --systems codex-native,codex-tracetoon --judges codex:gpt-6.1-sol@medium,codex:gpt-6.1-terra@medium --cases cases-local --split dev --artifacts results-codex-sol/artifacts -o results-codex-sol -j 1
+bun run prbench auth codex                       # browser sign-in into ~/.prbench/codex-auth
+claude setup-token                               # prints a long-lived token, then:
+bun run prbench auth claude < token.txt          # stores it in ~/.prbench/claude-oauth-token
 ```
 
-Both Codex flows receive the same `PR_PROMPT`, model, reasoning effort, permissions and timeout. `--skip-existing` rejects Codex artifacts with different model/effort settings. Codex defaults to `gpt-6.1-sol` at `medium`; `PRBENCH_CODEX_MODEL` and `PRBENCH_CODEX_REASONING_EFFORT` override those defaults. Codex CLI has no USD spending-cap flag and reports no dollar cost, so these runs use no USD cap; an explicit dollar cap is rejected. OAuth runs exclude inherited API keys. Tracetoon comics are off in benchmark sandboxes. On Windows the harness compiles and caches a fake `gh.exe` under `node_modules/.cache/prbench-gh`, so executable discovery also stays inside the sandbox.
-
-The `@effort` judge syntax uses the dedicated cache, an isolated home and explicit model/effort. It disables hooks, delegation, shell, image and plugin tools. Connected apps, browser use and computer use are disabled for Codex writers and these judges; PR calls go through the fake `gh`. Judge IDs include effort, keeping those cached judgments separate. Legacy `codex[:model]` judges retain their existing login/configuration behavior. Sol and Terra are two models from the same provider; agreement between them does not replace cross-family or human calibration. Claude artifacts and judgments can stay in their existing directories.
-
-## How it fits together
-
-Rubric v5 retains the v4 evidence separation and adds independent clause, fallback, and review-location audits. It supplies original work-session evidence and each writer's fresh command evidence separately. Capture-summary references `A.V0` and `B.V0` make recording limits citable; they cannot establish that a check passed, failed or did not run. Missing check receipts remain evidence gaps; contradictions and scope overclaims have separate findings. Evidence-dependent preferences are inconclusive, and reports show evidence coverage. Preserve historical v2/v3 results. Legacy v2 unsupported counts may include missing fresh evidence and must not be interpreted as fabrication rates. See [validation evidence and historical audits](docs/validation-evidence.md).
-
-Rubric v6 makes scope findings depend on the breadth actually asserted in context and a reachable, source-backed counterexample. It separates an omitted unchanged fallback from an incorrect universal guarantee. See [scope calibration](docs/scope-calibration.md) for the policy, fixed synthetic examples, and current calibration limits. Historical v5 results remain unchanged.
-
-To prepare existing development drafts for reassessment while preserving their originals:
+Freeze the inputs and inspect the plan, still without model calls:
 
 ```sh
-bun run prbench audit-evidence --cases cases-local --split dev --artifacts results-old/artifacts --judgments results-old/judgments --out results-evidence-audit
+bun run prbench compare --provider codex --dataset real-cases@4.0.0 \
+  --baseline-skill skills/baseline --candidate-skill skills/candidate \
+  --systems baseline,candidate --out results/my-run --prepare-only
+bun run prbench compare <same arguments> --resume --plan
 ```
 
-This local audit calls no models and never reruns historical checks. Use a new output directory when judging under v5; historical reports and caches are preserved.
+**Codex**: gpt-6.1-terra writes; Sol and Terra judge.
 
-- A **case** (`cases/<id>/`) fixes the starting point: a repo snapshot, the task and, for replay cases, the recorded agent sessions and resulting commits. [docs/cases.md](docs/cases.md)
-- A **system** (`src/systems/`) turns a case into a **PR artifact** (`src/schema/artifact.ts`). Systems run in a **sandbox** (`src/run/sandbox.ts`) with their own home directory holding only the case's sessions, a fake `gh` that captures PRs, and a local remote for pushes.
-- **Metrics** only see artifacts, so any PR tool can be compared with any other. [docs/methodology.md](docs/methodology.md)
+```sh
+bun run prbench compare --provider codex --models gpt-6.1-terra@medium \
+  --judges codex:gpt-6.1-sol@medium,codex:gpt-6.1-terra@medium \
+  --systems baseline,candidate --replicates 3 --purpose diagnostic \
+  --baseline-skill skills/baseline --candidate-skill skills/candidate \
+  --dataset real-cases@4.0.0 --parallel 6 --out results/my-run/codex
+```
+
+**Claude Code**: Sonnet writes; Opus and Sonnet judge.
+
+```sh
+bun run prbench compare --provider claude --models claude-sonnet-5-5@medium \
+  --judges claude:claude-opus-5-5@medium,claude:claude-sonnet-5-5@medium \
+  --systems baseline,candidate --replicates 3 --purpose diagnostic \
+  --baseline-skill skills/baseline --candidate-skill skills/candidate \
+  --dataset real-cases@4.0.0 --parallel 6 --out results/my-run/claude
+```
+
+Then review the flagged claims and rebuild the report:
+
+```sh
+bun run prbench accuracy-review --run results/my-run/codex --cases <cases dir> \
+  --out results/my-run/codex-accuracy --decider claude-fable-5-1 --write
+bun run prbench compare <same arguments as the run> --resume --report-only
+bun run prbench score results/my-run/codex --cases <cases dir>   # per-draft scores and cost
+```
+
+**Options and recovery:**
+- **Judges.** `--judges` takes one comma-separated list; repeating the flag keeps only the last judge.
+- **Purpose.** `--purpose confirmation` (the default) drafts everything fresh and enforces the adoption gate. `diagnostic` allows exact-match draft reuse across runs.
+- **Interrupted runs.** Resume with the same command plus `--resume`, and add `--recover-lock` if the controller died. After a reboot, add `--accept-environment-change`.
+- **Status.** `bun run prbench status --experiment <out>` reports progress without launching calls.
+- **Timeouts.** `PRBENCH_WRITER_TIMEOUT_MS` sets the writer timeout (default 30 min; frozen in the experiment). `PRBENCH_JUDGE_TIMEOUT_MS` or `--judge-timeout-ms` sets the judge timeout (default 15 min; may be raised on resume).
+- **Exit codes.** 0 passed, 1 a gate failed, 2 incomplete or invalid, 3 inconclusive, 130 cancelled.
+
+## Reproduce the golden run
+
+[golden/v4-candidate62/README.md](golden/v4-candidate62/README.md) has the full procedure. In short:
+
+1. **Harness.** Check out `fa3db9c`, the harness revision recorded in the run's manifests, or use this branch, whose later commits only add macOS/Windows fixes and resume options.
+2. **Skills.** Build the baseline bundle from Tracetoon tag `v1.0.0-rc.24` (`9ac29c4`) and the candidate from tag `candidate62` (`8d9783f`). Compare them with `golden/v4-candidate62/skills.json`.
+3. **Writer CLIs.** Pin Claude Code 2.1.319 (`npm install @anthropic-ai/claude-code@2.1.319`, then `PRBENCH_CLAUDE_COMMAND='["<path>/node_modules/.bin/claude"]'`). The run used Codex CLI 0.169.0.
+4. **Environment.** `PRBENCH_WRITER_TIMEOUT_MS=3600000 PRBENCH_JUDGE_TIMEOUT_MS=1800000 TMPDIR=/var/tmp`.
+5. **Run.** Use the two `compare` commands above with `--cases <real-cases 4.0.0> --preparation <cases>/preparation.json --split dev`, then `accuracy-review --decider claude-fable-5-1 --write` and `--resume --report-only`. The exact scripts are in `golden/v4-candidate62/commands/`.
+
+**Cost and time.** A full run is 366 drafts and 732 judge calls per provider, plus the accuracy review.
+- **Claude Code**, at API prices: about $620 (writers about $183, judges $273, accuracy review $167).
+- **Codex** does not report USD costs; its writers are estimated at about $105.
+- **Time.** A run from scratch has about 43–51 writer-hours per provider: roughly 7–9 hours at `--parallel 6` with both providers running at once, plus judging. Memory, not CPU, limited concurrency: 16 concurrent writers ran a workstation out of memory.
+
+The golden run reused cached original-workflow drafts and took about 4 hours per provider.
+
+## Output layout
+
+A `compare --out <dir>` folder holds:
+
+| Path | Contents |
+| --- | --- |
+| `manifest.json` | frozen experiment: skill identities, case hashes, writer and judge contract hashes, settings, harness revision |
+| `summary.md`, `summary.json` | the report: consensus picks, per-judge head-to-head, components, cost, gates |
+| `<model>/artifacts/<case>/<system>.json` | each draft (title, body, commits, diff, validation evidence, run metadata); replicates 2+ under `replicate-00N/` |
+| `<model>/tracetoon-baseline/pairs.json`, `judgments/` | pairwise verdicts and every judge's full judgment, per order |
+| `accuracy-findings.json`, `adjudications.json` | flagged claims and the expert rulings that confirm or clear them |
+| `state.json`, `events.jsonl`, `attempts/` | progress, the event ledger and per-attempt logs (for resume and diagnosis) |
+| `inputs/` | frozen copies of the harness, skills, cases and preparation profile |
+| `derived-reports/` | earlier report versions, kept when a report is rebuilt |
+
+Results folders contain traces and paths from your machine. Keep them out of Git (`results/` is ignored). The golden bundle is a curated, path-free extract.
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `src/cli.ts` | the `prbench` command |
+| `src/comparison.ts`, `src/run/` | frozen comparisons, sandboxes, isolation probes, preparation |
+| `src/systems/`, `src/agents/` | systems (native, Tracetoon) and the Claude/Codex runners |
+| `src/judge/`, `src/report/`, `src/gates.ts` | pairwise judging, rubric v6, scoring, cost pricing and gates |
+| `src/factreview/` | expert fact-sheet review (`fact-review`, `fact-debate`, `fact-decide`) |
+| `scripts/` | case discovery, import, redaction, dataset staging and packaging, paired deltas |
+| `datasets/` | dataset registry, card and drafts (data itself is downloaded) |
+| `golden/` | curated golden-run bundles |
+| `docs/` | methodology and reference |
+
+## Documentation
+
+- [Methodology](docs/methodology.md): what is measured, the v4 protocol and its limits.
+- [Harness reference](docs/harness-reference.md): `compare` internals, providers, parallel controllers, timeouts, single-system commands, rubric versions.
+- [Datasets](docs/datasets.md) and the [dataset card](datasets/DATASET_CARD.md).
+- [Expert fact review](docs/fact-review.md), [cases](docs/cases.md), [validation evidence](docs/validation-evidence.md), [scope calibration](docs/scope-calibration.md).
+- [Reproducing the Tracetoon graph-vs-base comparison](docs/reproduce-graph-vs-base.md) and the [v4 golden run](golden/v4-candidate62/README.md).
+- [Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html), the published write-up of the golden run.
 
 ## Adding a system
 
-Implement `System` from `src/systems/types.ts` and register it in `src/systems/index.ts`. A system gets the loaded case (without its fact sheet) and a sandbox, runs whatever it needs with `sandbox.env` inside `sandbox.repo`, and returns a `PRArtifact`. PRs opened through `gh pr create` are available from `sandbox.capturedPRs()`. Use the provider's shared runner (`runClaude` or `runCodex`) and `PR_PROMPT` so each tool flow differs from its native baseline only in what it installs.
+Implement `System` from `src/systems/types.ts` and register it in `src/systems/index.ts`. A system receives the loaded case (without its fact sheet) and a sandbox, runs whatever it needs with `sandbox.env` inside `sandbox.repo`, and returns a `PRArtifact`. PRs opened through `gh pr create` are available from `sandbox.capturedPRs()`. Use the provider's shared runner (`runClaude` or `runCodex`) and `PR_PROMPT`, so each tool flow differs from its native baseline only in what it installs.
 
 ## License
 
-Apache-2.0
-
-## Reproducible comparisons (v2)
-
-`compare` defaults to the predeclared confirmation protocol: three samples per case/model/system, Sol and Terra at medium effort, two independent judges, and both orders. A selected real case needs `facts-provenance.json` before writers start; source references bind each fact to immutable code or session records. Facts and published descriptions are excluded from writer cache identities and never copied to writer sandboxes.
-
-```sh
-bun run prbench preflight --cases <dir> --split dev --out results/preflight.json
-bun run prbench compare --baseline-skill <dir> --candidate-skill <dir> --cases <dir> --out results/<experiment> --plan
-bun run prbench compare --baseline-skill <dir> --candidate-skill <dir> --cases <dir> --out results/<experiment> --replicates 3
-bun run prbench status --experiment results/<experiment>
-```
-
-Use `--resume` with the same frozen inputs to retain completed work, or `--report-only --resume` to refresh reports without model calls. `--purpose diagnostic --replicates 1` permits compatible cross-experiment writer reuse; diagnostic results never pass the adoption gate. Confirmation creates a fresh paired performance block. Stage cache reuse is explained by `--plan`; `--cache <dir>` selects its content-addressed store. Git revision is provenance, while effective stage inputs control reuse. Legacy comparison-v1 directories are read-only.
-
-After a fact-sheet or judge repair, `--reuse-from <inactive-dev-experiment>` retains its writer performance block only when writer inputs, controls, preparation, sampling and adoption policy still match. It does not turn diagnostic samples into confirmation samples. A stale experiment lock can be recovered with `--resume --recover-lock`; recovery verifies the experiment owner and requires that its recorded process has exited. It never terminates a process by PID.
-
-The maintained `calibrate-scope` and `admission` commands support fixed diagnostic stages with `--plan` and exact-input `--resume`. Performance report v2 requires comparable completed validation from captured artifact evidence; faster interrupted or unknown-work samples cannot establish a performance pass. See the [fixed completion protocol](docs/completion-round4.md) for call counts, recovery and promotion rules.
-
-Completed writer generations are cached before scope acceptance. After a scope-checker repair, `--resume` re-audits the same retained generation without another writer call. The original rejection remains in `.isolation-failure.json`; `.scope-audit.json` records the current decision, artifact digest and checker contract, with immutable decisions under `.scope-audits/`. A real scope violation still stops the comparison. Historical v1 drafts lack these recovery receipts and are not automatically promoted into a confirmation block.
-
-The experiment retains the harness source and build receipts with its frozen inputs. Confirmation candidates require protocol-2 dependency/compiler provenance and a matching native-output receipt. Implementation and executable identities are checked before new calls. Derived report versions remain under `derived-reports/`; refreshing the latest report preserves previous views and raw judgments.
-
-There is no total experiment deadline. Calls have a recorded timeout and at most three persisted provider attempts, including at most one format-correction request. Valid scores are never retried for a better result. Redacted private traces and attempt responses are retained before owned sandboxes are removed. Windows Job Objects and POSIX process groups limit teardown to the invocation. Shared rotating OAuth credentials remain serialized.
-
-Quality, efficiency, and operational status are separate. Accuracy flags from any order appear in `accuracy-findings.json`; adjudications live separately and require matching source hashes and ranges. Unresolved flags remain inconclusive. Performance uses fresh paired samples and case-clustered intervals; repeats are not additional independent cases. Token usage is not a USD estimate. Read [the implementation and evaluation record](docs/evaluation-round3.md).
-
-Exit codes: 0 completed/passed; 1 completed/failed gate; 2 incomplete or invalid; 3 completed/inconclusive; 130 cancelled. A valid failure finishes with a report. Held-out input preflight runs only after a matching development adoption gate passes.
+Apache-2.0. Dataset cases keep their source repositories' licenses; see the [dataset card](datasets/DATASET_CARD.md).

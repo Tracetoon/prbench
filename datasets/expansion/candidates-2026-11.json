@@ -1,0 +1,633 @@
+{
+ "schema": "prbench.candidates/v1",
+ "notes": "2026-11 expansion batch (one pool); merge into candidates.json once admitted.",
+ "cases": [
+  {
+   "id": "tracetoon-update-command",
+   "title": "feat: add `tracetoon update` to upgrade in place",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "e1a4ee33cee3aa219e43183cd9e996c3389c03d8",
+   "head": "2984193c57fbcba986e4578b8be2f427c92c0285",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon",
+    "/var$HOME/Development/tracetoon/.claude/worktrees/ci-flaky-fix"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon--claude-worktrees-ci-flaky-fix/84bbcbfa-5e29-43e3-a551-5b4bfd404c63.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon--claude-worktrees-ci-flaky-fix/84bbcbfa-5e29-43e3-a551-5b4bfd404c63/subagents/agent-a8a5ceb207c83af77.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-release-no-round",
+   "title": "Allow an explicitly requested release with no benchmark round (promotion v3)",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "02a420ffd9025929e13cb6409fa6cd4a0375249c",
+   "head": "e1e36a892d768704fcb44aaf13026c9b04774d90",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/b93ecd6e-24d0-4448-808f-900503a8b663.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/b93ecd6e-24d0-4448-808f-900503a8b663/subagents/agent-ab144166213a917f0.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/b93ecd6e-24d0-4448-808f-900503a8b663/subagents/agent-aa9d3b8792678af12.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/98a33a7b-2484-4250-a4d1-88cfb6f06019.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/98a33a7b-2484-4250-a4d1-88cfb6f06019/subagents/agent-aa856d776b723c562.jsonl",
+     "subagentOf": 3
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/98a33a7b-2484-4250-a4d1-88cfb6f06019/subagents/agent-aabfad9e622f4e1ae.jsonl",
+     "subagentOf": 3
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/98a33a7b-2484-4250-a4d1-88cfb6f06019/subagents/agent-ae0992e1e529fb6f6.jsonl",
+     "subagentOf": 3
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-rc27-promotion",
+   "title": "Record rc.27 promotion: explicit request, no benchmark round (v3)",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "992e32214af591f1d2e4abec6894c728de769cb4",
+   "head": "ddc0183356e34c2d069d305a63fb82ec9532ae0c",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon",
+    "/var$HOME/Development/tracetoon/.claude/worktrees/rc26"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/44b85707-67bc-4555-ac0b-fb083272150b.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/44b85707-67bc-4555-ac0b-fb083272150b/subagents/agent-a086e6ce2b27342ec.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/44b85707-67bc-4555-ac0b-fb083272150b/subagents/agent-a4272a97158465b89.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-cli-guard-tests",
+   "title": "test: run every CLI call through a guard that survives a Bun that will not exit",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "3041190abde6f8211e2efce7cd021676bf439c46",
+   "head": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon--claude-worktrees-ci-flaky-fix/beb43308-4d94-41f2-b86c-e4dc4068a12a.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-graph-search-links",
+   "title": "feat(graph): search links, code lines and commit-vs-code rows in the evidence br",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+   "head": "3d8d392775a194e96bdbee9c2aa906de111bfef5",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/3e157515-6836-49a8-9bd6-57f4943f687a.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-brief-reviewer-cover",
+   "title": "feat(brief): cover what reviewers need and check what writers claim",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "e3bc491aaf0a25926801b1a853877def2c55516f",
+   "head": "d94bd82ec42c930a8f214417b68f0663ca88e7d7",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/d955bb9a-6b8d-4065-82f5-fee240b30549.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development-tracetoon/d955bb9a-6b8d-4065-82f5-fee240b30549/subagents/agent-a1e2c3632947a9a17.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-render-name-check",
+   "title": "feat(render): check names in tagged sentences against the rows they cite",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "28ed652d86cbd84ef881759943d77fe5cfd1c731",
+   "head": "e3bc491aaf0a25926801b1a853877def2c55516f",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9/subagents/agent-adb6f79d39ae72eba.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-shell-bookkeeping",
+   "title": "Keep shell bookkeeping out of writers and out of the environment identity",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "f7ec46eedb0bb7c1f28a635d8a94ed733092dd7a",
+   "head": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/7dd093ed-9291-4a70-b73d-0ccc942523a9/subagents/agent-ad1d9592a4c8c70d1.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-priced-cost-gate",
+   "title": "Performance gate: pass on paired priced cost per draft, not time and tokens",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "f1dfd98f89f65fce56395990de209584ec971882",
+   "head": "15472459f884e1f4aed7dbe54fed649965bd2e80",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a4fc41f0cd5bdcb5a.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a23711640b4cce9ba.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-aggregate-only",
+   "title": "Add --aggregate-only to score, paired-delta and qualify-cases",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "860b3f5f14c560ee048488e829a829c554c9d4eb",
+   "head": "154d46ea2b00edbbfc9114a70fae5533ce10a163",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a17c3e614b6390bd3.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a901682448261fe93.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-afad7108ec2ab2b4b.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-judge-retry",
+   "title": "Retry timed-out judges; accept saved isolation proofs for effort arms",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "0986e264165621237331b2bb30a6c16718af321b",
+   "head": "08b8254953538d3cf26e2cf9aa678657f58524ed",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a54d19cca5612686e.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a1728dc0c84002b1e.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "relate-grouped-aggregates",
+   "title": "fix(executor): stream grouped aggregates through constant-size accumulators (LAB",
+   "split": "dev",
+   "repo": "~/Development/relate",
+   "license": "Apache-2.0",
+   "base": "d932ed8f29d8204f708b8a532c987f356eda6dbe",
+   "head": "08afb21caa4985ea3aa92974638a64fb1e2898c3",
+   "recordedPath": "/var$HOME/Development/relate",
+   "recordedAliases": [
+    "$HOME/Development/relate"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-afc8aeeb5daadb5f3.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-lean-review-packet",
+   "title": "feat(review): graph-built lean review packet (claim neighborhoods); coverage by ",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+   "head": "a839b633e8168cbaad7d4d13621f19c5638c000a",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a0a259151a9f2c51f.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-brief-owners-rows",
+   "title": "feat(brief): owners rows say where each behavior lives; code cells spell out dir",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "0101b3186ff7e4cf9204317c33b1d2d742bfcd11",
+   "head": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a4a94ea89d7a98bce.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-graph-compare-doc",
+   "title": "Document how to reproduce the Tracetoon graph-vs-base comparison; changelog",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "3b922dca48b069a7b5f89df30431b77e0bef38cc",
+   "head": "dcf2bb3e1eb0755cbfa00952e67aab8f2a9dc503",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-ac039b6f5a9e102ec.jsonl",
+     "subagentOf": 0
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-aaf6f69cb0323356f.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "prbench-compare-systems",
+   "title": "compare --systems; cross-model composite delta in score",
+   "split": "dev",
+   "repo": "~/Development/prbench",
+   "license": "Apache-2.0",
+   "base": "51a03875c90e4e6ed0da9797013b041ea4226eaa",
+   "head": "0986e264165621237331b2bb30a6c16718af321b",
+   "recordedPath": "/var$HOME/Development/prbench",
+   "recordedAliases": [
+    "$HOME/Development/prbench"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a2f2dbb7dd6ca7fc4.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-sql-row-order",
+   "title": "fix(sql): return rows in cypherlite's order where the brief keeps it",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+   "head": "c088a541216b913d788011b48b819e5037fba483",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-aca122a190f279c88.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "tracetoon-review-run-all",
+   "title": "feat(review): review run --all, review merge, and the Review recheck setting",
+   "split": "dev",
+   "repo": "~/Development/tracetoon",
+   "license": "Apache-2.0",
+   "base": "6960bc82696af69382f8c0b4d89b45ebc3e678a6",
+   "head": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+   "recordedPath": "/var$HOME/Development/tracetoon",
+   "recordedAliases": [
+    "$HOME/Development/tracetoon"
+   ],
+   "sessions": [
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f.jsonl"
+    },
+    {
+     "agent": "claude-code",
+     "path": "~/.claude/projects/-var$HOME_SLUG-Development/58410cbe-0b43-4cbb-bece-12d01c15d63f/subagents/agent-a522828e5a0f8efdf.jsonl",
+     "subagentOf": 0
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstcontent-portable-replays",
+   "title": "fix: make Python replays portable across platforms",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstcontent.git",
+   "license": "Apache-2.0",
+   "base": "c74618e9abde1e24b6eca1e456a607538ca6be03",
+   "head": "1f332e0664e5e71a900a23b6585317524cd417f6",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcontent",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-09-02T22-14-55-01a065b1-0634-7442-b14c-1eea1fc081a4.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstcli-signpath-release",
+   "title": "build: prepare releases for SignPath signing",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstcli.git",
+   "license": "Apache-2.0",
+   "base": "adf6e95a3ec08165e889266b7e69c7e62abaad11",
+   "head": "2bbb2bfc687962ede097fdb58183da3743e80f27",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T12-15-55-01a0593f-e7a9-73a3-9133-b59100be72e2.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstcli-showtail-harness",
+   "title": "test: add Claude Showtail scenario harness",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstcli.git",
+   "license": "Apache-2.0",
+   "base": "c2016a28345c228c94f809b7abdd1e09629c0ee8",
+   "head": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstcli",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-30T13-33-51-01a05460-e427-7c52-ad5f-89822211a928.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstextension-content-sync",
+   "title": "Sync content to v1.5.0 (148 -> 155 prompts)",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstextension.git",
+   "license": "Apache-2.0",
+   "base": "e6a6d86444e0db4c8b36e918af910ee0752d4007",
+   "head": "01af5522798ed5ec47e81545438a268e39ce4051",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstextension",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-30T15-35-10-01a054cf-f570-72b2-8c5c-2edd5fba811d.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstwebsite-signing-policy",
+   "title": "docs: publish signing and trademark policy",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstwebsite.git",
+   "license": "Apache-2.0",
+   "base": "55054081657c0d436e26a1037baa40b3b3ecfa6b",
+   "head": "1f2b6be34d951ab9db4c5ac014338c93c477b872",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstwebsite",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T16-15-45-01a05a1b-79a5-7ee1-bb89-51c1860ca477.jsonl"
+    },
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T12-15-55-01a0593f-e7a9-73a3-9133-b59100be72e2.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstextension-apache-license",
+   "title": "docs: standardize Apache licensing",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstextension.git",
+   "license": "Apache-2.0",
+   "base": "01af5522798ed5ec47e81545438a268e39ce4051",
+   "head": "9b5452fe5beec8ba7833211a23b39adb605f8e1f",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstextension",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T16-15-45-01a05a1b-79a5-7ee1-bb89-51c1860ca477.jsonl"
+    },
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T12-15-55-01a0593f-e7a9-73a3-9133-b59100be72e2.jsonl"
+    },
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-08-31T16-16-56-01a05a1c-8fc2-7c33-94ec-27aca435b281.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  },
+  {
+   "id": "aifirstwebsite-macos-workaround",
+   "title": "fix: publish macOS installer setup workaround",
+   "split": "dev",
+   "repo": "~/.cache/prbench/staging/repos/aifirstwebsite.git",
+   "license": "Apache-2.0",
+   "base": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+   "head": "9b79dd0fcb33577b0e2316b4dbe415624951736f",
+   "recordedPath": "$HOME/src/github.com/aifirstprogramming/aifirstwebsite",
+   "sessions": [
+    {
+     "agent": "codex",
+     "path": "~/.cache/prbench/staging/sessions/codex-dev/rollout-2026-09-08T20-08-27-01a08423-6641-77b3-af70-48f238696ba6.jsonl"
+    }
+   ],
+   "notes": "2026-11 expansion: found by scripts/discover-cases.ts"
+  }
+ ]
+}

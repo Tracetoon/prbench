@@ -51,7 +51,7 @@ Each arm needs a skill directory that contains the Linux binary. Build each
 bundle from a separate Tracetoon worktree:
 
 ```sh
-# in a Tracetoon clone (github.com/Tingsters/tracetoon)
+# in a Tracetoon clone (github.com/Tracetoon/tracetoon)
 git worktree add /var/tmp/tt-base 9ac29c4        # baseline: main skill
 git worktree add /var/tmp/tt-graph 7483847       # candidate: evidence-graph commit
 
@@ -242,6 +242,13 @@ against its own baseline: +1 when all four judgments prefer the candidate,
 
 The script reads judgments with the harness's own loaders
 (`collectDraftScores`, `agreedResults`), so its numbers match `score`.
+
+For a sealed run, where per-case data must stay unseen until it is
+released, pass `--aggregate-only` to `prbench score`,
+`scripts/paired-delta.ts` and `scripts/qualify-cases.ts`. They then print
+only the overall tables (composite with its interval, W/T/L, errors and
+cost), with no per-case rows, per-case deltas, leave-one-case-out ranges or
+case names.
 
 ## Expected cost and time
 

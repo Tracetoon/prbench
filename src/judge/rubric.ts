@@ -342,6 +342,48 @@ Reply with JSON only, matching this shape:
 {"A": {...}, "B": {...}, "preferred": "A" | "B" | "tie" | "inconclusive", "preferenceDependsOnMissingEvidence": false, "reason": "..."}`;
 }
 
+/**
+ * The claim assessments are the judge's itemised verdicts (each with evidence
+ * and a reason); factualErrors and unsupportedClaims are summaries of them.
+ * When a reply's summaries disagree with its own assessments, rebuild them from
+ * the assessments instead of paying for another call. Returns one note per
+ * rebuilt list (empty when nothing changed). Mutates `value`.
+ */
+export function reconcileErrorLists(value: unknown): string[] {
+  const notes: string[] = [];
+  const v = value as Record<string, any>;
+  if (!v || typeof v !== "object") return notes;
+  for (const label of ["A", "B"]) {
+    const s = v[label];
+    if (!s || typeof s !== "object" || !Array.isArray(s.claimAssessments))
+      continue;
+    for (const [k, status] of [
+      ["factualErrors", "contradicted"],
+      ["unsupportedClaims", "unsupported"],
+    ] as const) {
+      const expected = [
+        ...new Set<string>(
+          s.claimAssessments
+            .filter((a: any) => a?.status === status && typeof a.claim === "string")
+            .map((a: any) => a.claim),
+        ),
+      ];
+      const given = s[k];
+      const same =
+        Array.isArray(given) &&
+        given.length === expected.length &&
+        given.every((c: unknown) => typeof c === "string" && expected.includes(c));
+      if (!same) {
+        notes.push(
+          `${label}.${k}: rebuilt from ${status} assessments (${Array.isArray(given) ? given.length : "none"} given, ${expected.length} assessed)`,
+        );
+        s[k] = expected;
+      }
+    }
+  }
+  return notes;
+}
+
 /** Checks a parsed judgment and fills nothing in: a judge that skips fields has failed. */
 export function checkJudgment(
   value: unknown,

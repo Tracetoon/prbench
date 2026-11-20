@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, test } from 'bun:test';
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { delimiter, join } from 'node:path';
 import { loadCase } from '../src/schema/case.ts';
-import { claudeProjectDir, createSandbox, GUI_LAUNCHERS, msysPath, pathPairs, rewritePaths } from '../src/run/sandbox.ts';
+import { claudeProjectDir, createSandbox, GUI_LAUNCHERS, msysPath, pathPairs, rewritePaths, sandboxPath } from '../src/run/sandbox.ts';
 import { exec, git } from '../src/util/exec.ts';
 import { cleanupTemps, copyExample, EXAMPLE, tempDir } from './helpers.ts';
 
@@ -196,9 +196,44 @@ describe('createSandbox', () => {
     }
   });
 
+  test('temp files, PATH, session type and terminal describe the sandbox, not the host session', () => {
+    const saved = { PATH: process.env.PATH, TMPDIR: process.env.TMPDIR, XDG_SESSION_TYPE: process.env.XDG_SESSION_TYPE, COLORTERM: process.env.COLORTERM };
+    const plugin = join(tempDir(), '.claude', 'plugins', 'cache', 'p', '1.0', 'bin');
+    const parent = tempDir();
+    process.env.PATH = `${plugin}${delimiter}${saved.PATH ?? ''}`;
+    process.env.TMPDIR = parent;
+    process.env.XDG_SESSION_TYPE = 'wayland';
+    process.env.COLORTERM = 'truecolor';
+    let sb;
+    try {
+      sb = createSandbox(loaded, { parent });
+      // The sandbox lives under the host temp dir; its own temp dir must not
+      // contain the checkout or HOME, or temp-path checks treat them as scratch.
+      for (const k of ['TMPDIR', 'TMP', 'TEMP']) expect(sb.env[k]).toBe(join(sb.root, 'tmp'));
+      expect(statSync(sb.env.TMPDIR!).isDirectory()).toBe(true);
+      expect(sb.repo.startsWith(sb.env.TMPDIR!)).toBe(false);
+      expect(sb.home.startsWith(sb.env.TMPDIR!)).toBe(false);
+      // Windows spells it Path; the sandbox keeps the host's spelling.
+      const path = Object.entries(sb.env).find(([k]) => k.toUpperCase() === 'PATH')![1]!;
+      expect(path.split(delimiter)).not.toContain(plugin);
+      expect(path.split(delimiter)[0]).toBe(sb.bin);
+      expect(sb.env.XDG_SESSION_TYPE).toBeUndefined();
+      expect(sb.env.COLORTERM).toBeUndefined();
+    } finally {
+      sb?.dispose();
+      for (const [k, v] of Object.entries(saved)) if (v === undefined) delete process.env[k]; else process.env[k] = v;
+    }
+    expect(sandboxPath(['/usr/bin', '/h/.claude/plugins/x/bin', '/h/.claude/local'].join(delimiter))).toBe(['/usr/bin', '/h/.claude/local'].join(delimiter));
+  });
+
   test('editors and desktop openers are no-ops inside the sandbox', () => {
     const sb = createSandbox(loaded, { parent: tempDir() });
     try {
+      // Without a display, an editor reached outside the shims (PATH reset to /usr/bin) cannot open a window either.
+      for (const k of ['DISPLAY', 'WAYLAND_DISPLAY', 'DBUS_SESSION_BUS_ADDRESS']) expect(sb.env[k]).toBeUndefined();
+      // No fallback display or bus sockets: the runtime dir is private to the sandbox and empty.
+      expect(sb.env.XDG_RUNTIME_DIR!.startsWith(sb.root)).toBe(true);
+      expect(readdirSync(sb.env.XDG_RUNTIME_DIR!)).toEqual([]);
       for (const name of GUI_LAUNCHERS) {
         const cmd = process.platform === 'win32' ? ['cmd', '/d', '/c', name, '.'] : [name, '.'];
         const r = exec(cmd, { cwd: sb.repo, env: sb.env });
@@ -296,4 +331,41 @@ test('a Windows recorded path names the checkout by its last segment on any host
   } finally {
     sb.dispose();
   }
+});
+
+test('places a Claude Code subagent transcript beside its parent session', () => {
+  const cases = copyExample('with-subagent', (c) => {
+    c.sessions.push({ ...c.sessions[0], file: 'agent-a1.jsonl', subagentOf: c.sessions[0].file });
+  });
+  writeFileSync(join(cases.dir, 'agent-a1.jsonl'), readFileSync(join(cases.dir, 'session.jsonl')));
+  const sb = createSandbox(loadCase(cases.dir), { parent: tempDir() });
+  try {
+    const parent = sb.sessions[0]!;
+    expect(sb.sessions[1]).toBe(join(parent.replace(/\.jsonl$/, ''), 'subagents', 'agent-a1.jsonl'));
+    expect(existsSync(sb.sessions[1]!)).toBe(true);
+  } finally {
+    sb.dispose();
+  }
+});
+
+test('maps recorded aliases such as worktrees onto the checkout, without their parents', () => {
+  const pairs = pathPairs(
+    { repo: { recordedPath: '/home/a/dev/tool', recordedAliases: ['/var/tmp/wt-x', '/var/home/a/dev/tool'] } } as never,
+    '/sb/work/tool',
+  );
+  expect(pairs).toEqual([
+    ['/home/a/dev/tool', '/sb/work/tool'],
+    ['/home/a/dev', '/sb/work'],
+    ['/var/tmp/wt-x', '/sb/work/tool'],
+    ['/var/home/a/dev/tool', '/sb/work/tool'],
+  ]);
+  expect(JSON.parse(rewritePaths(JSON.stringify({ a: '/var/tmp/wt-x/src/a.ts' }), pairs))).toEqual({ a: '/sb/work/tool/src/a.ts' });
+});
+
+test('rewrites paths that start a line of tool output after an escaped newline', () => {
+  const pairs: [string, string][] = [['/home/a/repo', '/sb/work/repo']];
+  const line = JSON.stringify({ out: '/home/a/repo/x.ts\n/home/a/repo/y.ts\t/home/a/repo/z.ts', keep: 'C:\\new/home/a/repo' });
+  const parsed = JSON.parse(rewritePaths(line, pairs));
+  expect(parsed.out).toBe('/sb/work/repo/x.ts\n/sb/work/repo/y.ts\t/sb/work/repo/z.ts');
+  expect(parsed.keep).toBe('C:\\new/home/a/repo');
 });

@@ -25,12 +25,25 @@ export interface FactSource {
   endLine: number;
   sha256: string;
 }
+export interface ExpertReviewRecord {
+  runId: string;
+  reviewers: { model: string; family: string; effort: string; count: number }[];
+  rounds: number;
+  /** sha256 of the revised facts.json the panel produced. */
+  factsSha256: string;
+  disputed: number;
+  revised: number;
+  removed: number;
+  added: number;
+}
 export interface FactProvenance {
   schema: "prbench.fact-provenance/v1";
   factsSha256: string;
   reviewedBy: string;
   reviewedAt: string;
-  reviewKind?: "human" | "automated";
+  reviewKind?: "human" | "automated" | "expert-panel";
+  /** Set by `prbench fact-review --apply`: the panel that reviewed this sheet. */
+  expertReview?: ExpertReviewRecord;
   entries: Record<string, { rationale: string; sources: FactSource[] }>;
 }
 function casePath(loaded: LoadedCase, name: string) {

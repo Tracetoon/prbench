@@ -11,45 +11,113 @@ size_categories:
 - n<1K
 ---
 
-# prbench real PR replay cases, 1.0.0
+# prbench real PR replay cases, 4.0.0
 
-Seven historical replay cases for comparing the accuracy and usefulness of AI-written pull requests. Each case contains an immutable repository bundle, time-sliced and redacted work sessions, unchanged fact sheets, and source-bound fact provenance. Six sessions are Claude Code sessions; one is Codex. No original session files are needed on the receiving machine.
+Sixty-one historical replay cases for comparing the accuracy and usefulness of AI-written pull requests. Each case contains:
+- an immutable repository bundle;
+- time-sliced, redacted work sessions;
+- a fact sheet reviewed by an expert model panel;
+- source-bound fact provenance.
+
+No original session files are needed on the receiving machine.
+
+Version 4.0.0 is the pool used for the v4 benchmark (the Tracetoon `candidate62` golden run; see `golden/v4-candidate62/` in the prbench repository). It contains:
+- the 27 cases of 2.0.0, with the same sessions and bundles;
+- 16 cases added in the 3.0.0 review (never published on their own);
+- 18 cases from the November 2026 expansion.
+
+The cases come from thirteen repositories:
+- Tracetoon (17 cases) and prbench (9), dogfooded work;
+- the AI First CLI (10), content (4), website (3) and editor extension (1) repositories;
+- Showtail (6);
+- VEX AIM: the workshop (2), the AIM CLI (1), a VEX AIM agent repository (4) and the vexide `vex-v5-serial` library (1);
+- winapps (2) and the Bazzite desktop login service (1).
+
+They cover bug fixes, features, documentation, CI, release engineering, licensing and an upstream contribution, from one-file changes to forty-file features, in TypeScript, Python, shell/systemd, Rust and prose. Thirty-three cases were recorded with Claude Code and twenty-eight with Codex; twenty include more than one session file (a subagent transcript or a second session). In total the sessions hold 60,844 records, and the fact sheets 1,397 facts.
 
 ## Access
 
-Install prbench 0.3.0 or newer, then run `prbench datasets fetch real-cases@1.0.0`. Use `--out cases-local` for a project-local installation. Downloads require no account; running model evaluations requires the user's own Codex login. Bun 1.3.14+ and Git are required. VEX AIM has no package-install preparation: its simulator tests use Python's standard library. Rust/Cargo is needed only for optional CLI build checks. Hardware acceptance requires a real device and is not implied by this dataset.
+Use a prbench build whose registry lists 4.0.0 (the harness from this repository once the release is published), then run `prbench datasets fetch real-cases@4.0.0`. Use `--out cases-local` for a project-local installation.
 
-`prbench compare --baseline-skill <built-dir> --candidate-skill <built-dir> --out results/comparison --prepare-only` uses the pinned default dataset and its preparation profile when `--cases` is omitted. It performs no model calls. Remove `--prepare-only` only when ready to run the paid/usage-limited evaluation. Baseline and candidate skills must include binaries for the recipient's platform.
+**Requirements:**
+- Downloads require no account. Running model evaluations requires the user's own model login.
+- Bun 1.3.14+ and Git are required.
+- Most TypeScript cases prepare with `bun install --frozen-lockfile` (see `preparation.json`). Tracetoon cases also pin a sibling Showtail checkout from `.fixtures`. `aifirstextension-apache-license` prepares with `npm ci --allow-git=all`: npm 12 refuses git dependencies without that flag. The v4 golden run used plain `npm ci` (npm 11) for that case.
+- Shell, documentation, Python and Rust cases have no preparation step. Cargo is not run.
+- Hardware acceptance (VEX AIM, VEX V5) requires a real device and is not implied by this dataset.
+
+`prbench compare --dataset real-cases@4.0.0 --baseline-skill <built-dir> --candidate-skill <built-dir> --out results/comparison --prepare-only` performs no model calls. Remove `--prepare-only` only when you are ready to run the paid or usage-limited evaluation.
 
 ## Composition and splits
 
-| Split | Case IDs | Purpose |
-| --- | --- | --- |
-| dev | pr5, pr8, pr9, pr11, pr12 | Tool development and comparison |
-| test | pr10, vexaim | Evaluation after the development gate |
+There is one pool and no held-out split: every case is in `dev`. The maintainers decided on 2026-11-15 to use the whole pool both for development and for confirmation runs, and to grow it rather than seal part of it. Treat any result on these cases as an in-sample result. Do not describe it as validation on untouched data.
 
-The split was fixed before this publication and has not changed. The user authorized publication curation of test facts; no writer, judge or tuning run was performed during curation. Public test data is available for reproducibility; researchers must avoid tuning on it and then claiming untouched held-out validation. Showtail's excluded case and its transcripts are not included. A pinned Showtail source bundle is included solely as a build dependency.
+**Overlap:** several cases share one long working session, cut to different time windows: most Tracetoon and prbench cases, the AI First CLI cases, and the two VEX AIM workshop cases.
+
+`MANIFEST.md` lists each case's sessions, fact count, review kind, published-PR availability, source license and preparation.
 
 ## Collection and provenance
 
-Cases come from the session owner's open-source work on Tracetoon and VEX AIM in October 2026. The owner consented to public redistribution of the redacted seven-case library. Imports retain case base/head commits, session IDs, timestamps, tool links and record order. Records that wrote published PR text were removed before slicing; the original leak check is applied without weakening it. Published PR text, when present, is a separate comparison artifact and is never a writer input.
+All cases come from work by the session owners, recorded between March and November 2026. Every repository is public except the VEX AIM agent repository (see Privacy).
 
-Fact text was hand-checked in the original project and remains unchanged. The publication's per-fact source review was performed by Codex and is explicitly marked **automated**, not human adjudication. Claims reference pinned code ranges; contextual observations reference the original historical digest packet or attributed commit narratives. The historical digest is a source artifact, not an independently verified execution log or a current test receipt. It remains outside writer sandboxes and writer cache identities.
+**Consent.** The repository owner authorized public redistribution of all 61 cases. The collaborator who recorded the 24 AI First and Showtail Codex sessions consented to the redistribution of all 24 of those cases.
 
-Several facts describe clipped or aggregated historical observations. These limits do not mean that an event never occurred or that newer, more complete evidence is false. Fresh accurate checks must be judged from their own evidence. Test-run counts do not establish passing checks on the exact final commit. Tracetoon and VEX AIM versions, model/provider names and behaviors in these cases describe the historical snapshots, not current product recommendations.
+**Importing.** Cases are imported from an explicit candidate list (`datasets/expansion/candidates.json` and `scripts/discover-cases.ts` in the prbench repository). Imports retain:
+- base and head commits;
+- session IDs and timestamps;
+- tool-call links and record order.
+
+**Slicing.** Each session is cut to the work that produced the change. Records that wrote published PR text are removed, together with the results of those calls. Importing fails if the published title or body survives in a slice. Published PR text, when present, is a separate comparison artifact and never a writer input.
+
+**Fact sheets.** Fact sheets were drafted from the diff, commits and sessions before the published PR was read. Each fact cites hashed line ranges of its sources. Preflight checks those hashes and ranges.
+
+**Reviews.** Every 4.0.0 fact sheet was reviewed by the expert panel (`prbench fact-review`, see `docs/fact-review.md`) and its `facts-provenance.json` has `reviewKind: "expert-panel"`. Claude Opus and Codex Sol reviewers at xhigh effort checked each fact against the raw evidence over several rounds. A change was accepted only when both model families agreed. Disputed items went to a debate, then to two judges (Claude Fable and Codex Astra); Fable decided splits. Earlier owner (`human`) and `automated` reviews of the 2.0.0 cases were the starting point for their panel review.
+
+**Limits of the facts.** Some facts describe clipped or aggregated historical observations. A missing observation does not mean an event never happened, and fresh, accurate evidence must be judged on its own. Test-run counts do not establish passing checks on the exact final commit.
 
 ## Privacy and transformations
 
-The review covered prompts, embedded file contents, commands, outputs and the added historical source packets. Credential-shaped values, personal emails, home paths, host/user/network/device identifiers were pseudonymized. Embedded image data and opaque encrypted provider payloads/signatures were removed; image block types and surrounding text were retained. No redaction map, authentication cache, raw audit backup or original agent-home directory is distributed. Public repository identities and Git author/commit metadata remain in immutable source bundles so commit SHAs stay valid.
+**What the review covered:** prompts, embedded file contents, commands, outputs, commit metadata and the published PR text.
 
-`MANIFEST.md` records case metadata and redaction categories. The release's archive checksum is pinned in the prbench registry; `dataset.json` hashes every installed file. Download verification never executes preparation commands. Package managers may need network access when a comparison prepares a checkout.
+**Changes applied to every session:**
+- **Personal identifiers:** email addresses in session logs are replaced with placeholders. Home-directory paths, user names in paths and host names are normalized; the recorded checkout paths in `case.json` are rewritten to match.
+- **Embedded payloads:** inline image data, encrypted provider reasoning and provider signatures are removed. Their record structure is kept.
+- **Out-of-scope content:** records that read or edited code outside a case's repositories are replaced in place by an `[omitted: …]` stub. This covers a private robot-control repository in the VEX library session and reads of an internal graph-database checkout in Tracetoon and prbench sessions (`vex-v5-serial-aim-port`, `tracetoon-evidence-graph`, `prbench-aggregate-only`, `prbench-graph-compare-doc`). Each stub keeps the record's ids, type, tool-call pairing and line, so fact provenance still points at the same records.
+- **Secrets:** a fail-closed scanner (`scripts/redact-cases.ts`) checks for credential-shaped values, keys and personal data, and every finding was reviewed. For 4.0.0 the scan was rerun over the staged release: it ends with no unreviewed hits, and re-applying the rules changes nothing beyond the reviewed exceptions listed below.
+
+No redaction map, authentication cache or raw session is distributed.
+
+**Rewritten history (four cases).** The four `vexagent-*` cases publish the history of the VEX AIM agent repository, which has no public remote and no license file; the owner approved its release with this dataset. Before release, that history was rewritten in all four bundles:
+- the owner's work e-mail became `owner@example.invalid` in author and committer metadata and in a committed patch file's `From:` header;
+- a local home path in the committed `build-shim/pkgconfig/libudev.pc` was normalized to `/home/user`.
+
+Every commit SHA in these four cases therefore differs from the v4 golden run's inputs. `case.json` (base, head, task label), commit references in the session logs and fact sheets, and the fact provenance (revisions and hashes, re-verified by preflight) were updated to the new SHAs. Apart from those two files, the trees the writers saw are unchanged. Apart from the commit references, so are the session logs and fact sheets, and every provenance line range still points at the same lines.
+
+**Left unchanged:** In the other 57 cases, Git author and commit metadata stay in the source bundles, so commit SHAs remain valid. Four Tracetoon sessions first published in 1.0.0 (`pr9`–`pr12`) keep a Windows 8.3 temp path with a shortened collaborator account name, and two fact sheets (`tracetoon-evidence-graph`, `tracetoon-sql-row-order`) use the engine's former name, cypherlite. Both are kept byte-identical to the inputs of the v4 golden run. The four Tracetoon cases from the evidence-graph work include a compiled WebAssembly build of the Relate graph engine, which Tracetoon vendors. That build is part of the public Tracetoon history and is redistributed unchanged. Relate was formerly named cypherlite. Session prose and fact sheets use the new name, while file names, code identifiers and repository URLs keep the old one so they match the bundles.
+
+**Integrity:** the registry pins the archive checksum, and `dataset.json` hashes every installed file. Download verification never executes preparation commands. Package managers may need network access when a comparison prepares a checkout.
 
 ## Intended use and limitations
 
-Use for paired PR-writing tool comparisons on fixed evidence. Seven cases from one owner's projects are a small convenience sample, not a representative measure of general software-engineering ability. The cases include overlapping work sessions, historical extractor limits and missing direct user prompts in some slices. No new benchmark quality result or speed improvement is asserted by publishing the data. Preserve the same cases, split, model settings and preparation across compared tools.
+Use the cases for paired PR-writing tool comparisons on fixed evidence. Keep the cases, splits, model settings and preparation identical across the tools you compare.
+
+**Limitations:**
+- Sixty-one cases from a few owners' projects are a convenience sample, not a representative measure of general software-engineering ability.
+- Almost half of the cases (26) come from developing Tracetoon and prbench themselves.
+- There is no held-out split; results on this pool are in-sample.
+- Some slices come from long multi-task sessions, and some lack a direct user prompt.
+- Stubbed records hide part of the work in four cases.
+
+Publishing the data asserts no benchmark result.
 
 ## License, attribution and maintenance
 
-Dataset compilation, owner-contributed text and annotations are distributed under Apache-2.0; see LICENSE. Source repositories, dependencies and third-party quoted material retain their applicable upstream terms; see NOTICE.md and licenses in the Git histories. Attribute Tracetoon/prbench and the source projects when redistributing. Do not replace assets for an existing version: corrections require a new dataset version and checksum. Report accidental disclosure through the repository's private vulnerability reporting mechanism when available, or privately to the owner; do not reproduce secrets in public issues.
+Dataset compilation, owner-contributed text and annotations are distributed under Apache-2.0; see LICENSE.
 
-The release is hosted at https://github.com/Tracetoon/prbench/releases/tag/cases-v1.0.0. The harness and dataset have independent versions. MANIFEST.md and the release metadata identify the exact inputs.
+Source repositories keep their own terms: Apache-2.0 for most, MIT for `vex-v5-serial` and AGPL-3.0 for winapps. The VEX AIM agent repository has no license file; its history is redistributed with the owner's permission, for benchmarking only. Dependencies, vendored builds and quoted third-party material also keep their upstream terms. See NOTICE.md and the licenses in each Git history, and attribute Tracetoon/prbench and the source projects when redistributing.
+
+**Corrections:**
+- Do not replace the assets of an existing version; corrections need a new dataset version and checksum.
+- Report accidental disclosure privately, through the repository's private vulnerability reporting or directly to the owner. Never reproduce secrets in public issues.
+
+The release is hosted at https://github.com/Tracetoon/prbench/releases/tag/cases-v4.0.0 (earlier versions keep their own tags). The harness and the dataset are versioned independently.

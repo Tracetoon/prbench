@@ -34,6 +34,12 @@ export interface CaseRepo {
    * sandbox checkout and its parent. Defaults to the first session's cwd.
    */
   recordedPath?: string;
+  /**
+   * Other paths the sessions used for the same repository, such as git
+   * worktrees or a symlinked home (/home vs /var/home). Sandboxes map each
+   * onto the checkout, like recordedPath, but not their parents.
+   */
+  recordedAliases?: string[];
   /** When the base commit was made (ISO). Judges read session evidence from this point on. */
   baseTime?: string;
 }
@@ -48,6 +54,12 @@ export interface CaseSession {
    * tools that match sessions to repositories by path still find them.
    */
   cwd: string;
+  /**
+   * Claude Code only: the `file` of the session that started this subagent.
+   * Sandboxes place it under that session's `subagents/` folder, where
+   * Claude Code keeps subagent transcripts.
+   */
+  subagentOf?: string;
 }
 
 export interface CaseOriginal {
@@ -149,7 +161,18 @@ export function checkCase(value: unknown, dir?: string): Problems {
       c.oneOf(ss.agent, `${p}.agent`, AGENTS);
       file(ss.file, `${p}.file`);
       c.string(ss.cwd, `${p}.cwd`);
+      if (ss.subagentOf !== undefined) {
+        const parent = (v.sessions as Record<string, unknown>[]).find((o) => o?.file === ss.subagentOf);
+        if (ss.agent !== 'claude-code') c.fail(`${p}.subagentOf`, 'only Claude Code sessions have subagent transcripts');
+        else if (!parent || parent === ss || parent.subagentOf !== undefined || parent.agent !== 'claude-code')
+          c.fail(`${p}.subagentOf`, 'must name another top-level Claude Code session in this case');
+      }
     });
+  }
+  if (v.repo && typeof v.repo === 'object' && (v.repo as Record<string, unknown>).recordedAliases !== undefined) {
+    const aliases = (v.repo as Record<string, unknown>).recordedAliases;
+    if (!Array.isArray(aliases) || aliases.some((a) => typeof a !== 'string' || !a.trim()))
+      c.fail('repo.recordedAliases', 'must be a list of non-empty paths');
   }
 
   if (v.facts !== undefined) {

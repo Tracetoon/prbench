@@ -2,7 +2,8 @@ import { afterAll, expect, test } from "bun:test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { SideJudgment } from "../src/judge/rubric.ts";
-import { consensusOutcome, loadRun, pairedDelta, pairedDeltaMarkdown } from "../scripts/paired-delta.ts";
+import { aggregatePairedDelta, consensusOutcome, loadRun, pairedDelta, pairedDeltaMarkdown } from "../scripts/paired-delta.ts";
+import { qualify, qualifyAggregate, qualifyAggregateMarkdown, qualifyMarkdown } from "../scripts/qualify-cases.ts";
 import type { PairResult } from "../src/judge/pairwise.ts";
 import { composite, sideComponents } from "../src/report/score.ts";
 import { cleanupTemps, tempDir } from "./helpers.ts";
@@ -108,4 +109,29 @@ test("compares two runs pair by pair against their own baselines", () => {
   const md = pairedDeltaMarkdown(r);
   expect(md).toContain(`| 4 | 2 | 1 | 1 | 2/1/1 | 1/1/2 | +${((D + 15) / 4).toFixed(1)} [`);
   expect(md).toContain(`| p1 | 2 | 1 | 1 | 0 | +${((D + 15) / 2).toFixed(1)} |`);
+});
+
+test("--aggregate-only output of paired-delta and qualify-cases names no case", () => {
+  const rows = (cand: number) =>
+    ["sealedcase-one", "sealedcase-two"].flatMap((c) =>
+      [1, 2].map((replicate) => ({ case: c, replicate, verdicts: [C, C] as [string, string], base: 1, cand })),
+    );
+  const a = run(rows(2)),
+    b = run(rows(1));
+  const r = pairedDelta(a, b);
+  expect(pairedDeltaMarkdown(r)).toContain("sealedcase-one");
+  const md = pairedDeltaMarkdown(r, { aggregateOnly: true });
+  expect(md).not.toContain("sealedcase");
+  expect(md).toContain("| 4 | 0 | 0 | 4 | 4/0/0 | 4/0/0 |");
+  expect(md).toContain("| A candidate |");
+  expect(JSON.stringify(aggregatePairedDelta(r))).not.toContain("sealedcase");
+  const q = qualify([a.root, b.root], () => facts);
+  expect(qualifyMarkdown(q)).toContain("sealedcase-two");
+  const aggregate = qualifyAggregate(q);
+  expect(aggregate).toMatchObject({ cases: 2, expected: 8, pairs: 8, drafts: { baseline: 8, candidate: 8 } });
+  expect(aggregate.consensusShare).toBe(1);
+  const sealed = qualifyAggregateMarkdown(aggregate);
+  expect(sealed).not.toContain("sealedcase");
+  expect(JSON.stringify(aggregate)).not.toContain("sealedcase");
+  expect(sealed).toContain("| 2 |");
 });

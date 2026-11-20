@@ -40,7 +40,12 @@ export interface ArtifactMeta {
    */
   usageByModel?: Record<
     string,
-    { inputTokens: number; cachedInputTokens: number; outputTokens: number; costUsd?: number }
+    {
+      inputTokens: number;
+      cachedInputTokens: number;
+      outputTokens: number;
+      costUsd?: number;
+    }
   >;
   experimentId?: string;
   runtimeIdentity?: { version: string; buildId: string; sha256: string };
@@ -49,12 +54,7 @@ export interface ArtifactMeta {
   toolTimings?: { stage: string; durationMs: number }[];
   toolTimingGaps?: string[];
   operationCounts?: Record<string, number>;
-  workflow?: {
-    declaredIndependentRoles: number;
-    reviewCurrent: boolean;
-    reviewVersion?: number;
-    limitations: string[];
-  };
+  workflow?: WorkflowRecord;
   writerOutcome?: {
     exitCode: number;
     timedOut: boolean;
@@ -64,6 +64,40 @@ export interface ArtifactMeta {
   };
   /** Anything that went wrong or was skipped while producing the artifact. */
   notes?: string[];
+}
+
+/** A tool's review plan as its run folder stored it (Tracetoon `review-plan.json`). */
+export interface WorkflowReviewPlan {
+  /** Fresh reviewer passes asked for; the required count is at least the lens count. */
+  passes: number;
+  lenses: string[];
+  reviewerModel?: string;
+  reviewerEffort?: string;
+  /** "tracetoon" when passes must be started and model-verified by the tool itself. */
+  runner?: string;
+}
+/** One reviewer pass as the review record lists it (Tracetoon review.json `passes`). */
+export interface WorkflowReviewPass {
+  agentId: string;
+  lens?: string;
+  model?: string;
+  effort?: string;
+  source?: string;
+  /** The model a session rollout showed; null when none was found. */
+  verifiedModel?: string | null;
+}
+/** Declared review workflow of a writer run; host-reported, never validation evidence. */
+export interface WorkflowRecord {
+  declaredIndependentRoles: number;
+  reviewCurrent: boolean;
+  /** Why the review is not current, when it is not. */
+  reviewIssues?: string[];
+  reviewVersion?: number;
+  /** Absent when the run stored no review plan. */
+  reviewPlan?: WorkflowReviewPlan;
+  /** Absent on runs saved before passes were recorded. */
+  reviewPasses?: WorkflowReviewPass[];
+  limitations: string[];
 }
 
 export interface PRArtifact {
@@ -162,8 +196,13 @@ export function checkArtifact(value: unknown): Problems {
       optional: true,
       min: 0,
     });
-    if (m.usageByModel !== undefined && c.object(m.usageByModel, "meta.usageByModel"))
-      for (const [model, u] of Object.entries(m.usageByModel as Record<string, unknown>)) {
+    if (
+      m.usageByModel !== undefined &&
+      c.object(m.usageByModel, "meta.usageByModel")
+    )
+      for (const [model, u] of Object.entries(
+        m.usageByModel as Record<string, unknown>,
+      )) {
         const at = `meta.usageByModel.${model}`;
         if (!c.object(u, at)) continue;
         const v = u as Record<string, unknown>;

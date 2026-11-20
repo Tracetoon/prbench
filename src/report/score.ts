@@ -143,6 +143,67 @@ export function estimateCostByModel(
   return usd;
 }
 
+export interface DraftCost {
+  costUsd?: number;
+  costSource?: "reported" | "estimated";
+  usageScope?: "all-threads" | "main-thread";
+  usageSource?: "artifact" | "traces";
+  subagentThreads?: number;
+  inputTokens?: number;
+  cachedInputTokens?: number;
+  outputTokens?: number;
+  models?: string[];
+}
+
+/**
+ * Priced cost of one saved draft, as `prbench score` reports it: the
+ * reported total when the agent gives one (Claude), otherwise an estimate
+ * from token counts with every model at its own price and cached input at
+ * its own rate. Codex usage covers every thread, from the artifact or its
+ * saved writer traces; `usageScope: "main-thread"` marks a draft whose
+ * subagent usage is unknown. `costUsd` is undefined when a model has no price.
+ */
+export function draftCost(
+  root: string,
+  artifactFile: string,
+  meta: Record<string, any>,
+  armModel: string,
+): DraftCost {
+  const d: DraftCost = {};
+  let tokens: Tokens & { usageByModel?: Record<string, Tokens> } = meta;
+  if (meta.agent === "codex" && typeof meta.costUsd !== "number") {
+    if (meta.usageScope === "all-threads") {
+      d.usageScope = "all-threads";
+      d.usageSource = "artifact";
+      d.subagentThreads = meta.subagentThreads;
+    } else {
+      const usage = writerTraceUsage(root, artifactFile);
+      if (usage && (meta.inputTokens === undefined || usage.inputTokens >= meta.inputTokens)) {
+        tokens = usage;
+        d.usageScope = "all-threads";
+        d.usageSource = "traces";
+        d.subagentThreads = usage.subagentThreads;
+      } else if (meta.inputTokens !== undefined) d.usageScope = "main-thread";
+    }
+  }
+  d.inputTokens = tokens.inputTokens;
+  d.cachedInputTokens = tokens.cachedInputTokens;
+  d.outputTokens = tokens.outputTokens;
+  const models = Object.keys(tokens.usageByModel ?? {}).sort();
+  if (models.length) d.models = models;
+  if (typeof meta.costUsd === "number") {
+    d.costUsd = meta.costUsd;
+    d.costSource = "reported";
+  } else {
+    const est = estimateCostByModel(String(meta.model ?? armModel), tokens, tokens.usageByModel);
+    if (est !== undefined) {
+      d.costUsd = est;
+      d.costSource = "estimated";
+    }
+  }
+  return d;
+}
+
 export interface DraftScore extends Components {
   model: string;
   replicate: number;
@@ -315,38 +376,8 @@ export function collectDraftScores(
     const artifact = a.artifactDir && join(a.artifactDir, `${a.key.system}.json`);
     if (artifact && existsSync(artifact)) {
       const meta = JSON.parse(readFileSync(artifact, "utf8")).meta ?? {};
-      let tokens: Tokens & { usageByModel?: Record<string, Tokens> } = meta;
-      if (meta.agent === "codex" && typeof meta.costUsd !== "number") {
-        if (meta.usageScope === "all-threads") {
-          d.usageScope = "all-threads";
-          d.usageSource = "artifact";
-          d.subagentThreads = meta.subagentThreads;
-        } else {
-          const usage = writerTraceUsage(root, artifact);
-          if (usage && (meta.inputTokens === undefined || usage.inputTokens >= meta.inputTokens)) {
-            tokens = usage;
-            d.usageScope = "all-threads";
-            d.usageSource = "traces";
-            d.subagentThreads = usage.subagentThreads;
-          } else if (meta.inputTokens !== undefined) d.usageScope = "main-thread";
-        }
-      }
-      d.inputTokens = tokens.inputTokens;
-      d.cachedInputTokens = tokens.cachedInputTokens;
-      d.outputTokens = tokens.outputTokens;
+      Object.assign(d, draftCost(root, artifact, meta, a.key.model));
       d.graphQueries = meta.operationCounts?.["graph.queries"];
-      const models = Object.keys(tokens.usageByModel ?? {}).sort();
-      if (models.length) d.models = models;
-      if (typeof meta.costUsd === "number") {
-        d.costUsd = meta.costUsd;
-        d.costSource = "reported";
-      } else {
-        const est = estimateCostByModel(String(meta.model ?? a.key.model), tokens, tokens.usageByModel);
-        if (est !== undefined) {
-          d.costUsd = est;
-          d.costSource = "estimated";
-        }
-      }
     }
     drafts.push(d);
   }
@@ -717,7 +748,7 @@ export interface JudgeFailures {
 /**
  * Failed judge attempts per judge under a run root (or a folder of run
  * roots). Timed-out and transient calls are retried (up to 3 attempts per
- * order judgment) and a malformed reply gets one format repair; each failed
+ * order judgment) and a malformed reply gets one format repair, then fresh requests up to 5 attempts; each failed
  * attempt is counted here as a reliability measure. Results saved before
  * they named their judge take the judge from a sibling judgment, else from
  * the judge's folder name.
@@ -778,8 +809,25 @@ export function collectJudgeFailures(root: string): JudgeFailures[] {
   return [...out.values()].sort((a, b) => a.judge.localeCompare(b.judge));
 }
 
+/**
+ * Arm-level results with nothing per case: composite and component means with
+ * case-clustered intervals, paired deltas without their per-case map or
+ * leave-one-case-out range. For sealed runs (`score --aggregate-only --json`).
+ */
+export function aggregateScores(drafts: DraftScore[]) {
+  return {
+    arms: armScores(drafts).sort((x, y) => (x.model + x.system).localeCompare(y.model + y.system)),
+    pairedDeltas: pairedDeltas(drafts).map(({ perCase: _perCase, leaveOneOut: _loo, ...d }) => d),
+  };
+}
+
+/**
+ * `aggregateOnly` prints the overall tables only (sealed runs): no per-case
+ * delta table and no leave-one-case-out column.
+ */
 export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: WriterFailures[] = [],
-  judgeFailures: JudgeFailures[] = [],): string {
+  judgeFailures: JudgeFailures[] = [], options: { aggregateOnly?: boolean } = {}): string {
+  const sealed = options.aggregateOnly === true;
   const w = WEIGHTS;
   const lines = [
     `## ${title}`,
@@ -809,19 +857,33 @@ export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: 
     );
   const deltas = pairedDeltas(drafts);
   if (deltas.length) {
-    lines.push(
-      "",
-      "Paired candidate − other system (same model, case and replicate). Leave one case out = lowest and highest composite Δ when each case in turn is dropped:",
-      "",
-      "| Model | Against | Pairs | Composite Δ [95% CI] | Leave one case out | Factual errors Δ |",
-      "|---|---|---:|---|---|---:|",
-    );
-    for (const d of deltas)
+    if (sealed)
       lines.push(
-        `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${d.leaveOneOut ? `${f(d.leaveOneOut[0], 1)} to ${f(d.leaveOneOut[1], 1)}` : "–"} | ${f(d.errorsDelta)} |`,
+        "",
+        "Paired candidate − other system (same model, case and replicate; aggregate only, per-case results sealed):",
+        "",
+        "| Model | Against | Pairs | Composite Δ [95% CI] | Factual errors Δ |",
+        "|---|---|---:|---|---:|",
+        ...deltas.map(
+          (d) =>
+            `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${f(d.errorsDelta)} |`,
+        ),
       );
-    const perCase = perCaseDeltaMarkdown(drafts);
-    if (perCase) lines.push("", perCase);
+    else {
+      lines.push(
+        "",
+        "Paired candidate − other system (same model, case and replicate). Leave one case out = lowest and highest composite Δ when each case in turn is dropped:",
+        "",
+        "| Model | Against | Pairs | Composite Δ [95% CI] | Leave one case out | Factual errors Δ |",
+        "|---|---|---:|---|---|---:|",
+      );
+      for (const d of deltas)
+        lines.push(
+          `| ${d.model} | ${d.against} | ${d.delta.drafts} | ${f(d.delta.mean, 1)} [${f(d.delta.ci[0], 1)}, ${f(d.delta.ci[1], 1)}] | ${d.leaveOneOut ? `${f(d.leaveOneOut[0], 1)} to ${f(d.leaveOneOut[1], 1)}` : "–"} | ${f(d.errorsDelta)} |`,
+        );
+      const perCase = perCaseDeltaMarkdown(drafts);
+      if (perCase) lines.push("", perCase);
+    }
   }
   if (failures.length) {
     const accepted = (f: WriterFailures) => drafts.filter((d) => d.model === f.model && d.system === f.system).length;
@@ -837,7 +899,7 @@ export function scoreMarkdown(drafts: DraftScore[], title = "Scores", failures: 
   if (judgeFailures.length)
     lines.push(
       "",
-      "Judge reliability (timed-out and transient calls are retried, up to 3 attempts per order judgment; a malformed reply gets one format repair):",
+      "Judge reliability (timed-out and transient calls are retried, up to 3 attempts per order judgment; a malformed reply gets one format repair, then fresh requests, up to 5 attempts):",
       "",
       "| Judge | Failed attempts | Timed out | Transient | Format | Other |",
       "|---|---:|---:|---:|---:|---:|",

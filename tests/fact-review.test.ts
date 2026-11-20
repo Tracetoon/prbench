@@ -4,9 +4,10 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
+  realpathSync,
   writeFileSync,
 } from "node:fs";
-import { join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { buildProvenance, type Draft } from "../scripts/provenance.ts";
 import { preflightCase } from "../src/run/preflight.ts";
 import { loadCase, type Facts } from "../src/schema/case.ts";
@@ -312,11 +313,17 @@ describe("fact-review with a fake panel", () => {
             "-s",
             "read-only",
             "-C",
-            c.cwd,
             'model_reasoning_effort="xhigh"',
             'approval_policy="never"',
           ]),
         );
+        // The fake records process.cwd(), which resolves symlinks (macOS
+        // /var -> /private/var); the work dir itself is gone by now.
+        const work = c.args[c.args.indexOf("-C") + 1];
+        expect([
+          work,
+          join(realpathSync(dirname(work)), basename(work)),
+        ]).toContain(c.cwd);
         expect(c.args).not.toContain("shell_tool");
       }
     }

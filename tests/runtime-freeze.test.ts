@@ -1,5 +1,11 @@
 import { afterAll, expect, test } from "bun:test";
-import { chmodSync, existsSync, symlinkSync, writeFileSync } from "node:fs";
+import {
+  chmodSync,
+  existsSync,
+  realpathSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import {
   checkFrozenRuntime,
@@ -21,7 +27,8 @@ test("a frozen runtime accepts only the same binary, through symlinks too", () =
   // Nothing frozen: no check.
   expect(checkFrozenRuntime(root, "claude", [link])).toBeUndefined();
   const entry = freezeRuntime(root, "claude", [link], "1.0");
-  expect(entry.path).toBe(real);
+  // freezeRuntime resolves symlinks, including in the temp dir (macOS /var -> /private/var).
+  expect(entry.path).toBe(realpathSync(real));
   expect(existsSync(join(root, FROZEN_RUNTIMES_FILE))).toBe(true);
   expect(readFrozen(root).claude!.sha256).toBe(entry.sha256);
   expect(checkFrozenRuntime(root, "claude", [link])!.version).toBe("1.0");

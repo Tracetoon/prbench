@@ -213,8 +213,10 @@ describe('createSandbox', () => {
       expect(statSync(sb.env.TMPDIR!).isDirectory()).toBe(true);
       expect(sb.repo.startsWith(sb.env.TMPDIR!)).toBe(false);
       expect(sb.home.startsWith(sb.env.TMPDIR!)).toBe(false);
-      expect(sb.env.PATH!.split(delimiter)).not.toContain(plugin);
-      expect(sb.env.PATH!.split(delimiter)[0]).toBe(sb.bin);
+      // Windows spells it Path; the sandbox keeps the host's spelling.
+      const path = Object.entries(sb.env).find(([k]) => k.toUpperCase() === 'PATH')![1]!;
+      expect(path.split(delimiter)).not.toContain(plugin);
+      expect(path.split(delimiter)[0]).toBe(sb.bin);
       expect(sb.env.XDG_SESSION_TYPE).toBeUndefined();
       expect(sb.env.COLORTERM).toBeUndefined();
     } finally {

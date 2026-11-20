@@ -19,7 +19,7 @@ bun run prbench datasets fetch real-cases@4.0.0
 bun run prbench preflight --dataset real-cases@4.0.0
 ```
 
-The packaged CLI (`bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.3.0/prbench-0.3.0.tgz`) knows only 1.0.0 and 2.0.0: each CLI ships its own registry.
+Each CLI ships its own registry: the packaged CLI 0.4.0 (`bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.4.0/prbench-0.4.0.tgz`) knows 1.0.0, 2.0.0 and 4.0.0; 0.3.0 knows only 1.0.0.
 
 No account is required to download. `datasets fetch` verifies the archive and every installed file, then installs into a version-specific cache under `~/.cache/prbench/datasets` (or `$XDG_CACHE_HOME/prbench/datasets`). A verified cache works offline. `--out cases-local` installs into an empty project-local directory instead; existing user data is never replaced. If an installed dataset fails integrity checks, move it aside and fetch it again.
 

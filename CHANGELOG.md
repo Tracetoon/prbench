@@ -1,9 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.4.0
 
 - Add `golden/v4-candidate62/`: the curated record of the v4 golden run (Tracetoon candidate62 vs the original workflow, 61 cases × 3 replicates on Codex and Claude Code). It holds manifests, summaries, per-draft scores, pairwise verdicts, accuracy findings and adjudications, draft texts, site data, skill identities, the decisions log, the commands as run, and `tools/build_bundle.py`, which rebuilds it from a raw run folder and fails on leftover local paths.
-- Stage dataset `real-cases@4.0.0`: the 61-case v4 pool, all `dev`, with expert-panel fact sheets. The registry entry carries the local build's hashes; the archive is not uploaded yet. The dataset card describes 4.0.0.
+- Stage dataset `real-cases@4.0.0`: the 61-case v4 pool, all `dev`, with expert-panel fact sheets. The archive is published as release `cases-v4.0.0`, and the registry entry pins its hashes. The dataset card describes 4.0.0.
 - README rewritten for newcomers: what prbench measures and how, golden-run results, install, a no-model smoke test, dataset download, Codex and Claude comparison commands, reproduction, cost and output layout. The detailed CLI reference moved to `docs/harness-reference.md`, and `docs/methodology.md` gains the v4 protocol.
 - `compare --accept-environment-change` (with `--resume`) keeps the recorded writer environment hash when only the launching environment changed, for example after a reboot. Each override is logged in `<run>/environment-overrides.json`.
 

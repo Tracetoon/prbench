@@ -44,7 +44,7 @@ bun install --frozen-lockfile
 bun run prbench --help
 ```
 
-A packaged release is also available: `bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.3.0/prbench-0.3.0.tgz`, which installs the `prbench` command. It predates the v4 harness and the 4.0.0 dataset. Use the repository for the commands below.
+A packaged release is also available: `bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.4.0/prbench-0.4.0.tgz` installs the `prbench` command with the v4 harness and the 4.0.0 dataset registry. With the package, drop the `bun run` prefix from the commands below.
 
 ## Quick start: a smoke test with no model calls
 

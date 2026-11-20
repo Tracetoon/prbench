@@ -130,7 +130,7 @@ writeFileSync(
   [
     '# Attribution and redistribution',
     '',
-    `prbench dataset ${version}. Dataset compilation, owner-contributed text and annotations: Tingsters/prbench contributors, 2026, Apache-2.0. Source work retains its own terms (${[...licenses].sort().join('; ')}), as declared in each case's provenance and the licenses in its Git history. Preserve upstream copyright, author and license notices in the supplied bundles. Dependencies, vendored builds and third-party quotations retain their upstream terms. The root license does not override third-party rights.`,
+    `prbench dataset ${version}. Dataset compilation, owner-contributed text and annotations: Tracetoon/prbench contributors, 2026, Apache-2.0. Source work retains its own terms (${[...licenses].sort().join('; ')}), as declared in each case's provenance and the licenses in its Git history. Preserve upstream copyright, author and license notices in the supplied bundles. Dependencies, vendored builds and third-party quotations retain their upstream terms. The root license does not override third-party rights.`,
     '',
     'Session owners authorized public redistribution of the reviewed, redacted cases. See DATASET_CARD.md for the transformations applied and the review status of each fact sheet.',
     '',

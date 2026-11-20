@@ -51,7 +51,7 @@ Each arm needs a skill directory that contains the Linux binary. Build each
 bundle from a separate Tracetoon worktree:
 
 ```sh
-# in a Tracetoon clone (github.com/Tingsters/tracetoon)
+# in a Tracetoon clone (github.com/Tracetoon/tracetoon)
 git worktree add /var/tmp/tt-base 9ac29c4        # baseline: main skill
 git worktree add /var/tmp/tt-graph 7483847       # candidate: evidence-graph commit
 

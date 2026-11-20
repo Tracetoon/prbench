@@ -111,10 +111,10 @@ Publishing the data asserts no benchmark result.
 
 Dataset compilation, owner-contributed text and annotations are distributed under Apache-2.0; see LICENSE.
 
-Source repositories keep their own terms: Apache-2.0 for most, MIT for `vex-v5-serial` and AGPL-3.0 for winapps. Dependencies, vendored builds and quoted third-party material also keep their upstream terms. See NOTICE.md and the licenses in each Git history, and attribute Tingsters/prbench and the source projects when redistributing.
+Source repositories keep their own terms: Apache-2.0 for most, MIT for `vex-v5-serial` and AGPL-3.0 for winapps. Dependencies, vendored builds and quoted third-party material also keep their upstream terms. See NOTICE.md and the licenses in each Git history, and attribute Tracetoon/prbench and the source projects when redistributing.
 
 **Corrections:**
 - Do not replace the assets of an existing version; corrections need a new dataset version and checksum.
 - Report accidental disclosure privately, through the repository's private vulnerability reporting or directly to the owner. Never reproduce secrets in public issues.
 
-The release is hosted at https://github.com/Tingsters/prbench/releases/tag/cases-v2.0.0. The harness and the dataset are versioned independently.
+The release is hosted at https://github.com/Tracetoon/prbench/releases/tag/cases-v2.0.0. The harness and the dataset are versioned independently.

@@ -69,7 +69,7 @@ bun run prbench datasets fetch real-cases@4.0.0 --out cases-v4   # or into a new
 bun run prbench preflight --dataset real-cases@4.0.0        # checks provenance, no model calls
 ```
 
-The 4.0.0 archive is staged for the `cases-v4.0.0` release. Until that release is published, use `real-cases@2.0.0` (27 cases). Downloads need no account. Every file is verified against the registry's SHA-256 values, and no setup command runs at download time. The [dataset card](datasets/DATASET_CARD.md) covers composition, consent, redaction, licenses and limitations, and [docs/datasets.md](docs/datasets.md) covers the download workflow.
+The 4.0.0 archive is published as the [`cases-v4.0.0` release](https://github.com/Tracetoon/prbench/releases/tag/cases-v4.0.0). Downloads need no account. Every file is verified against the registry's SHA-256 values, and no setup command runs at download time. The [dataset card](datasets/DATASET_CARD.md) covers composition, consent, redaction, licenses and limitations, and [docs/datasets.md](docs/datasets.md) covers the download workflow.
 
 ## Run a comparison
 

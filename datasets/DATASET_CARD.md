@@ -60,6 +60,8 @@ There is one pool and no held-out split: every case is in `dev`. The maintainers
 
 All cases come from work by the session owners, recorded between March and November 2026. Every repository is public except the VEX AIM agent repository (see Privacy).
 
+**Consent.** The repository owner authorized public redistribution of all 61 cases. The collaborator who recorded the 24 AI First and Showtail Codex sessions consented to the redistribution of all 24 of those cases.
+
 **Importing.** Cases are imported from an explicit candidate list (`datasets/expansion/candidates.json` and `scripts/discover-cases.ts` in the prbench repository). Imports retain:
 - base and head commits;
 - session IDs and timestamps;
@@ -85,7 +87,13 @@ All cases come from work by the session owners, recorded between March and Novem
 
 No redaction map, authentication cache or raw session is distributed.
 
-**Left unchanged:** Git author and commit metadata stay in the source bundles, so commit SHAs remain valid. The four `vexagent-*` cases publish the history of the VEX AIM agent repository, which has no public remote and no license file; the owner approved its release with this dataset. One committed build file in that history contains a local home path. Four Tracetoon sessions first published in 1.0.0 (`pr9`–`pr12`) keep a Windows 8.3 temp path with a shortened collaborator account name, and two fact sheets (`tracetoon-evidence-graph`, `tracetoon-sql-row-order`) use the engine's former name, cypherlite. Both are kept byte-identical to the inputs of the v4 golden run. The four Tracetoon cases from the evidence-graph work include a compiled WebAssembly build of the Relate graph engine, which Tracetoon vendors. That build is part of the public Tracetoon history and is redistributed unchanged. Relate was formerly named cypherlite. Session prose and fact sheets use the new name, while file names, code identifiers and repository URLs keep the old one so they match the bundles.
+**Rewritten history (four cases).** The four `vexagent-*` cases publish the history of the VEX AIM agent repository, which has no public remote and no license file; the owner approved its release with this dataset. Before release, that history was rewritten in all four bundles:
+- the owner's work e-mail became `owner@example.invalid` in author and committer metadata and in a committed patch file's `From:` header;
+- a local home path in the committed `build-shim/pkgconfig/libudev.pc` was normalized to `/home/user`.
+
+Every commit SHA in these four cases therefore differs from the v4 golden run's inputs. `case.json` (base, head, task label), commit references in the session logs and fact sheets, and the fact provenance (revisions and hashes, re-verified by preflight) were updated to the new SHAs. Apart from those two files, the trees the writers saw are unchanged. Apart from the commit references, so are the session logs and fact sheets, and every provenance line range still points at the same lines.
+
+**Left unchanged:** In the other 57 cases, Git author and commit metadata stay in the source bundles, so commit SHAs remain valid. Four Tracetoon sessions first published in 1.0.0 (`pr9`–`pr12`) keep a Windows 8.3 temp path with a shortened collaborator account name, and two fact sheets (`tracetoon-evidence-graph`, `tracetoon-sql-row-order`) use the engine's former name, cypherlite. Both are kept byte-identical to the inputs of the v4 golden run. The four Tracetoon cases from the evidence-graph work include a compiled WebAssembly build of the Relate graph engine, which Tracetoon vendors. That build is part of the public Tracetoon history and is redistributed unchanged. Relate was formerly named cypherlite. Session prose and fact sheets use the new name, while file names, code identifiers and repository URLs keep the old one so they match the bundles.
 
 **Integrity:** the registry pins the archive checksum, and `dataset.json` hashes every installed file. Download verification never executes preparation commands. Package managers may need network access when a comparison prepares a checkout.
 

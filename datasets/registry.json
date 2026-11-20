@@ -71,9 +71,9 @@
       "version": "4.0.0",
       "description": "61 consented, redacted historical PR-writing replay cases (one pool)",
       "url": "https://github.com/Tracetoon/prbench/releases/download/cases-v4.0.0/prbench-real-cases-4.0.0.tar.gz",
-      "sha256": "baaf06302d1e96269f9fadf3fa386a3d3f35b64f246b7ef66812b4fd01690bfe",
-      "manifestSha256": "3b4f52b3899d0086ead43f0b64ee4a90d89b38dac5f3bddabef7afccffe24ecf",
-      "bytes": 433134799,
+      "sha256": "fece4524d7a1b859847613e94360ed2e525680e7fb41405ff73160b5e6987f6e",
+      "manifestSha256": "fdc96f8485db656833711ec1aef14a86cc07b871aff70aef7856f6d5e9c469c5",
+      "bytes": 433135330,
       "cases": {
         "dev": [
           "aifirstcli-book-walk",

@@ -4,7 +4,25 @@ Current comparisons use rubric v6 and comparison manifest v2. Rubric v6 retains 
 
 prbench answers one question: **does a given PR-writing tool produce better pull requests than the agent would have produced without it?** "Better" means better for the person reviewing the PR. The design follows from the research in [related-work.md](related-work.md).
 
-Status: milestone 1. Cases, artifacts, the sandbox, five systems (`original`, `claude-native`, `tracetoon`, `codex-native`, `codex-tracetoon`), the pairwise judge and the report exist. Accuracy checking beyond the judge, human calibration and the remaining metrics are planned; see [Roadmap](#roadmap).
+Status (v4, November 2026): frozen `compare` runs on Codex and Claude Code, real replay cases with expert-panel fact sheets (`real-cases@4.0.0`, 61 cases), pairwise judging by two judges in both orders, absolute per-draft scores with priced cost, and source-backed expert review of every accuracy flag. Human calibration and the remaining metrics are still planned; see [Metrics still to build](#metrics-still-to-build). The single-system `run`/`judge` commands and the five legacy systems described below remain available.
+
+## The v4 protocol
+
+This is the protocol behind the [v4 golden run](../golden/v4-candidate62/README.md). Each step is a prbench command; [harness reference](harness-reference.md) has the details.
+
+1. **Cases.** Real Claude Code and Codex work sessions, replayed: the repository at the base commit, the commits, and the session logs, redacted and cut to the change (see [cases](cases.md) and the [dataset card](../datasets/DATASET_CARD.md)). The writer works in a sandbox on that checkout, with those logs in its home directory, and opens a PR through a fake `gh`.
+2. **Fact sheets.** Drafted from the diff, commits and sessions before any published PR is read. Each fact cites hashed line ranges of its sources. `fact-review` has Claude Opus and Codex Sol reviewers at xhigh effort check every item against the raw evidence, accepting a change only on cross-family agreement. `fact-debate` and `fact-decide` settle the rest with two judges (Claude Fable and GPT-6 Astra; Fable decides splits). See [expert fact review](fact-review.md).
+3. **Writers.** `compare` freezes skills, binaries, cases, preparation, CLI version and the launch environment into the experiment identity. Before any scored call, it checks with isolation probes that each arm sees only its own skill. Each case runs three replicates per system. Cached drafts are reused only on an exact writer-identity match, and only in diagnostic runs.
+4. **Judging.** Each provider judges its own run with two pre-registered judges (Codex: gpt-6.1-sol and gpt-6.1-terra; Claude: claude-opus-5-5 and claude-sonnet-5-5, all at medium effort). Every pair is judged in both orders, blind to the tool, under rubric v6. A preference needs both orders to agree. The **consensus** count needs both judges to agree too.
+5. **Scores.** Each draft gets absolute components: fact-sheet coverage (claims, context, uncertainties respected), the rubric mean, factual errors, unsupported claims and traps hit. The composite (0–100) is 35·claims + 15·context + 15·uncertainties + 35·rubric (coverage as fractions, rubric as mean/2), minus 15 per factual error, 7 per unsupported claim and 10 per trap hit, floored at 0. Arm means are means of per-case means, with 95% bootstrap intervals clustered by case. Replicates are not independent cases.
+6. **Accuracy review.** `accuracy-review` sends every claim a judge flagged as contradicted or unsupported, on both arms, to Claude Fable 5.1 and GPT-6 Astra at xhigh effort, with the source evidence; Fable decides splits. Confirmed errors per scored draft are compared between arms. The strict gate requires the candidate's rate to be no more than the baseline's plus 0.05 (upper bound of the case-bootstrap interval).
+7. **Cost.** Writer tokens are priced per model across all threads, subagents included. The performance gate compares the geometric mean of paired per-draft cost (candidate / baseline). Writer wall time is reported as information.
+
+**Known limits:**
+- **In-sample results.** The pool is one set, used both to tune candidates and to measure them.
+- **Same-provider judges.** Each provider's judges come from its own model family. Codex and Claude results are reported separately, never pooled.
+- **Fact-sheet bias.** The fact sheets are model-reviewed, not human-verified, and judges can only score what a sheet lists.
+- **Sample.** About 40% of cases come from developing Tracetoon and prbench themselves.
 
 ## Terms
 
@@ -117,15 +135,4 @@ and compaction recaps are not labeled as user requests.
 
 ## Avoiding overfitting
 
-Tools under test may have been tuned on some cases (Tracetoon was tuned on its own PRs). Every case is `dev` or `test`; tool authors may look at `dev` results only, and reports show the two splits separately. Synthetic cases are for tests and templates, not results.
-
-## Roadmap
-
-| Milestone                                | Scope                                                                                                                                                                                                                                                    |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **M0 scaffold** (done)                   | Case and artifact schemas, sandbox, fake `gh`, `original` system, CLI (`validate`, `systems`, `run`, `check-artifact`), synthetic example case, these docs.                                                                                              |
-| **M1 first comparison** (this milestone) | Tracetoon's eval cases imported locally with session slices. `claude-native` and `tracetoon` systems. Blind pairwise judging in both orders by two model families, statistics and report. Sandbox fetch blocked and fact-sheet path hidden from systems. |
-| **M2 accuracy checker**                  | Claim extraction and checking; validate against Gong et al.'s labelled PRs. Resumed-session baseline for short sessions.                                                                                                                                 |
-| **M3 calibration**                       | Human labeling round, agreement statistics, mutation tests; freeze judge prompt v1.                                                                                                                                                                      |
-| **M4 scale**                             | 50+ held-out replay cases across repositories and agents; end-to-end pilot on about 30 SWE-bench Verified tasks.                                                                                                                                         |
-| **M5 operate**                           | Regression gate for PR tools' release candidates, published reports, real-world signals.                                                                                                                                                                 |
+Tools under test may have been tuned on some cases: Tracetoon was tuned on its own PRs and, in v4, on the whole 61-case pool. Up to `real-cases@2.0.0`, every case is `dev` or `test`; tool authors look only at `dev` results, test runs need a passing development gate, and reports show the two splits separately. `real-cases@4.0.0` deliberately has one pool (decision of 2026-11-15). Report its results as in-sample and grow the pool instead of reusing a sealed set. Synthetic cases are for tests and templates, not results.

@@ -45,7 +45,7 @@ The Codex candidate makes more confirmed accuracy errors than the original. The 
 
 | | |
 | --- | --- |
-| Cases | `real-cases@4.0.0`: 61 cases, all `dev` (archive sha256 `baaf0630…0bfe`; see `datasets/registry.json`) |
+| Cases | `real-cases@4.0.0`: 61 cases, all `dev` (archive sha256 `fece4524…7f6e`; see `datasets/registry.json`). 57 cases are byte-identical to the golden run's inputs. The four `vexagent-*` cases were history-rewritten for release (owner e-mail and one local path scrubbed), so their commit SHAs differ; see below |
 | Baseline (`tracetoon-baseline`) | Tracetoon's original workflow: tag `v1.0.0-rc.24`, commit `9ac29c4`, buildId `dbdff588…9193` |
 | Candidate (`tracetoon-candidate`) | Tracetoon evidence-graph skill: tag `candidate62`, commit `8d9783f`, buildId `d9db4725…3f77` |
 | Harness | prbench `bench-v4` at `fa3db9c` (manifest `provenance.harnessRevision`); `bench-v4` and this branch contain it |
@@ -56,6 +56,7 @@ The Codex candidate makes more confirmed accuracy errors than the original. The 
 **Notes on inputs:**
 - **Reused drafts.** The original-workflow drafts were reused from the content-addressed cache of the 2026-11-16 decision run (`pool61-vs-original`). Candidate replicate 1 came from the 61×1 panel (`panel-c62`). prbench reuses a draft only when the writer identity matches exactly: case, skill, model, effort, prompt, CLI and launch environment hash.
 - **Preparation.** The run used plain `npm ci` for `aifirstextension-apache-license`. The 4.0.0 dataset ships `npm ci --allow-git=all` for that case, because npm 12 refuses git dependencies without the flag. All other preparation commands are unchanged.
+- **vexagent cases.** Before publication, the bundles of `vexagent-cli-snap`, `vexagent-repl-usb-iface`, `vexagent-replug-runs` and `vexagent-skill` had their history rewritten: the owner's work e-mail became `owner@example.invalid` in commit metadata and in a committed patch header, and a home path in `build-shim/pkgconfig/libudev.pc` became `/home/user`. Every commit SHA in those cases changed. Their `case.json`, session logs and fact sheets now cite the new SHAs, and the provenance was rehashed. The golden run's drafts and manifests for these cases still cite the original SHAs and case hashes. Apart from those two files, the writers' trees are the same.
 - **Purpose.** `--purpose diagnostic` allows the reuse above and pre-registered judge pairs. A `confirmation` run would draft everything fresh.
 
 ## Reproduce

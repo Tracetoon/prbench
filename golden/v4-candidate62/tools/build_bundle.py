@@ -112,7 +112,7 @@ for root, _, files in os.walk(OUT):
         p = os.path.join(root, name)
         with open(p, errors="replace") as f:
             text = f.read()
-        if re.search(r"/var/home/|/home/steve|/var/tmp/prbench", text):
+        if re.search(r"/var/home/|/home/(?!user\b)[A-Za-z0-9._-]+/|/var/tmp/prbench", text):
             bad.append(f"{p}: local path")
         for m in EMAIL.findall(text):
             if not EMAIL_OK.search(m):

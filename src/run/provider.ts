@@ -260,6 +260,8 @@ const SYSTEM_ALIASES: Record<string, "native" | "baseline" | "candidate"> = {
 export function selectSystems(
   provider: ComparisonProvider,
   names?: string[],
+  /** Diagnostic runs may judge the candidate against native only (no baseline arm). */
+  allowNoBaseline = false,
 ): string[] {
   if (!names?.length) return [...provider.systems];
   const wanted = new Set<string>();
@@ -279,9 +281,15 @@ export function selectSystems(
           : "tracetoon-candidate",
     );
   }
-  if (!wanted.has("tracetoon-candidate") || !wanted.has("tracetoon-baseline"))
+  if (
+    !wanted.has("tracetoon-candidate") ||
+    (!wanted.has("tracetoon-baseline") &&
+      !(allowNoBaseline && wanted.has(provider.native)))
+  )
     throw new Error(
-      "--systems needs at least baseline and candidate (native is optional).",
+      allowNoBaseline
+        ? "--systems needs candidate plus baseline or native."
+        : "--systems needs at least baseline and candidate (native is optional; native + candidate only for --purpose diagnostic).",
     );
   return provider.systems.filter((s) => wanted.has(s));
 }

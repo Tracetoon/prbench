@@ -298,9 +298,41 @@ test("--systems baseline,candidate plans no native writers and only candidate-vs
     expect(
       ((await compare({ ...base, systems: ["codex-native", "baseline", "candidate"] })) as any).writers,
     ).toBe(90);
-    await expect(compare({ ...base, systems: ["native", "candidate"] })).rejects.toThrow("baseline and candidate");
-    await expect(compare({ ...base, systems: ["baseline", "native"] })).rejects.toThrow("baseline and candidate");
+    // Diagnostic runs may judge the candidate against native only.
+    const nativeOnly: any = await compare({ ...base, systems: ["native", "candidate"] });
+    expect(nativeOnly.systems).toEqual(["codex-native", "tracetoon-candidate"]);
+    expect(nativeOnly.judgedAgainst).toEqual(["codex-native"]);
+    expect(nativeOnly.writers).toBe(60);
+    await expect(
+      compare({ ...base, purpose: "confirmation", systems: ["native", "candidate"] }),
+    ).rejects.toThrow("baseline and candidate");
+    await expect(compare({ ...base, systems: ["baseline", "native"] })).rejects.toThrow("candidate plus baseline or native");
     await expect(compare({ ...base, systems: ["baseline", "candidate", "gpt"] })).rejects.toThrow("Unknown system");
+  } finally {
+    restore();
+  }
+}, 240_000);
+
+test("a diagnostic run of native and candidate only completes and reports the native pairing", async () => {
+  const { cases, skill, candidate, restore } = await fakeComparisonSetup();
+  const opts = {
+    baselineSkill: skill,
+    candidateSkill: candidate,
+    cases: cases.root,
+    split: "dev",
+    out: join(tempDir(), "experiment"),
+    purpose: "diagnostic",
+    replicates: 1,
+    systems: ["native", "candidate"],
+  };
+  try {
+    await compare(opts);
+    const summary = JSON.parse(readFileSync(join(opts.out, "summary.json"), "utf8"));
+    expect(summary.coverage).toMatchObject({ writers: 4, expectedWriters: 4, complete: true });
+    expect([...new Set(summary.reports.map((r: any) => r.comparison))]).toEqual(["codex-native"]);
+    expect(summary.scores.some((d: any) => d.system === "tracetoon-baseline")).toBe(false);
+    const md = readFileSync(join(opts.out, "summary.md"), "utf8");
+    expect(md).toContain("codex-native");
   } finally {
     restore();
   }

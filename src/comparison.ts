@@ -842,7 +842,7 @@ export async function compareV2(opts: CompareOptions) {
   // A resume without --systems keeps the systems the experiment was frozen with.
   const SYSTEMS =
       opts.systems?.length || !old
-        ? selectSystems(provider, opts.systems)
+        ? selectSystems(provider, opts.systems, (opts.purpose ?? "confirmation") === "diagnostic")
         : manifestSystems(old.settings, provider),
     COMPARISONS = judgedAgainst(SYSTEMS, provider);
   checkArms(MODELS, provider.id === "claude" ? "claude" : "codex");

@@ -86,6 +86,19 @@ export function claudeProcessEnv(base: Env, auth: Record<string, string>): Recor
   return { ...env, ...auth };
 }
 
+/**
+ * Every Claude writer (native and Tracetoon alike) runs Bash with a 10-minute
+ * default timeout. With Claude Code's 120 s default, a long test command moves
+ * to the background; interactively the agent is notified when it finishes and
+ * continues, but `-p` can end the turn while it runs and publish no PR
+ * (decisions #117: native Opus, 3/3 attempts). Verified on 2.1.319: a 150 s
+ * command stays in the foreground with these and moves to the background without.
+ */
+export const CLAUDE_WRITER_BASH_ENV: Record<string, string> = {
+  BASH_DEFAULT_TIMEOUT_MS: "600000",
+  BASH_MAX_TIMEOUT_MS: "900000",
+};
+
 /** An MCP configuration with no servers, used with --strict-mcp-config. */
 export const EMPTY_MCP_CONFIG = JSON.stringify({ mcpServers: {} });
 
@@ -236,7 +249,10 @@ export async function runClaude(sandbox: Sandbox, opts: ClaudeRunOptions): Promi
   if (opts.maxBudgetUsd !== undefined) cmd.push('--max-budget-usd', String(opts.maxBudgetUsd));
   opts.log?.(`claude ${cmd.slice(claudeCommand().length).join(' ')}`);
 
-  const env = claudeProcessEnv({ ...sandbox.env, ...opts.env }, claudeAuthEnv());
+  const env = {
+    ...claudeProcessEnv({ ...sandbox.env, ...opts.env }, claudeAuthEnv()),
+    ...CLAUDE_WRITER_BASH_ENV,
+  };
   const capture = startValidationCapture(sandbox, env);
   const executionStarted = performance.now();
   const execution = await runAgentProcess(cmd, {

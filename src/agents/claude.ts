@@ -99,6 +99,36 @@ export const CLAUDE_WRITER_BASH_ENV: Record<string, string> = {
   BASH_MAX_TIMEOUT_MS: "900000",
 };
 
+/**
+ * A file login in the sandbox's ~/.claude, from the same token the writer gets
+ * in its environment. Claude Code strips CLAUDE_CODE_OAUTH_TOKEN from the
+ * environment of the commands it runs, so a nested `claude -p` (Tracetoon's
+ * reviewer runner) would be "not logged in" in the sandbox, unlike on a user's
+ * machine where the login lives in ~/.claude. Owner-only; removed with the
+ * sandbox; traces never copy it.
+ */
+export function writeSandboxLogin(home: string, auth: Record<string, string>): void {
+  const token = auth.CLAUDE_CODE_OAUTH_TOKEN;
+  if (!token) return;
+  const dir = join(home, ".claude");
+  const file = join(dir, ".credentials.json");
+  if (existsSync(file)) return;
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  writeFileSync(
+    file,
+    JSON.stringify({
+      claudeAiOauth: {
+        accessToken: token,
+        refreshToken: null,
+        expiresAt: 4102444800000,
+        scopes: ["user:inference"],
+        subscriptionType: null,
+      },
+    }),
+    { mode: 0o600 },
+  );
+}
+
 /** An MCP configuration with no servers, used with --strict-mcp-config. */
 export const EMPTY_MCP_CONFIG = JSON.stringify({ mcpServers: {} });
 
@@ -249,8 +279,10 @@ export async function runClaude(sandbox: Sandbox, opts: ClaudeRunOptions): Promi
   if (opts.maxBudgetUsd !== undefined) cmd.push('--max-budget-usd', String(opts.maxBudgetUsd));
   opts.log?.(`claude ${cmd.slice(claudeCommand().length).join(' ')}`);
 
+  const auth = claudeAuthEnv();
+  writeSandboxLogin(sandbox.home, auth);
   const env = {
-    ...claudeProcessEnv({ ...sandbox.env, ...opts.env }, claudeAuthEnv()),
+    ...claudeProcessEnv({ ...sandbox.env, ...opts.env }, auth),
     ...CLAUDE_WRITER_BASH_ENV,
   };
   const capture = startValidationCapture(sandbox, env);

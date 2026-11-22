@@ -97,6 +97,11 @@ export function claudeProcessEnv(base: Env, auth: Record<string, string>): Recor
 export const CLAUDE_WRITER_BASH_ENV: Record<string, string> = {
   BASH_DEFAULT_TIMEOUT_MS: "600000",
   BASH_MAX_TIMEOUT_MS: "900000",
+  // The model also chooses run_in_background for long suites and then ends the
+  // -p turn "waiting for the notification" (decisions #122: native Opus, many
+  // cases). Interactively it would be notified and continue; with background
+  // tasks disabled the command runs in the foreground, the same end result.
+  CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1",
 };
 
 /**

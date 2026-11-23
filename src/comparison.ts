@@ -1135,7 +1135,8 @@ export async function compareV2(opts: CompareOptions) {
     return plan;
   }
   if (!old) {
-    if (existsSync(root) && readdirSync(root).length)
+    // The --environment-from override log is written first; nothing else may exist.
+    if (existsSync(root) && readdirSync(root).filter((f) => f !== "environment-overrides.json").length)
       throw new Error("New experiment output must be empty.");
     mkdirSync(join(root, "inputs", "cases"), { recursive: true });
     cpSync(resolve(opts.baselineSkill), join(root, "inputs", "baseline"), {

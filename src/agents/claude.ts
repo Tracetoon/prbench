@@ -86,6 +86,54 @@ export function claudeProcessEnv(base: Env, auth: Record<string, string>): Recor
   return { ...env, ...auth };
 }
 
+/**
+ * Every Claude writer (native and Tracetoon alike) runs Bash with a 10-minute
+ * default timeout. With Claude Code's 120 s default, a long test command moves
+ * to the background; interactively the agent is notified when it finishes and
+ * continues, but `-p` can end the turn while it runs and publish no PR
+ * (decisions #117: native Opus, 3/3 attempts). Verified on 2.1.319: a 150 s
+ * command stays in the foreground with these and moves to the background without.
+ */
+export const CLAUDE_WRITER_BASH_ENV: Record<string, string> = {
+  BASH_DEFAULT_TIMEOUT_MS: "600000",
+  BASH_MAX_TIMEOUT_MS: "900000",
+  // The model also chooses run_in_background for long suites and then ends the
+  // -p turn "waiting for the notification" (decisions #122: native Opus, many
+  // cases). Interactively it would be notified and continue; with background
+  // tasks disabled the command runs in the foreground, the same end result.
+  CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1",
+};
+
+/**
+ * A file login in the sandbox's ~/.claude, from the same token the writer gets
+ * in its environment. Claude Code strips CLAUDE_CODE_OAUTH_TOKEN from the
+ * environment of the commands it runs, so a nested `claude -p` (Tracetoon's
+ * reviewer runner) would be "not logged in" in the sandbox, unlike on a user's
+ * machine where the login lives in ~/.claude. Owner-only; removed with the
+ * sandbox; traces never copy it.
+ */
+export function writeSandboxLogin(home: string, auth: Record<string, string>): void {
+  const token = auth.CLAUDE_CODE_OAUTH_TOKEN;
+  if (!token) return;
+  const dir = join(home, ".claude");
+  const file = join(dir, ".credentials.json");
+  if (existsSync(file)) return;
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  writeFileSync(
+    file,
+    JSON.stringify({
+      claudeAiOauth: {
+        accessToken: token,
+        refreshToken: null,
+        expiresAt: 4102444800000,
+        scopes: ["user:inference"],
+        subscriptionType: null,
+      },
+    }),
+    { mode: 0o600 },
+  );
+}
+
 /** An MCP configuration with no servers, used with --strict-mcp-config. */
 export const EMPTY_MCP_CONFIG = JSON.stringify({ mcpServers: {} });
 
@@ -236,7 +284,12 @@ export async function runClaude(sandbox: Sandbox, opts: ClaudeRunOptions): Promi
   if (opts.maxBudgetUsd !== undefined) cmd.push('--max-budget-usd', String(opts.maxBudgetUsd));
   opts.log?.(`claude ${cmd.slice(claudeCommand().length).join(' ')}`);
 
-  const env = claudeProcessEnv({ ...sandbox.env, ...opts.env }, claudeAuthEnv());
+  const auth = claudeAuthEnv();
+  writeSandboxLogin(sandbox.home, auth);
+  const env = {
+    ...claudeProcessEnv({ ...sandbox.env, ...opts.env }, auth),
+    ...CLAUDE_WRITER_BASH_ENV,
+  };
   const capture = startValidationCapture(sandbox, env);
   const executionStarted = performance.now();
   const execution = await runAgentProcess(cmd, {

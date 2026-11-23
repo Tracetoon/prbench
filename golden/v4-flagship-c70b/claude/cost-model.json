@@ -1,0 +1,3505 @@
+{
+ "prefix": 500000,
+ "summary": {
+  "tracetoon-candidate": {
+   "drafts": 183,
+   "models": [
+    "haiku",
+    "opus"
+   ],
+   "mainRequests": 4.0055,
+   "subRequests": 14.8033,
+   "raw": 0.5306,
+   "subscription": 0.9312,
+   "subscription_main": 0.5442,
+   "subscription_expiries": 0,
+   "api": 2.3329,
+   "api_main": 1.9459,
+   "api_expiries": 0.6011,
+   "api1h": 1.0395,
+   "api1h_main": 0.5442,
+   "api1h_expiries": 0
+  }
+ },
+ "rows": {
+  "tracetoon-candidate": [
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39042323000000007,
+    "subscription": 0.79042323,
+    "subscription_main": 0.5400958,
+    "subscription_expiries": 0,
+    "api": 0.7509132299999999,
+    "api_main": 0.5005858,
+    "api_expiries": 0,
+    "api1h": 0.85403388,
+    "api1h_main": 0.5400958,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.37290283,
+    "subscription": 0.77290283,
+    "subscription_main": 0.5415784,
+    "subscription_expiries": 0,
+    "api": 0.7330988299999999,
+    "api_main": 0.5017744,
+    "api_expiries": 0,
+    "api1h": 0.8303421800000002,
+    "api1h_main": 0.5415784,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47212037999999995,
+    "subscription": 0.8721203800000001,
+    "subscription_main": 0.544703,
+    "subscription_expiries": 0,
+    "api": 3.2310143800000004,
+    "api_main": 2.903597,
+    "api_expiries": 1,
+    "api1h": 0.95307508,
+    "api1h_main": 0.544703,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.46542037999999997,
+    "subscription": 0.86542038,
+    "subscription_main": 0.5445574,
+    "subscription_expiries": 0,
+    "api": 0.82537338,
+    "api_main": 0.5045104,
+    "api_expiries": 0,
+    "api1h": 0.9447109800000001,
+    "api1h_main": 0.5445574,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 4,
+    "subRequests": 19,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7693750300000002,
+    "subscription": 1.16937503,
+    "subscription_main": 0.5493406,
+    "subscription_expiries": 0,
+    "api": 3.5275370300000004,
+    "api_main": 2.9075026,
+    "api_expiries": 1,
+    "api1h": 1.31948618,
+    "api1h_main": 0.5493406,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.41586512999999997,
+    "subscription": 0.8158651299999999,
+    "subscription_main": 0.5391204,
+    "subscription_expiries": 0,
+    "api": 3.17584213,
+    "api_main": 2.8990973999999996,
+    "api_expiries": 1,
+    "api1h": 0.8862122799999999,
+    "api1h_main": 0.5391204,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4364057299999998,
+    "subscription": 0.8364057300000002,
+    "subscription_main": 0.5385095999999999,
+    "subscription_expiries": 0,
+    "api": 0.7964577300000002,
+    "api_main": 0.4985616,
+    "api_expiries": 0,
+    "api1h": 0.9120862799999999,
+    "api1h_main": 0.5385095999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.52785483,
+    "subscription": 0.9278548299999999,
+    "subscription_main": 0.5437464000000001,
+    "subscription_expiries": 0,
+    "api": 0.8872258299999998,
+    "api_main": 0.5031173999999999,
+    "api_expiries": 0,
+    "api1h": 1.02026338,
+    "api1h_main": 0.5437464000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.61423298,
+    "subscription": 1.01423298,
+    "subscription_main": 0.5406712,
+    "subscription_expiries": 0,
+    "api": 3.3741379799999995,
+    "api_main": 2.9005761999999997,
+    "api_expiries": 1,
+    "api1h": 1.1944354799999997,
+    "api1h_main": 0.5406712,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.66164393,
+    "subscription": 1.0616439299999998,
+    "subscription_main": 0.5449554,
+    "subscription_expiries": 0,
+    "api": 3.42044793,
+    "api_main": 2.9037593999999998,
+    "api_expiries": 1,
+    "api1h": 1.2301249799999998,
+    "api1h_main": 0.5449554,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.80285643,
+    "subscription": 1.2028564299999998,
+    "subscription_main": 0.5499388,
+    "subscription_expiries": 0,
+    "api": 3.5601064299999994,
+    "api_main": 2.9071887999999997,
+    "api_expiries": 1,
+    "api1h": 1.4175755800000003,
+    "api1h_main": 0.5499388,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4662990449999999,
+    "subscription": 0.866299045,
+    "subscription_main": 0.5422977999999999,
+    "subscription_expiries": 0,
+    "api": 3.225634045,
+    "api_main": 2.9016328,
+    "api_expiries": 1,
+    "api1h": 0.94530757,
+    "api1h_main": 0.5422977999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50143398,
+    "subscription": 0.9014339799999997,
+    "subscription_main": 0.5419432,
+    "subscription_expiries": 0,
+    "api": 0.8605949799999999,
+    "api_main": 0.5011042,
+    "api_expiries": 0,
+    "api1h": 0.9941186799999999,
+    "api1h_main": 0.5419432,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47143713,
+    "subscription": 0.8714371299999998,
+    "subscription_main": 0.5425367999999999,
+    "subscription_expiries": 0,
+    "api": 3.2310241299999998,
+    "api_main": 2.9021238,
+    "api_expiries": 1,
+    "api1h": 0.95878198,
+    "api1h_main": 0.5425367999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5769809300000001,
+    "subscription": 0.9769809299999999,
+    "subscription_main": 0.5408303999999999,
+    "subscription_expiries": 0,
+    "api": 3.3364059299999997,
+    "api_main": 2.9002554,
+    "api_expiries": 1,
+    "api1h": 1.0825459800000001,
+    "api1h_main": 0.5408303999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5202714299999999,
+    "subscription": 0.9202714300000001,
+    "subscription_main": 0.5457538,
+    "subscription_expiries": 0,
+    "api": 3.27913843,
+    "api_main": 2.9046208,
+    "api_expiries": 1,
+    "api1h": 1.0173377799999999,
+    "api1h_main": 0.5457538,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.51764983,
+    "subscription": 0.91764983,
+    "subscription_main": 0.5481536,
+    "subscription_expiries": 0,
+    "api": 3.27559283,
+    "api_main": 2.9060966,
+    "api_expiries": 1,
+    "api1h": 1.01056778,
+    "api1h_main": 0.5481536,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.51784883,
+    "subscription": 0.9178488299999997,
+    "subscription_main": 0.5441891999999999,
+    "subscription_expiries": 0,
+    "api": 0.8769408299999999,
+    "api_main": 0.5032812,
+    "api_expiries": 0,
+    "api1h": 1.0170508799999998,
+    "api1h_main": 0.5441891999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4521928800000001,
+    "subscription": 0.8521928799999999,
+    "subscription_main": 0.5413832,
+    "subscription_expiries": 0,
+    "api": 0.8120378799999999,
+    "api_main": 0.5012281999999999,
+    "api_expiries": 0,
+    "api1h": 0.9317405799999998,
+    "api1h_main": 0.5413832,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.56785388,
+    "subscription": 0.9678538799999999,
+    "subscription_main": 0.5423664,
+    "subscription_expiries": 0,
+    "api": 0.9275398799999999,
+    "api_main": 0.5020524,
+    "api_expiries": 0,
+    "api1h": 1.0716058800000001,
+    "api1h_main": 0.5423664,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39815573000000004,
+    "subscription": 0.79815573,
+    "subscription_main": 0.540939,
+    "subscription_expiries": 0,
+    "api": 0.7586487299999999,
+    "api_main": 0.501432,
+    "api_expiries": 0,
+    "api1h": 0.8620903799999999,
+    "api1h_main": 0.540939,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5642746300000001,
+    "subscription": 0.9642746300000001,
+    "subscription_main": 0.5440233999999999,
+    "subscription_expiries": 0,
+    "api": 3.32316563,
+    "api_main": 2.9029144000000002,
+    "api_expiries": 1,
+    "api1h": 1.07791538,
+    "api1h_main": 0.5440233999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4327711800000001,
+    "subscription": 0.8327711799999998,
+    "subscription_main": 0.5359389999999999,
+    "subscription_expiries": 0,
+    "api": 0.7936121799999998,
+    "api_main": 0.49678,
+    "api_expiries": 0,
+    "api1h": 0.9040724800000001,
+    "api1h_main": 0.5359389999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.41990492999999995,
+    "subscription": 0.8199049300000001,
+    "subscription_main": 0.544097,
+    "subscription_expiries": 0,
+    "api": 3.17891293,
+    "api_main": 2.903105,
+    "api_expiries": 1,
+    "api1h": 0.89021338,
+    "api1h_main": 0.544097,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4581553299999999,
+    "subscription": 0.8581553300000001,
+    "subscription_main": 0.5456298,
+    "subscription_expiries": 0,
+    "api": 3.2171903299999998,
+    "api_main": 2.9046648,
+    "api_expiries": 1,
+    "api1h": 0.94079888,
+    "api1h_main": 0.5456298,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7041864299999999,
+    "subscription": 1.10418643,
+    "subscription_main": 0.5438504,
+    "subscription_expiries": 0,
+    "api": 3.46320643,
+    "api_main": 2.9028704000000003,
+    "api_expiries": 1,
+    "api1h": 1.2739976800000001,
+    "api1h_main": 0.5438504,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48718953000000004,
+    "subscription": 0.8871895299999999,
+    "subscription_main": 0.5389168,
+    "subscription_expiries": 0,
+    "api": 3.2473825300000003,
+    "api_main": 2.8991098,
+    "api_expiries": 1,
+    "api1h": 1.00135708,
+    "api1h_main": 0.5389168,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 4,
+    "subRequests": 10,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.34465967999999997,
+    "subscription": 0.7446596799999998,
+    "subscription_main": 0.5372011999999999,
+    "subscription_expiries": 0,
+    "api": 0.70523668,
+    "api_main": 0.49777819999999995,
+    "api_expiries": 0,
+    "api1h": 0.80283058,
+    "api1h_main": 0.5372011999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43060958000000005,
+    "subscription": 0.8306095799999998,
+    "subscription_main": 0.5401214,
+    "subscription_expiries": 0,
+    "api": 0.7910035799999999,
+    "api_main": 0.5005154,
+    "api_expiries": 0,
+    "api1h": 0.9007573799999999,
+    "api1h_main": 0.5401214,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7092508299999999,
+    "subscription": 1.10925083,
+    "subscription_main": 0.5434978,
+    "subscription_expiries": 0,
+    "api": 3.46767383,
+    "api_main": 2.9019208,
+    "api_expiries": 1,
+    "api1h": 1.28037758,
+    "api1h_main": 0.5434978,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6523786800000002,
+    "subscription": 1.0523786800000001,
+    "subscription_main": 0.547774,
+    "subscription_expiries": 0,
+    "api": 3.41092168,
+    "api_main": 2.906317,
+    "api_expiries": 1,
+    "api1h": 1.2152321799999999,
+    "api1h_main": 0.547774,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6296954300000001,
+    "subscription": 1.0296954300000003,
+    "subscription_main": 0.5469063999999999,
+    "subscription_expiries": 0,
+    "api": 3.38832843,
+    "api_main": 2.9055394,
+    "api_expiries": 1,
+    "api1h": 1.1515903800000002,
+    "api1h_main": 0.5469063999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5894959300000001,
+    "subscription": 0.9894959299999999,
+    "subscription_main": 0.5451037999999999,
+    "subscription_expiries": 0,
+    "api": 3.3486479300000003,
+    "api_main": 2.9042558,
+    "api_expiries": 1,
+    "api1h": 1.12699388,
+    "api1h_main": 0.5451037999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5093730299999999,
+    "subscription": 0.9093730300000001,
+    "subscription_main": 0.543706,
+    "subscription_expiries": 0,
+    "api": 3.26836903,
+    "api_main": 2.902702,
+    "api_expiries": 1,
+    "api1h": 1.02823048,
+    "api1h_main": 0.543706,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4980566800000001,
+    "subscription": 0.8980566799999999,
+    "subscription_main": 0.5389206,
+    "subscription_expiries": 0,
+    "api": 0.8581056799999999,
+    "api_main": 0.4989696,
+    "api_expiries": 0,
+    "api1h": 0.9834081799999999,
+    "api1h_main": 0.5389206,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5507104800000001,
+    "subscription": 0.95071048,
+    "subscription_main": 0.5375856,
+    "subscription_expiries": 0,
+    "api": 3.3106754799999996,
+    "api_main": 2.8975505999999998,
+    "api_expiries": 1,
+    "api1h": 1.06073518,
+    "api1h_main": 0.5375856,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5991521799999999,
+    "subscription": 0.9991521800000001,
+    "subscription_main": 0.543605,
+    "subscription_expiries": 0,
+    "api": 3.35853818,
+    "api_main": 2.902991,
+    "api_expiries": 1,
+    "api1h": 1.14602678,
+    "api1h_main": 0.543605,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5524116800000001,
+    "subscription": 0.9524116799999999,
+    "subscription_main": 0.5408456,
+    "subscription_expiries": 0,
+    "api": 0.91189668,
+    "api_main": 0.5003306,
+    "api_expiries": 0,
+    "api1h": 1.05905898,
+    "api1h_main": 0.5408456,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39188782999999994,
+    "subscription": 0.7918878299999997,
+    "subscription_main": 0.5424302,
+    "subscription_expiries": 0,
+    "api": 0.7515498299999998,
+    "api_main": 0.5020922,
+    "api_expiries": 0,
+    "api1h": 0.85460298,
+    "api1h_main": 0.5424302,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5502279299999999,
+    "subscription": 0.9502279299999997,
+    "subscription_main": 0.5450197999999999,
+    "subscription_expiries": 0,
+    "api": 3.3094189299999996,
+    "api_main": 2.9042108,
+    "api_expiries": 1,
+    "api1h": 1.05480118,
+    "api1h_main": 0.5450197999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.61616433,
+    "subscription": 1.0161643300000003,
+    "subscription_main": 0.5416236,
+    "subscription_expiries": 0,
+    "api": 3.3753223300000004,
+    "api_main": 2.9007816,
+    "api_expiries": 1,
+    "api1h": 1.13760898,
+    "api1h_main": 0.5416236,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.76564238,
+    "subscription": 1.16564238,
+    "subscription_main": 0.5468462,
+    "subscription_expiries": 0,
+    "api": 3.52387638,
+    "api_main": 2.9050802,
+    "api_expiries": 1,
+    "api1h": 1.3744444799999997,
+    "api1h_main": 0.5468462,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4197394300000001,
+    "subscription": 0.8197394300000002,
+    "subscription_main": 0.5414442,
+    "subscription_expiries": 0,
+    "api": 0.78007943,
+    "api_main": 0.5017841999999999,
+    "api_expiries": 0,
+    "api1h": 0.88545488,
+    "api1h_main": 0.5414442,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39205303,
+    "subscription": 0.7920530300000002,
+    "subscription_main": 0.5408246,
+    "subscription_expiries": 0,
+    "api": 0.7517840300000002,
+    "api_main": 0.5005556,
+    "api_expiries": 0,
+    "api1h": 0.85611248,
+    "api1h_main": 0.5408246,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.35660878,
+    "subscription": 0.75660878,
+    "subscription_main": 0.5413207999999999,
+    "subscription_expiries": 0,
+    "api": 0.71694278,
+    "api_main": 0.5016548,
+    "api_expiries": 0,
+    "api1h": 0.8097276800000001,
+    "api1h_main": 0.5413207999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7484277799999999,
+    "subscription": 1.1484277799999998,
+    "subscription_main": 0.5424924,
+    "subscription_expiries": 0,
+    "api": 3.50793978,
+    "api_main": 2.9020044,
+    "api_expiries": 1,
+    "api1h": 1.37108268,
+    "api1h_main": 0.5424924,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6912051300000001,
+    "subscription": 1.09120513,
+    "subscription_main": 0.5515296,
+    "subscription_expiries": 0,
+    "api": 3.4488061300000004,
+    "api_main": 2.9091306,
+    "api_expiries": 1,
+    "api1h": 1.2468287799999997,
+    "api1h_main": 0.5515296,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6811073799999999,
+    "subscription": 1.08110738,
+    "subscription_main": 0.5395424,
+    "subscription_expiries": 0,
+    "api": 3.44143838,
+    "api_main": 2.8998733999999997,
+    "api_expiries": 1,
+    "api1h": 1.30753358,
+    "api1h_main": 0.5395424,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5728187300000002,
+    "subscription": 0.97281873,
+    "subscription_main": 0.5402796,
+    "subscription_expiries": 0,
+    "api": 3.33308373,
+    "api_main": 2.9005446,
+    "api_expiries": 1,
+    "api1h": 1.13477628,
+    "api1h_main": 0.5402796,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5249081800000001,
+    "subscription": 0.9249081800000001,
+    "subscription_main": 0.5415922,
+    "subscription_expiries": 0,
+    "api": 3.28475618,
+    "api_main": 2.9014402,
+    "api_expiries": 1,
+    "api1h": 1.04753408,
+    "api1h_main": 0.5415922,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 4,
+    "subRequests": 19,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.8586981799999999,
+    "subscription": 1.25869818,
+    "subscription_main": 0.5471360000000001,
+    "subscription_expiries": 0,
+    "api": 3.6168391800000004,
+    "api_main": 2.905277,
+    "api_expiries": 1,
+    "api1h": 1.48740978,
+    "api1h_main": 0.5471360000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5386407299999999,
+    "subscription": 0.9386407299999999,
+    "subscription_main": 0.5430731999999999,
+    "subscription_expiries": 0,
+    "api": 0.89806573,
+    "api_main": 0.5024982,
+    "api_expiries": 0,
+    "api1h": 1.0420673800000002,
+    "api1h_main": 0.5430731999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.57561708,
+    "subscription": 0.9756170799999999,
+    "subscription_main": 0.5396373999999999,
+    "subscription_expiries": 0,
+    "api": 0.9352250800000002,
+    "api_main": 0.49924539999999995,
+    "api_expiries": 0,
+    "api1h": 1.10050558,
+    "api1h_main": 0.5396373999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39995678000000007,
+    "subscription": 0.7999567799999999,
+    "subscription_main": 0.5377801999999999,
+    "subscription_expiries": 0,
+    "api": 0.7607377799999999,
+    "api_main": 0.49856120000000004,
+    "api_expiries": 0,
+    "api1h": 0.86987148,
+    "api1h_main": 0.5377801999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.44799248,
+    "subscription": 0.8479924799999998,
+    "subscription_main": 0.5397303999999999,
+    "subscription_expiries": 0,
+    "api": 0.8079274799999998,
+    "api_main": 0.4996654,
+    "api_expiries": 0,
+    "api1h": 0.9298096800000001,
+    "api1h_main": 0.5397303999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43359422999999997,
+    "subscription": 0.8335942300000001,
+    "subscription_main": 0.5405884,
+    "subscription_expiries": 0,
+    "api": 0.7938322299999999,
+    "api_main": 0.5008264,
+    "api_expiries": 0,
+    "api1h": 0.9078731800000002,
+    "api1h_main": 0.5405884,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4962207800000001,
+    "subscription": 0.8962207799999999,
+    "subscription_main": 0.5452111999999999,
+    "subscription_expiries": 0,
+    "api": 3.25502478,
+    "api_main": 2.9040151999999995,
+    "api_expiries": 1,
+    "api1h": 0.9871174799999998,
+    "api1h_main": 0.5452111999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.66101928,
+    "subscription": 1.06101928,
+    "subscription_main": 0.5471088,
+    "subscription_expiries": 0,
+    "api": 3.4197482800000003,
+    "api_main": 2.9058378,
+    "api_expiries": 1,
+    "api1h": 1.22223148,
+    "api1h_main": 0.5471088,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47839763,
+    "subscription": 0.87839763,
+    "subscription_main": 0.5395784,
+    "subscription_expiries": 0,
+    "api": 0.83831163,
+    "api_main": 0.49949239999999995,
+    "api_expiries": 0,
+    "api1h": 0.9638095799999999,
+    "api1h_main": 0.5395784,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7452210300000001,
+    "subscription": 1.14522103,
+    "subscription_main": 0.542863,
+    "subscription_expiries": 0,
+    "api": 3.5040580300000004,
+    "api_main": 2.9017,
+    "api_expiries": 1,
+    "api1h": 1.3501115799999996,
+    "api1h_main": 0.542863,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.58898953,
+    "subscription": 0.98898953,
+    "subscription_main": 0.547914,
+    "subscription_expiries": 0,
+    "api": 3.3474875300000004,
+    "api_main": 2.9064120000000004,
+    "api_expiries": 1,
+    "api1h": 1.0980066800000001,
+    "api1h_main": 0.547914,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4611843299999999,
+    "subscription": 0.86118433,
+    "subscription_main": 0.5399004,
+    "subscription_expiries": 0,
+    "api": 0.82126033,
+    "api_main": 0.4999764,
+    "api_expiries": 0,
+    "api1h": 0.93563008,
+    "api1h_main": 0.5399004,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4629905800000001,
+    "subscription": 0.86299058,
+    "subscription_main": 0.5410050000000001,
+    "subscription_expiries": 0,
+    "api": 0.8228715799999998,
+    "api_main": 0.5008859999999999,
+    "api_expiries": 0,
+    "api1h": 0.9588015800000003,
+    "api1h_main": 0.5410050000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.53052053,
+    "subscription": 0.93052053,
+    "subscription_main": 0.5433777999999999,
+    "subscription_expiries": 0,
+    "api": 3.2901015300000003,
+    "api_main": 2.9029588000000004,
+    "api_expiries": 1,
+    "api1h": 1.05686208,
+    "api1h_main": 0.5433777999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.49073547999999995,
+    "subscription": 0.89073548,
+    "subscription_main": 0.5418322,
+    "subscription_expiries": 0,
+    "api": 3.2501184800000003,
+    "api_main": 2.9012152,
+    "api_expiries": 1,
+    "api1h": 1.0007118799999999,
+    "api1h_main": 0.5418322,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4011003799999999,
+    "subscription": 0.80110038,
+    "subscription_main": 0.54053,
+    "subscription_expiries": 0,
+    "api": 0.7610323800000001,
+    "api_main": 0.5004620000000001,
+    "api_expiries": 0,
+    "api1h": 0.8678971799999999,
+    "api1h_main": 0.54053,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6633790300000001,
+    "subscription": 1.0633790300000001,
+    "subscription_main": 0.5425782,
+    "subscription_expiries": 0,
+    "api": 3.42303803,
+    "api_main": 2.9022372,
+    "api_expiries": 1,
+    "api1h": 1.2358542799999996,
+    "api1h_main": 0.5425782,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5866780299999999,
+    "subscription": 0.98667803,
+    "subscription_main": 0.5473847999999999,
+    "subscription_expiries": 0,
+    "api": 3.34436603,
+    "api_main": 2.9050728,
+    "api_expiries": 1,
+    "api1h": 1.13400218,
+    "api1h_main": 0.5473847999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.55008038,
+    "subscription": 0.9500803800000002,
+    "subscription_main": 0.5419830000000001,
+    "subscription_expiries": 0,
+    "api": 0.9098473800000001,
+    "api_main": 0.50175,
+    "api_expiries": 0,
+    "api1h": 1.0654402800000002,
+    "api1h_main": 0.5419830000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47727153,
+    "subscription": 0.8772715299999998,
+    "subscription_main": 0.5402847999999999,
+    "subscription_expiries": 0,
+    "api": 0.83695453,
+    "api_main": 0.49996779999999996,
+    "api_expiries": 0,
+    "api1h": 0.9597032799999996,
+    "api1h_main": 0.5402847999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5277644799999999,
+    "subscription": 0.92776448,
+    "subscription_main": 0.5459794,
+    "subscription_expiries": 0,
+    "api": 3.28572548,
+    "api_main": 2.9039403999999998,
+    "api_expiries": 1,
+    "api1h": 1.02838688,
+    "api1h_main": 0.5459794,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42122953,
+    "subscription": 0.82122953,
+    "subscription_main": 0.542178,
+    "subscription_expiries": 0,
+    "api": 0.78144053,
+    "api_main": 0.502389,
+    "api_expiries": 0,
+    "api1h": 0.8904492799999999,
+    "api1h_main": 0.542178,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.59369148,
+    "subscription": 0.9936914799999998,
+    "subscription_main": 0.549354,
+    "subscription_expiries": 0,
+    "api": 3.3510194799999997,
+    "api_main": 2.906682,
+    "api_expiries": 1,
+    "api1h": 1.14676258,
+    "api1h_main": 0.549354,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5004233800000001,
+    "subscription": 0.90042338,
+    "subscription_main": 0.5429436,
+    "subscription_expiries": 0,
+    "api": 0.85996538,
+    "api_main": 0.5024856,
+    "api_expiries": 0,
+    "api1h": 1.00165898,
+    "api1h_main": 0.5429436,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.71339038,
+    "subscription": 1.11339038,
+    "subscription_main": 0.542414,
+    "subscription_expiries": 0,
+    "api": 3.47218838,
+    "api_main": 2.901212,
+    "api_expiries": 1,
+    "api1h": 1.2521844800000002,
+    "api1h_main": 0.542414,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 5,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48334523,
+    "subscription": 0.9833452300000001,
+    "subscription_main": 0.6592054,
+    "subscription_expiries": 0,
+    "api": 3.34123423,
+    "api_main": 3.0170944,
+    "api_expiries": 1,
+    "api1h": 1.0980521799999998,
+    "api1h_main": 0.6592054,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.56399476,
+    "subscription": 0.96399476,
+    "subscription_main": 0.546813,
+    "subscription_expiries": 0,
+    "api": 3.3224567599999997,
+    "api_main": 2.9052749999999996,
+    "api_expiries": 1,
+    "api1h": 1.06950236,
+    "api1h_main": 0.546813,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4874572300000001,
+    "subscription": 0.8874572299999999,
+    "subscription_main": 0.5431128,
+    "subscription_expiries": 0,
+    "api": 3.2468012300000004,
+    "api_main": 2.9024568000000004,
+    "api_expiries": 1,
+    "api1h": 0.9785901800000002,
+    "api1h_main": 0.5431128,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6038505300000001,
+    "subscription": 1.00385053,
+    "subscription_main": 0.5405018,
+    "subscription_expiries": 0,
+    "api": 3.3631315299999995,
+    "api_main": 2.8997827999999997,
+    "api_expiries": 1,
+    "api1h": 1.1108657800000001,
+    "api1h_main": 0.5405018,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4481833299999999,
+    "subscription": 0.84818333,
+    "subscription_main": 0.5412156,
+    "subscription_expiries": 0,
+    "api": 0.80810333,
+    "api_main": 0.5011356,
+    "api_expiries": 0,
+    "api1h": 0.9301509799999998,
+    "api1h_main": 0.5412156,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40849668,
+    "subscription": 0.8084966800000001,
+    "subscription_main": 0.5420734,
+    "subscription_expiries": 0,
+    "api": 3.16770868,
+    "api_main": 2.9012854,
+    "api_expiries": 1,
+    "api1h": 0.87588268,
+    "api1h_main": 0.5420734,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48517932999999996,
+    "subscription": 0.8851793299999999,
+    "subscription_main": 0.5454048,
+    "subscription_expiries": 0,
+    "api": 3.2446043299999996,
+    "api_main": 2.9048298,
+    "api_expiries": 1,
+    "api1h": 0.97090538,
+    "api1h_main": 0.5454048,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.41767978,
+    "subscription": 0.8176797799999999,
+    "subscription_main": 0.5407776,
+    "subscription_expiries": 0,
+    "api": 0.7778217799999999,
+    "api_main": 0.5009196,
+    "api_expiries": 0,
+    "api1h": 0.8849880800000001,
+    "api1h_main": 0.5407776,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.35558283,
+    "subscription": 0.7555828299999999,
+    "subscription_main": 0.5374144000000001,
+    "subscription_expiries": 0,
+    "api": 0.71651083,
+    "api_main": 0.4983424,
+    "api_expiries": 0,
+    "api1h": 0.81319948,
+    "api1h_main": 0.5374144000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43909877999999997,
+    "subscription": 0.8390987799999999,
+    "subscription_main": 0.5392692,
+    "subscription_expiries": 0,
+    "api": 0.79965478,
+    "api_main": 0.4998252,
+    "api_expiries": 0,
+    "api1h": 0.9168866799999998,
+    "api1h_main": 0.5392692,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6270397799999999,
+    "subscription": 1.02703978,
+    "subscription_main": 0.5383666,
+    "subscription_expiries": 0,
+    "api": 3.3872387799999997,
+    "api_main": 2.8985656,
+    "api_expiries": 1,
+    "api1h": 1.2093725800000001,
+    "api1h_main": 0.5383666,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.49746717999999995,
+    "subscription": 0.8974671799999999,
+    "subscription_main": 0.5437616,
+    "subscription_expiries": 0,
+    "api": 3.2565171800000003,
+    "api_main": 2.9028116,
+    "api_expiries": 1,
+    "api1h": 0.9901926799999997,
+    "api1h_main": 0.5437616,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 4,
+    "subRequests": 19,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.63860008,
+    "subscription": 1.03860008,
+    "subscription_main": 0.5432937999999999,
+    "subscription_expiries": 0,
+    "api": 3.3981750799999997,
+    "api_main": 2.9028688,
+    "api_expiries": 1,
+    "api1h": 1.1536590800000002,
+    "api1h_main": 0.5432937999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50851488,
+    "subscription": 0.9085148799999999,
+    "subscription_main": 0.5419752,
+    "subscription_expiries": 0,
+    "api": 0.86759188,
+    "api_main": 0.5010522,
+    "api_expiries": 0,
+    "api1h": 1.00419778,
+    "api1h_main": 0.5419752,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.62289008,
+    "subscription": 1.02289008,
+    "subscription_main": 0.5454496,
+    "subscription_expiries": 0,
+    "api": 3.3814030799999997,
+    "api_main": 2.9039626,
+    "api_expiries": 1,
+    "api1h": 1.14437658,
+    "api1h_main": 0.5454496,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40721948,
+    "subscription": 0.8072194800000001,
+    "subscription_main": 0.5417326,
+    "subscription_expiries": 0,
+    "api": 0.7669474799999999,
+    "api_main": 0.5014605999999999,
+    "api_expiries": 0,
+    "api1h": 0.8756812799999999,
+    "api1h_main": 0.5417326,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.3551367800000001,
+    "subscription": 0.7551367800000001,
+    "subscription_main": 0.5398552,
+    "subscription_expiries": 0,
+    "api": 0.71553678,
+    "api_main": 0.5002552,
+    "api_expiries": 0,
+    "api1h": 0.8081557800000001,
+    "api1h_main": 0.5398552,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7656045800000001,
+    "subscription": 1.16560458,
+    "subscription_main": 0.5449602,
+    "subscription_expiries": 0,
+    "api": 3.52427958,
+    "api_main": 2.9036352,
+    "api_expiries": 1,
+    "api1h": 1.3770952799999994,
+    "api1h_main": 0.5449602,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5029472300000001,
+    "subscription": 0.9029472299999997,
+    "subscription_main": 0.5421374,
+    "subscription_expiries": 0,
+    "api": 3.26234223,
+    "api_main": 2.9015324,
+    "api_expiries": 1,
+    "api1h": 1.01056428,
+    "api1h_main": 0.5421374,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47698598,
+    "subscription": 0.8769859799999999,
+    "subscription_main": 0.5451984,
+    "subscription_expiries": 0,
+    "api": 0.83576298,
+    "api_main": 0.5039754000000001,
+    "api_expiries": 0,
+    "api1h": 0.95945568,
+    "api1h_main": 0.5451984,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42589122999999995,
+    "subscription": 0.82589123,
+    "subscription_main": 0.5388948,
+    "subscription_expiries": 0,
+    "api": 0.7862792300000001,
+    "api_main": 0.49928279999999997,
+    "api_expiries": 0,
+    "api1h": 0.8993433799999999,
+    "api1h_main": 0.5388948,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.54428128,
+    "subscription": 0.94428128,
+    "subscription_main": 0.5479698,
+    "subscription_expiries": 0,
+    "api": 0.9030102799999998,
+    "api_main": 0.5066988,
+    "api_expiries": 0,
+    "api1h": 1.04311958,
+    "api1h_main": 0.5479698,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.45401288000000006,
+    "subscription": 0.8540128800000002,
+    "subscription_main": 0.541654,
+    "subscription_expiries": 0,
+    "api": 0.8141068800000001,
+    "api_main": 0.501748,
+    "api_expiries": 0,
+    "api1h": 0.9334426800000001,
+    "api1h_main": 0.541654,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4451442299999999,
+    "subscription": 0.8451442299999999,
+    "subscription_main": 0.54208,
+    "subscription_expiries": 0,
+    "api": 0.80525623,
+    "api_main": 0.5021920000000001,
+    "api_expiries": 0,
+    "api1h": 0.9216392800000001,
+    "api1h_main": 0.54208,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50612688,
+    "subscription": 0.9061268800000001,
+    "subscription_main": 0.5493134,
+    "subscription_expiries": 0,
+    "api": 3.26326588,
+    "api_main": 2.9064524,
+    "api_expiries": 1,
+    "api1h": 1.0017386799999999,
+    "api1h_main": 0.5493134,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.54921073,
+    "subscription": 0.9492107299999999,
+    "subscription_main": 0.5431522,
+    "subscription_expiries": 0,
+    "api": 3.3084287299999997,
+    "api_main": 2.9023702,
+    "api_expiries": 1,
+    "api1h": 1.04678978,
+    "api1h_main": 0.5431522,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43912017999999997,
+    "subscription": 0.8391201799999999,
+    "subscription_main": 0.5395804,
+    "subscription_expiries": 0,
+    "api": 0.79905818,
+    "api_main": 0.49951840000000003,
+    "api_expiries": 0,
+    "api1h": 0.91510538,
+    "api1h_main": 0.5395804,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 4,
+    "subRequests": 10,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.37858928000000003,
+    "subscription": 0.7785892799999998,
+    "subscription_main": 0.5392286,
+    "subscription_expiries": 0,
+    "api": 0.7386262799999999,
+    "api_main": 0.4992655999999999,
+    "api_expiries": 0,
+    "api1h": 0.8442277799999999,
+    "api1h_main": 0.5392286,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.35760782999999996,
+    "subscription": 0.7576078299999999,
+    "subscription_main": 0.5424082,
+    "subscription_expiries": 0,
+    "api": 0.7178188299999999,
+    "api_main": 0.5026192,
+    "api_expiries": 0,
+    "api1h": 0.8149226799999999,
+    "api1h_main": 0.5424082,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.67091153,
+    "subscription": 1.07091153,
+    "subscription_main": 0.545793,
+    "subscription_expiries": 0,
+    "api": 3.42945753,
+    "api_main": 2.9043390000000002,
+    "api_expiries": 1,
+    "api1h": 1.2341899799999998,
+    "api1h_main": 0.545793,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50603753,
+    "subscription": 0.90603753,
+    "subscription_main": 0.5446949999999999,
+    "subscription_expiries": 0,
+    "api": 3.26508453,
+    "api_main": 2.9037420000000003,
+    "api_expiries": 1,
+    "api1h": 1.00104738,
+    "api1h_main": 0.5446949999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 4,
+    "subRequests": 20,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.63921443,
+    "subscription": 1.0392144299999997,
+    "subscription_main": 0.5450636,
+    "subscription_expiries": 0,
+    "api": 3.39838143,
+    "api_main": 2.9042306000000004,
+    "api_expiries": 1,
+    "api1h": 1.1484970799999996,
+    "api1h_main": 0.5450636,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.45373828,
+    "subscription": 0.8537382800000001,
+    "subscription_main": 0.5387974,
+    "subscription_expiries": 0,
+    "api": 0.8138982800000001,
+    "api_main": 0.4989574,
+    "api_expiries": 0,
+    "api1h": 0.93229598,
+    "api1h_main": 0.5387974,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 4,
+    "subRequests": 20,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6077342800000001,
+    "subscription": 1.00773428,
+    "subscription_main": 0.5435978,
+    "subscription_expiries": 0,
+    "api": 3.36680228,
+    "api_main": 2.9026658,
+    "api_expiries": 1,
+    "api1h": 1.1158005799999997,
+    "api1h_main": 0.5435978,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43716473,
+    "subscription": 0.8371647299999999,
+    "subscription_main": 0.5477064,
+    "subscription_expiries": 0,
+    "api": 0.7957827299999999,
+    "api_main": 0.5063244,
+    "api_expiries": 0,
+    "api1h": 0.9162616800000002,
+    "api1h_main": 0.5477064,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 4,
+    "subRequests": 20,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7636971800000001,
+    "subscription": 1.1636971800000002,
+    "subscription_main": 0.5504688,
+    "subscription_expiries": 0,
+    "api": 3.5215621799999997,
+    "api_main": 2.9083338,
+    "api_expiries": 1,
+    "api1h": 1.31198748,
+    "api1h_main": 0.5504688,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.37192903,
+    "subscription": 0.7719290299999999,
+    "subscription_main": 0.5371634,
+    "subscription_expiries": 0,
+    "api": 0.73238303,
+    "api_main": 0.4976174,
+    "api_expiries": 0,
+    "api1h": 0.8302584800000001,
+    "api1h_main": 0.5371634,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5741178299999998,
+    "subscription": 0.9741178300000001,
+    "subscription_main": 0.5458948,
+    "subscription_expiries": 0,
+    "api": 3.3322108299999997,
+    "api_main": 2.9039878,
+    "api_expiries": 1,
+    "api1h": 1.0734437799999998,
+    "api1h_main": 0.5458948,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.56331043,
+    "subscription": 0.9633104300000002,
+    "subscription_main": 0.5466996,
+    "subscription_expiries": 0,
+    "api": 0.92242643,
+    "api_main": 0.5058155999999999,
+    "api_expiries": 0,
+    "api1h": 1.06555418,
+    "api1h_main": 0.5466996,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40969473,
+    "subscription": 0.8096947300000001,
+    "subscription_main": 0.5398148,
+    "subscription_expiries": 0,
+    "api": 0.7700287300000002,
+    "api_main": 0.5001488000000001,
+    "api_expiries": 0,
+    "api1h": 0.87193378,
+    "api1h_main": 0.5398148,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.39331973,
+    "subscription": 0.7933197300000002,
+    "subscription_main": 0.5404738,
+    "subscription_expiries": 0,
+    "api": 0.7536927300000003,
+    "api_main": 0.5008467999999999,
+    "api_expiries": 0,
+    "api1h": 0.8510953799999998,
+    "api1h_main": 0.5404738,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6012520800000001,
+    "subscription": 1.0012520799999998,
+    "subscription_main": 0.5462596,
+    "subscription_expiries": 0,
+    "api": 3.36027508,
+    "api_main": 2.9052826,
+    "api_expiries": 1,
+    "api1h": 1.1479364799999998,
+    "api1h_main": 0.5462596,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40499078,
+    "subscription": 0.8049907800000002,
+    "subscription_main": 0.5376014,
+    "subscription_expiries": 0,
+    "api": 0.7653367800000002,
+    "api_main": 0.4979474,
+    "api_expiries": 0,
+    "api1h": 0.87392118,
+    "api1h_main": 0.5376014,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.44473317999999995,
+    "subscription": 0.84473318,
+    "subscription_main": 0.5457158,
+    "subscription_expiries": 0,
+    "api": 0.80372618,
+    "api_main": 0.5047088000000001,
+    "api_expiries": 0,
+    "api1h": 0.91787858,
+    "api1h_main": 0.5457158,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40994748,
+    "subscription": 0.8099474800000003,
+    "subscription_main": 0.5411232,
+    "subscription_expiries": 0,
+    "api": 0.7697534800000002,
+    "api_main": 0.5009292,
+    "api_expiries": 0,
+    "api1h": 0.88455268,
+    "api1h_main": 0.5411232,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 4,
+    "subRequests": 19,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4897185299999999,
+    "subscription": 0.8897185299999999,
+    "subscription_main": 0.544565,
+    "subscription_expiries": 0,
+    "api": 0.8500615300000001,
+    "api_main": 0.504908,
+    "api_expiries": 0,
+    "api1h": 0.9637004799999999,
+    "api1h_main": 0.544565,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5922705299999999,
+    "subscription": 0.9922705299999999,
+    "subscription_main": 0.5425477999999999,
+    "subscription_expiries": 0,
+    "api": 3.3509815300000003,
+    "api_main": 2.9012588000000004,
+    "api_expiries": 1,
+    "api1h": 1.10350738,
+    "api1h_main": 0.5425477999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7032463800000001,
+    "subscription": 1.10324638,
+    "subscription_main": 0.5482422,
+    "subscription_expiries": 0,
+    "api": 3.46081138,
+    "api_main": 2.9058072,
+    "api_expiries": 1,
+    "api1h": 1.2476807800000003,
+    "api1h_main": 0.5482422,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7443565799999999,
+    "subscription": 1.1443565800000002,
+    "subscription_main": 0.5499264,
+    "subscription_expiries": 0,
+    "api": 3.5017055800000003,
+    "api_main": 2.9072754,
+    "api_expiries": 1,
+    "api1h": 1.3001675799999999,
+    "api1h_main": 0.5499264,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50338338,
+    "subscription": 0.9033833799999998,
+    "subscription_main": 0.5390222,
+    "subscription_expiries": 0,
+    "api": 3.2631803799999997,
+    "api_main": 2.8988191999999997,
+    "api_expiries": 1,
+    "api1h": 1.02401098,
+    "api1h_main": 0.5390222,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.45730613,
+    "subscription": 0.85730613,
+    "subscription_main": 0.5424452000000001,
+    "subscription_expiries": 0,
+    "api": 3.21665013,
+    "api_main": 2.9017892,
+    "api_expiries": 1,
+    "api1h": 0.9390784800000002,
+    "api1h_main": 0.5424452000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47492798,
+    "subscription": 0.8749279799999999,
+    "subscription_main": 0.5394854,
+    "subscription_expiries": 0,
+    "api": 3.23454498,
+    "api_main": 2.8991024000000003,
+    "api_expiries": 1,
+    "api1h": 0.9532570800000001,
+    "api1h_main": 0.5394854,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47443398,
+    "subscription": 0.87443398,
+    "subscription_main": 0.5445133999999999,
+    "subscription_expiries": 0,
+    "api": 3.2336489800000003,
+    "api_main": 2.9037284000000003,
+    "api_expiries": 1,
+    "api1h": 0.95196598,
+    "api1h_main": 0.5445133999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4290858799999999,
+    "subscription": 0.8290858800000002,
+    "subscription_main": 0.5465758,
+    "subscription_expiries": 0,
+    "api": 3.18801588,
+    "api_main": 2.9055058000000002,
+    "api_expiries": 1,
+    "api1h": 0.8997217799999999,
+    "api1h_main": 0.5465758,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.58913518,
+    "subscription": 0.9891351799999999,
+    "subscription_main": 0.5374562,
+    "subscription_expiries": 0,
+    "api": 3.34929218,
+    "api_main": 2.8976132,
+    "api_expiries": 1,
+    "api1h": 1.1233053800000001,
+    "api1h_main": 0.5374562,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4403605300000001,
+    "subscription": 0.8403605299999999,
+    "subscription_main": 0.5392028,
+    "subscription_expiries": 0,
+    "api": 0.8003255299999998,
+    "api_main": 0.49916779999999994,
+    "api_expiries": 0,
+    "api1h": 0.9144126800000001,
+    "api1h_main": 0.5392028,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42037363,
+    "subscription": 0.8203736300000001,
+    "subscription_main": 0.5421897999999999,
+    "subscription_expiries": 0,
+    "api": 3.17972663,
+    "api_main": 2.9015428,
+    "api_expiries": 1,
+    "api1h": 0.88615088,
+    "api1h_main": 0.5421897999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.55194368,
+    "subscription": 0.95194368,
+    "subscription_main": 0.5423888,
+    "subscription_expiries": 0,
+    "api": 3.3118846799999995,
+    "api_main": 2.9023297999999995,
+    "api_expiries": 1,
+    "api1h": 1.0761136799999997,
+    "api1h_main": 0.5423888,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5031270299999999,
+    "subscription": 0.9031270300000003,
+    "subscription_main": 0.5403198,
+    "subscription_expiries": 0,
+    "api": 0.8625640300000004,
+    "api_main": 0.4997568,
+    "api_expiries": 0,
+    "api1h": 0.9952898799999998,
+    "api1h_main": 0.5403198,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.51004088,
+    "subscription": 0.9100408799999999,
+    "subscription_main": 0.5418496,
+    "subscription_expiries": 0,
+    "api": 0.8695228800000001,
+    "api_main": 0.5013316,
+    "api_expiries": 0,
+    "api1h": 1.0030669800000003,
+    "api1h_main": 0.5418496,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5523091299999999,
+    "subscription": 0.9523091300000002,
+    "subscription_main": 0.543799,
+    "subscription_expiries": 0,
+    "api": 3.3110351300000005,
+    "api_main": 2.9025250000000002,
+    "api_expiries": 1,
+    "api1h": 1.05901538,
+    "api1h_main": 0.543799,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.43582911500000004,
+    "subscription": 0.8358291150000001,
+    "subscription_main": 0.5415598,
+    "subscription_expiries": 0,
+    "api": 3.195311115,
+    "api_main": 2.9010418,
+    "api_expiries": 1,
+    "api1h": 0.91043289,
+    "api1h_main": 0.5415598,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5611937300000001,
+    "subscription": 0.9611937300000001,
+    "subscription_main": 0.5426584,
+    "subscription_expiries": 0,
+    "api": 3.32072073,
+    "api_main": 2.9021854,
+    "api_expiries": 1,
+    "api1h": 1.06742088,
+    "api1h_main": 0.5426584,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6539462299999999,
+    "subscription": 1.05394623,
+    "subscription_main": 0.5419468,
+    "subscription_expiries": 0,
+    "api": 3.41279823,
+    "api_main": 2.9007988,
+    "api_expiries": 1,
+    "api1h": 1.23172638,
+    "api1h_main": 0.5419468,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48464883000000003,
+    "subscription": 0.8846488300000004,
+    "subscription_main": 0.5454952000000001,
+    "subscription_expiries": 0,
+    "api": 3.24341683,
+    "api_main": 2.9042632,
+    "api_expiries": 1,
+    "api1h": 0.96904108,
+    "api1h_main": 0.5454952000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5192169800000003,
+    "subscription": 0.9192169799999999,
+    "subscription_main": 0.5411229999999999,
+    "subscription_expiries": 0,
+    "api": 3.2793109799999995,
+    "api_main": 2.9012169999999995,
+    "api_expiries": 1,
+    "api1h": 1.04553828,
+    "api1h_main": 0.5411229999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 4,
+    "subRequests": 26,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 1.2529572299999998,
+    "subscription": 1.65295723,
+    "subscription_main": 0.5496036,
+    "subscription_expiries": 0,
+    "api": 4.01168023,
+    "api_main": 2.9083266000000005,
+    "api_expiries": 1,
+    "api1h": 2.0883599800000003,
+    "api1h_main": 0.5496036,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.50699208,
+    "subscription": 0.9069920800000002,
+    "subscription_main": 0.5437698,
+    "subscription_expiries": 0,
+    "api": 3.2654780800000003,
+    "api_main": 2.9022558,
+    "api_expiries": 1,
+    "api1h": 1.00033828,
+    "api1h_main": 0.5437698,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42923348,
+    "subscription": 0.8292334800000001,
+    "subscription_main": 0.5399151999999999,
+    "subscription_expiries": 0,
+    "api": 3.18925248,
+    "api_main": 2.8999342,
+    "api_expiries": 1,
+    "api1h": 0.90187308,
+    "api1h_main": 0.5399151999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.40949028,
+    "subscription": 0.8094902799999999,
+    "subscription_main": 0.5372742,
+    "subscription_expiries": 0,
+    "api": 0.7700792799999999,
+    "api_main": 0.49786319999999995,
+    "api_expiries": 0,
+    "api1h": 0.8812295800000001,
+    "api1h_main": 0.5372742,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.44461792999999994,
+    "subscription": 0.84461793,
+    "subscription_main": 0.541293,
+    "subscription_expiries": 0,
+    "api": 3.2037549299999997,
+    "api_main": 2.9004299999999996,
+    "api_expiries": 1,
+    "api1h": 0.9287593800000001,
+    "api1h_main": 0.541293,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47847797999999997,
+    "subscription": 0.8784779799999998,
+    "subscription_main": 0.5410503999999999,
+    "subscription_expiries": 0,
+    "api": 3.2385269799999996,
+    "api_main": 2.9010993999999997,
+    "api_expiries": 1,
+    "api1h": 0.9824753799999999,
+    "api1h_main": 0.5410503999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4065495300000001,
+    "subscription": 0.80654953,
+    "subscription_main": 0.5389906,
+    "subscription_expiries": 0,
+    "api": 0.7665085300000002,
+    "api_main": 0.4989496,
+    "api_expiries": 0,
+    "api1h": 0.8794952800000001,
+    "api1h_main": 0.5389906,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5986472800000001,
+    "subscription": 0.99864728,
+    "subscription_main": 0.5457915999999999,
+    "subscription_expiries": 0,
+    "api": 3.35765528,
+    "api_main": 2.9047995999999996,
+    "api_expiries": 1,
+    "api1h": 1.1541192799999997,
+    "api1h_main": 0.5457915999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5438629800000001,
+    "subscription": 0.94386298,
+    "subscription_main": 0.5450394000000001,
+    "subscription_expiries": 0,
+    "api": 3.3022469799999996,
+    "api_main": 2.9034234,
+    "api_expiries": 1,
+    "api1h": 1.0522070799999999,
+    "api1h_main": 0.5450394000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.49634818,
+    "subscription": 0.89634818,
+    "subscription_main": 0.5457078,
+    "subscription_expiries": 0,
+    "api": 3.25574918,
+    "api_main": 2.9051088,
+    "api_expiries": 1,
+    "api1h": 0.9820146799999999,
+    "api1h_main": 0.5457078,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6273187300000002,
+    "subscription": 1.02731873,
+    "subscription_main": 0.5514316,
+    "subscription_expiries": 0,
+    "api": 3.38415173,
+    "api_main": 2.9082646,
+    "api_expiries": 1,
+    "api1h": 1.18648538,
+    "api1h_main": 0.5514316,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.59683793,
+    "subscription": 0.9968379300000001,
+    "subscription_main": 0.5417274,
+    "subscription_expiries": 0,
+    "api": 3.3559749300000004,
+    "api_main": 2.9008644,
+    "api_expiries": 1,
+    "api1h": 1.12312908,
+    "api1h_main": 0.5417274,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6685024800000001,
+    "subscription": 1.0685024800000003,
+    "subscription_main": 0.5419229999999999,
+    "subscription_expiries": 0,
+    "api": 3.42784648,
+    "api_main": 2.901267,
+    "api_expiries": 1,
+    "api1h": 1.2359882800000002,
+    "api1h_main": 0.5419229999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.5514376799999999,
+    "subscription": 0.9514376799999998,
+    "subscription_main": 0.5459448,
+    "subscription_expiries": 0,
+    "api": 0.9104696799999998,
+    "api_main": 0.5049768,
+    "api_expiries": 0,
+    "api1h": 1.04410078,
+    "api1h_main": 0.5459448,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6553036299999999,
+    "subscription": 1.0553036299999998,
+    "subscription_main": 0.5460965999999999,
+    "subscription_expiries": 0,
+    "api": 3.4137926299999997,
+    "api_main": 2.9045856,
+    "api_expiries": 1,
+    "api1h": 1.2047172800000001,
+    "api1h_main": 0.5460965999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.47981262999999996,
+    "subscription": 0.87981263,
+    "subscription_main": 0.5436099999999999,
+    "subscription_expiries": 0,
+    "api": 3.23900963,
+    "api_main": 2.902807,
+    "api_expiries": 1,
+    "api1h": 0.9551655800000003,
+    "api1h_main": 0.5436099999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 4,
+    "subRequests": 16,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.52261588,
+    "subscription": 0.9226158799999999,
+    "subscription_main": 0.5505964,
+    "subscription_expiries": 0,
+    "api": 3.28112288,
+    "api_main": 2.9091034,
+    "api_expiries": 1,
+    "api1h": 1.0336317800000001,
+    "api1h_main": 0.5505964,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6865086800000002,
+    "subscription": 1.0865086800000001,
+    "subscription_main": 0.5397544,
+    "subscription_expiries": 0,
+    "api": 3.4465156800000005,
+    "api_main": 2.8997614,
+    "api_expiries": 1,
+    "api1h": 1.2679681800000002,
+    "api1h_main": 0.5397544,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.45786328,
+    "subscription": 0.8578632800000001,
+    "subscription_main": 0.542549,
+    "subscription_expiries": 0,
+    "api": 3.21699428,
+    "api_main": 2.90168,
+    "api_expiries": 1,
+    "api1h": 0.9406746800000001,
+    "api1h_main": 0.542549,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.59374788,
+    "subscription": 0.99374788,
+    "subscription_main": 0.5472384,
+    "subscription_expiries": 0,
+    "api": 3.3522698799999997,
+    "api_main": 2.9057604,
+    "api_expiries": 1,
+    "api1h": 1.1608793800000001,
+    "api1h_main": 0.5472384,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.41226097999999994,
+    "subscription": 0.81226098,
+    "subscription_main": 0.5395044,
+    "subscription_expiries": 0,
+    "api": 0.77275998,
+    "api_main": 0.5000034,
+    "api_expiries": 0,
+    "api1h": 0.88094298,
+    "api1h_main": 0.5395044,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.46625112999999996,
+    "subscription": 0.86625113,
+    "subscription_main": 0.5451952,
+    "subscription_expiries": 0,
+    "api": 3.2253221300000003,
+    "api_main": 2.9042662000000004,
+    "api_expiries": 1,
+    "api1h": 0.9471639799999998,
+    "api1h_main": 0.5451952,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.83436058,
+    "subscription": 1.23436058,
+    "subscription_main": 0.6482441999999999,
+    "subscription_expiries": 0,
+    "api": 3.5533485799999998,
+    "api_main": 2.9672321999999998,
+    "api_expiries": 1,
+    "api1h": 1.4083413799999998,
+    "api1h_main": 0.6482441999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.62715473,
+    "subscription": 1.0271547300000001,
+    "subscription_main": 0.5466466,
+    "subscription_expiries": 0,
+    "api": 3.3853287300000003,
+    "api_main": 2.9048206000000003,
+    "api_expiries": 1,
+    "api1h": 1.1749876799999999,
+    "api1h_main": 0.5466466,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48299818,
+    "subscription": 0.8829981799999999,
+    "subscription_main": 0.5411543999999999,
+    "subscription_expiries": 0,
+    "api": 3.2422671800000002,
+    "api_main": 2.9004234,
+    "api_expiries": 1,
+    "api1h": 1.00061018,
+    "api1h_main": 0.5411543999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.4251993299999999,
+    "subscription": 0.82519933,
+    "subscription_main": 0.5402866000000001,
+    "subscription_expiries": 0,
+    "api": 0.78535333,
+    "api_main": 0.5004406,
+    "api_expiries": 0,
+    "api1h": 0.8961107800000001,
+    "api1h_main": 0.5402866000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 4,
+    "subRequests": 23,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.63722628,
+    "subscription": 1.03722628,
+    "subscription_main": 0.5411358000000001,
+    "subscription_expiries": 0,
+    "api": 3.3967712799999994,
+    "api_main": 2.9006808,
+    "api_expiries": 1,
+    "api1h": 1.1401004800000003,
+    "api1h_main": 0.5411358000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 4,
+    "subRequests": 12,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.54538583,
+    "subscription": 0.9453858299999999,
+    "subscription_main": 0.5447192,
+    "subscription_expiries": 0,
+    "api": 3.30365883,
+    "api_main": 2.9029922,
+    "api_expiries": 1,
+    "api1h": 1.0824748800000001,
+    "api1h_main": 0.5447192,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 4,
+    "subRequests": 18,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.68107128,
+    "subscription": 1.08107128,
+    "subscription_main": 0.5446596,
+    "subscription_expiries": 0,
+    "api": 3.43992628,
+    "api_main": 2.9035146,
+    "api_expiries": 1,
+    "api1h": 1.21543438,
+    "api1h_main": 0.5446596,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.38250358000000007,
+    "subscription": 0.78250358,
+    "subscription_main": 0.5406636,
+    "subscription_expiries": 0,
+    "api": 0.74276558,
+    "api_main": 0.5009256,
+    "api_expiries": 0,
+    "api1h": 0.84601328,
+    "api1h_main": 0.5406636,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42032133,
+    "subscription": 0.8203213299999998,
+    "subscription_main": 0.5414637999999999,
+    "subscription_expiries": 0,
+    "api": 0.78030733,
+    "api_main": 0.5014498000000001,
+    "api_expiries": 0,
+    "api1h": 0.8903669799999999,
+    "api1h_main": 0.5414637999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42864483,
+    "subscription": 0.8286448300000001,
+    "subscription_main": 0.5460912,
+    "subscription_expiries": 0,
+    "api": 0.7876378300000001,
+    "api_main": 0.5050842,
+    "api_expiries": 0,
+    "api1h": 0.8988791800000001,
+    "api1h_main": 0.5460912,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 4,
+    "subRequests": 17,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.6231654800000002,
+    "subscription": 1.0231654800000003,
+    "subscription_main": 0.5435308,
+    "subscription_expiries": 0,
+    "api": 3.3824074800000004,
+    "api_main": 2.9027728,
+    "api_expiries": 1,
+    "api1h": 1.18101498,
+    "api1h_main": 0.5435308,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 4,
+    "subRequests": 20,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.77080383,
+    "subscription": 1.1708038300000003,
+    "subscription_main": 0.5457110000000001,
+    "subscription_expiries": 0,
+    "api": 3.52913983,
+    "api_main": 2.904047,
+    "api_expiries": 1,
+    "api1h": 1.3118021800000004,
+    "api1h_main": 0.5457110000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 4,
+    "subRequests": 14,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.59002103,
+    "subscription": 0.9900210300000002,
+    "subscription_main": 0.550014,
+    "subscription_expiries": 0,
+    "api": 3.3477060300000003,
+    "api_main": 2.907699,
+    "api_expiries": 1,
+    "api1h": 1.1378980800000003,
+    "api1h_main": 0.550014,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.3938561799999999,
+    "subscription": 0.7938561800000001,
+    "subscription_main": 0.5409408,
+    "subscription_expiries": 0,
+    "api": 0.7535601800000001,
+    "api_main": 0.5006448,
+    "api_expiries": 0,
+    "api1h": 0.8582619800000002,
+    "api1h_main": 0.5409408,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 4,
+    "subRequests": 11,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.3938796799999999,
+    "subscription": 0.79387968,
+    "subscription_main": 0.5390766,
+    "subscription_expiries": 0,
+    "api": 0.75431268,
+    "api_main": 0.4995096,
+    "api_expiries": 0,
+    "api1h": 0.86032158,
+    "api1h_main": 0.5390766,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.53078118,
+    "subscription": 0.9307811800000002,
+    "subscription_main": 0.5443102,
+    "subscription_expiries": 0,
+    "api": 3.2902751800000005,
+    "api_main": 2.9038042000000006,
+    "api_expiries": 1,
+    "api1h": 1.05231568,
+    "api1h_main": 0.5443102,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 4,
+    "subRequests": 13,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.42255273000000004,
+    "subscription": 0.8225527299999998,
+    "subscription_main": 0.5433156,
+    "subscription_expiries": 0,
+    "api": 0.7824187300000001,
+    "api_main": 0.5031816,
+    "api_expiries": 0,
+    "api1h": 0.8915516799999998,
+    "api1h_main": 0.5433156,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.48614937999999996,
+    "subscription": 0.8861493800000001,
+    "subscription_main": 0.5422844,
+    "subscription_expiries": 0,
+    "api": 0.84576938,
+    "api_main": 0.5019043999999999,
+    "api_expiries": 0,
+    "api1h": 0.9667266800000003,
+    "api1h_main": 0.5422844,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 4,
+    "subRequests": 24,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.7082277800000001,
+    "subscription": 1.1082277800000004,
+    "subscription_main": 0.5419416,
+    "subscription_expiries": 0,
+    "api": 1.0676707800000003,
+    "api_main": 0.5013846000000001,
+    "api_expiries": 0,
+    "api1h": 1.2342574800000001,
+    "api1h_main": 0.5419416,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 4,
+    "subRequests": 15,
+    "models": [
+     "haiku",
+     "opus"
+    ],
+    "raw": 0.53272738,
+    "subscription": 0.93272738,
+    "subscription_main": 0.5400714,
+    "subscription_expiries": 0,
+    "api": 3.29264738,
+    "api_main": 2.8999914,
+    "api_expiries": 1,
+    "api1h": 1.0360194799999998,
+    "api1h_main": 0.5400714,
+    "api1h_expiries": 0
+   }
+  ]
+ }
+}

@@ -123,3 +123,18 @@ describe('agent systems', () => {
     await expect(runCase(loaded, tracetoonSystem(), { sandboxParent: tempDir() })).rejects.toThrow(/tracetoon produced no PR draft/);
   });
 });
+
+test("Claude writer sandboxes get an owner-only file login from the token (nested claude -p stays logged in)", async () => {
+  const { writeSandboxLogin } = await import("../src/agents/claude.ts");
+  const { mkdtempSync, readFileSync, statSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const home = mkdtempSync(join(tmpdir(), "prbench-login-"));
+  writeSandboxLogin(home, { ANTHROPIC_API_KEY: "k" });
+  expect(() => statSync(join(home, ".claude", ".credentials.json"))).toThrow();
+  writeSandboxLogin(home, { CLAUDE_CODE_OAUTH_TOKEN: "tok-123" });
+  const file = join(home, ".claude", ".credentials.json");
+  expect(JSON.parse(readFileSync(file, "utf8")).claudeAiOauth.accessToken).toBe("tok-123");
+  // Windows has no POSIX permission bits (files report 0o666).
+  if (process.platform !== "win32") expect(statSync(file).mode & 0o777).toBe(0o600);
+});

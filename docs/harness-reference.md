@@ -196,6 +196,15 @@ Use `--resume` with the same frozen inputs to retain completed work, or `--repor
 
 After a fact-sheet or judge repair, `--reuse-from <inactive-dev-experiment>` retains its writer performance block only when writer inputs, controls, preparation, sampling and adoption policy still match. It does not turn diagnostic samples into confirmation samples. A stale experiment lock can be recovered with `--resume --recover-lock`; recovery verifies the experiment owner and requires that its recorded process has exited. It never terminates a process by PID.
 
+**Native-only diagnostic runs.** `--systems native,candidate` (with `--purpose diagnostic`) judges the candidate against the provider's native agent only, with no baseline arm; the quality gate then reports the missing baseline as a failure, which is expected. Confirmation runs still need baseline and candidate. The flagship benchmark ([golden/v4-flagship-c70b](../golden/v4-flagship-c70b/README.md)) uses this mode.
+
+**After a reboot.** The writer environment hash covers the launching environment, so a reboot changes it and breaks cache reuse. `--resume --accept-environment-change` keeps the recorded hash. For a new experiment, `--environment-from <run> --accept-environment-change` adopts that run's recorded hash, so its cached drafts stay reusable. Both are logged in the run's `environment-overrides.json` for disclosure.
+
+**Claude Code writers.** Every Claude Code writer gets the same environment:
+- `BASH_DEFAULT_TIMEOUT_MS=600000` and `BASH_MAX_TIMEOUT_MS=900000`, so a long test command stays in the foreground;
+- `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`, so a `-p` turn can't end while it waits on a background task, where interactive use would be notified and continue;
+- a sandbox `~/.claude/.credentials.json` built from the writer's token, so nested `claude -p` processes (Tracetoon's reviewer runner) are signed in as on a user's machine.
+
 The maintained `calibrate-scope` and `admission` commands support fixed diagnostic stages with `--plan` and exact-input `--resume`. Performance report v3 requires comparable completed validation from captured artifact evidence; cheaper interrupted or unknown-work samples cannot establish a performance pass. See the [fixed completion protocol](completion-round4.md) for call counts, recovery and promotion rules.
 
 Completed writer generations are cached before scope acceptance. After a scope-checker repair, `--resume` re-audits the same retained generation without another writer call. The original rejection remains in `.isolation-failure.json`; `.scope-audit.json` records the current decision, artifact digest and checker contract, with immutable decisions under `.scope-audits/`. A real scope violation still stops the comparison. Historical v1 drafts lack these recovery receipts and are not automatically promoted into a confirmation block.

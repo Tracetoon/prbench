@@ -1,0 +1,142 @@
+{
+ "schema": "tracetoon.flagship-site-data/v1",
+ "run": "results/v4/full70",
+ "cases": 61,
+ "replicates": 3,
+ "contextTokens": 500000,
+ "pricing": "USD per M tokens, user-verified 2026-11-21; Claude subscription caching (main thread 1 h, subagents 5 min); Codex 30-min TTL",
+ "claude": {
+  "setup": {
+   "session": "claude-opus-5-5 (medium)",
+   "drafter": "claude-opus-5-5, effort low (fresh subagent)",
+   "reviewers": "claude-haiku-5-5, effort xhigh (2 passes, claude -p)",
+   "judges": [
+    "claude-opus-5-5",
+    "claude-sonnet-5-5"
+   ]
+  },
+  "composite": {
+   "native": 52.8,
+   "tracetoon": 68.32
+  },
+  "compositeDelta": 15.53,
+  "compositeDeltaSE": 1.96,
+  "casesWon": 52,
+  "preference": {
+   "tracetoon": 72,
+   "native": 9,
+   "split": 79
+  },
+  "judgeErrorsPerDraft": {
+   "native": 0.324,
+   "tracetoon": 0.161
+  },
+  "validationRubric": {
+   "native": 1.79,
+   "tracetoon": 1.61
+  },
+  "costPerPR": {
+   "scenario": "subscription",
+   "native": 1.285,
+   "tracetoon": 0.931,
+   "ratio": 0.725,
+   "rawNative": 0.265,
+   "rawTracetoon": 0.531
+  },
+  "mainRequests": {
+   "native": 10.2,
+   "tracetoon": 4.0
+  },
+  "accuracyReview": {
+   "tracetoonFlags": 144,
+   "confirmed": 111
+  },
+  "groups": {
+   "smoke8": {
+    "cases": 8,
+    "compositeDelta": 26.39,
+    "preference": {
+     "tracetoon": 12,
+     "native": 0,
+     "split": 8
+    }
+   },
+   "other53": {
+    "cases": 53,
+    "compositeDelta": 13.89,
+    "preference": {
+     "tracetoon": 60,
+     "native": 9,
+     "split": 71
+    }
+   }
+  }
+ },
+ "codex": {
+  "setup": {
+   "session": "gpt-6.1-sol (medium)",
+   "drafter": "gpt-6.1-sol, reasoning effort low (spawn_agent)",
+   "reviewers": "gpt-6-luna, effort xhigh (2 passes, codex exec)",
+   "judges": [
+    "gpt-6.1-sol",
+    "gpt-6.1-terra"
+   ]
+  },
+  "composite": {
+   "native": 64.07,
+   "tracetoon": 78.07
+  },
+  "compositeDelta": 14.01,
+  "compositeDeltaSE": 1.2,
+  "casesWon": 57,
+  "preference": {
+   "tracetoon": 111,
+   "native": 19,
+   "split": 45
+  },
+  "judgeErrorsPerDraft": {
+   "native": 0.179,
+   "tracetoon": 0.153
+  },
+  "validationRubric": {
+   "native": 1.72,
+   "tracetoon": 1.6
+  },
+  "costPerPR": {
+   "scenario": "openai",
+   "native": 3.496,
+   "tracetoon": 0.928,
+   "ratio": 0.265,
+   "rawNative": 0.258,
+   "rawTracetoon": 0.298
+  },
+  "mainRequests": {
+   "native": 30,
+   "tracetoon": 5.8
+  },
+  "accuracyReview": {
+   "tracetoonFlags": 78,
+   "confirmed": 56
+  },
+  "groups": {
+   "smoke8": {
+    "cases": 8,
+    "compositeDelta": 8.78,
+    "preference": {
+     "tracetoon": 13,
+     "native": 3,
+     "split": 7
+    }
+   },
+   "other53": {
+    "cases": 53,
+    "compositeDelta": 14.8,
+    "preference": {
+     "tracetoon": 98,
+     "native": 16,
+     "split": 38
+    }
+   }
+  }
+ }
+}

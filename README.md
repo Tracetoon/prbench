@@ -14,6 +14,19 @@ The question it answers: **does an agent with this tool write a more accurate an
 
 Methodology: [docs/methodology.md](docs/methodology.md). Related work: [docs/related-work.md](docs/related-work.md).
 
+## Results: Tracetoon vs no Tracetoon on flagship models
+
+The user's own agent writing the PR with no Tracetoon (`native`), against the same agent using Tracetoon `candidate70b`. Both run in a Claude Code session on Opus 5.5 and a Codex session on Sol 6.1. The run used 61 real cases × 3 replicates per provider, two judges per provider in both orders, and the same accuracy review. Data, drafts, cost model and commands: [golden/v4-flagship-c70b/](golden/v4-flagship-c70b/).
+
+| | Claude Code (Opus 5.5) | Codex (Sol 6.1) |
+| --- | --- | --- |
+| Composite score, native → Tracetoon | 52.8 → **68.3** (+15.5 ± 2.0) | 64.1 → **78.1** (+14.0 ± 1.2) |
+| Consensus picks, Tracetoon–native | **72–9** | **111–19** |
+| Judge-flagged factual errors per draft | 0.32 → **0.16** | 0.18 → **0.15** |
+| Cost per PR, 500k-token warm session | $1.29 → **$0.93** (0.72×) | $3.50 → **$0.93** (0.27×) |
+
+The session's own model only coordinates (about 4–6 requests). A fresh drafter on the same model at low effort writes from the evidence brief, and cheap reviewers check it (Haiku / Luna). Cost assumes a 500k-token session with subscription-style caching (main thread 1 h, subagents 5 min; Codex 30 min). Without a long carried session, Tracetoon costs more than the native agent. Details and caveats are in the bundle's README.
+
 ## Results: the v4 golden run
 
 Tracetoon's evidence-graph skill (`candidate62`) against Tracetoon's original workflow. The run used 61 real cases × 3 replicates per provider, with two pre-registered judges per provider, each judging every pair in both orders, and an expert accuracy review of every flagged claim. Data, drafts and commands: [golden/v4-candidate62/](golden/v4-candidate62/). Write-up: [the Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html).
@@ -185,6 +198,7 @@ Results folders contain traces and paths from your machine. Keep them out of Git
 - [Expert fact review](docs/fact-review.md), [cases](docs/cases.md), [validation evidence](docs/validation-evidence.md), [scope calibration](docs/scope-calibration.md).
 - [Reproducing the Tracetoon graph-vs-base comparison](docs/reproduce-graph-vs-base.md) and the [v4 golden run](golden/v4-candidate62/README.md).
 - [Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html), the published write-up of the golden run.
+- [Flagship benchmark bundle](golden/v4-flagship-c70b/README.md): Tracetoon vs no Tracetoon on Opus 5.5 and Sol 6.1.
 
 ## Adding a system
 

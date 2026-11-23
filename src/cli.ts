@@ -196,6 +196,10 @@ program
     "with --resume, recover an owned lock only after its controller process has exited",
   )
   .option(
+    "--environment-from <run>",
+    "new experiment: adopt that run's recorded writer environment hash (needs --accept-environment-change), so its cached drafts stay reusable after a reboot; logged in environment-overrides.json",
+  )
+  .option(
     "--accept-environment-change",
     "with --resume, keep the recorded writer environment hash when only the launching environment changed (e.g. after a reboot); logged in environment-overrides.json",
   )

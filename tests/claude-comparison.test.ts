@@ -17,6 +17,7 @@ import {
   saveClaudeToken,
 } from "../src/agents/claude.ts";
 import { parseJudge } from "../src/judge/providers.ts";
+import { CLAUDE_WRITER_BASH_ENV } from "../src/agents/claude.ts";
 import {
   inspectClaudeCatalogue,
   normalizeClaudeReport,
@@ -103,9 +104,12 @@ const calls = () =>
     .map((l) => JSON.parse(l));
 const after = (args: string[], flag: string): string =>
   args[args.indexOf(flag) + 1]!;
+// The writer's token and the harness's own writer settings are set on purpose;
+// anything else under CLAUDE_* would come from the host session.
 const leaked = (call: any) =>
   call.inheritedClaudeEnv.filter(
-    (k: string) => k !== "CLAUDE_CODE_OAUTH_TOKEN",
+    (k: string) =>
+      k !== "CLAUDE_CODE_OAUTH_TOKEN" && !(k in CLAUDE_WRITER_BASH_ENV),
   );
 
 describe("claude comparison writers", () => {

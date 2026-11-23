@@ -1,0 +1,4354 @@
+{
+ "schema": "prbench.adjudications/v1",
+ "experiment": "3356a8b942ada7b8b44153eedd371ef5993586d1fef7798b84e1a8c605c3108b",
+ "entries": [
+  {
+   "finding": "0085014e53bbb0f3bdcda434c5b680c3670c5ba6a68ea204a9bf1ccf2780ae5f",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:58:20.508Z",
+   "rationale": "claude-fable-5-1: demoteRepeats does skip unbackedNames, but openProblems never counted them at base or head, briefPathOpen gates publishing only on open and uncovered, and render keeps unbackedNames in JSON only; so every finding render reports and that blocks is demoted on repeat, and the flag's 'can continue blocking' premise is contradicted. The sentence matches the commit message and the function's own doc comment. (other: gpt-6-astra confirmed: The claim is too broad: unbackedNames remains outside repeated, although the flag incorrectly says those diagnostics can block publishing.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/graph/briefRender.ts",
+     "startLine": 478,
+     "endLine": 504,
+     "sha256": "6fffe8993135f3b751d15777a757bbd6d4c75066de839c6e9c3017f88db8681c"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 254,
+     "endLine": 258,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 292,
+     "endLine": 293,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 887,
+     "endLine": 904,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+     "path": "src/commands/publish.ts",
+     "startLine": 253,
+     "endLine": 257,
+     "sha256": "2928ffa02343fd2feb40a2efcde3d1c39b0230ffb5a77cdbdaa107f24405fe4d"
+    },
+    {
+     "kind": "commit",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "startLine": 9,
+     "endLine": 14,
+     "sha256": "e9dc66aa12dcb19d06118d84a38e8ef514069eea410df0ae68f5e9d0e01cdb23"
+    },
+    {
+     "kind": "diff",
+     "startLine": 758,
+     "endLine": 777,
+     "sha256": "a3a63f044b87ab8622ef9a1fd2de5975ece7b3430e6ddab430411d009a971d3c"
+    }
+   ]
+  },
+  {
+   "finding": "00bc391c13eecd0d9a69b96a459873fe8c6c9ff2d690e18e271225e52508bce2",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:47.930Z",
+   "rationale": "claude-fable-5-1: Unqualified 'runner containers' claim is contradicted: both runners unconditionally call showtail_docker_prepare_volumes, whose docker run uses --user root with host credential bind-mounts and has neither --cap-drop ALL nor --security-opt no-new-privileges; only containers built from SHOWTAIL_DOCKER_RUN_ARGS get those flags, so a reviewer would be misled about the hardening posture. | gpt-6-astra: Both runners launch a root volume-preparation container without either restriction; the unqualified claim only holds for subsequent execution containers.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 369,
+     "endLine": 376,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 399,
+     "endLine": 409,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 464,
+     "endLine": 466,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 562,
+     "endLine": 565,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-common.sh",
+     "startLine": 55,
+     "endLine": 62,
+     "sha256": "168c25e73576ac9875ac88e6416852557ec6c41ed9764a92c8d67428820100c7"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-common.sh",
+     "startLine": 85,
+     "endLine": 95,
+     "sha256": "168c25e73576ac9875ac88e6416852557ec6c41ed9764a92c8d67428820100c7"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-live-test.sh",
+     "startLine": 35,
+     "endLine": 37,
+     "sha256": "84e995a3bfb3c147c5d38969e600fdd94c9f73521f2bc99d845db975f08d0bc0"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-test.sh",
+     "startLine": 51,
+     "endLine": 53,
+     "sha256": "ab1f37801876ce8c33632310166abe8b5012d55c008143579f72d1a6815cd161"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-test.sh",
+     "startLine": 51,
+     "endLine": 54,
+     "sha256": "ab1f37801876ce8c33632310166abe8b5012d55c008143579f72d1a6815cd161"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-live-test.sh",
+     "startLine": 35,
+     "endLine": 44,
+     "sha256": "84e995a3bfb3c147c5d38969e600fdd94c9f73521f2bc99d845db975f08d0bc0"
+    }
+   ]
+  },
+  {
+   "finding": "0385c02c0b4752a98aa3ed1e179f5acbd7c41bd0f68494158f428fa3729e24f8",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:14.840Z",
+   "rationale": "claude-fable-5-1: The session shows the quoted request was answered by the pre-base candidate20/21 work; the receipt fix arose during adjudication-worksheet preparation after the user's 'Fix harness, assist adjudication' answer, and the reviewed-brief default followed the later 'take a step back' request and 'go ahead with the plan' approval, so 'addresses the request to ...' is an unsupported causal attribution. | gpt-6-astra: The behavior summary is supported, but the combined causal attribution is unsupported: the receipt fix arose during adjudication, and the workflow change followed a later approved plan.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 7,
+     "endLine": 7,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 136,
+     "endLine": 138,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 198,
+     "endLine": 198,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 229,
+     "endLine": 229,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 266,
+     "endLine": 266,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 290,
+     "endLine": 290,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 342,
+     "endLine": 342,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 375,
+     "endLine": 375,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 276,
+     "endLine": 276,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 327,
+     "endLine": 327,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    }
+   ]
+  },
+  {
+   "finding": "0452ea6a387f4e2acc17e9f31d08662e136336668b374402c23cee5f9f277e22",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.788Z",
+   "rationale": "claude-fable-5-1: The parenthetical attributes coverage of the scrolling bindings to test/tui-learn.test.ts, but that test's scenario only dismisses the progress and command-reference screens with Enter and Escape and sends no scroll keys while a document is shown. | gpt-6-astra: The coverage claim includes scrolling, while the Home-screen test exercises only opening and dismissal.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 69,
+     "endLine": 76,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/fixtures/native-tui-driver.py",
+     "startLine": 75,
+     "endLine": 85,
+     "sha256": "f4b6351c737cb3ca15d32c5f98f2ccbfb4acf5b04fd22a42341f5db4f9974732"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 267,
+     "endLine": 295,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "a30583b586deefaa2d8707af2af4cea7a071d3fc9e3a010c5a5d78f165707f64",
+     "commandId": "V22",
+     "sha256": "2487da316d1fc99ca479b0ffabeaab51648014b3a40c003bc92e4ae4a0a2a607",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 58,
+     "endLine": 104,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 264,
+     "endLine": 301,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    }
+   ]
+  },
+  {
+   "finding": "158ca1e27ca61386dce1a489b947df69fdce8fa8c50b71fdd3abb57318a30118",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.861Z",
+   "rationale": "claude-fable-5-1: Trailing planning blocks are preserved via withLeadingBlocks, but the sentence's subject is replay replies, and the legacy no-events reply from nativeReplayReply carries only text (with a Replay header) and no nativeBlocks, so legacy commentary does not reach the reply as text blocks. | gpt-6-astra: Trailing planning blocks are preserved, but legacy commentary blocks are not attached to the no-events replay reply.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 718,
+     "endLine": 722,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 729,
+     "endLine": 737,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 60,
+     "endLine": 67,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "diff",
+     "startLine": 128,
+     "endLine": 133,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/learn/native.ts",
+     "startLine": 645,
+     "endLine": 664,
+     "sha256": "a8f8a8821a6dcb270a53d0a547b14970c821cde598b60a0da155177a2b6d5dd0"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 302,
+     "endLine": 308,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 729,
+     "endLine": 749,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/planning.test.ts",
+     "startLine": 230,
+     "endLine": 238,
+     "sha256": "8bb4d50c40f2afdf42c5a967422e308555519e42a8f94caf0035f4e6c487bd1c"
+    }
+   ]
+  },
+  {
+   "finding": "209e8b346c0e4c58b7395ff18fc242769cd26a26b8e2e03b8f8f63a5b1a0d533",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.241Z",
+   "rationale": "claude-fable-5-1: At L959 the bottom-5% removal from providers.ts precedes `bun test` and the bundled test in the same command, followed immediately by the d5935ebc commit at 23:41:16; the transcript ends at L966 with no further providers.ts edits. The statement that the last test run came before the final edits is contradicted by this ordering. | gpt-6-astra: The final session command removes the bottom-5% instruction before running the full and bundled tests, with no intervening provider edits before commit.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 941,
+     "endLine": 942,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "commit",
+     "revision": "d5935ebcd4bf45146a5b522830d2776fb6bffa84",
+     "startLine": 1,
+     "endLine": 14,
+     "sha256": "30b9eb7fadcf8f5ae1de1f770c7bb46598cf90d72a36764c96910184269eff96"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    }
+   ]
+  },
+  {
+   "finding": "25509262fce23cf3ebb7590964e1f59110799603d60de11171c763d2a6b1a428",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:58:20.533Z",
+   "rationale": "claude-fable-5-1: The commit message describes exactly these repeated findings; the attribution exemption matches the new attributed check in applyBrief; and the repeated-list clause holds for every blocking finding category since unbackedNames is a JSON-only diagnostic excluded from openProblems at base and head, so nothing 'remains blocking' as the flag asserts. (other: gpt-6-astra confirmed: The commit-attribution clause is supported, but repeat demotion excludes unbackedNames, making the general finding claim too broad.)",
+   "sources": [
+    {
+     "kind": "commit",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "startLine": 7,
+     "endLine": 14,
+     "sha256": "e9dc66aa12dcb19d06118d84a38e8ef514069eea410df0ae68f5e9d0e01cdb23"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/graph/briefRender.ts",
+     "startLine": 313,
+     "endLine": 318,
+     "sha256": "6fffe8993135f3b751d15777a757bbd6d4c75066de839c6e9c3017f88db8681c"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/graph/briefRender.ts",
+     "startLine": 485,
+     "endLine": 504,
+     "sha256": "6fffe8993135f3b751d15777a757bbd6d4c75066de839c6e9c3017f88db8681c"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 254,
+     "endLine": 258,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 292,
+     "endLine": 293,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+     "path": "src/commands/publish.ts",
+     "startLine": 253,
+     "endLine": 257,
+     "sha256": "2928ffa02343fd2feb40a2efcde3d1c39b0230ffb5a77cdbdaa107f24405fe4d"
+    },
+    {
+     "kind": "diff",
+     "startLine": 736,
+     "endLine": 742,
+     "sha256": "a3a63f044b87ab8622ef9a1fd2de5975ece7b3430e6ddab430411d009a971d3c"
+    }
+   ]
+  },
+  {
+   "finding": "2dfd32f80a2d90b89aefa05e5a5984f6dbafe3f50507af0be14c9c7ce61b4640",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:52:36.736Z",
+   "rationale": "claude-fable-5-1: The diff leaves java-6-05's responsePath unchanged at src/main/java/Thermostat.java and only adds a clean entry for src/main/java/ThermostatApp.java; no response path is corrected, and the d3 author's review notes record this same correction. | gpt-6-astra: The responsePath remains Thermostat.java; the change adds ThermostatApp.java to the clean list.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 170,
+     "endLine": 178,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "git",
+     "revision": "834fab16fd633c06d0745cfb6804b21d2261db6d",
+     "path": "books/ai-first-java-programming.json",
+     "startLine": 4046,
+     "endLine": 4049,
+     "sha256": "4dfa4fbe1431a3b5e98a44d44e4e8a592caa4ac609267fb6a338b5a7bc0acfee"
+    }
+   ]
+  },
+  {
+   "finding": "2f47244e0ebe1ce4660cc8fa78abf170a8ffc5cdb19c14ff624510b4832256d6",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:52:36.876Z",
+   "rationale": "claude-fable-5-1: Base verify.ts created a temp directory with mkdtempSync and removed it in finally for every call that actually verified; the only exception is the pre-existing, unchanged external-launch skip that returns before any verification occurs, so 'verification created and removed a temporary directory for each call' is a fair description of the ownership model the change alters. (other: gpt-6-astra confirmed: “Each call” is too broad: external-project verification returned before creating a temporary directory.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "3556da9ed14d0cfea4ad4b4037d88ad98915dc18",
+     "path": "scripts/lib/verify.ts",
+     "startLine": 302,
+     "endLine": 306,
+     "sha256": "2ae6b0366e79e7c2b6044ea30f539a21215c99a088555388109008d2b308257d"
+    },
+    {
+     "kind": "git",
+     "revision": "3556da9ed14d0cfea4ad4b4037d88ad98915dc18",
+     "path": "scripts/lib/verify.ts",
+     "startLine": 359,
+     "endLine": 365,
+     "sha256": "2ae6b0366e79e7c2b6044ea30f539a21215c99a088555388109008d2b308257d"
+    },
+    {
+     "kind": "diff",
+     "startLine": 313,
+     "endLine": 319,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "diff",
+     "startLine": 326,
+     "endLine": 338,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    }
+   ]
+  },
+  {
+   "finding": "2f6f09b0911bdfa1658356f115b97b1d8609088ac9923d92ed7fb5854e6f2a2b",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:16.699Z",
+   "rationale": "claude-fable-5-1: File redirection (spawnToFiles) is used only by the review-run and review-lean helpers, as the commit says; receipts-and-fork, flow and comic tests still spawn the CLI with piped spawnSync, so 'Test CLI calls redirect output to files' overgeneralizes (the guard clause itself is supported). | gpt-6-astra: File redirection applies to the review helpers, while other CLI calls retain pipes; the guard supplies no timeout for unmarked hangs.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/helpers.ts",
+     "startLine": 273,
+     "endLine": 297,
+     "sha256": "eec30974c9096e533073231894c7dcea666a998799b2b506812debe754b4ebf8"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/review-run.test.ts",
+     "startLine": 44,
+     "endLine": 44,
+     "sha256": "d2edbfc8a435db13eb113e08600cae61e49c8273db4d86e6958390b094c7ee25"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/review-lean.test.ts",
+     "startLine": 302,
+     "endLine": 302,
+     "sha256": "f6098e9346d39227ebc2afc12bb21acb0fb2db6d75a91a2b23599d7578d948cb"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/receipts-and-fork.test.ts",
+     "startLine": 66,
+     "endLine": 73,
+     "sha256": "33ec0f8fba72eb1e83c074601f7c4fac3bc03635ebc0d9d075bbb175d3423a7c"
+    },
+    {
+     "kind": "commit",
+     "revision": "e8b441728a5d45edf14288492e753723299c551e",
+     "startLine": 13,
+     "endLine": 14,
+     "sha256": "51f4dcca0baeb6b5f5681003782e192e093b5b3e57aa9f1636b0aa86bcf7197e"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/helpers.ts",
+     "startLine": 299,
+     "endLine": 322,
+     "sha256": "eec30974c9096e533073231894c7dcea666a998799b2b506812debe754b4ebf8"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/spawn-guard.ts",
+     "startLine": 7,
+     "endLine": 8,
+     "sha256": "66b61d557f35616e13fa105d1b7904c39bec6c1b8df9518b17083c203ff1e160"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/spawn-guard.test.ts",
+     "startLine": 39,
+     "endLine": 45,
+     "sha256": "d2fff56ff0c48763476972e067f07e2c30f698e5ba4318a8b5ffba2f00c359b1"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/review-run.test.ts",
+     "startLine": 43,
+     "endLine": 48,
+     "sha256": "d2edbfc8a435db13eb113e08600cae61e49c8273db4d86e6958390b094c7ee25"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/helpers.ts",
+     "startLine": 273,
+     "endLine": 289,
+     "sha256": "eec30974c9096e533073231894c7dcea666a998799b2b506812debe754b4ebf8"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/helpers.ts",
+     "startLine": 305,
+     "endLine": 318,
+     "sha256": "eec30974c9096e533073231894c7dcea666a998799b2b506812debe754b4ebf8"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/spawn-guard.ts",
+     "startLine": 24,
+     "endLine": 45,
+     "sha256": "66b61d557f35616e13fa105d1b7904c39bec6c1b8df9518b17083c203ff1e160"
+    }
+   ]
+  },
+  {
+   "finding": "333f110b6998ffa30445162cb8afbcfa343b84e53d98330a62024c370e7460b3",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:40.343Z",
+   "rationale": "claude-fable-5-1: The AIFIRST_CLAUDE_E2E=1 suite only runs `claude --version` and then the replay driver, which drives local `aifirst learn`; learn launches Claude against a local book server with a synthetic ANTHROPIC_AUTH_TOKEN and isolated HOME, so no credentials are involved. Credential copying lives only in the separate, ungated capture script, so calling the gated test 'credentialed replay' misleads reviewers about what the env var protects; the wording traces to the agent's pre-implementation plan, not the shipped code. | gpt-6-astra: The gate makes local replay opt-in; replay uses a synthetic token, while real credentials belong to the separate authoring capture, so “credentialed replay” is misleading.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "test/claude-showtail-scenarios-e2e.test.ts",
+     "startLine": 30,
+     "endLine": 43,
+     "sha256": "e1802f8f9fd2cb70b4d28524fdfd809f06ac0eff9d9de6aecc93a4dee7c35b21"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "test/claude-showtail-scenarios-e2e.test.ts",
+     "startLine": 92,
+     "endLine": 128,
+     "sha256": "e1802f8f9fd2cb70b4d28524fdfd809f06ac0eff9d9de6aecc93a4dee7c35b21"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "test/fixtures/claude-e2e-replay-driver.py",
+     "startLine": 38,
+     "endLine": 59,
+     "sha256": "e73925d071d4bc01a2e131859a32af3a43189b10bfa0f5cfc78c51f8f08db742"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 229,
+     "endLine": 229,
+     "sha256": "22581bfa5fa9888a7b1c64ed7becb8e248e659c8876aeead11a411a31f7e12d4"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 1,
+     "endLine": 12,
+     "sha256": "85ed31987bb261fe28ddf7c05808a602ff8d9cb404832daf15e6ef3c6c0569ef"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "scripts/capture-claude-showtail-e2e.ts",
+     "startLine": 48,
+     "endLine": 48,
+     "sha256": "091994f74d1b33f9a8fe3177cd4b5fd6dfaa0207b6330540ca04e993936087c9"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "scripts/capture-claude-showtail-e2e.ts",
+     "startLine": 135,
+     "endLine": 139,
+     "sha256": "091994f74d1b33f9a8fe3177cd4b5fd6dfaa0207b6330540ca04e993936087c9"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "scripts/capture-claude-showtail-e2e.ts",
+     "startLine": 372,
+     "endLine": 378,
+     "sha256": "091994f74d1b33f9a8fe3177cd4b5fd6dfaa0207b6330540ca04e993936087c9"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 117,
+     "endLine": 117,
+     "sha256": "22581bfa5fa9888a7b1c64ed7becb8e248e659c8876aeead11a411a31f7e12d4"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 230,
+     "endLine": 230,
+     "sha256": "22581bfa5fa9888a7b1c64ed7becb8e248e659c8876aeead11a411a31f7e12d4"
+    },
+    {
+     "kind": "git",
+     "revision": "8455fd5fb07be73dc629cccdb96de9cc78d3439f",
+     "path": "scripts/capture-claude-showtail-e2e.ts",
+     "startLine": 134,
+     "endLine": 139,
+     "sha256": "091994f74d1b33f9a8fe3177cd4b5fd6dfaa0207b6330540ca04e993936087c9"
+    }
+   ]
+  },
+  {
+   "finding": "3491c3606a9ed713f648bdd41251c13250c0a112ba84098a9b97472bca26da99",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.778Z",
+   "rationale": "claude-fable-5-1: The cited test waits for the document screen and presses only Enter or Escape; its Down presses occur on the Home picker, so scrolling (Up/k, Down/j, Page Up/Down implemented in session.ts) is never exercised despite the driver supporting arrow keys. | gpt-6-astra: Scrolling is implemented, but the cited test only dismisses documents with Enter/Escape; its Down presses navigate menus.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 69,
+     "endLine": 76,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/fixtures/native-tui-driver.py",
+     "startLine": 75,
+     "endLine": 85,
+     "sha256": "f4b6351c737cb3ca15d32c5f98f2ccbfb4acf5b04fd22a42341f5db4f9974732"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 267,
+     "endLine": 295,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1376,
+     "endLine": 1387,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 58,
+     "endLine": 76,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 264,
+     "endLine": 301,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    }
+   ]
+  },
+  {
+   "finding": "35b2de2b9429c4f53c042505e1e6c5d55ad0c67fad5f853a12e2e13f52f58a11",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:47.950Z",
+   "rationale": "claude-fable-5-1: Unqualified 'runner containers' claim is contradicted: every normal run of either runner first launches the volume-preparation container via docker run --rm --user root with none of --init, --cap-drop ALL, or --security-opt no-new-privileges; those three flags live only in SHOWTAIL_DOCKER_RUN_ARGS used by the later sandbox/live containers, so the statement overstates the hardening of what the runners launch. | gpt-6-astra: Both runners launch a root volume-preparation container without --init, --cap-drop ALL, or no-new-privileges, so the claim overstates their coverage.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 369,
+     "endLine": 376,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 399,
+     "endLine": 409,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 464,
+     "endLine": 466,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "diff",
+     "startLine": 562,
+     "endLine": 565,
+     "sha256": "e05af69664990fc1264b74362f87cb18f9ebd1b0819fc9238a63063cf3960a12"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-common.sh",
+     "startLine": 55,
+     "endLine": 62,
+     "sha256": "168c25e73576ac9875ac88e6416852557ec6c41ed9764a92c8d67428820100c7"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-common.sh",
+     "startLine": 85,
+     "endLine": 95,
+     "sha256": "168c25e73576ac9875ac88e6416852557ec6c41ed9764a92c8d67428820100c7"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-live-test.sh",
+     "startLine": 35,
+     "endLine": 37,
+     "sha256": "84e995a3bfb3c147c5d38969e600fdd94c9f73521f2bc99d845db975f08d0bc0"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-test.sh",
+     "startLine": 51,
+     "endLine": 53,
+     "sha256": "ab1f37801876ce8c33632310166abe8b5012d55c008143579f72d1a6815cd161"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-test.sh",
+     "startLine": 51,
+     "endLine": 54,
+     "sha256": "ab1f37801876ce8c33632310166abe8b5012d55c008143579f72d1a6815cd161"
+    },
+    {
+     "kind": "git",
+     "revision": "48082aa3af50cc4fa9fc8dd8fd0f18e53c438488",
+     "path": "scripts/docker-live-test.sh",
+     "startLine": 35,
+     "endLine": 44,
+     "sha256": "84e995a3bfb3c147c5d38969e600fdd94c9f73521f2bc99d845db975f08d0bc0"
+    }
+   ]
+  },
+  {
+   "finding": "36eca5028956dcea1f33a90ca84e60a71d1cfbece80e6292d042e9d3ee80aab5",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:03.936Z",
+   "rationale": "claude-fable-5-1: Each named command was executed by the description's author in its head checkout (V10 install, V11 validate, V12 add-ids --check, V13 bun test, V14–V16 tsc, V19 run-exercises) after reading the PR diff there via `git diff HEAD^ HEAD` (V7); the 430-test count is not the session's 431-test dirty-tree result (raw L133), so the passes are the author's runs on the submitted tree, not session runs misattributed to it. (other: gpt-6-astra confirmed: Recorded check results do not establish that the tested content matched the submitted tree.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V7",
+     "sha256": "e623bb1c4e12e9b408669f68c6f5fecf25bed44b5077cdad6a7f9a82aac02e12",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V11",
+     "sha256": "435504c51db3d653622d575b797a0a7ef01d6a14f117f6dda9f3633e407dbab1",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V12",
+     "sha256": "bb3f71e66024c4ed43efc493f2c91ffbe139174bf490f1af2c70aadc25a6171b",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V13",
+     "sha256": "4715eff67651643dcd4eeb1d99904e4c21358a86f43cd5747f65ec2f31181490",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V14",
+     "sha256": "9054054b583dd122658be42c5c8c8b443a3b6f31d5921a1992865f8e75e6016d",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V19",
+     "sha256": "70c5e281b673c7af8cf1ec9d50cc6268acce75f6d0def86cc5792f3b54fe97e4",
+     "startLine": 1,
+     "endLine": 11
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 133,
+     "endLine": 135,
+     "sha256": "3c15f0bb20c6a48413b932d7ff0323e4696b364c2f967f4076e7b585fd61b678"
+    }
+   ]
+  },
+  {
+   "finding": "37edd0cc18761d306fbe5f166c2b449aea35fba0707489a6aff2cbc189f1cea2",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:02:49.490Z",
+   "rationale": "claude-fable-5-1: The statement is attributed to the commit message, and the commit message literally says the comparison could not resume because the environment hash covered every inherited variable \"including per-process ones like CLAUDE_PID and INVOCATION_ID\"; whether the session independently proved the culprit is beside the point of a claim about what the commit reports. | gpt-6-astra: The commit message explicitly links failed resumption to hashing inherited per-process variables, naming CLAUDE_PID; the draft accurately attributes that explanation to the commit.",
+   "sources": [
+    {
+     "kind": "commit",
+     "revision": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+     "startLine": 9,
+     "endLine": 11,
+     "sha256": "ccea5e71604e91f78be9d6aeddcb7aaa5f1a79b9c5ad1cba8e438b68325f7568"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1049,
+     "endLine": 1050,
+     "sha256": "964cd047372975bd431f868edd82c91c38957f0bc5ac9753efdde97fbd3d0278"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 619,
+     "endLine": 619,
+     "sha256": "964cd047372975bd431f868edd82c91c38957f0bc5ac9753efdde97fbd3d0278"
+    },
+    {
+     "kind": "commit",
+     "revision": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+     "startLine": 9,
+     "endLine": 12,
+     "sha256": "ccea5e71604e91f78be9d6aeddcb7aaa5f1a79b9c5ad1cba8e438b68325f7568"
+    }
+   ]
+  },
+  {
+   "finding": "38e7da7c4985e0a1ae401ea965968bc1b4f418f7ed68c4d81d3e0c1ed34c12e1",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.189Z",
+   "rationale": "claude-fable-5-1: The first clause is contradicted: at L959 the 5% line was removed from providers.ts and then the full and bundled suites ran before the commit, with no intervening or later edits (the digest's own R2 entry also records 'no later edits seen'). The trailing clause about the fresh check being later in time is trivially true but does not rescue the misleading claim that the session never tested the final providers.ts content. | gpt-6-astra: Historical tests followed the final provider edit; the fresh command captures also do not establish that they tested the submitted content.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 941,
+     "endLine": 942,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "d47a5a8197a631dd94de836d4188c5146b803f0d9025c5ea0cf3b5f2c69bc321",
+     "commandId": "V11",
+     "sha256": "1c3826fdaab6ebccd90bfdc7ac19bbc85ba01840ff6e589f52f806e5af63a31e",
+     "startLine": 1,
+     "endLine": 11
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "d47a5a8197a631dd94de836d4188c5146b803f0d9025c5ea0cf3b5f2c69bc321",
+     "commandId": "V14",
+     "sha256": "e16568af05f59025de294504f4b265fdaa0b86bf1cec61b9f9179f1f48284de1",
+     "startLine": 1,
+     "endLine": 11
+    }
+   ]
+  },
+  {
+   "finding": "3b1ac8bc2fcd57163575bf4d3a98cc568e42cccf1585872f4f7ba2ca8000f93b",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:16.673Z",
+   "rationale": "claude-fable-5-1: tests/test-files.test.ts's timeout test checks exit code and duration only; output retention is implemented in scripts/test-files.ts (stderr note appended) but no test inspects it. | gpt-6-astra: The named regression does not inspect captured output or the timeout message.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/test-files.test.ts",
+     "startLine": 46,
+     "endLine": 64,
+     "sha256": "141dba157dd2d42b8c64ff01c3be7b2eadf46c1d85984155fc76955d09e80c18"
+    },
+    {
+     "kind": "diff",
+     "startLine": 806,
+     "endLine": 817,
+     "sha256": "2533df07a8874ed2f96aa1bba3d9b09940a3269a0abc10ccc366d47ebed7b19e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 2090,
+     "endLine": 2108,
+     "sha256": "2533df07a8874ed2f96aa1bba3d9b09940a3269a0abc10ccc366d47ebed7b19e"
+    }
+   ]
+  },
+  {
+   "finding": "3b2725797c795d54c28f42c0fcd50c4b1484e469ef3621adc829cdc6c62cff29",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:03.940Z",
+   "rationale": "claude-fable-5-1: Same statement as F2: the binding to the submitted tree is supported by the author running the checks itself in the checkout it was diffing (V7, V10–V19), and by the test count (430) diverging from the session's run on a tree with uncommitted loader/schema/test edits (431 tests, raw L133; status raw L198, L289), which shows the draft did not borrow session results for the head. (other: gpt-6-astra confirmed: The passes are recorded, but their attribution to the submitted content lacks revision or tree evidence.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V7",
+     "sha256": "e623bb1c4e12e9b408669f68c6f5fecf25bed44b5077cdad6a7f9a82aac02e12",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V13",
+     "sha256": "4715eff67651643dcd4eeb1d99904e4c21358a86f43cd5747f65ec2f31181490",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V16",
+     "sha256": "89d87872bb219e86269cb0bc5b281739aad8125e33152e133566344e73b603f4",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 133,
+     "endLine": 135,
+     "sha256": "3c15f0bb20c6a48413b932d7ff0323e4696b364c2f967f4076e7b585fd61b678"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 289,
+     "endLine": 290,
+     "sha256": "3c15f0bb20c6a48413b932d7ff0323e4696b364c2f967f4076e7b585fd61b678"
+    }
+   ]
+  },
+  {
+   "finding": "3beb60220184bfb3b8c11689f951c43b97837275005f26ae20da3ec0e7ab1241",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:10:01.853Z",
+   "rationale": "claude-fable-5-1: The sentence sits in the paragraph describing plain `review run --all`, and the skip branch there matches it exactly (source tracetoon-run, same slot/lens, same bodySha256, same verifiedModel, unless --fresh); the draft describes `--all --recheck` separately as resuming earlier sessions, mirroring the code comment, CLI help and commit message, so extending the skip rule to recheck mode is not a fair reading of the draft. (other: gpt-6-astra confirmed: The skip rule applies only without --recheck; a partial-failure retry preserves --recheck and, under default once, resumes successful slots again without --fresh.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 762,
+     "endLine": 781,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 719,
+     "endLine": 726,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 737,
+     "endLine": 761,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/cli.ts",
+     "startLine": 322,
+     "endLine": 322,
+     "sha256": "8ff771fb55af7c7b25ccc667a00d04fd435a701d705421dd353599460c013841"
+    },
+    {
+     "kind": "commit",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "startLine": 13,
+     "endLine": 19,
+     "sha256": "f26f9ea886696e0cf99e34e115a095b898aa45682b41a0c087a4a29d81570d76"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "tests/review-run.test.ts",
+     "startLine": 543,
+     "endLine": 570,
+     "sha256": "c2e8bd89c5abfb60f1485eee0195633421e8e931abbdbf0f8122b2f897c24113"
+    }
+   ]
+  },
+  {
+   "finding": "3edaf8df19f2b6c61edadb8fc2656972ce7eb721139b9dc940531e249005b745",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.254Z",
+   "rationale": "claude-fable-5-1: The first clause is wrong for the same reason: the final providers.ts edit (5% line removal) and the last full and bundled test runs are in one chained command at L959, edit first, and the commit followed with no intervening edits; the digest's R2 entry at the same timestamp also says 'no later edits seen'. The fresh-check clause being chronologically true does not make the open point accurate. | gpt-6-astra: Historical tests followed the final provider edit; completed fresh commands do not independently establish that they tested the submitted content.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "git",
+     "revision": "d5935ebcd4bf45146a5b522830d2776fb6bffa84",
+     "path": "src/comic/providers.ts",
+     "startLine": 467,
+     "endLine": 467,
+     "sha256": "e9baeabd691b800c56092221d2682d70eb11db802e826c04b73eae80a6da70b4"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "c2f0e1fe6b0c6d4254e0c570ce7583943918b76337431ef91dac9baf43eb372c",
+     "commandId": "V8",
+     "sha256": "aafc78b826f2cfe407807038e6226aba93991051b15039fc0fd9b2584cbfee1f",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "c2f0e1fe6b0c6d4254e0c570ce7583943918b76337431ef91dac9baf43eb372c",
+     "commandId": "V9",
+     "sha256": "6dd657a0638376a2ebcc4adec3926b391186d89cc535fd229a20995b51af4d3b",
+     "startLine": 1,
+     "endLine": 12
+    }
+   ]
+  },
+  {
+   "finding": "3f0fa6e585929a57c14bb7d65d113ff30bdb53591cbb42df6d7b0d3df6bafcb4",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:52:51.367Z",
+   "rationale": "claude-fable-5-1: The statement paraphrases the two new test titles ('provides portable execution for every captured shell command' and 'keeps the original Windows tool label separate from portable execution'); 'portable execution' is the project's own term for the portableCommand metadata, and the draft never claims the test runs commands, so the flag rebuts a claim not made. (other: gpt-6-astra confirmed: The audit checks portable-command metadata and the PowerShell label without executing captured commands, so “checks portable execution” overstates its coverage.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "1f332e0664e5e71a900a23b6585317524cd417f6",
+     "path": "test/python-chapters-9-10-audit.test.ts",
+     "startLine": 77,
+     "endLine": 98,
+     "sha256": "f41ec8479481ffc4aa19f445f0e7efcef3c24bdf369d67a118e706061c83f681"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1840,
+     "endLine": 1861,
+     "sha256": "f862441bfef90d2b18b58ce5dc0dc5af81d5f6d6e92f0de2bd5ba5e4d3c7e3b5"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 395,
+     "endLine": 395,
+     "sha256": "d9e9aa8b1d47552834e9e32bff30339483ad600eeea0e4e4a08524cb8f9ad342"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 676,
+     "endLine": 677,
+     "sha256": "d9e9aa8b1d47552834e9e32bff30339483ad600eeea0e4e4a08524cb8f9ad342"
+    }
+   ]
+  },
+  {
+   "finding": "4f1e6f6cffedcfde83c004a982b8c17441a0de832cecb4479c22e6c7da886a37",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:03.933Z",
+   "rationale": "claude-fable-5-1: The validation footer refers to the author's own runs, not session results: the author ran every listed check via tracetoon check (V10–V16, V19) in the same checkout where it had just inspected the change with `git diff HEAD^ HEAD` (V7), and its reported figure (430 tests/15 files) differs from the session's dirty-tree content run (431 tests, raw L133) whose tree carried uncommitted non-PR edits (raw L198), so the runs are tied to the checked-out head rather than relabeled session output. (other: gpt-6-astra confirmed: The captured runs do not identify their tested tree; original-session checks included uncommitted changes excluded from the submission.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V7",
+     "sha256": "e623bb1c4e12e9b408669f68c6f5fecf25bed44b5077cdad6a7f9a82aac02e12",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V13",
+     "sha256": "4715eff67651643dcd4eeb1d99904e4c21358a86f43cd5747f65ec2f31181490",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+     "commandId": "V10",
+     "sha256": "0ed2c6bbeb5935b8dfa65a23260b966e10f56e3716bf4f85835f5bf763153a9f",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 133,
+     "endLine": 135,
+     "sha256": "3c15f0bb20c6a48413b932d7ff0323e4696b364c2f967f4076e7b585fd61b678"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 198,
+     "endLine": 199,
+     "sha256": "3c15f0bb20c6a48413b932d7ff0323e4696b364c2f967f4076e7b585fd61b678"
+    }
+   ]
+  },
+  {
+   "finding": "5381ea625e4ecde2c798365a396c990dfa13d297eae37f119f63c8eb4db623f8",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:54.262Z",
+   "rationale": "claude-fable-5-1: The version-reporting commit 9de1891b6e (subject: 'doctor reports both versions') has a body line 'Found by a cold test: a fresh agent given only the skill completed the student task (doctor, battery, LEDs, camera, version) with no failures', which is exactly what the draft states; the flag's claim that the message omits the cold test is contradicted by the commit text. | gpt-6-astra: The version-reporting commit message explicitly says a fresh agent given only the skill completed the cold student task covering doctor, battery, LEDs, camera, and version with no failures.",
+   "sources": [
+    {
+     "kind": "commit",
+     "revision": "9de1891b6e558b1c76b7c0313653d3cbf7ee6e2f",
+     "startLine": 7,
+     "endLine": 10,
+     "sha256": "c1694269d5b5172af69bad427559538055bd52f24466a3f9ab29348b3bb54ff3"
+    }
+   ]
+  },
+  {
+   "finding": "55c45e0560141cf562c18d3a373eb1dd642e6448862a3350010f6715616bd1b7",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:07:41.990Z",
+   "rationale": "claude-fable-5-1: commitMoments records only the first matching command per base commit (break after found.set) and earlierWorkCutoff takes the max of those per-commit first-match times, so a later command matching the same base commit (e.g. the fixture's git log after a quiet git commit) does not set the cutoff; the draft's 'latest matching command' claim is contradicted. | gpt-6-astra: The cutoff is the maximum timestamp among each base commit’s first matching command; later matches for the same commit do not advance it.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 776,
+     "endLine": 799,
+     "sha256": "af10f0d77b0a9c36d572f16806637ffb18bd907ad8b2dda525c824363fc07d2a"
+    },
+    {
+     "kind": "diff",
+     "startLine": 810,
+     "endLine": 820,
+     "sha256": "af10f0d77b0a9c36d572f16806637ffb18bd907ad8b2dda525c824363fc07d2a"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 203,
+     "endLine": 231,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 238,
+     "endLine": 252,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "tests/summary-fixes.test.ts",
+     "startLine": 139,
+     "endLine": 140,
+     "sha256": "76b79f448277e7b722398a5cd5fe4beee27ff4ee24ef3d338947d327ca4f6e4e"
+    },
+    {
+     "kind": "commit",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "startLine": 12,
+     "endLine": 14,
+     "sha256": "07124667c68235ab16bf8f63e520132080c3ea4d70f0b8ac3018ba1dcb6f9b94"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 208,
+     "endLine": 230,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 242,
+     "endLine": 251,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "tests/summary-fixes.test.ts",
+     "startLine": 132,
+     "endLine": 140,
+     "sha256": "76b79f448277e7b722398a5cd5fe4beee27ff4ee24ef3d338947d327ca4f6e4e"
+    }
+   ]
+  },
+  {
+   "finding": "5674e7dc3dafea090cb2b0fb5e65878b7e9d9630a3ddaa5b9619208bfd88986f",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.211Z",
+   "rationale": "claude-fable-5-1: Same ordering error: the L959 command deleted the bottom-5% line, bumped versions, ran prettier/tsc/bundle, ran `bun test` and the bundled tests, then committed; the committed head providers.ts matches that tested content (new wrapper line at L467, 5% line gone). The L959 tool result is missing from the raw transcript, which limits what can be said about outcomes, but not the recorded edit-then-test ordering. | gpt-6-astra: The final session command places the provider edit before the full and bundled tests; missing raw results do not support reversing that ordering.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 941,
+     "endLine": 942,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "git",
+     "revision": "d5935ebcd4bf45146a5b522830d2776fb6bffa84",
+     "path": "src/comic/providers.ts",
+     "startLine": 467,
+     "endLine": 467,
+     "sha256": "e9baeabd691b800c56092221d2682d70eb11db802e826c04b73eae80a6da70b4"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    }
+   ]
+  },
+  {
+   "finding": "573cfe3a0a33f0718c6fdbf000e15fc6061d365ebd8edf6ce573c6aba2b5813d",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:08:02.365Z",
+   "rationale": "claude-fable-5-1: The session resolves both: `git push -u origin` created the branch (exit 0), `gh pr view 14` returned PR #14 open on Tingsters/Showtail with head owner steveonjava and commits authored by Stephen Chin, and the two follow-up pushes (65f87e7..fc33bf5, fc33bf5..cfabbdc) succeeded; the only `gh pr` errors were `gh pr checks` exiting non-zero on a failing CI check or an unknown `--json` flag, none touching publication or push attribution. | gpt-6-astra: The session confirms PR #14 was open and both follow-up commits were successfully pushed; incomplete CI evidence does not leave those outcomes unresolved.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1006,
+     "endLine": 1007,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1018,
+     "endLine": 1018,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1041,
+     "endLine": 1042,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1094,
+     "endLine": 1095,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1019,
+     "endLine": 1019,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1059,
+     "endLine": 1060,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "commit",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "startLine": 1,
+     "endLine": 7,
+     "sha256": "c8612c7ebdfdd9030df390b16e7de7e908996cde23b8cbc122caa8439ded7d2c"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1015,
+     "endLine": 1020,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1040,
+     "endLine": 1042,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1093,
+     "endLine": 1095,
+     "sha256": "4978219dae3efd19478c6902a62c99ce347d667b2c76a1c71b0db39885b265de"
+    }
+   ]
+  },
+  {
+   "finding": "585e82f9495eeaf90f3b0d6e344e5d65572ec7458bd101e8c5197c158d55037a",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:52:36.818Z",
+   "rationale": "claude-fable-5-1: The Maven source/target 17 settings and the test assertions are supported (diff L629-L631), but the clause 'correct the Thermostat response path' is contradicted: the responsePath stays Thermostat.java and the change is a new clean entry for ThermostatApp.java. | gpt-6-astra: The Maven settings and assertions are supported, but the claimed Thermostat response-path correction did not occur.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 170,
+     "endLine": 178,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "diff",
+     "startLine": 629,
+     "endLine": 631,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "diff",
+     "startLine": 625,
+     "endLine": 631,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    }
+   ]
+  },
+  {
+   "finding": "5bfbdb5ed41094b634263cb051f3cdebb5dc3f6a2ab2a7e1d156c954e210887d",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:05:42.077Z",
+   "rationale": "claude-fable-5-1: The comment says Bun cannot poll stdin that the shell reopened via </dev/tty; it does not say Bun reopens the alias, so the draft misattributes the actor. | gpt-6-astra: The comment attributes the failure to Bun’s inability to poll stdin reopened through /dev/tty; the shell redirection reopens stdin, not Bun.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "9b79dd0fcb33577b0e2316b4dbe415624951736f",
+     "path": "static/install.sh",
+     "startLine": 317,
+     "endLine": 324,
+     "sha256": "2a910b5d1f5e77adb253fd2827c031a303f406f70751e3a6b2def098504ad02a"
+    },
+    {
+     "kind": "diff",
+     "startLine": 28,
+     "endLine": 37,
+     "sha256": "068bf389c49ff16e966b1e6759dd50aa89c8690abfba1fe6da265777b07ee626"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 37,
+     "endLine": 37,
+     "sha256": "c630650a676d77e12446ba23cf44f873ee41bfbcee9ce48de044a7ae06fee347"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 99,
+     "endLine": 99,
+     "sha256": "c630650a676d77e12446ba23cf44f873ee41bfbcee9ce48de044a7ae06fee347"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 154,
+     "endLine": 154,
+     "sha256": "c630650a676d77e12446ba23cf44f873ee41bfbcee9ce48de044a7ae06fee347"
+    }
+   ]
+  },
+  {
+   "finding": "5dec930720324e0f7da120f9d7d00e371888d1b732203f9375d2fb47862fc1f8",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.128Z",
+   "rationale": "claude-fable-5-1: The port's request was to port the SQLite store and measure brief parity for the graph-versus-SQLite question (Q3 in the Round 16 plan); the cheaper-reviewer round (Q1, the baseline-hrev arm) was a separate strand, so the PR was not made to support that round. | gpt-6-astra: The recorded work explicitly separates the cheap-reviewer experiment from the SQLite parity port.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 288,
+     "endLine": 288,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 333,
+     "endLine": 333,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    }
+   ]
+  },
+  {
+   "finding": "663ffe72e6927b25ab3801bffc51ec1bc384d6fa4288a38013dee14cfb92065d",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:27.640Z",
+   "rationale": "claude-fable-5-1: The check wrapper records outcome \"failed\" with reason \"The command changed validation inputs\" whenever the tree fingerprint changes, even on exit 0; `bun run bundle` rewrites tracked dist/tracetoon.mjs and build.json, both authors restored exactly those files after the check, and the dev session shows the bundle building cleanly at head ca6ac22, so presenting this as a bundle failure on the submitted content misleads. | gpt-6-astra: The captured wrapper tool-error establishes neither a bundle-command failure nor submitted-content identity; the subsequent log-reading command supplies no captured output resolving either claim.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+     "path": "plugin/skills/tracetoon/dist/tracetoon.mjs",
+     "startLine": 148,
+     "endLine": 148,
+     "sha256": "e63ea7b209603731d2f0993cbfd00755b3959647065df0280e295ed0bb7d5b8c"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9edeb7e80deb5c1e795efcd18a8ba72a046e494b3dcefaee76d0fe99bf097655",
+     "commandId": "V14",
+     "sha256": "0c3b2d86f7f118c6c1a02ba916488e35eba53ef40fc16c9cb8dc52c44bf0cf8e",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9edeb7e80deb5c1e795efcd18a8ba72a046e494b3dcefaee76d0fe99bf097655",
+     "commandId": "V15",
+     "sha256": "6799b1123e2c569a4255e3cb747583ed6c0f557e2f3d46b07bdd2b2e62d43638",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9edeb7e80deb5c1e795efcd18a8ba72a046e494b3dcefaee76d0fe99bf097655",
+     "commandId": "V5",
+     "sha256": "095aa32ac9a1a4abf3a98c2fa7f990a9f0a1a91e4fc8424db30f14536db1a88e",
+     "startLine": 1,
+     "endLine": 24
+    },
+    {
+     "kind": "git",
+     "revision": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+     "path": "CONTRIBUTING.md",
+     "startLine": 67,
+     "endLine": 67,
+     "sha256": "2f799a3096a6dab91e87b31984f8be46a29bb78ed1c010c3d561b3f716a4ac0c"
+    },
+    {
+     "kind": "git",
+     "revision": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+     "path": "scripts/build-info.ts",
+     "startLine": 81,
+     "endLine": 93,
+     "sha256": "0fb82a2c0f033b86ed28192390ca1441eed30da7c3f306499e1d7f2ee247ace8"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 677,
+     "endLine": 677,
+     "sha256": "0a314d272b3c916725117a03c374bfe3e427f8def47e65df7feb35231a080b4f"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 2943,
+     "endLine": 2943,
+     "sha256": "0a314d272b3c916725117a03c374bfe3e427f8def47e65df7feb35231a080b4f"
+    }
+   ]
+  },
+  {
+   "finding": "6e3a075d06cfd3bc1c44dfcb5a9f99fa90a11de0e755463728cc4555982ab793",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:02:49.503Z",
+   "rationale": "claude-fable-5-1: The draft reports what the commit message says, and the commit message names exactly CLAUDE_PID and INVOCATION_ID as the per-process inherited variables the environment hash covered when the resume from a new shell failed; the session's agent wrote that commit text after diagnosing the refusal as a whole-environment hash. | gpt-6-astra: The commit message names both CLAUDE_PID and INVOCATION_ID in its explanation of failed resumption, supporting the draft’s explicitly attributed statement.",
+   "sources": [
+    {
+     "kind": "commit",
+     "revision": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+     "startLine": 9,
+     "endLine": 11,
+     "sha256": "ccea5e71604e91f78be9d6aeddcb7aaa5f1a79b9c5ad1cba8e438b68325f7568"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1049,
+     "endLine": 1050,
+     "sha256": "964cd047372975bd431f868edd82c91c38957f0bc5ac9753efdde97fbd3d0278"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 642,
+     "endLine": 642,
+     "sha256": "964cd047372975bd431f868edd82c91c38957f0bc5ac9753efdde97fbd3d0278"
+    },
+    {
+     "kind": "commit",
+     "revision": "564a56e6ad0e12118a3100443a77384b41f00bbd",
+     "startLine": 9,
+     "endLine": 12,
+     "sha256": "ccea5e71604e91f78be9d6aeddcb7aaa5f1a79b9c5ad1cba8e438b68325f7568"
+    }
+   ]
+  },
+  {
+   "finding": "7236e96cef17b8fbc9f56ed87401e16f20728bb0f4e17ef88858eaef2faa2e6a",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:16.721Z",
+   "rationale": "claude-fable-5-1: The receipts-and-fork, spawn-guard and summary-based pointers are accurate, but the sentence also says tests/test-files.test.ts checks timeout output, and that test asserts only code 1 and elapsed time, never the retained output. | gpt-6-astra: The timeout-output coverage claim is unsupported: the regression checks code and duration, although summary-based result assertions are present.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/test-files.test.ts",
+     "startLine": 46,
+     "endLine": 64,
+     "sha256": "141dba157dd2d42b8c64ff01c3be7b2eadf46c1d85984155fc76955d09e80c18"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/test-files.test.ts",
+     "startLine": 66,
+     "endLine": 98,
+     "sha256": "141dba157dd2d42b8c64ff01c3be7b2eadf46c1d85984155fc76955d09e80c18"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/receipts-and-fork.test.ts",
+     "startLine": 11,
+     "endLine": 98,
+     "sha256": "33ec0f8fba72eb1e83c074601f7c4fac3bc03635ebc0d9d075bbb175d3423a7c"
+    },
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/spawn-guard.test.ts",
+     "startLine": 29,
+     "endLine": 45,
+     "sha256": "d2fff56ff0c48763476972e067f07e2c30f698e5ba4318a8b5ffba2f00c359b1"
+    },
+    {
+     "kind": "diff",
+     "startLine": 797,
+     "endLine": 803,
+     "sha256": "2533df07a8874ed2f96aa1bba3d9b09940a3269a0abc10ccc366d47ebed7b19e"
+    }
+   ]
+  },
+  {
+   "finding": "7a95207da4bffc166e510086abfa6d76b24fbab6648b6f3d4c99379ae4bd7833",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:58:20.557Z",
+   "rationale": "claude-fable-5-1: Same premise as F1: unbackedNames is the only list demoteRepeats skips, and it never blocked (absent from openProblems and from the publish gate at base and head, printed in JSON only), so the unqualified sentence is a fair paraphrase of the commit message and code comment and misleads no reviewer. (other: gpt-6-astra confirmed: Not every finding moves to repeated: unbackedNames remains separate, though it is already nonblocking.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/graph/briefRender.ts",
+     "startLine": 478,
+     "endLine": 504,
+     "sha256": "6fffe8993135f3b751d15777a757bbd6d4c75066de839c6e9c3017f88db8681c"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 254,
+     "endLine": 258,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 292,
+     "endLine": 293,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "path": "src/commands/publish.ts",
+     "startLine": 887,
+     "endLine": 904,
+     "sha256": "451dc76f70a41801af33b09094020299b93e33ac7ed44c2ac2039095dc260869"
+    },
+    {
+     "kind": "git",
+     "revision": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+     "path": "src/commands/publish.ts",
+     "startLine": 253,
+     "endLine": 257,
+     "sha256": "2928ffa02343fd2feb40a2efcde3d1c39b0230ffb5a77cdbdaa107f24405fe4d"
+    },
+    {
+     "kind": "commit",
+     "revision": "48a90d77c9cc8dcef0caa08b1c6e92505de5a345",
+     "startLine": 12,
+     "endLine": 14,
+     "sha256": "e9dc66aa12dcb19d06118d84a38e8ef514069eea410df0ae68f5e9d0e01cdb23"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1815,
+     "endLine": 1838,
+     "sha256": "a3a63f044b87ab8622ef9a1fd2de5975ece7b3430e6ddab430411d009a971d3c"
+    }
+   ]
+  },
+  {
+   "finding": "7e74195c779375bd2fe0ff971b80fc0bd8f2b46324df4bc1df363bee15904823",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:22.056Z",
+   "rationale": "claude-fable-5-1: `bun test` was run by the author in V9 on the same unmodified checkout as the other checks; no repo content was edited before or after it (only tracetoon body/title files in V8, V14, V17), so attributing the failure to the submitted content is accurate and honestly reported. (other: gpt-6-astra confirmed: The test invocation and subsequent polling error provide no evidence tying the tested content to the submitted head.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V9",
+     "sha256": "b0442cab4af18da8689ecb73c9bb0b765929424c8aa4e8d17e86f7b72ccf380e",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V8",
+     "sha256": "bd0622133d4167436132be6cf52e55c86a279c622634f35dd9e0ac751ae5783b",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V14",
+     "sha256": "d8c5b4dba217e44571b69022587a0837241042ecc871494667eeb2d237dafff1",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V17",
+     "sha256": "fa861b8de8b4f4fdcb2203e142a36a2f8d0b7fa4ffac4d4eaa69daec6911b59f",
+     "startLine": 1,
+     "endLine": 12
+    }
+   ]
+  },
+  {
+   "finding": "7f8a78e40cbd2ec7b4b4481779fc0aa6e59b210c33b7f72e4aa8a8c21d039d4a",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.223Z",
+   "rationale": "claude-fable-5-1: The session's last tests ran after the final providers.ts edit inside the same L959 chain and on the content committed as head; the draft's own review-resolution (V14) even acknowledges the limitation was about missing outcomes 'after the captured provider edit', not that the test preceded it. The fresh-check clause is true in time but the sentence as a whole misstates the session record. | gpt-6-astra: Historical tests followed the final provider edit; the fresh command captures also do not establish that they tested the submitted content.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "2ac49e779eb8ff741f3ff83af8cce61ddaf361faf4a66b909700ae2aedc46d0c",
+     "commandId": "V14",
+     "sha256": "7d97d348695ebdf9433e2b94740bc3db79c2473fa0d0cc0c3ab9cfb21545e6c1",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "2ac49e779eb8ff741f3ff83af8cce61ddaf361faf4a66b909700ae2aedc46d0c",
+     "commandId": "V8",
+     "sha256": "fef82517845dba0a1ca81f003f989b81b0b9ee2c9cc42dca8542a468bca9b955",
+     "startLine": 1,
+     "endLine": 11
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "2ac49e779eb8ff741f3ff83af8cce61ddaf361faf4a66b909700ae2aedc46d0c",
+     "commandId": "V10",
+     "sha256": "c0260d025c79b4fa07f0dbd1181c4253c462169b828d4111cdf23953c9b5eb25",
+     "startLine": 1,
+     "endLine": 13
+    }
+   ]
+  },
+  {
+   "finding": "81223fe16fc4a09983cd39c4f179168423e474d75429036b5262126810590581",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:29.870Z",
+   "rationale": "claude-fable-5-1: Same statement as F1: the flat 6-char discount (diff.patch:L613) does not match either label's growth; `added: ` adds 5 over `+ ` (cost drops by one) and `removed: ` adds 7 over `- ` (cost rises by one) per head/src/graph/codeEvidence.ts:L334-L335 against the base line.length + 3 (base/src/graph/codeEvidence.ts:L208). The flag's claim that the discount offsets `removed:` is wrong, but its point that the added label does not retain the old cost holds, and the description's blanket claim of retained cost is unsupported; the code comment (diff.patch:L611-L612) and commit message (commits/7483847fb67c5f79b5cba243911d26cb6c83c866.txt:L20-L21) assert intent, not verified arithmetic. | gpt-6-astra: The statement is false, although the flag miscounts removals: the prefixes add seven and five characters respectively, producing net cost changes of +1 and −1.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 616,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 582,
+     "endLine": 583,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "git",
+     "revision": "0101b3186ff7e4cf9204317c33b1d2d742bfcd11",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 208,
+     "endLine": 208,
+     "sha256": "d20177235f0d473caf7288ce0de7e0f104042af060045e1a3cc58ba066aafeff"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 334,
+     "endLine": 335,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 428,
+     "endLine": 428,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "commit",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "startLine": 20,
+     "endLine": 21,
+     "sha256": "d5184ac082258bcd5facc9c7ea5fec71339789b322f7916cdc19997915ae33ab"
+    },
+    {
+     "kind": "diff",
+     "startLine": 582,
+     "endLine": 598,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 615,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    }
+   ]
+  },
+  {
+   "finding": "85f25aeddb6a9424e8144327615cef7dc45794754495b72e4b4bb271ea555f47",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:07:42.020Z",
+   "rationale": "claude-fable-5-1: The turn-dropping, crossing-turn, and link/artifact exemption clauses match dropEarlierWork, but the sentence's leading claim that the latest matching command sets the cutoff is wrong: the cutoff is the max over base commits of each commit's first matching command time, so the sentence as written misstates the mechanism. | gpt-6-astra: The filtering and exemptions are supported, but the cutoff uses each base commit’s first matching command, not the latest matching command overall.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 776,
+     "endLine": 799,
+     "sha256": "af10f0d77b0a9c36d572f16806637ffb18bd907ad8b2dda525c824363fc07d2a"
+    },
+    {
+     "kind": "diff",
+     "startLine": 810,
+     "endLine": 820,
+     "sha256": "af10f0d77b0a9c36d572f16806637ffb18bd907ad8b2dda525c824363fc07d2a"
+    },
+    {
+     "kind": "diff",
+     "startLine": 822,
+     "endLine": 851,
+     "sha256": "af10f0d77b0a9c36d572f16806637ffb18bd907ad8b2dda525c824363fc07d2a"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 208,
+     "endLine": 231,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 242,
+     "endLine": 284,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "tests/summary-fixes.test.ts",
+     "startLine": 139,
+     "endLine": 140,
+     "sha256": "76b79f448277e7b722398a5cd5fe4beee27ff4ee24ef3d338947d327ca4f6e4e"
+    },
+    {
+     "kind": "commit",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "startLine": 12,
+     "endLine": 14,
+     "sha256": "07124667c68235ab16bf8f63e520132080c3ea4d70f0b8ac3018ba1dcb6f9b94"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 208,
+     "endLine": 230,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 242,
+     "endLine": 251,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    },
+    {
+     "kind": "git",
+     "revision": "2b22db920f3ae0751e03ff373a01e8b67779a8e4",
+     "path": "src/correlate/correlate.ts",
+     "startLine": 254,
+     "endLine": 283,
+     "sha256": "699e8d47ac4c2c7ada8352f230af11d2bec412b8d7cc71d0ba2203b54297c3d2"
+    }
+   ]
+  },
+  {
+   "finding": "86ec58674eed0bca605afbc2b3829d8954192665b57f44245be709ee2e792388",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:14.813Z",
+   "rationale": "claude-fable-5-1: The quoted 09:06 request produced the Round 8 plan and candidate20/21 commits, the last of which (8dfcab6) is this PR's base; the receipt fix was found while preparing the conf21 adjudication worksheet after the user chose 'Fix harness, assist adjudication', and the default-path change followed the separate 19:36 step-back request and 19:48 go-ahead, so the evidence does not establish that request as the purpose of these two changes. | gpt-6-astra: The earlier research request is real, but attributing both changes to it conflates the adjudication-driven receipt fix with the later step-back plan.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 7,
+     "endLine": 7,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 136,
+     "endLine": 138,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 198,
+     "endLine": 198,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 229,
+     "endLine": 229,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 266,
+     "endLine": 266,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 290,
+     "endLine": 290,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 342,
+     "endLine": 342,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 375,
+     "endLine": 375,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 7,
+     "endLine": 12,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 327,
+     "endLine": 327,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    }
+   ]
+  },
+  {
+   "finding": "87784c33b6a3df5123f6210735ed815b9e37228ca0cf07628e72f39cda41bbad",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:09:41.797Z",
+   "rationale": "claude-fable-5-1: Base collect's acquisition path always ran confirm() then the retained() reverse before success (evidence 'native_possession_and_retention'), and deliver always required confirm(cargo, False) before success; the only no-reverse success is the already-held short-circuit, which the base skill doc itself describes as a separate exception ('Already-held requested cargo is accepted') to its own summary 'make magnetic contact and verify retention'. The draft's sentence is a summary at the same level as the project's own documentation, and the draft separately names the already-held path, so a reviewer is not misled about what the change relaxes. (other: gpt-6-astra confirmed: Base collect returned success for already-confirmed held cargo without any retention reverse, so the collection requirement is overstated; the delivery release-confirmation clause is supported.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "f4dcc73a37eddab57ba679a21a73d8134a6da180",
+     "path": "cli/vexaim/src/behaviors.py",
+     "startLine": 331,
+     "endLine": 346,
+     "sha256": "a41d296d47df7683b6b20e60fa4e4be75c56ede62b20e17b546201ae13530e54"
+    },
+    {
+     "kind": "git",
+     "revision": "f4dcc73a37eddab57ba679a21a73d8134a6da180",
+     "path": "cli/vexaim/src/behaviors.py",
+     "startLine": 271,
+     "endLine": 290,
+     "sha256": "a41d296d47df7683b6b20e60fa4e4be75c56ede62b20e17b546201ae13530e54"
+    },
+    {
+     "kind": "git",
+     "revision": "f4dcc73a37eddab57ba679a21a73d8134a6da180",
+     "path": "cli/vexaim/src/behaviors.py",
+     "startLine": 405,
+     "endLine": 424,
+     "sha256": "a41d296d47df7683b6b20e60fa4e4be75c56ede62b20e17b546201ae13530e54"
+    },
+    {
+     "kind": "git",
+     "revision": "f4dcc73a37eddab57ba679a21a73d8134a6da180",
+     "path": "skill/vex-aim/references/behaviors.md",
+     "startLine": 34,
+     "endLine": 37,
+     "sha256": "f36696eebe4cc8597d67803dd2f11efcb379a1d2c0ba6a5a9194b9910dd021f3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 230,
+     "endLine": 252,
+     "sha256": "00608aa6977a9b47f2e9365607e47341e50af2f2a9f54060dfbb44e12093e8a8"
+    }
+   ]
+  },
+  {
+   "finding": "879f98620fa8832adcc2ffa63b1bcc104deb67599ed261b4b7e22035e486d1b9",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:27.601Z",
+   "rationale": "claude-fable-5-1: The added reviewer text treats graphLeads as places to look, says an unexplained hunk needs a commit explanation or author.md (not a diff ref), and reserves the mandatory `diff:` ref for new or changed conditional-behavior claims in correction rounds; the sentence wrongly attaches a diff-reference requirement to the leads themselves. | gpt-6-astra: Unexplained hunks may be supported by commit explanations or author.md; mandatory diff references apply specifically to conditional-behavior claims in correction rounds.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 674,
+     "endLine": 684,
+     "sha256": "2021e6ed426d27ef17a9c6a7fab18e26d21701ff8df301f70be722fb1cb28d16"
+    },
+    {
+     "kind": "diff",
+     "startLine": 111,
+     "endLine": 116,
+     "sha256": "2021e6ed426d27ef17a9c6a7fab18e26d21701ff8df301f70be722fb1cb28d16"
+    },
+    {
+     "kind": "git",
+     "revision": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+     "path": "plugin/skills/tracetoon/references/contribution-workflow.md",
+     "startLine": 331,
+     "endLine": 341,
+     "sha256": "372e187c31230700372c011c5ede1b52434655f174fe5d04aed1ae7f67620eee"
+    },
+    {
+     "kind": "git",
+     "revision": "ca6ac22d1881e94260fc767fb8d8f2d0e330f501",
+     "path": "plugin/skills/tracetoon/references/contribution-workflow.md",
+     "startLine": 327,
+     "endLine": 341,
+     "sha256": "372e187c31230700372c011c5ede1b52434655f174fe5d04aed1ae7f67620eee"
+    }
+   ]
+  },
+  {
+   "finding": "895ca1e9621a8c00bc6dcfe289482999fa20061093539ad42912502f76e2f274",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:52.766Z",
+   "rationale": "claude-fable-5-1: The guard is `grep -Fq \"$path_line\" \"$rc_path\"` with no -x, a fixed-string substring match on any line; a commented or longer line containing the text suppresses the append, so 'if an exact matching line is missing' overstates the check. | gpt-6-astra: The guard uses grep -Fq for substring matching, so a commented or longer line containing the PATH text suppresses appending even without an exact matching line.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+     "path": "static/install.sh",
+     "startLine": 298,
+     "endLine": 304,
+     "sha256": "d56d71664e7445a316a19fb64e4e6dc2e2eec6d857e89c26f97aa5fcc44e2e91"
+    },
+    {
+     "kind": "diff",
+     "startLine": 157,
+     "endLine": 165,
+     "sha256": "5419a018c056869c8d3eccb70976f7b2a6c236afabed88bcf848958d760c05b3"
+    },
+    {
+     "kind": "git",
+     "revision": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+     "path": "static/install.sh",
+     "startLine": 296,
+     "endLine": 304,
+     "sha256": "d56d71664e7445a316a19fb64e4e6dc2e2eec6d857e89c26f97aa5fcc44e2e91"
+    }
+   ]
+  },
+  {
+   "finding": "8c5de4f807953b6b46a9d02fa38f0f81dad0790591bddfca88487c702ecda83d",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:56:57.677Z",
+   "rationale": "claude-fable-5-1: Typecheck and the full suite passed after the last fake-gh.ts edit in the command that made final commit f7ec46e (raw L1791), contradicting the claim that the session's last verification preceded those edits; the only build-kind runs in the session were tracetoon bundles in another repo and prbench defines no build script. (other: gpt-6-astra false-positive: The build occurred before the final fake-gh edits; subsequent typechecking and tests do not contradict that chronology.)",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1774,
+     "endLine": 1775,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1790,
+     "endLine": 1791,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 2170,
+     "endLine": 2192,
+     "sha256": "1534f537cf739e5032a4fd84161e4f21eb159c8bcdc5d632fe20b8536672a8c3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1710,
+     "endLine": 1711,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "session",
+     "path": "agent-a030cb94333e721e8.jsonl",
+     "startLine": 41,
+     "endLine": 41,
+     "sha256": "51ba9c33ca76bec8ef9950b2b97f325c0994701ee6c5b22afd6d1d85e703df8d"
+    }
+   ]
+  },
+  {
+   "finding": "8d9cb78fe5a227b9952c469ae85e75911593391007e8b3ac669dface6acee353",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:03:03.178Z",
+   "rationale": "claude-fable-5-1: readerInput is gated on options.inputMode === 'reader' (default options and the plain-terminal/no-display learner call pass 'authored-sample'), so interactive final commands by default receive step.stdin and keep executionTimeoutMs; the statement presents callback/inherited stdin and the missing timeout as unconditional for any final interactive command. | gpt-6-astra: Reader input and its timeout exemption require inputMode === 'reader'; otherwise execution uses authored input and the normal timeout policy.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 124,
+     "endLine": 139,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "diff",
+     "startLine": 246,
+     "endLine": 293,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "diff",
+     "startLine": 511,
+     "endLine": 519,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "diff",
+     "startLine": 121,
+     "endLine": 139,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "git",
+     "revision": "1aab407658fea18cddedbb55aa708eba92221a09",
+     "path": "src/learn/native.ts",
+     "startLine": 1120,
+     "endLine": 1127,
+     "sha256": "1e60f8b2a1d783319c0b0974519ed4ba8765f920adb8ad41c4b3ce2dd6d36f2c"
+    }
+   ]
+  },
+  {
+   "finding": "8e198eda75abdcadb251f657cd8b8f8399f1b77385e9ffc15f89ab0ec93f1ff7",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:56:57.651Z",
+   "rationale": "claude-fable-5-1: The session's last typecheck and full-suite run (230 tests, 0 fail) came after the final fake-gh.ts edits, in the same command that created head commit f7ec46e, so the implied stale verification is contradicted; prbench has no build script, so the literal 'build run' reading is unsupported. (other: gpt-6-astra false-positive: The last recorded build preceded the fake-gh edits; the later typecheck and test pass was not a build.)",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1774,
+     "endLine": 1775,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1790,
+     "endLine": 1791,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 2170,
+     "endLine": 2192,
+     "sha256": "1534f537cf739e5032a4fd84161e4f21eb159c8bcdc5d632fe20b8536672a8c3"
+    },
+    {
+     "kind": "commit",
+     "revision": "f7ec46eedb0bb7c1f28a635d8a94ed733092dd7a",
+     "startLine": 1,
+     "endLine": 13,
+     "sha256": "a7bdd37726e61e679b7d8eccddb5d243d79e8aee575055d6241068482fa081e1"
+    },
+    {
+     "kind": "session",
+     "path": "agent-a030cb94333e721e8.jsonl",
+     "startLine": 41,
+     "endLine": 41,
+     "sha256": "51ba9c33ca76bec8ef9950b2b97f325c0994701ee6c5b22afd6d1d85e703df8d"
+    }
+   ]
+  },
+  {
+   "finding": "915b541a0487231c0eba34c09dc6d471b760112ef5190452f573eb1e5bdac366",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:56:57.720Z",
+   "rationale": "claude-fable-5-1: Raw L1791 shows bun x tsc and 230 passing tests immediately followed by commit f7ec46e, after the fake-gh.ts edits at L1774 and the unrecorded help-block edit the assistant reported as tested at L1790; the session's last prbench verification therefore post-dates the edits, and prbench has no build step to make the literal reading true. (other: gpt-6-astra false-positive: The last recorded build preceded the fake-gh edits; the final commit’s typecheck and test results establish different checks.)",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1774,
+     "endLine": 1775,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1790,
+     "endLine": 1791,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 2170,
+     "endLine": 2192,
+     "sha256": "1534f537cf739e5032a4fd84161e4f21eb159c8bcdc5d632fe20b8536672a8c3"
+    },
+    {
+     "kind": "commit",
+     "revision": "f7ec46eedb0bb7c1f28a635d8a94ed733092dd7a",
+     "startLine": 1,
+     "endLine": 13,
+     "sha256": "a7bdd37726e61e679b7d8eccddb5d243d79e8aee575055d6241068482fa081e1"
+    },
+    {
+     "kind": "session",
+     "path": "agent-a030cb94333e721e8.jsonl",
+     "startLine": 41,
+     "endLine": 41,
+     "sha256": "51ba9c33ca76bec8ef9950b2b97f325c0994701ee6c5b22afd6d1d85e703df8d"
+    }
+   ]
+  },
+  {
+   "finding": "91c4f9920d659b61dd11d5579edf519726b7a19319bc35a9995a1548d4cad2ad",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:07:00.927Z",
+   "rationale": "claude-fable-5-1: The sentence's blanket claim that changed tests replace collaborators with fakes rather than checking real steps is contradicted: the story unit tests use no doubles at all, the end-to-end test drives the real CLI for whole-page art, render, overlay, reroll and config set with real output assertions, and the cited digest lists no such limitation. | gpt-6-astra: The changed tests exercise actual sequel-recap logic and CLI rendering behavior, so describing them as replacing real steps with fakes is misleading.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 3352,
+     "endLine": 3412,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3419,
+     "endLine": 3486,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    },
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 540,
+     "endLine": 583,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "git",
+     "revision": "cfd0e3d26cf1ab5d1732ab8d92dee88ef743e39b",
+     "path": "tests/comic.test.ts",
+     "startLine": 20,
+     "endLine": 21,
+     "sha256": "50fb56626b9eef6850375d9b2cb05f10f7f8b7782645f093e9cb8cccb001583d"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1335,
+     "endLine": 1344,
+     "sha256": "1a9304e1780f4fa680ba84a160bd4ae2fc863792eacfe094ef3eab12b65bb522"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3389,
+     "endLine": 3411,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    },
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 291,
+     "endLine": 303,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3443,
+     "endLine": 3485,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    }
+   ]
+  },
+  {
+   "finding": "9241498d8f580bb8e12c133d8f25f6b67e56b8fca79b72cac176c064787b098e",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:03:03.223Z",
+   "rationale": "claude-fable-5-1: Only the two new terminal-renderer tests use FakeTty; the same file also has a PTY-driven child-process test, and the recorded tui-learn, tui-streaming and graphical-run tests fork a real pseudo-terminal via native-tui-driver.py and drive a real process, passing in the session, so the blanket fakes-or-stubs characterization misstates the recorded renderer coverage. | gpt-6-astra: Recorded tests include real PTY-driven TUI rendering, making the blanket characterization as fake- or stub-based misleading.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 1849,
+     "endLine": 1897,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "git",
+     "revision": "1aab407658fea18cddedbb55aa708eba92221a09",
+     "path": "test/terminal-renderer.test.ts",
+     "startLine": 215,
+     "endLine": 234,
+     "sha256": "5bdf1b4716d0436417e88bf6aad3336d95c86c0398ec46ecc00c8e92157dc44a"
+    },
+    {
+     "kind": "git",
+     "revision": "1aab407658fea18cddedbb55aa708eba92221a09",
+     "path": "test/fixtures/native-tui-driver.py",
+     "startLine": 32,
+     "endLine": 36,
+     "sha256": "d47fbc2d7eb6e8a8adbbd396e3a142bdc1424848c2156d1558f30defdc27b40e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1673,
+     "endLine": 1706,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1945,
+     "endLine": 1991,
+     "sha256": "55bc80004161f4242aab80f8d0d5069ce4aa1c38fcdc9c6602fb19c033f36322"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 831,
+     "endLine": 843,
+     "sha256": "58f2f3efff22f15a7873d1d71b6513f5ee4491cfe0debaa7460e8bba2f4fb7e0"
+    },
+    {
+     "kind": "git",
+     "revision": "1aab407658fea18cddedbb55aa708eba92221a09",
+     "path": "test/tui-streaming.test.ts",
+     "startLine": 99,
+     "endLine": 124,
+     "sha256": "6df4322ca28c6384c586deaf1587b5bb909dc9a8b18462d8d84fed6cb1d120d1"
+    },
+    {
+     "kind": "git",
+     "revision": "1aab407658fea18cddedbb55aa708eba92221a09",
+     "path": "test/fixtures/native-tui-driver.py",
+     "startLine": 25,
+     "endLine": 36,
+     "sha256": "d47fbc2d7eb6e8a8adbbd396e3a142bdc1424848c2156d1558f30defdc27b40e"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 1046,
+     "endLine": 1049,
+     "sha256": "58f2f3efff22f15a7873d1d71b6513f5ee4491cfe0debaa7460e8bba2f4fb7e0"
+    }
+   ]
+  },
+  {
+   "finding": "95ef2abd6fa6bf44be02857374d152261d860fcbeb7a7a08d417a83954f968d2",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.122Z",
+   "rationale": "claude-fable-5-1: The \"strong writer, cheap high-effort reviewers\" plan was the Round 14 reviewer-cost arm; the SQLite port was requested later as the answer to a separate question about beating SQLite and embedded relational stores, with the goal of a byte-identical brief, so the attributed motivation is not supported. | gpt-6-astra: The quoted reviewer plan concerned model selection and review improvements; SQLite parity was a separate follow-up.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 164,
+     "endLine": 164,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 333,
+     "endLine": 333,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 37,
+     "endLine": 37,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    }
+   ]
+  },
+  {
+   "finding": "987fdb45ed40257771de014be79e1a902bc8c0e62e3d05e7c874e1f290b4633c",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:14.796Z",
+   "rationale": "claude-fable-5-1: shellJoin's safe set `[\\w@%+=:,./<>-]` deliberately leaves the shell redirection characters < and > unquoted, and the added test asserts `env CLI=<repo>/dist/x.mjs bun test` is emitted without quotes; so 'quotes arguments containing ... shell characters' is contradicted by the diff for exactly the <repo> placeholder this change introduces. | gpt-6-astra: The claim overgeneralizes: shellJoin leaves shell redirection characters < and > unquoted, including in the added test.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 156,
+     "endLine": 163,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 196,
+     "endLine": 198,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 256,
+     "endLine": 256,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "diff",
+     "startLine": 192,
+     "endLine": 199,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    }
+   ]
+  },
+  {
+   "finding": "9a7899f52c08e81020bc70ab2d637ca8f38e3871d8a67664b19908abc25544b2",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:16.641Z",
+   "rationale": "claude-fable-5-1: The hung-file regression asserts only results[0].code === 1 and elapsed time < 60s; it never reads or asserts output, and runTestFiles' result object has no output field, so 'checks timeout output' is unsupported. | gpt-6-astra: Despite its descriptive name, the timeout test asserts only failure code and elapsed time, never retained output.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "9af69e8f453c911e10aa4850c4b24a35b3b7d0a1",
+     "path": "tests/test-files.test.ts",
+     "startLine": 46,
+     "endLine": 64,
+     "sha256": "141dba157dd2d42b8c64ff01c3be7b2eadf46c1d85984155fc76955d09e80c18"
+    },
+    {
+     "kind": "diff",
+     "startLine": 797,
+     "endLine": 803,
+     "sha256": "2533df07a8874ed2f96aa1bba3d9b09940a3269a0abc10ccc366d47ebed7b19e"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 972,
+     "endLine": 973,
+     "sha256": "304ddf5f60d56dd66517291ec07164fdedc0d0a3fc3f0bd8082c120c1735c802"
+    }
+   ]
+  },
+  {
+   "finding": "9c6fc7bc9826346791e276f29d17818abe340f179a03c9659a820773016bf5f9",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:05:18.891Z",
+   "rationale": "claude-fable-5-1: The launcher description is accurate, but the assertion that the PR implements the complete PATH-independent integration is too broad: the user chose the 'All Claude calls' scope, yet the hook-supplied canonicalReplay command is generated by code outside the diff and remains bare `aifirst` per the unchanged doc lines, the skill executes it as supplied, and the new docs' claim that the skill renders it through the launcher has no corresponding code change. | gpt-6-astra: The forwarding launcher exists, but hook-supplied `canonicalReplay` still uses bare `aifirst`, leaving a PATH-dependent workflow and invalidating the completeness claim.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 149,
+     "endLine": 150,
+     "sha256": "8eb258a70036fb60ac615eaf2a41e28e1cedac6563cb908adbef2512d4a3a6cd"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 233,
+     "endLine": 234,
+     "sha256": "8eb258a70036fb60ac615eaf2a41e28e1cedac6563cb908adbef2512d4a3a6cd"
+    },
+    {
+     "kind": "diff",
+     "startLine": 32,
+     "endLine": 38,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "git",
+     "revision": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+     "path": "src/skills/content.ts",
+     "startLine": 120,
+     "endLine": 123,
+     "sha256": "4c53e7dc268c3da83b832c3ff93c7bd5cef1735c744bc6430ef85abb88caff0a"
+    },
+    {
+     "kind": "diff",
+     "startLine": 245,
+     "endLine": 252,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "diff",
+     "startLine": 57,
+     "endLine": 61,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "git",
+     "revision": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+     "path": "src/agents/claude.ts",
+     "startLine": 42,
+     "endLine": 70,
+     "sha256": "1f986d979a6f24d1b928541abb415618dd3fbdf85d4a9e16fc7ae6af47d6f119"
+    }
+   ]
+  },
+  {
+   "finding": "9efcb2e851e11a4a9a250aa35ee5cd3071d2db58c4baee5a40443e04c78f1938",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:14.846Z",
+   "rationale": "claude-fable-5-1: The commit message literally states the full independent reviewer 'is what wins (hybrid 45-11 head-to-head vs 18-44 before)' and that researcher and drafter subagents 'add little separable value and cost about 1x'; the draft reports this as the commit's analysis and explicitly hedges it as not a performance guarantee, so the flag's objection is to the commit's own inference, not to the draft's faithful attribution of it. | gpt-6-astra: Explicitly framed as the commit’s analysis, this fairly summarizes its attribution of the hybrid’s 45–11 result to the full reviewer and its researcher/drafter cost assessment.",
+   "sources": [
+    {
+     "kind": "commit",
+     "revision": "c194a028fe2283708d69d1d3a5c532332d3bd707",
+     "startLine": 9,
+     "endLine": 12,
+     "sha256": "be9b25935a2aaa36f2da3482fd68a6952aeeec38639960d1e0e222eff57abb3b"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 314,
+     "endLine": 314,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 327,
+     "endLine": 327,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    }
+   ]
+  },
+  {
+   "finding": "a9fc0cd6e748d87e552efd97c7ca41f144e325c4999f5aa51ece1c8b4f06c7bc",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:52.772Z",
+   "rationale": "claude-fable-5-1: Profile selection, mkdir -p of the parent, and the darwin .bash_profile / else .bashrc choice are accurate, but the sentence's 'exact matching line' clause is contradicted by the substring-only grep -Fq guard that skips the append whenever any line contains the PATH text. | gpt-6-astra: Profile selection and directory creation are supported, but the exact-line claim is contradicted by grep -Fq, which also matches the PATH text within longer lines.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+     "path": "static/install.sh",
+     "startLine": 278,
+     "endLine": 304,
+     "sha256": "d56d71664e7445a316a19fb64e4e6dc2e2eec6d857e89c26f97aa5fcc44e2e91"
+    },
+    {
+     "kind": "diff",
+     "startLine": 135,
+     "endLine": 165,
+     "sha256": "5419a018c056869c8d3eccb70976f7b2a6c236afabed88bcf848958d760c05b3"
+    },
+    {
+     "kind": "git",
+     "revision": "42edf9f6507816e8d5ba2d26ef2d68d8bb7bc9dd",
+     "path": "static/install.sh",
+     "startLine": 275,
+     "endLine": 304,
+     "sha256": "d56d71664e7445a316a19fb64e4e6dc2e2eec6d857e89c26f97aa5fcc44e2e91"
+    }
+   ]
+  },
+  {
+   "finding": "ab06d861f0df10ecf5fd8ee268d6da6e426e83f1a93707017d5863345f9e0471",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.138Z",
+   "rationale": "claude-fable-5-1: The user's follow-up and the Round 16 plan treat the cheap-reviewer work and the SQLite comparison as separate questions, and the port was requested to compare the SQLite store against the current graph build for brief parity, not to support the reviewer-cost work. | gpt-6-astra: The port implements the separate SQLite comparison task; the asserted purpose of supporting cheaper reviewers is unsupported.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 288,
+     "endLine": 288,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 333,
+     "endLine": 333,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    }
+   ]
+  },
+  {
+   "finding": "ab33dd8e346b7e86f5aeb1b7abf8a9317c61f5f449dbe0fe8b485a2613ab1ddd",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.840Z",
+   "rationale": "claude-fable-5-1: The CLI replay command and native learner switched to the async executor, but BookContentSource.execute in the book-mode responder still calls synchronous executeReplay at head, unchanged from base, so the unqualified 'callers' claim overstates the migration. | gpt-6-astra: CLI callers await the async executor and retain the bypass, but the unqualified claim overlooks the book-mode responder's synchronous executeReplay call.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 1306,
+     "endLine": 1316,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "b4602db256909ec1ffe2e2012f2f8956285b7107",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 1296,
+     "endLine": 1306,
+     "sha256": "397dab9e1150cd834d480e0bf6c556f3213ab0ff3df2bc00c012ef9b25e2ea3c"
+    },
+    {
+     "kind": "diff",
+     "startLine": 268,
+     "endLine": 296,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "diff",
+     "startLine": 461,
+     "endLine": 462,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "diff",
+     "startLine": 273,
+     "endLine": 296,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 1306,
+     "endLine": 1315,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/replay/executor.ts",
+     "startLine": 165,
+     "endLine": 179,
+     "sha256": "4201ca3b9cf65680deff2cb7c616e3bccffaaa8125b69489567b2beaf27b82c3"
+    }
+   ]
+  },
+  {
+   "finding": "acb6fed8471cff3cce7f6a7624fe36c2959f07ae94787ed36725edd946e89a61",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:00:18.114Z",
+   "rationale": "claude-fable-5-1: The only comment added to the query code states the general rule (nodes in load order, relationships newest first via rowid DESC) and does not name branch-limit symbols, implementedBy ties or why's commit sessions; those three places are named only in the commit message and a comment inside tests/sql.test.ts, not in query comments. (other: gpt-6-astra false-positive: The query comment documents the ordering rule, and the query-parity test comment explicitly names all three consumers, making this a fair summary.)",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 788,
+     "endLine": 790,
+     "sha256": "72856c484f66fa5c788dc74d060c24513c8116029edc8d87506af1062f48a940"
+    },
+    {
+     "kind": "git",
+     "revision": "c088a541216b913d788011b48b819e5037fba483",
+     "path": "src/graph/queries.ts",
+     "startLine": 37,
+     "endLine": 39,
+     "sha256": "b69a0fa355917e3800c1c510baa634269fa520c7469b34f8355f9bc440f1decc"
+    },
+    {
+     "kind": "commit",
+     "revision": "c088a541216b913d788011b48b819e5037fba483",
+     "startLine": 9,
+     "endLine": 12,
+     "sha256": "e594964b1fb80b050699c16912bb0ba2a06c6a9a80236c0d316637a059a8e9fb"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3185,
+     "endLine": 3187,
+     "sha256": "72856c484f66fa5c788dc74d060c24513c8116029edc8d87506af1062f48a940"
+    }
+   ]
+  },
+  {
+   "finding": "ad1aa4caf8aacf7a5a941915f99fb796800b8da61369e635aee68fd012f585d7",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:29.895Z",
+   "rationale": "claude-fable-5-1: d2 says the adjustment means the expanded wording \"does not increase their cost\" for `added:`/`removed:` labels; for `removed:` lines this is false: `removed: ` is 7 chars longer than `- ` (head/src/graph/codeEvidence.ts:L335) while the discount is only 6 (head/src/graph/codeEvidence.ts:L428), so against the base cost (base/src/graph/codeEvidence.ts:L208) a removed-line candidate costs one more and can be rejected by the budget check at diff.patch:L614 where it previously fit. The session shows no verification of the number (raw/agent-a4a94ea89d7a98bce.jsonl:L251) and no test with a tight budget (diff.patch:L998). | gpt-6-astra: Replacing '- ' with 'removed: ' adds seven characters; discounting only six increases an unclipped candidate’s cost by one and can exceed the budget.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 616,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 334,
+     "endLine": 335,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 428,
+     "endLine": 428,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "git",
+     "revision": "0101b3186ff7e4cf9204317c33b1d2d742bfcd11",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 208,
+     "endLine": 208,
+     "sha256": "d20177235f0d473caf7288ce0de7e0f104042af060045e1a3cc58ba066aafeff"
+    },
+    {
+     "kind": "session",
+     "path": "agent-a4a94ea89d7a98bce.jsonl",
+     "startLine": 251,
+     "endLine": 251,
+     "sha256": "33f0eb5a220303c3b6a59a050701b1c443078387d6b25747bd09aff28f0480a5"
+    },
+    {
+     "kind": "diff",
+     "startLine": 998,
+     "endLine": 998,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 582,
+     "endLine": 598,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 615,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    }
+   ]
+  },
+  {
+   "finding": "ae106aeeeddf63bfb51df916f5762b695f2bbe062634b1305ded446d18068151",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:22.054Z",
+   "rationale": "claude-fable-5-1: The captured commands ran in the branch checkout (V7 diffs main...HEAD) and every write the author made (V8, V14, V17) targets the tracetoon run directory, not repo files, so the checks in V8–V14 ran on unmodified submitted content; the footnote also explains the provenance split between the author's runs and session-log checks. (other: gpt-6-astra confirmed: The captured check commands do not establish the revision or worktree content tested, leaving the submitted-content attribution unsupported.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V7",
+     "sha256": "b872ae7856bffa48937fba0ade9c5d422b9dd9b6bc753a386ab6a26ade6a2061",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V8",
+     "sha256": "bd0622133d4167436132be6cf52e55c86a279c622634f35dd9e0ac751ae5783b",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V11",
+     "sha256": "25696a476db20c7fe074ea0dc5d7c8c60ac8de30d9118c4290eb4d0d370e51f3",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V13",
+     "sha256": "ec4c0b3146796e347156d10b78855874e06a240716365eee1d0f19b6e035a67c",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V17",
+     "sha256": "fa861b8de8b4f4fdcb2203e142a36a2f8d0b7fa4ffac4d4eaa69daec6911b59f",
+     "startLine": 1,
+     "endLine": 12
+    }
+   ]
+  },
+  {
+   "finding": "b1f50f12cb9652b49a33c4ca382e6e9dba42ea058d48446129ca7141acd692e8",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:29.842Z",
+   "rationale": "claude-fable-5-1: The cost formula subtracts a flat 6 for any `added:`/`removed:` line (diff.patch:L613), but directional() turns `+ ` (2 chars) into `added: ` (7 chars, +5) and `- ` into `removed: ` (9 chars, +7) (diff.patch:L582-L583); versus the base cost of line.length + 3 (base/src/graph/codeEvidence.ts:L180, L208), an added line now costs one less and a removed line one more, so neither label retains the previous cost. The flag's aside that the added label preserves the old cost is itself off by one, but the statement remains contradicted; the agent's edit introduced the comment and the 6 together with no arithmetic (raw/agent-a4a94ea89d7a98bce.jsonl:L251), and the only code-cell test uses a 2000-char budget (diff.patch:L998). | gpt-6-astra: Costs are not preserved: the six-character discount leaves short removal candidates one character more expensive and addition candidates one cheaper.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 616,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 582,
+     "endLine": 583,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "git",
+     "revision": "0101b3186ff7e4cf9204317c33b1d2d742bfcd11",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 180,
+     "endLine": 180,
+     "sha256": "d20177235f0d473caf7288ce0de7e0f104042af060045e1a3cc58ba066aafeff"
+    },
+    {
+     "kind": "git",
+     "revision": "0101b3186ff7e4cf9204317c33b1d2d742bfcd11",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 208,
+     "endLine": 208,
+     "sha256": "d20177235f0d473caf7288ce0de7e0f104042af060045e1a3cc58ba066aafeff"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 334,
+     "endLine": 335,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 397,
+     "endLine": 397,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "git",
+     "revision": "7483847fb67c5f79b5cba243911d26cb6c83c866",
+     "path": "src/graph/codeEvidence.ts",
+     "startLine": 428,
+     "endLine": 428,
+     "sha256": "fc717154c4f358868b7e57dac81179596171b4aecfa897d998443e1e4e65d200"
+    },
+    {
+     "kind": "session",
+     "path": "agent-a4a94ea89d7a98bce.jsonl",
+     "startLine": 251,
+     "endLine": 251,
+     "sha256": "33f0eb5a220303c3b6a59a050701b1c443078387d6b25747bd09aff28f0480a5"
+    },
+    {
+     "kind": "diff",
+     "startLine": 998,
+     "endLine": 998,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 582,
+     "endLine": 598,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    },
+    {
+     "kind": "diff",
+     "startLine": 606,
+     "endLine": 615,
+     "sha256": "d464869c1ae8cf74b2117365ab2705d9fd34e167cf3d13f1deb0f5d543e67f70"
+    }
+   ]
+  },
+  {
+   "finding": "b59908c5c6b780a398152d9538670fb27ebdc95c4f882d7be26a88bafaa508b1",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:52:36.536Z",
+   "rationale": "claude-fable-5-1: Purpose statement faithful to the session: the user asked for the ordered harness because of the 6-05 bug (L579) and the agent framed the ordered pass as catching state left by earlier exercises (L584, L619); 'like 6-05' names a class, and the harness did catch a same-class stale-file defect (math.py shadowing, L2147). The reconciliation nuance at java-6-03 is an implementation detail, not a contradiction of stated purpose. | gpt-6-astra: This states the documented motivation for the harness, without claiming it reproduces the exact 6-05 failure.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 579,
+     "endLine": 579,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 584,
+     "endLine": 584,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 619,
+     "endLine": 619,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 2147,
+     "endLine": 2147,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "diff",
+     "startLine": 449,
+     "endLine": 475,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "git",
+     "revision": "834fab16fd633c06d0745cfb6804b21d2261db6d",
+     "path": "books/ai-first-java-programming.json",
+     "startLine": 3828,
+     "endLine": 3837,
+     "sha256": "4dfa4fbe1431a3b5e98a44d44e4e8a592caa4ac609267fb6a338b5a7bc0acfee"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 579,
+     "endLine": 584,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 707,
+     "endLine": 707,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    }
+   ]
+  },
+  {
+   "finding": "b82e2574ef8e6ad563e8c15cadf80eadb9dfb5cb57ee2af6cbb881b15a8fcd7b",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:00.173Z",
+   "rationale": "claude-fable-5-1: The last test runs in the session (full `bun test` and the bundled comic/flow tests) are in the single chained command at L959, which first deleted the bottom-5% line from providers.ts, then ran those tests, then committed d5935ebc; the only earlier providers.ts edit (L941) was followed by the focused pages test, and nothing edits providers.ts after L959 before the transcript ends at L966. So the last test run came after, not before, the final providers.ts edit, and tested the committed content. | gpt-6-astra: The final session command removes the bottom-5% instruction before running the full and bundled tests, with no intervening provider edits before commit.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 959,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 941,
+     "endLine": 942,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 960,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    },
+    {
+     "kind": "commit",
+     "revision": "d5935ebcd4bf45146a5b522830d2776fb6bffa84",
+     "startLine": 1,
+     "endLine": 14,
+     "sha256": "30b9eb7fadcf8f5ae1de1f770c7bb46598cf90d72a36764c96910184269eff96"
+    },
+    {
+     "kind": "diff",
+     "startLine": 117,
+     "endLine": 130,
+     "sha256": "b792b5be1e8e1591770477870a3b6fd49b080d5adbc2897f1b84ac84a7cb0104"
+    },
+    {
+     "kind": "git",
+     "revision": "d5935ebcd4bf45146a5b522830d2776fb6bffa84",
+     "path": "src/comic/providers.ts",
+     "startLine": 467,
+     "endLine": 467,
+     "sha256": "e9baeabd691b800c56092221d2682d70eb11db802e826c04b73eae80a6da70b4"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 959,
+     "endLine": 966,
+     "sha256": "b3ccdcfa55d35c1e91250abc8491728c27fec28bec9bf81d0a3ce23f51365ce3"
+    }
+   ]
+  },
+  {
+   "finding": "bab4830954b3a690cd8ed9eb3846a250385c8393b4b7034bc293ddde215297dd",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:08:38.990Z",
+   "rationale": "claude-fable-5-1: `showtail migrate --resume <id> --yes --json` forwards to runBulkMigration, which skips the json-only early return when --yes is set and calls applyRoot; applyRoot unconditionally passes interactiveMatcher as confirmMatch, whose only gate is a TTY check, so on a terminal ambiguous matches prompt via readline (and print to stdout) despite --json. The unqualified 'JSON mode avoids prompts' is contradicted for the resume path the same sentence lists. | gpt-6-astra: `showtail migrate --resume <run-id> --yes --json` can prompt for ambiguous matches in an eligible project on a TTY, contradicting the unqualified guarantee.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 521,
+     "endLine": 529,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 786,
+     "endLine": 830,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 715,
+     "endLine": 725,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 490,
+     "endLine": 516,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/core/migration.ts",
+     "startLine": 500,
+     "endLine": 504,
+     "sha256": "b046109003b3a6fb70b7dda2c2a27335d7650ac242e8ebe0daf11ce569dd242d"
+    },
+    {
+     "kind": "diff",
+     "startLine": 261,
+     "endLine": 261,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/cli.ts",
+     "startLine": 619,
+     "endLine": 630,
+     "sha256": "968bc5f308eb5942770bf2038729c95841653516e38b55050361086a699c01b9"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrate.ts",
+     "startLine": 119,
+     "endLine": 126,
+     "sha256": "f071ec346b43627a784294173e5d1caf3fe7b51e39ee04310fda8aee2f15e55b"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrateAll.ts",
+     "startLine": 186,
+     "endLine": 223,
+     "sha256": "345b61d1c3ded3b6a327341de430cbb716c81d049971eb587fcc6b4491816a24"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrateAll.ts",
+     "startLine": 115,
+     "endLine": 125,
+     "sha256": "345b61d1c3ded3b6a327341de430cbb716c81d049971eb587fcc6b4491816a24"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrate.ts",
+     "startLine": 89,
+     "endLine": 103,
+     "sha256": "f071ec346b43627a784294173e5d1caf3fe7b51e39ee04310fda8aee2f15e55b"
+    }
+   ]
+  },
+  {
+   "finding": "bbd390483c10b6e329e6ac8ace5e44cf5e58ec1ec9c90ad9f57f8cd605dc42cd",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:01:14.824Z",
+   "rationale": "claude-fable-5-1: The spaces, single-quote escaping, empty-argument and bash -c parts are supported, but the unhedged 'shell characters' class is contradicted by the regex keeping < and > unquoted and by the test showing `CLI=<repo>/dist/x.mjs` rendered without quotes. | gpt-6-astra: The escaping, empty-argument handling and bash example are supported, but the general shell-character claim is contradicted by the unquoted < and > characters.",
+   "sources": [
+    {
+     "kind": "diff",
+     "startLine": 156,
+     "endLine": 163,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 196,
+     "endLine": 198,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 256,
+     "endLine": 256,
+     "sha256": "4bebde165eacf2065739424cd1368e791fe84dea362ed74726d590f09e346148"
+    },
+    {
+     "kind": "diff",
+     "startLine": 192,
+     "endLine": 199,
+     "sha256": "c77a77450b57a9b12b8ff511f3a89ebae2c8aa230a4bbe7cf3f245bd92ee6c9b"
+    }
+   ]
+  },
+  {
+   "finding": "c21096c70fafe70c17ce23cb4e5241c1f471196ef7f8ddd3a0a3d6d2c44225e8",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:08:39.043Z",
+   "rationale": "claude-fable-5-1: The option list and undo routing are supported by cli.ts, but the embedded unqualified claim that JSON mode avoids prompts fails for the listed bulk --resume path: only the non-resume branch disables the matcher when json||yes (L533-534); the resume branch reaches applyRoot, which installs the TTY-gated interactiveMatcher and can prompt for ambiguous candidates even with --yes --json. | gpt-6-astra: The options and undo routing are supported, but the included JSON guarantee is false: bulk resume with `--yes --json` retains the interactive ambiguous-match picker.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/cli.ts",
+     "startLine": 609,
+     "endLine": 630,
+     "sha256": "968bc5f308eb5942770bf2038729c95841653516e38b55050361086a699c01b9"
+    },
+    {
+     "kind": "diff",
+     "startLine": 533,
+     "endLine": 534,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 521,
+     "endLine": 529,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 786,
+     "endLine": 830,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 723,
+     "endLine": 725,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "diff",
+     "startLine": 492,
+     "endLine": 503,
+     "sha256": "b5f659d6b03de5fcabe48bc4ed23f16f2bc72a9b31f33ba3c0417c68fa207f8b"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/core/migration.ts",
+     "startLine": 500,
+     "endLine": 504,
+     "sha256": "b046109003b3a6fb70b7dda2c2a27335d7650ac242e8ebe0daf11ce569dd242d"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/cli.ts",
+     "startLine": 581,
+     "endLine": 629,
+     "sha256": "968bc5f308eb5942770bf2038729c95841653516e38b55050361086a699c01b9"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrate.ts",
+     "startLine": 119,
+     "endLine": 126,
+     "sha256": "f071ec346b43627a784294173e5d1caf3fe7b51e39ee04310fda8aee2f15e55b"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrateAll.ts",
+     "startLine": 186,
+     "endLine": 223,
+     "sha256": "345b61d1c3ded3b6a327341de430cbb716c81d049971eb587fcc6b4491816a24"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrateAll.ts",
+     "startLine": 115,
+     "endLine": 125,
+     "sha256": "345b61d1c3ded3b6a327341de430cbb716c81d049971eb587fcc6b4491816a24"
+    },
+    {
+     "kind": "git",
+     "revision": "c7ac95a3d17cb6ae8bc34dfbffa78130602a545d",
+     "path": "src/commands/migrate.ts",
+     "startLine": 89,
+     "endLine": 103,
+     "sha256": "f071ec346b43627a784294173e5d1caf3fe7b51e39ee04310fda8aee2f15e55b"
+    }
+   ]
+  },
+  {
+   "finding": "c81646f848e791af42e1a8d209fb24b47487ab0292bb3dd642ebc40446a58f74",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.804Z",
+   "rationale": "claude-fable-5-1: Scrolling and AbortError handling are implemented, but the coverage parenthetical placed after the scroll-key list is unsupported: the Home test's document-screen steps are enter and escape only, with no up/down/page actions. | gpt-6-astra: The screen and pause behavior is supported, but the parenthetical overstates coverage because the cited test never scrolls documents.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 69,
+     "endLine": 76,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 267,
+     "endLine": 295,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1376,
+     "endLine": 1387,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "a30583b586deefaa2d8707af2af4cea7a071d3fc9e3a010c5a5d78f165707f64",
+     "commandId": "V22",
+     "sha256": "2487da316d1fc99ca479b0ffabeaab51648014b3a40c003bc92e4ae4a0a2a607",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "test/tui-learn.test.ts",
+     "startLine": 58,
+     "endLine": 76,
+     "sha256": "7c7645128f44cb0a6c4b269d2d0876ba122271d9b323189a93adf96730c5f5eb"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/tui/session.ts",
+     "startLine": 264,
+     "endLine": 301,
+     "sha256": "e86ba96755b3a21bacd8c828f35b8c5f4440d64a4e0361e1b8cb3d2caafc0a2e"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/prompt.ts",
+     "startLine": 25,
+     "endLine": 40,
+     "sha256": "ce0893504c9cf4365f88f2dedd029d0ca7c2b18db57332ab99f95e3d7809ff20"
+    }
+   ]
+  },
+  {
+   "finding": "d177757ffbd62c27e0b27016fcf9c67b38e45bbefef1ee3b857eb8f5684210fa",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:10:01.867Z",
+   "rationale": "claude-fable-5-1: Partial-failure behavior (successful slots stay imported, failed slots reported, exit code 1) is confirmed by the code and test, and the rerun-skip clause describes the non-recheck `--all` path in the same paragraph; the recheck path, where every previous Tracetoon-run pass is resumed, is covered separately in the draft and the commit message with the same split, so the sentence is accurate for what it describes. (other: gpt-6-astra confirmed: Retaining successful imports and exiting nonzero are supported, but the unqualified retry claim fails for --all --recheck under default once, which also resumes successful slots.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 783,
+     "endLine": 812,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 864,
+     "endLine": 864,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 762,
+     "endLine": 781,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "src/commands/reviewRun.ts",
+     "startLine": 737,
+     "endLine": 761,
+     "sha256": "13f4d7d05f30c4419f8ef4f35132fceae2e7d2cb9092c304cdcebe1eb45d3625"
+    },
+    {
+     "kind": "git",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "path": "tests/review-run.test.ts",
+     "startLine": 543,
+     "endLine": 570,
+     "sha256": "c2e8bd89c5abfb60f1485eee0195633421e8e931abbdbf0f8122b2f897c24113"
+    },
+    {
+     "kind": "commit",
+     "revision": "96686e9187d2303dd5d02092bb7d6789f0d406b5",
+     "startLine": 16,
+     "endLine": 19,
+     "sha256": "f26f9ea886696e0cf99e34e115a095b898aa45682b41a0c087a4a29d81570d76"
+    }
+   ]
+  },
+  {
+   "finding": "d28da98c39a24d19910b1788810aedba95b35bcc8a6cd859f56e83dd42f0d2e3",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:07:00.882Z",
+   "rationale": "claude-fable-5-1: The changed story tests call the real buildStory and previouslyFor with no doubles, and the new end-to-end test spawns the real CLI and asserts real footer SVG text, proofread list, reroll style and config validation; only the pre-existing fake Codex/gh externals are stubbed, and the session shows the footer assertion catching a real render bug before the fix. | gpt-6-astra: The added test fakes Codex but runs the real CLI and checks rendering, proofreading, overlay, reroll and configuration validation.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 156,
+     "endLine": 213,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 516,
+     "endLine": 583,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 291,
+     "endLine": 304,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "git",
+     "revision": "cfd0e3d26cf1ab5d1732ab8d92dee88ef743e39b",
+     "path": "tests/comic.test.ts",
+     "startLine": 20,
+     "endLine": 21,
+     "sha256": "50fb56626b9eef6850375d9b2cb05f10f7f8b7782645f093e9cb8cccb001583d"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3419,
+     "endLine": 3486,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1335,
+     "endLine": 1344,
+     "sha256": "1a9304e1780f4fa680ba84a160bd4ae2fc863792eacfe094ef3eab12b65bb522"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1473,
+     "endLine": 1473,
+     "sha256": "1a9304e1780f4fa680ba84a160bd4ae2fc863792eacfe094ef3eab12b65bb522"
+    },
+    {
+     "kind": "git",
+     "revision": "85b4567087d0fe7dba780368e906639830c2d8fa",
+     "path": "tests/comic.test.ts",
+     "startLine": 291,
+     "endLine": 303,
+     "sha256": "cde6818c4ff9d1ccd0e4dff7f5ab3d7b7277e754c0e2247fb366260546f45955"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3419,
+     "endLine": 3455,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    },
+    {
+     "kind": "diff",
+     "startLine": 3457,
+     "endLine": 3485,
+     "sha256": "44f54656423edf53423433371384e34fac4a4efee919e8cf2c82d25f7a4c918c"
+    }
+   ]
+  },
+  {
+   "finding": "d726087328fea10dca1eefdf793c7c34bf1033387e53ba1d2ccea8ca24c2863b",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:08:02.382Z",
+   "rationale": "claude-fable-5-1: The file's four test cases are exactly those four topics (policy/roles/privacy/removal text, Bun pin plus Windows metadata, signing step ordering before publication, and `uses:` references pinned to 40-hex commits); 'covers' summarizes test subjects and does not claim exhaustive or behavioral coverage, so the regex missing `- uses:` list items (e.g. release.yml:54, all of which are nonetheless SHA-pinned at head) is a limitation of the test, not a false statement in the description. | gpt-6-astra: The tests contain assertions for all four listed areas; “covers” fairly summarizes them without claiming exhaustive action coverage or runtime validation, despite the regex gap.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": "tests/signingReadiness.test.ts",
+     "startLine": 9,
+     "endLine": 81,
+     "sha256": "7fb4cc71cfc0d035a024b2c17ccbd2c36298d7a520cacf8676ccd1a4490acbce"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1445,
+     "endLine": 1513,
+     "sha256": "e47ff0d52858291c3767acc6f06ec88bacab5a89640e65bbf61ea3a8bf3550c3"
+    },
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": ".github/workflows/release.yml",
+     "startLine": 54,
+     "endLine": 57,
+     "sha256": "aa69523bc2e134c7e5b2731f7cc3f00121d0f213038762b7060dc6b84d262958"
+    },
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": "tests/signingReadiness.test.ts",
+     "startLine": 19,
+     "endLine": 30,
+     "sha256": "7fb4cc71cfc0d035a024b2c17ccbd2c36298d7a520cacf8676ccd1a4490acbce"
+    },
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": "tests/signingReadiness.test.ts",
+     "startLine": 33,
+     "endLine": 50,
+     "sha256": "7fb4cc71cfc0d035a024b2c17ccbd2c36298d7a520cacf8676ccd1a4490acbce"
+    },
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": "tests/signingReadiness.test.ts",
+     "startLine": 53,
+     "endLine": 80,
+     "sha256": "7fb4cc71cfc0d035a024b2c17ccbd2c36298d7a520cacf8676ccd1a4490acbce"
+    },
+    {
+     "kind": "git",
+     "revision": "cfabbdc4b85b3179fd702aa7b05c9afd18298072",
+     "path": ".github/workflows/ci.yml",
+     "startLine": 18,
+     "endLine": 21,
+     "sha256": "b759e051b8100dbe0584fc210152f3f9c63b4b6b91a2a18141ae7ef84df62f0d"
+    }
+   ]
+  },
+  {
+   "finding": "dc1c79d0f34881ce33e5a88c7f3ba9744810b5810564f5720dfc902d5ae7a299",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:05:18.866Z",
+   "rationale": "claude-fable-5-1: The quoted 'complete' goal comes from the agent's own plan that the user approved, but the PR does not deliver it: the diff touches no hook-output code, the unchanged docs state the hook still supplies the bare `aifirst replay execute <id> --format json` command, the skill still tells Claude to execute `canonicalReplay` verbatim with no launcher rewrite, and the legacy `Bash(aifirst replay execute:*)` allow entry is now removed, so the planning-workflow replay path remains PATH-dependent and loses pre-approval. | gpt-6-astra: Complete PATH independence is overstated: the hook still supplies bare `aifirst replay execute`, and the skill instructs Claude to execute `canonicalReplay` without rewriting it through the launcher.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 233,
+     "endLine": 234,
+     "sha256": "8eb258a70036fb60ac615eaf2a41e28e1cedac6563cb908adbef2512d4a3a6cd"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 149,
+     "endLine": 150,
+     "sha256": "8eb258a70036fb60ac615eaf2a41e28e1cedac6563cb908adbef2512d4a3a6cd"
+    },
+    {
+     "kind": "diff",
+     "startLine": 32,
+     "endLine": 38,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "git",
+     "revision": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+     "path": "src/skills/content.ts",
+     "startLine": 120,
+     "endLine": 123,
+     "sha256": "4c53e7dc268c3da83b832c3ff93c7bd5cef1735c744bc6430ef85abb88caff0a"
+    },
+    {
+     "kind": "git",
+     "revision": "5a703a05a99caf74900f00766d9b9b84d5a82ab4",
+     "path": "src/skills/content.ts",
+     "startLine": 122,
+     "endLine": 122,
+     "sha256": "c8978b29d6e8b17e3a7eb1f3e7258c41beb0f896fc152356d812212d45c5bdd0"
+    },
+    {
+     "kind": "diff",
+     "startLine": 245,
+     "endLine": 252,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "diff",
+     "startLine": 161,
+     "endLine": 169,
+     "sha256": "24d679c64f796340fa1e524ae916d69f177d794f386942ebf45a64a6900fac10"
+    },
+    {
+     "kind": "git",
+     "revision": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+     "path": "src/skills/content.ts",
+     "startLine": 120,
+     "endLine": 128,
+     "sha256": "4c53e7dc268c3da83b832c3ff93c7bd5cef1735c744bc6430ef85abb88caff0a"
+    },
+    {
+     "kind": "git",
+     "revision": "85a8ba295d327e2a20c8bb69bfc91299b4065442",
+     "path": "src/agents/claude.ts",
+     "startLine": 184,
+     "endLine": 193,
+     "sha256": "1f986d979a6f24d1b928541abb415618dd3fbdf85d4a9e16fc7ae6af47d6f119"
+    }
+   ]
+  },
+  {
+   "finding": "e14aeb23ff5340f38a3d71993e37b871cbdd6024dbfe9095ccb99c6f434fb40a",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T16:06:22.052Z",
+   "rationale": "claude-fable-5-1: The packet holds no record of a smoke failure: V13 shows the shellcheck run the flag calls invisible, and after inspecting the first smoke log the author re-ran the python3 check (V14) using the exact `\"total\": N` string assertion the repo's own CI smoke step uses; the tool-generated Validation lists that check as passed and reports failures separately (as it does for bun test), so the pass claim is supported, not contradicted. (other: gpt-6-astra confirmed: The captures show smoke-check invocations, including a revised retry, but tool completion alone establishes neither a passing result nor validation of submitted content.)",
+   "sources": [
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V12",
+     "sha256": "12d93be69885033d1c406f75e265de734d4f623286efc1a6615b1362a06af858",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V13",
+     "sha256": "ec4c0b3146796e347156d10b78855874e06a240716365eee1d0f19b6e035a67c",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+     "commandId": "V14",
+     "sha256": "d8c5b4dba217e44571b69022587a0837241042ecc871494667eeb2d237dafff1",
+     "startLine": 1,
+     "endLine": 12
+    },
+    {
+     "kind": "git",
+     "revision": "2bbb2bfc687962ede097fdb58183da3743e80f27",
+     "path": ".github/workflows/ci.yml",
+     "startLine": 37,
+     "endLine": 43,
+     "sha256": "3edf35d1c25805068ab7ba7aa9ae35402b060857ab99f71b8341b6aa3a635903"
+    }
+   ]
+  },
+  {
+   "finding": "e2194abf1f7bc326d207d700feafdce1f083ba7b4808013bf6237e2ef6af50a4",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.096Z",
+   "rationale": "claude-fable-5-1: The SQLite port was launched to answer the user's separate third follow-up question (\"Do we win versus sqlite and embedded relational dbs?\") with the task \"port the SQLite evidence store onto the current graph build and measure brief parity\"; the Round 16 plan and the assistant's own summary list it as Q3, distinct from Q1's cheap-reviewer arm, so attributing the port to the \"strong writer, cheap high-effort reviewers\" plan is unsupported. | gpt-6-astra: The features are supported, but the SQLite port addressed the separate database-comparison and brief-parity question.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 333,
+     "endLine": 333,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 288,
+     "endLine": 288,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "commit",
+     "revision": "7b663696ba965c8204ffabd0b3e59fbf10f3cfbd",
+     "startLine": 7,
+     "endLine": 9,
+     "sha256": "7fbbf622fcdc62019222d077fc81b945242a85df6bac315ddd2e78adedca7685"
+    }
+   ]
+  },
+  {
+   "finding": "e3cb85cf318e3f5299b6c865946154329916efea79666bbf44f548fafcbe47b6",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.133Z",
+   "rationale": "claude-fable-5-1: SQLite availability alongside cypherlite is real, but the stated rationale is wrong: the retained request asks to port the store and measure brief parity to decide whether SQLite is a drop-in backend, separately from the writer/reviewer cost experiment. | gpt-6-astra: SQLite availability is supported, but its requested purpose was backend comparison and brief parity, not the reviewer-cost experiment.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "agent-aca122a190f279c88.jsonl",
+     "startLine": 1,
+     "endLine": 1,
+     "sha256": "1b68bd976e6b360a63e8bc20c398aecbab8c237e04c40db3653dc057d2e4f71b"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 288,
+     "endLine": 288,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    }
+   ]
+  },
+  {
+   "finding": "e4741dc498917ac32c6fdd472d92d61229d13f06b7740d3e58f2552d15662260",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh; split decided by claude-fable-5-1",
+   "reviewedAt": "2026-11-23T15:52:51.414Z",
+   "rationale": "claude-fable-5-1: Same statement as F1 with 'original' added, matching the test title 'keeps the original Windows tool label separate from portable execution'; the test asserts a <shell> portable argv for each captured command and the PowerShell label plus '<python> --version', which is what the draft describes, and nothing in it asserts the commands are executed. (other: gpt-6-astra confirmed: The audit asserts the <shell> marker, PowerShell label, and <python> substring; it does not verify that captured commands execute portably.)",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "1f332e0664e5e71a900a23b6585317524cd417f6",
+     "path": "test/python-chapters-9-10-audit.test.ts",
+     "startLine": 77,
+     "endLine": 98,
+     "sha256": "f41ec8479481ffc4aa19f445f0e7efcef3c24bdf369d67a118e706061c83f681"
+    },
+    {
+     "kind": "diff",
+     "startLine": 1840,
+     "endLine": 1861,
+     "sha256": "f862441bfef90d2b18b58ce5dc0dc5af81d5f6d6e92f0de2bd5ba5e4d3c7e3b5"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 982,
+     "endLine": 983,
+     "sha256": "d9e9aa8b1d47552834e9e32bff30339483ad600eeea0e4e4a08524cb8f9ad342"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 395,
+     "endLine": 395,
+     "sha256": "d9e9aa8b1d47552834e9e32bff30339483ad600eeea0e4e4a08524cb8f9ad342"
+    }
+   ]
+  },
+  {
+   "finding": "e8d9f1d6e484a0d714618e3152306cada3b62258f44b3087e367f92eb8ff9813",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:56:57.698Z",
+   "rationale": "claude-fable-5-1: The first clause is contradicted: the session ran typecheck and the full suite after the final fake-gh.ts edits, in the command that produced commit f7ec46e, and both passed; the second clause about the fresh check is true but does not rescue a bullet that misleads reviewers about in-session verification. | gpt-6-astra: The build chronology is supported, but the fresh-check captures do not establish that the checked source matched the submitted content.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1790,
+     "endLine": 1791,
+     "sha256": "5dd603aaf6dd104d579e77fab4acfec446364188abcb04ec6137a9102a3dbb4e"
+    },
+    {
+     "kind": "diff",
+     "startLine": 2170,
+     "endLine": 2192,
+     "sha256": "1534f537cf739e5032a4fd84161e4f21eb159c8bcdc5d632fe20b8536672a8c3"
+    },
+    {
+     "kind": "commit",
+     "revision": "f7ec46eedb0bb7c1f28a635d8a94ed733092dd7a",
+     "startLine": 1,
+     "endLine": 13,
+     "sha256": "a7bdd37726e61e679b7d8eccddb5d243d79e8aee575055d6241068482fa081e1"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+     "commandId": "V8",
+     "sha256": "71a9567e30605e4b84fe5d3051cf5c9a8c56ff0606baccead2e045b45ae6d1c3",
+     "startLine": 1,
+     "endLine": 11
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+     "commandId": "V9",
+     "sha256": "829e2537d718ccb293db8c5287501b157dd08f61a873cd6179891572f8f57733",
+     "startLine": 1,
+     "endLine": 13
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+     "commandId": "V2",
+     "sha256": "1870cbb4dbd8c4dad39ce6574897f524e4cd232c0b07b7055f8a00499b329f7d",
+     "startLine": 1,
+     "endLine": 24
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+     "commandId": "V10",
+     "sha256": "2d2b0f1074d28d4f72dbf78a8ba137928915b0dd8accd29f21225447b33767e4",
+     "startLine": 1,
+     "endLine": 12
+    }
+   ]
+  },
+  {
+   "finding": "ede0de86d37bc3e3ddba51d1d2d0872c20d285bb2d9963b23d869a05ebcc4283",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:51:31.819Z",
+   "rationale": "claude-fable-5-1: replaySegments builds text blocks for legacy commentary, but nativeReplayReply's no-events branch returns header plus flattened text with no nativeBlocks, and no other code reads those legacy blocks, so the renderer falls back to reply.text rather than blocks. | gpt-6-astra: Legacy commentary produces internal segment blocks, but the no-events replay reply returns flattened text without nativeBlocks.",
+   "sources": [
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 302,
+     "endLine": 309,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 718,
+     "endLine": 722,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 128,
+     "endLine": 133,
+     "sha256": "0343b340287c0ad3d25956e22978aada25e3500ae4e9ac93198566f2cfe77445"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/learn/native.ts",
+     "startLine": 645,
+     "endLine": 664,
+     "sha256": "a8f8a8821a6dcb270a53d0a547b14970c821cde598b60a0da155177a2b6d5dd0"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 302,
+     "endLine": 308,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    },
+    {
+     "kind": "git",
+     "revision": "0f7ab0f767f5063cae54babd4aa04f03fc6ffcf7",
+     "path": "src/bookmode/responder.ts",
+     "startLine": 694,
+     "endLine": 722,
+     "sha256": "692b5b10e644eaa27f8dfa675d66cc4dcd39f53304bfeca49dfe91db413597a3"
+    }
+   ]
+  },
+  {
+   "finding": "f472d1e6871d0b4360c754b2f9a3ddd23e530531f2cfbe7d91a6da2575a37341",
+   "arm": "tracetoon-candidate",
+   "outcome": "false-positive",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:52:36.692Z",
+   "rationale": "claude-fable-5-1: The PR does add isolated and sequential passes through persistent per-book workspaces (diff L379-L381, L449-L512) as part of the harness the user requested to catch 6-05-style problems (L579); the sentence states motivation and scope, not that the sequential pass reproduces the exact 6-02→6-05 scenario, and the ordered harness did surface a same-class shared-workspace defect (L2147). | gpt-6-astra: The session supports this rationale, and the diff implements both passes with checkpoint reconciliation; no specific regression reproduction is claimed.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 579,
+     "endLine": 579,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 619,
+     "endLine": 619,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 2147,
+     "endLine": 2147,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "diff",
+     "startLine": 379,
+     "endLine": 381,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "diff",
+     "startLine": 449,
+     "endLine": 475,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "diff",
+     "startLine": 496,
+     "endLine": 512,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-codex.jsonl",
+     "startLine": 707,
+     "endLine": 707,
+     "sha256": "cf8326efe95f2784c412fdec52d2391987fc3fe8906faf5f82cbbc31c2ad99ca"
+    },
+    {
+     "kind": "diff",
+     "startLine": 496,
+     "endLine": 511,
+     "sha256": "d581de529c48d340aea01b4cb04eea747e1fe31bfeff0e701ff4e413f6c13bad"
+    }
+   ]
+  },
+  {
+   "finding": "f54f6f38da532f18177a71bb4eea5692aca9271d89af453dc2b0f9a6846cec6b",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T16:00:18.148Z",
+   "rationale": "claude-fable-5-1: The parity harness compares the two engines' answers and briefs byte for byte to test whether SQLite is a drop-in replacement; nothing in the request ties the port to the writer/reviewer cost work, which the retained context lists as a separate question. | gpt-6-astra: The comparisons check engine and brief parity, but the record does not establish the claimed connection to the reviewer-cost work.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 323,
+     "endLine": 323,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 253,
+     "endLine": 253,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 288,
+     "endLine": 288,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 333,
+     "endLine": 333,
+     "sha256": "52d9bc8a6643f9c611fa82ca3963e087d0a1be5944bbd1d1f8c60562541f0e7a"
+    },
+    {
+     "kind": "commit",
+     "revision": "7b663696ba965c8204ffabd0b3e59fbf10f3cfbd",
+     "startLine": 25,
+     "endLine": 25,
+     "sha256": "7fbbf622fcdc62019222d077fc81b945242a85df6bac315ddd2e78adedca7685"
+    },
+    {
+     "kind": "git",
+     "revision": "c088a541216b913d788011b48b819e5037fba483",
+     "path": "src/sql/parity.ts",
+     "startLine": 53,
+     "endLine": 59,
+     "sha256": "f3e1f117de3b1254232026a9b257e3e5d5eb73e9e6af2f4c0ed88ee23253930a"
+    }
+   ]
+  },
+  {
+   "finding": "fa2beb7fee5d898258afcaf97c793a49157a0a686d3886b2d7961f8332313dca",
+   "arm": "tracetoon-candidate",
+   "outcome": "confirmed",
+   "reviewedBy": "expert judges claude-fable-5-1@xhigh + gpt-6-astra@xhigh (agreed)",
+   "reviewedAt": "2026-11-23T15:54:25.373Z",
+   "rationale": "claude-fable-5-1: The unqualified claim that recorded runs were Linux/x64 with no recorded Windows run is contradicted: the work session is recorded as platform \"windows\" throughout, the bundled tests passed there via Git Bash `pwd -W` (20 pass/0 fail, 76 pass/0 fail at head), and a live Codex run used a Windows-installed codex binary, exercising the win32 onPath branch; only the author's own validation checks ran in a Linux sandbox and record no platform. | gpt-6-astra: The original session records successful Windows runs using `pwd -W`, including 20 passing bundled tests; this contradicts the unqualified claim that no Windows run was recorded.",
+   "sources": [
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1267,
+     "endLine": 1268,
+     "sha256": "a39625e63a8d084813bc75ced58ded289cd272635e0166402f95f2fee29490ff"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1365,
+     "endLine": 1366,
+     "sha256": "a39625e63a8d084813bc75ced58ded289cd272635e0166402f95f2fee29490ff"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1081,
+     "endLine": 1082,
+     "sha256": "a39625e63a8d084813bc75ced58ded289cd272635e0166402f95f2fee29490ff"
+    },
+    {
+     "kind": "session",
+     "path": "session-1-claude-code.jsonl",
+     "startLine": 1225,
+     "endLine": 1225,
+     "sha256": "a39625e63a8d084813bc75ced58ded289cd272635e0166402f95f2fee29490ff"
+    },
+    {
+     "kind": "diff",
+     "startLine": 700,
+     "endLine": 712,
+     "sha256": "2d356c0341ea7c62d9deda340eb268a2c5bbdcf2102c73f26d2ad025889a56f3"
+    },
+    {
+     "kind": "diff",
+     "startLine": 922,
+     "endLine": 938,
+     "sha256": "2d356c0341ea7c62d9deda340eb268a2c5bbdcf2102c73f26d2ad025889a56f3"
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "8174cd8de7d7879ed2d40cbd5e168eb4be7605d145504c786c13d0bd1e02ffc2",
+     "commandId": "V10",
+     "sha256": "267f54fc97276564b0ac39849c1350454192380dcd135c663f4c29a06a260e8b",
+     "startLine": 1,
+     "endLine": 11
+    },
+    {
+     "kind": "validation",
+     "artifactDigest": "8174cd8de7d7879ed2d40cbd5e168eb4be7605d145504c786c13d0bd1e02ffc2",
+     "commandId": "V12",
+     "sha256": "8524b87c2bd58bff058e1be5238d108c7a48cca74f1a8236b9124f89333defeb",
+     "startLine": 1,
+     "endLine": 11
+    }
+   ]
+  }
+ ]
+}

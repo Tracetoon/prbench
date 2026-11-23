@@ -1,0 +1,2122 @@
+{
+ "prefix": 500000,
+ "summary": {
+  "codex-native": {
+   "drafts": 175,
+   "models": [
+    "sol"
+   ],
+   "mainRequests": 30,
+   "subRequests": 0,
+   "raw": 0.2578,
+   "openai": 3.496,
+   "openai_main": 3.496,
+   "openai_expiries": 0
+  }
+ },
+ "rows": {
+  "codex-native": [
+   {
+    "case": "vexaim",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1121837,
+    "openai": 1.3157273999999999,
+    "openai_main": 1.3157273999999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 25,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2212532,
+    "openai": 2.9230363999999995,
+    "openai_main": 2.9230363999999995,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 45,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4343512,
+    "openai": 5.341317400000001,
+    "openai_main": 5.341317400000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.19771589999999997,
+    "openai": 3.3758318000000003,
+    "openai_main": 3.3758318000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.054765499999999995,
+    "openai": 0.903286,
+    "openai_main": 0.903286,
+    "openai_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0620525,
+    "openai": 1.2146449999999998,
+    "openai_main": 1.2146449999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09039810000000001,
+    "openai": 1.4705562,
+    "openai_main": 1.4705562,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 43,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.43502979999999997,
+    "openai": 5.130559599999998,
+    "openai_main": 5.130559599999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23284380000000002,
+    "openai": 3.543952599999999,
+    "openai_main": 3.543952599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 36,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3497332,
+    "openai": 4.2739514,
+    "openai_main": 4.2739514,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0893954,
+    "openai": 1.5695557999999998,
+    "openai_main": 1.5695557999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0564406,
+    "openai": 0.8059212,
+    "openai_main": 0.8059212,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.06866610000000001,
+    "openai": 1.0312222000000002,
+    "openai_main": 1.0312222000000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.06500550000000001,
+    "openai": 1.022191,
+    "openai_main": 1.022191,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 35,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2811774,
+    "openai": 4.0352398,
+    "openai_main": 4.0352398,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0722509,
+    "openai": 1.0382468,
+    "openai_main": 1.0382468,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 16,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1400214,
+    "openai": 1.8686278,
+    "openai_main": 1.8686278,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 47,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5666534000000001,
+    "openai": 5.799106799999999,
+    "openai_main": 5.799106799999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0950113,
+    "openai": 1.4819376,
+    "openai_main": 1.4819376,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 39,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.25482240000000006,
+    "openai": 4.3858048,
+    "openai_main": 4.3858048,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 60,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.6486191,
+    "openai": 7.251543200000002,
+    "openai_main": 7.251543200000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 46,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.30403280000000005,
+    "openai": 5.182400599999999,
+    "openai_main": 5.182400599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.10699239999999999,
+    "openai": 1.4049848000000003,
+    "openai_main": 1.4049848000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.13681019999999997,
+    "openai": 1.5640303999999998,
+    "openai_main": 1.5640303999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 49,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3709363,
+    "openai": 5.615582599999999,
+    "openai_main": 5.615582599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 21,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.18403210000000003,
+    "openai": 2.4530992,
+    "openai_main": 2.4530992,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 84,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5168603000000002,
+    "openai": 9.399685600000002,
+    "openai_main": 9.399685600000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 19,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1467886,
+    "openai": 2.1829222,
+    "openai_main": 2.1829222,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 82,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.7305400000000003,
+    "openai": 9.624349999999996,
+    "openai_main": 9.624349999999996,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09945179999999999,
+    "openai": 1.6881435999999999,
+    "openai_main": 1.6881435999999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1327362,
+    "openai": 1.2555724000000001,
+    "openai_main": 1.2555724000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 32,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2863905,
+    "openai": 3.7440809999999995,
+    "openai_main": 3.7440809999999995,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0479924,
+    "openai": 0.7896848000000001,
+    "openai_main": 0.7896848000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 36,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3147180999999999,
+    "openai": 4.201286199999998,
+    "openai_main": 4.201286199999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.38224499999999995,
+    "openai": 4.44228,
+    "openai_main": 4.44228,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1406194,
+    "openai": 1.4720488000000003,
+    "openai_main": 1.4720488000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.07224209999999999,
+    "openai": 1.2384992000000001,
+    "openai_main": 1.2384992000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 33,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4244548999999999,
+    "openai": 4.1245798,
+    "openai_main": 4.1245798,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.22088549999999998,
+    "openai": 3.420626,
+    "openai_main": 3.420626,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 50,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4950166,
+    "openai": 5.9548082,
+    "openai_main": 5.9548082,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 39,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3595648,
+    "openai": 4.597779599999999,
+    "openai_main": 4.597779599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 42,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3119412999999999,
+    "openai": 4.8006176,
+    "openai_main": 4.8006176,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23905360000000003,
+    "openai": 3.4575671999999997,
+    "openai_main": 3.4575671999999997,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0555034,
+    "openai": 0.9042768,
+    "openai_main": 0.9042768,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.06792550000000001,
+    "openai": 1.029921,
+    "openai_main": 1.029921,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 50,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.32898750000000004,
+    "openai": 5.634865,
+    "openai_main": 5.634865,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09594279999999998,
+    "openai": 1.2831006,
+    "openai_main": 1.2831006,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1557293,
+    "openai": 1.7994936000000001,
+    "openai_main": 1.7994936000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.056336699999999997,
+    "openai": 1.0048283999999998,
+    "openai_main": 1.0048283999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.07880849999999999,
+    "openai": 1.2490020000000002,
+    "openai_main": 1.2490020000000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 23,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.24231869999999997,
+    "openai": 2.7689274,
+    "openai_main": 2.7689274,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 49,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.34618509999999997,
+    "openai": 5.5638602,
+    "openai_main": 5.5638602,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 44,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5855307000000001,
+    "openai": 5.5321614,
+    "openai_main": 5.5321614,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 32,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3542187999999999,
+    "openai": 3.8810176,
+    "openai_main": 3.8810176,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 17,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1388435,
+    "openai": 1.966957,
+    "openai_main": 1.966957,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 24,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.266798,
+    "openai": 2.913410999999999,
+    "openai_main": 2.913410999999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 35,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3292791,
+    "openai": 4.1322282,
+    "openai_main": 4.1322282,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.28222579999999997,
+    "openai": 3.5376216,
+    "openai_main": 3.5376216,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 27,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.28245839999999994,
+    "openai": 3.2469868000000006,
+    "openai_main": 3.2469868000000006,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 68,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5278942999999998,
+    "openai": 7.827378599999999,
+    "openai_main": 7.827378599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0559308,
+    "openai": 1.0061466,
+    "openai_main": 1.0061466,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.07904030000000001,
+    "openai": 0.9529105999999999,
+    "openai_main": 0.9529105999999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.08803249999999999,
+    "openai": 1.467095,
+    "openai_main": 1.467095,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 42,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4420912999999999,
+    "openai": 5.050867599999999,
+    "openai_main": 5.050867599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 20,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2066575,
+    "openai": 2.3996199999999996,
+    "openai_main": 2.3996199999999996,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 53,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3680768,
+    "openai": 6.008808599999998,
+    "openai_main": 6.008808599999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 47,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3727013999999999,
+    "openai": 5.4175728,
+    "openai_main": 5.4175728,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 42,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.28398119999999993,
+    "openai": 4.7467874000000005,
+    "openai_main": 4.7467874000000005,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 85,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.7110504999999999,
+    "openai": 9.886270999999999,
+    "openai_main": 9.886270999999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 39,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.42093459999999994,
+    "openai": 4.7152992000000005,
+    "openai_main": 4.7152992000000005,
+    "openai_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.07200680000000001,
+    "openai": 1.0360786,
+    "openai_main": 1.0360786,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0872849,
+    "openai": 1.1664447999999998,
+    "openai_main": 1.1664447999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 27,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.21944940000000002,
+    "openai": 3.1186887999999993,
+    "openai_main": 3.1186887999999993,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 56,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3817866999999999,
+    "openai": 6.336218400000003,
+    "openai_main": 6.336218400000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 73,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.46963630000000006,
+    "openai": 8.2047376,
+    "openai_main": 8.2047376,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 24,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23861299999999996,
+    "openai": 2.8619160000000003,
+    "openai_main": 2.8619160000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.08767350000000002,
+    "openai": 1.266767,
+    "openai_main": 1.266767,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 38,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.34393720000000005,
+    "openai": 4.459144399999999,
+    "openai_main": 4.459144399999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 41,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.41799909999999996,
+    "openai": 4.9124582,
+    "openai_main": 4.9124582,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 17,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.18479530000000002,
+    "openai": 2.0561306,
+    "openai_main": 2.0561306,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3348352,
+    "openai": 3.7474604000000005,
+    "openai_main": 3.7474604000000005,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1517983,
+    "openai": 1.7924316,
+    "openai_main": 1.7924316,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 81,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.6143033000000001,
+    "openai": 9.293566599999997,
+    "openai_main": 9.293566599999997,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 29,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23111420000000005,
+    "openai": 3.338478400000001,
+    "openai_main": 3.338478400000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.075437,
+    "openai": 0.945114,
+    "openai_main": 0.945114,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 20,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1775437,
+    "openai": 2.3376274,
+    "openai_main": 2.3376274,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 22,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.21459840000000005,
+    "openai": 2.6142268000000004,
+    "openai_main": 2.6142268000000004,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3313104999999999,
+    "openai": 4.329946,
+    "openai_main": 4.329946,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.19580870000000003,
+    "openai": 3.3763274,
+    "openai_main": 3.3763274,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.37998150000000014,
+    "openai": 4.428873000000001,
+    "openai_main": 4.428873000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.06844710000000001,
+    "openai": 1.3286192000000001,
+    "openai_main": 1.3286192000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 44,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.35953449999999987,
+    "openai": 5.095934000000001,
+    "openai_main": 5.095934000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 34,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.30629220000000007,
+    "openai": 3.9795244,
+    "openai_main": 3.9795244,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 23,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.22595730000000003,
+    "openai": 2.7338446,
+    "openai_main": 2.7338446,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0740625,
+    "openai": 0.942225,
+    "openai_main": 0.942225,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 16,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.16680970000000003,
+    "openai": 1.9217494,
+    "openai_main": 1.9217494,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 32,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.21422400000000003,
+    "openai": 3.608148,
+    "openai_main": 3.608148,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 65,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5957721999999999,
+    "openai": 7.6586544000000005,
+    "openai_main": 7.6586544000000005,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 49,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5541625999999997,
+    "openai": 5.976185199999999,
+    "openai_main": 5.976185199999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 41,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.33154369999999994,
+    "openai": 4.7341923999999995,
+    "openai_main": 4.7341923999999995,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 43,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4464691,
+    "openai": 5.1635382,
+    "openai_main": 5.1635382,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 17,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1940196,
+    "openai": 2.0763992,
+    "openai_main": 2.0763992,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 33,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.35450899999999996,
+    "openai": 3.9867430000000006,
+    "openai_main": 3.9867430000000006,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 42,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4531933,
+    "openai": 5.0717766,
+    "openai_main": 5.0717766,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2549924999999999,
+    "openai": 4.181295,
+    "openai_main": 4.181295,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 24,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3027779,
+    "openai": 2.9836707999999996,
+    "openai_main": 2.9836707999999996,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.27612820000000005,
+    "openai": 4.2243814,
+    "openai_main": 4.2243814,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 25,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.32770640000000006,
+    "openai": 3.1331928000000002,
+    "openai_main": 3.1331928000000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1168571,
+    "openai": 1.4252892000000001,
+    "openai_main": 1.4252892000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1068284,
+    "openai": 1.2039418,
+    "openai_main": 1.2039418,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 28,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.25333150000000004,
+    "openai": 3.286168000000001,
+    "openai_main": 3.286168000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0783925,
+    "openai": 1.050405,
+    "openai_main": 1.050405,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.11983779999999998,
+    "openai": 1.3310856000000002,
+    "openai_main": 1.3310856000000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 66,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5618877000000001,
+    "openai": 7.688630399999999,
+    "openai_main": 7.688630399999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0711622,
+    "openai": 1.0365344,
+    "openai_main": 1.0365344,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.05098710000000001,
+    "openai": 0.9939842000000001,
+    "openai_main": 0.9939842000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 95,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.8069744999999999,
+    "openai": 11.079209000000004,
+    "openai_main": 11.079209000000004,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 36,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.25459350000000003,
+    "openai": 4.074737000000001,
+    "openai_main": 4.074737000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 35,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23882840000000002,
+    "openai": 3.9531818,
+    "openai_main": 3.9531818,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.08855859999999999,
+    "openai": 1.1693922,
+    "openai_main": 1.1693922,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 38,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4286319999999999,
+    "openai": 4.628809000000001,
+    "openai_main": 4.628809000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.11900540000000001,
+    "openai": 1.5289708,
+    "openai_main": 1.5289708,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 64,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3920141000000001,
+    "openai": 7.1537631999999975,
+    "openai_main": 7.1537631999999975,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.08104220000000001,
+    "openai": 1.4547394,
+    "openai_main": 1.4547394,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 50,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3363441,
+    "openai": 5.6420882,
+    "openai_main": 5.6420882,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 48,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3784996,
+    "openai": 5.524929200000002,
+    "openai_main": 5.524929200000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09737290000000001,
+    "openai": 1.3843808,
+    "openai_main": 1.3843808,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 34,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.36833639999999995,
+    "openai": 4.1096328,
+    "openai_main": 4.1096328,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 90,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.6876685000000001,
+    "openai": 10.335691999999998,
+    "openai_main": 10.335691999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0591807,
+    "openai": 0.9113514,
+    "openai_main": 0.9113514,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.13392749999999998,
+    "openai": 1.5573900000000003,
+    "openai_main": 1.5573900000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 30,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.242638,
+    "openai": 3.467091000000001,
+    "openai_main": 3.467091000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 64,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.5654609,
+    "openai": 7.491991799999999,
+    "openai_main": 7.491991799999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 27,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.25339649999999997,
+    "openai": 3.182303,
+    "openai_main": 3.182303,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 38,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3273469,
+    "openai": 4.429613799999999,
+    "openai_main": 4.429613799999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0680866,
+    "openai": 1.0301082000000001,
+    "openai_main": 1.0301082000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.14964,
+    "openai": 1.78686,
+    "openai_main": 1.78686,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 27,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1867167,
+    "openai": 3.0575084,
+    "openai_main": 3.0575084,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0570663,
+    "openai": 0.8075426000000001,
+    "openai_main": 0.8075426000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 57,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4679531,
+    "openai": 6.5885962,
+    "openai_main": 6.5885962,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 24,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2939871,
+    "openai": 2.9723292,
+    "openai_main": 2.9723292,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 16,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.10883790000000002,
+    "openai": 1.8055408,
+    "openai_main": 1.8055408,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 36,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4119183,
+    "openai": 4.397151599999999,
+    "openai_main": 4.397151599999999,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09064670000000001,
+    "openai": 1.0750834,
+    "openai_main": 1.0750834,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 17,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.17797970000000002,
+    "openai": 2.0459093999999998,
+    "openai_main": 2.0459093999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 19,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.12118760000000002,
+    "openai": 2.1309101999999998,
+    "openai_main": 2.1309101999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 51,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.27822650000000004,
+    "openai": 5.634898,
+    "openai_main": 5.634898,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 38,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.35282630000000004,
+    "openai": 4.4809426,
+    "openai_main": 4.4809426,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.07250000000000001,
+    "openai": 0.93844,
+    "openai_main": 0.93844,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.31824690000000005,
+    "openai": 3.713743800000001,
+    "openai_main": 3.713743800000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 22,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1939143,
+    "openai": 2.5731686,
+    "openai_main": 2.5731686,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.33211660000000004,
+    "openai": 3.7376682,
+    "openai_main": 3.7376682,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 59,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4878322000000001,
+    "openai": 6.843269400000002,
+    "openai_main": 6.843269400000002,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 66,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4160137000000002,
+    "openai": 7.407572399999996,
+    "openai_main": 7.407572399999996,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 39,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.22661020000000007,
+    "openai": 4.3326304,
+    "openai_main": 4.3326304,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.04541629999999999,
+    "openai": 0.9849076,
+    "openai_main": 0.9849076,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0571061,
+    "openai": 1.0069072000000001,
+    "openai_main": 1.0069072000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 35,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.29966420000000005,
+    "openai": 4.0726434000000005,
+    "openai_main": 4.0726434000000005,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 47,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.36532710000000007,
+    "openai": 5.3990092,
+    "openai_main": 5.3990092,
+    "openai_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.0734955,
+    "openai": 0.940036,
+    "openai_main": 0.940036,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 63,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.45514299999999996,
+    "openai": 7.171570999999998,
+    "openai_main": 7.171570999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.10880429999999999,
+    "openai": 1.5074885999999998,
+    "openai_main": 1.5074885999999998,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.09010009999999999,
+    "openai": 0.8744702,
+    "openai_main": 0.8744702,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 36,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2684134,
+    "openai": 4.107851800000001,
+    "openai_main": 4.107851800000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 23,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.23423170000000001,
+    "openai": 2.7473633999999993,
+    "openai_main": 2.7473633999999993,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3331169,
+    "openai": 3.7368688000000008,
+    "openai_main": 3.7368688000000008,
+    "openai_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.047686799999999994,
+    "openai": 0.9884936000000001,
+    "openai_main": 0.9884936000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1407549,
+    "openai": 1.7713898,
+    "openai_main": 1.7713898,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 18,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.14566159999999997,
+    "openai": 2.0789731999999996,
+    "openai_main": 2.0789731999999996,
+    "openai_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.1521103,
+    "openai": 1.7943206000000003,
+    "openai_main": 1.7943206000000003,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 48,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.4763325000000001,
+    "openai": 5.726825000000001,
+    "openai_main": 5.726825000000001,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 48,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.3691680999999999,
+    "openai": 5.5109612,
+    "openai_main": 5.5109612,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 33,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.2685882,
+    "openai": 3.8181814,
+    "openai_main": 3.8181814,
+    "openai_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 60,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.43450750000000016,
+    "openai": 6.84297,
+    "openai_main": 6.84297,
+    "openai_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 31,
+    "subRequests": 0,
+    "models": [
+     "sol"
+    ],
+    "raw": 0.21808399999999994,
+    "openai": 3.520068,
+    "openai_main": 3.520068,
+    "openai_expiries": 0
+   }
+  ]
+ },
+ "source": "native drafts reused from pool61-flagship-c69il (identical cached drafts; traces retained there)"
+}

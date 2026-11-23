@@ -254,10 +254,25 @@ export function writerEnvironmentHash(
  */
 export function acceptedEnvironmentHash(
   root: string,
-  opts: { resume?: boolean; acceptEnvironmentChange?: boolean },
+  opts: { resume?: boolean; acceptEnvironmentChange?: boolean; environmentFrom?: string },
   old: ComparisonManifest | undefined,
   current: string,
 ): string {
+  // A new experiment may adopt another run's recorded hash (--environment-from,
+  // with --accept-environment-change), so its writer keys match that run's
+  // cached drafts after a reboot changed the launching environment. Logged.
+  if (!old && opts.environmentFrom && opts.acceptEnvironmentChange) {
+    const source = read<ComparisonManifest>(join(resolve(opts.environmentFrom), "manifest.json"));
+    const adopted = source.settings?.toolchain?.environmentHash;
+    if (adopted && adopted !== current) {
+      const file = join(root, "environment-overrides.json");
+      const log = existsSync(file) ? read<unknown[]>(file) : [];
+      log.push({ at: new Date().toISOString(), recorded: adopted, current, source: resolve(opts.environmentFrom) });
+      mkdirSync(root, { recursive: true });
+      writeFileSync(file, JSON.stringify(log, null, 2) + "\n");
+      return adopted;
+    }
+  }
   const recorded = old?.settings?.toolchain?.environmentHash;
   if (!opts.acceptEnvironmentChange || !opts.resume || !recorded || recorded === current)
     return current;

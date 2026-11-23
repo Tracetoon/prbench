@@ -1,0 +1,49 @@
+{
+ "schema": "prbench.golden-skills/v1",
+ "note": "Identity of the Tracetoon skill bundle used by the flagship run (native agent vs Tracetoon). treeSha256 = sha256 of the sorted 'sha256  path' list of every file in the bundle directory. The native arm has no skill. The baseline slot in the manifest names candidate62 only because prbench records one; no baseline drafts were written (--systems native,candidate).",
+ "candidate": {
+  "role": "tracetoon-candidate (candidate70b: delegated drafter on the session model at low effort, minimal coordinator, Claude Code review runner, Validation receipts fix)",
+  "tracetoon": {
+   "tag": "candidate70b",
+   "commit": "b9597b0",
+   "branch": "c68 (from tag candidate62)"
+  },
+  "bundleDir": "results/evgraph-skills/candidate70b",
+  "skillLines": {
+   "Drafter model": "inherit",
+   "Drafter effort": "low",
+   "Reviewer model": "cheap",
+   "Reviewer effort": "xhigh",
+   "Review passes": "2",
+   "Review lenses": "d",
+   "Reviewer runner": "auto",
+   "Review recheck": "none"
+  },
+  "manifestIdentity": {
+   "version": "1.0.0-rc.24",
+   "buildId": "1bb8725e440a71e053b27df23de9c2fed2821f6a44a43b87d2ca34f4c7662dc1",
+   "sha256": "aac760e91300470b7672d5ade1028b52b0d89d835944217a46180098d0c3b2ef",
+   "outputReceiptSha256": "2a78f5b1ebb05fbfb69b65c9f71f66ffd2b283bb7e69bdb7cac798fbe73ad4e2"
+  },
+  "manifestHash": "b4a56200bce5cf5681b5117308bad90822089cd77e2c3febc497294088165bf8",
+  "runtime": "tracetoon-linux-x64",
+  "treeSha256": "38b6a94e8315a4631723e3e3cd94293924d6e06be0f697230c77bbbe37aa75c2",
+  "files": 32
+ },
+ "harness": {
+  "claude": {
+   "harnessRevision": "1a9de82fa261907deebe9604b65c114f74911de1",
+   "harnessHash": "6ea1e90b0f1dffcd67ac387a42e71a26791aca183b1d020626770a60222b54f7",
+   "harnessSnapshotHash": "8245d74d263c84eac073febd8dfa2a9d0de15055ef9499ec6d5efa223fdf0d17",
+   "bun": "1.3.14",
+   "at": "2026-11-23T09:14:07.107Z"
+  },
+  "codex": {
+   "harnessRevision": "189bd5fec0d66bf4034246618de5ca320ebf1807",
+   "harnessHash": "97bf21e79aa614b31343509ca5cd1cf2752250b6ecca20dd66d4828832081756",
+   "harnessSnapshotHash": "4fcd81831a85c0a5c8608b01e2563a8e410bbe28026854ef2591a5e278e39d0e",
+   "bun": "1.3.14",
+   "at": "2026-11-23T09:13:41.697Z"
+  }
+ }
+}

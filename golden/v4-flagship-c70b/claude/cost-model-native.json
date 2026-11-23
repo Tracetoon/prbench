@@ -1,0 +1,3322 @@
+{
+ "prefix": 500000,
+ "summary": {
+  "claude-native": {
+   "drafts": 183,
+   "models": [
+    "opus"
+   ],
+   "mainRequests": 10.2022,
+   "subRequests": 0,
+   "raw": 0.2649,
+   "subscription": 1.2852,
+   "subscription_main": 1.2852,
+   "subscription_expiries": 0,
+   "api": 2.4392,
+   "api_main": 2.4392,
+   "api_expiries": 0.5027,
+   "api1h": 1.2852,
+   "api1h_main": 1.2852,
+   "api1h_expiries": 0
+  }
+ },
+ "rows": {
+  "claude-native": [
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.34394199999999997,
+    "subscription": 1.543942,
+    "subscription_main": 1.543942,
+    "subscription_expiries": 0,
+    "api": 3.8755390000000007,
+    "api_main": 3.8755390000000007,
+    "api_expiries": 1,
+    "api1h": 1.543942,
+    "api1h_main": 1.543942,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.17494300000000002,
+    "subscription": 0.974943,
+    "subscription_main": 0.974943,
+    "subscription_expiries": 0,
+    "api": 0.9418500000000001,
+    "api_main": 0.9418500000000001,
+    "api_expiries": 0,
+    "api1h": 0.974943,
+    "api1h_main": 0.974943,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.199814,
+    "subscription": 0.9998139999999999,
+    "subscription_main": 0.9998139999999999,
+    "subscription_expiries": 0,
+    "api": 0.9581379999999999,
+    "api_main": 0.9581379999999999,
+    "api_expiries": 0,
+    "api1h": 0.9998139999999999,
+    "api1h_main": 0.9998139999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2432472,
+    "subscription": 1.3432472,
+    "subscription_main": 1.3432472,
+    "subscription_expiries": 0,
+    "api": 8.497269200000002,
+    "api_main": 8.497269200000002,
+    "api_expiries": 3,
+    "api1h": 1.3432472,
+    "api1h_main": 1.3432472,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22735160000000001,
+    "subscription": 0.9273516000000002,
+    "subscription_main": 0.9273516000000002,
+    "subscription_expiries": 0,
+    "api": 0.8794476,
+    "api_main": 0.8794476,
+    "api_expiries": 0,
+    "api1h": 0.9273516000000002,
+    "api1h_main": 0.9273516000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.23497820000000003,
+    "subscription": 1.1349782000000002,
+    "subscription_main": 1.1349782000000002,
+    "subscription_expiries": 0,
+    "api": 1.0872572,
+    "api_main": 1.0872572,
+    "api_expiries": 0,
+    "api1h": 1.1349782000000002,
+    "api1h_main": 1.1349782000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18762500000000001,
+    "subscription": 0.987625,
+    "subscription_main": 0.987625,
+    "subscription_expiries": 0,
+    "api": 0.95008,
+    "api_main": 0.95008,
+    "api_expiries": 0,
+    "api1h": 0.987625,
+    "api1h_main": 0.987625,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2096542,
+    "subscription": 1.1096542,
+    "subscription_main": 1.1096542,
+    "subscription_expiries": 0,
+    "api": 1.0664332,
+    "api_main": 1.0664332,
+    "api_expiries": 0,
+    "api1h": 1.1096542,
+    "api1h_main": 1.1096542,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.30840819999999997,
+    "subscription": 1.7084081999999998,
+    "subscription_main": 1.7084081999999998,
+    "subscription_expiries": 0,
+    "api": 1.6518791999999998,
+    "api_main": 1.6518791999999998,
+    "api_expiries": 0,
+    "api1h": 1.7084081999999998,
+    "api1h_main": 1.7084081999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1609566,
+    "subscription": 0.8609566,
+    "subscription_main": 0.8609566,
+    "subscription_expiries": 0,
+    "api": 0.8272936,
+    "api_main": 0.8272936,
+    "api_expiries": 0,
+    "api1h": 0.8609566,
+    "api1h_main": 0.8609566,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1728556,
+    "subscription": 0.7728556,
+    "subscription_main": 0.7728556,
+    "subscription_expiries": 0,
+    "api": 0.7312065999999999,
+    "api_main": 0.7312065999999999,
+    "api_expiries": 0,
+    "api1h": 0.7728556,
+    "api1h_main": 0.7728556,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.12869239999999998,
+    "subscription": 0.7286924,
+    "subscription_main": 0.7286924,
+    "subscription_expiries": 0,
+    "api": 0.7024273999999999,
+    "api_main": 0.7024273999999999,
+    "api_expiries": 0,
+    "api1h": 0.7286924,
+    "api1h_main": 0.7286924,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1572934,
+    "subscription": 0.7572934,
+    "subscription_main": 0.7572934,
+    "subscription_expiries": 0,
+    "api": 0.7228564,
+    "api_main": 0.7228564,
+    "api_expiries": 0,
+    "api1h": 0.7572934,
+    "api1h_main": 0.7572934,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2604562,
+    "subscription": 1.3604562,
+    "subscription_main": 1.3604562,
+    "subscription_expiries": 0,
+    "api": 1.3086162,
+    "api_main": 1.3086162,
+    "api_expiries": 0,
+    "api1h": 1.3604562,
+    "api1h_main": 1.3604562,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.19707560000000002,
+    "subscription": 0.7970756,
+    "subscription_main": 0.7970756,
+    "subscription_expiries": 0,
+    "api": 0.7525466000000001,
+    "api_main": 0.7525466000000001,
+    "api_expiries": 0,
+    "api1h": 0.7970756,
+    "api1h_main": 0.7970756,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1805854,
+    "subscription": 0.8805853999999999,
+    "subscription_main": 0.8805853999999999,
+    "subscription_expiries": 0,
+    "api": 0.8416814,
+    "api_main": 0.8416814,
+    "api_expiries": 0,
+    "api1h": 0.8805853999999999,
+    "api1h_main": 0.8805853999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22930999999999999,
+    "subscription": 1.1293100000000003,
+    "subscription_main": 1.1293100000000003,
+    "subscription_expiries": 0,
+    "api": 5.883185,
+    "api_main": 5.883185,
+    "api_expiries": 2,
+    "api1h": 1.1293100000000003,
+    "api1h_main": 1.1293100000000003,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18749380000000002,
+    "subscription": 0.8874938,
+    "subscription_main": 0.8874938,
+    "subscription_expiries": 0,
+    "api": 0.8461208,
+    "api_main": 0.8461208,
+    "api_expiries": 0,
+    "api1h": 0.8874938,
+    "api1h_main": 0.8874938,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1500262,
+    "subscription": 0.7500262,
+    "subscription_main": 0.7500262,
+    "subscription_expiries": 0,
+    "api": 0.7189551999999999,
+    "api_main": 0.7189551999999999,
+    "api_expiries": 0,
+    "api1h": 0.7500262,
+    "api1h_main": 0.7500262,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3588146,
+    "subscription": 1.2588146,
+    "subscription_main": 1.2588146,
+    "subscription_expiries": 0,
+    "api": 1.1756845999999999,
+    "api_main": 1.1756845999999999,
+    "api_expiries": 0,
+    "api1h": 1.2588146,
+    "api1h_main": 1.2588146,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.297682,
+    "subscription": 1.297682,
+    "subscription_main": 1.297682,
+    "subscription_expiries": 0,
+    "api": 6.0352190000000006,
+    "api_main": 6.0352190000000006,
+    "api_expiries": 2,
+    "api1h": 1.297682,
+    "api1h_main": 1.297682,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2374308,
+    "subscription": 1.2374307999999998,
+    "subscription_main": 1.2374307999999998,
+    "subscription_expiries": 0,
+    "api": 1.1908648,
+    "api_main": 1.1908648,
+    "api_expiries": 0,
+    "api1h": 1.2374307999999998,
+    "api1h_main": 1.2374307999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.35902680000000003,
+    "subscription": 1.5590267999999996,
+    "subscription_main": 1.5590267999999996,
+    "subscription_expiries": 0,
+    "api": 6.2804688,
+    "api_main": 6.2804688,
+    "api_expiries": 2,
+    "api1h": 1.5590267999999996,
+    "api1h_main": 1.5590267999999996,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18911099999999997,
+    "subscription": 0.7891110000000001,
+    "subscription_main": 0.7891110000000001,
+    "subscription_expiries": 0,
+    "api": 0.746151,
+    "api_main": 0.746151,
+    "api_expiries": 0,
+    "api1h": 0.7891110000000001,
+    "api1h_main": 0.7891110000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.15857120000000002,
+    "subscription": 0.8585712,
+    "subscription_main": 0.8585712,
+    "subscription_expiries": 0,
+    "api": 0.8277102,
+    "api_main": 0.8277102,
+    "api_expiries": 0,
+    "api1h": 0.8585712,
+    "api1h_main": 0.8585712,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 5,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.153942,
+    "subscription": 0.6539419999999999,
+    "subscription_main": 0.6539419999999999,
+    "subscription_expiries": 0,
+    "api": 0.617786,
+    "api_main": 0.617786,
+    "api_expiries": 0,
+    "api1h": 0.6539419999999999,
+    "api1h_main": 0.6539419999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1879942,
+    "subscription": 0.8879942,
+    "subscription_main": 0.8879942,
+    "subscription_expiries": 0,
+    "api": 0.8482651999999999,
+    "api_main": 0.8482651999999999,
+    "api_expiries": 0,
+    "api1h": 0.8879942,
+    "api1h_main": 0.8879942,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18429940000000003,
+    "subscription": 0.9842994,
+    "subscription_main": 0.9842994,
+    "subscription_expiries": 0,
+    "api": 0.9483624,
+    "api_main": 0.9483624,
+    "api_expiries": 0,
+    "api1h": 0.9842994,
+    "api1h_main": 0.9842994,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1913646,
+    "subscription": 1.0913646,
+    "subscription_main": 1.0913646,
+    "subscription_expiries": 0,
+    "api": 1.0528385999999998,
+    "api_main": 1.0528385999999998,
+    "api_expiries": 0,
+    "api1h": 1.0913646,
+    "api1h_main": 1.0913646,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1628542,
+    "subscription": 0.7628541999999999,
+    "subscription_main": 0.7628541999999999,
+    "subscription_expiries": 0,
+    "api": 0.7277242,
+    "api_main": 0.7277242,
+    "api_expiries": 0,
+    "api1h": 0.7628541999999999,
+    "api1h_main": 0.7628541999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2626174,
+    "subscription": 1.0626174,
+    "subscription_main": 1.0626174,
+    "subscription_expiries": 0,
+    "api": 1.0040364,
+    "api_main": 1.0040364,
+    "api_expiries": 0,
+    "api1h": 1.0626174,
+    "api1h_main": 1.0626174,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3341526,
+    "subscription": 1.3341526000000001,
+    "subscription_main": 1.3341526000000001,
+    "subscription_expiries": 0,
+    "api": 1.2593116000000002,
+    "api_main": 1.2593116000000002,
+    "api_expiries": 0,
+    "api1h": 1.3341526000000001,
+    "api1h_main": 1.3341526000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3257706,
+    "subscription": 1.7257706,
+    "subscription_main": 1.7257706,
+    "subscription_expiries": 0,
+    "api": 6.469031600000001,
+    "api_main": 6.469031600000001,
+    "api_expiries": 2,
+    "api1h": 1.7257706,
+    "api1h_main": 1.7257706,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.30133540000000003,
+    "subscription": 1.5013354000000003,
+    "subscription_main": 1.5013354000000003,
+    "subscription_expiries": 0,
+    "api": 6.2496874,
+    "api_main": 6.2496874,
+    "api_expiries": 2,
+    "api1h": 1.5013354000000003,
+    "api1h_main": 1.5013354000000003,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2297116,
+    "subscription": 1.2297116,
+    "subscription_main": 1.2297116,
+    "subscription_expiries": 0,
+    "api": 1.1848166,
+    "api_main": 1.1848166,
+    "api_expiries": 0,
+    "api1h": 1.2297116,
+    "api1h_main": 1.2297116,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.29994760000000004,
+    "subscription": 1.3999476,
+    "subscription_main": 1.3999476,
+    "subscription_expiries": 0,
+    "api": 1.3419126000000001,
+    "api_main": 1.3419126000000001,
+    "api_expiries": 0,
+    "api1h": 1.3999476,
+    "api1h_main": 1.3999476,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 5,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.150058,
+    "subscription": 0.6500579999999999,
+    "subscription_main": 0.6500579999999999,
+    "subscription_expiries": 0,
+    "api": 0.616677,
+    "api_main": 0.616677,
+    "api_expiries": 0,
+    "api1h": 0.6500579999999999,
+    "api1h_main": 0.6500579999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3502482,
+    "subscription": 1.4502481999999999,
+    "subscription_main": 1.4502481999999999,
+    "subscription_expiries": 0,
+    "api": 1.3771441999999998,
+    "api_main": 1.3771441999999998,
+    "api_expiries": 0,
+    "api1h": 1.4502481999999999,
+    "api1h_main": 1.4502481999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 48,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 1.5108470000000005,
+    "subscription": 6.310847000000001,
+    "subscription_main": 6.310847000000001,
+    "subscription_expiries": 0,
+    "api": 13.306141999999998,
+    "api_main": 13.306141999999998,
+    "api_expiries": 3,
+    "api1h": 6.310847000000001,
+    "api1h_main": 6.310847000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.41206560000000003,
+    "subscription": 1.6120656000000002,
+    "subscription_main": 1.6120656000000002,
+    "subscription_expiries": 0,
+    "api": 1.5207276,
+    "api_main": 1.5207276,
+    "api_expiries": 0,
+    "api1h": 1.6120656000000002,
+    "api1h_main": 1.6120656000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.37778459999999997,
+    "subscription": 1.4777846,
+    "subscription_main": 1.4777846,
+    "subscription_expiries": 0,
+    "api": 3.7908055999999997,
+    "api_main": 3.7908055999999997,
+    "api_expiries": 1,
+    "api1h": 1.4777846,
+    "api1h_main": 1.4777846,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.21854820000000005,
+    "subscription": 1.0185482,
+    "subscription_main": 1.0185482,
+    "subscription_expiries": 0,
+    "api": 0.9732781999999999,
+    "api_main": 0.9732781999999999,
+    "api_expiries": 0,
+    "api1h": 1.0185482,
+    "api1h_main": 1.0185482,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18244760000000002,
+    "subscription": 0.8824475999999999,
+    "subscription_main": 0.8824475999999999,
+    "subscription_expiries": 0,
+    "api": 0.8419146000000001,
+    "api_main": 0.8419146000000001,
+    "api_expiries": 0,
+    "api1h": 0.8824475999999999,
+    "api1h_main": 0.8824475999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.282179,
+    "subscription": 1.082179,
+    "subscription_main": 1.082179,
+    "subscription_expiries": 0,
+    "api": 1.017391,
+    "api_main": 1.017391,
+    "api_expiries": 0,
+    "api1h": 1.082179,
+    "api1h_main": 1.082179,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1426632,
+    "subscription": 0.7426632,
+    "subscription_main": 0.7426632,
+    "subscription_expiries": 0,
+    "api": 0.7121052,
+    "api_main": 0.7121052,
+    "api_expiries": 0,
+    "api1h": 0.7426632,
+    "api1h_main": 0.7426632,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20016119999999998,
+    "subscription": 1.0001612,
+    "subscription_main": 1.0001612,
+    "subscription_expiries": 0,
+    "api": 0.9585152,
+    "api_main": 0.9585152,
+    "api_expiries": 0,
+    "api1h": 1.0001612,
+    "api1h_main": 1.0001612,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.17435459999999997,
+    "subscription": 0.9743546,
+    "subscription_main": 0.9743546,
+    "subscription_expiries": 0,
+    "api": 0.9398065999999999,
+    "api_main": 0.9398065999999999,
+    "api_expiries": 0,
+    "api1h": 0.9743546,
+    "api1h_main": 0.9743546,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.21175460000000002,
+    "subscription": 1.0117546000000002,
+    "subscription_main": 1.0117546000000002,
+    "subscription_expiries": 0,
+    "api": 0.9664756000000001,
+    "api_main": 0.9664756000000001,
+    "api_expiries": 0,
+    "api1h": 1.0117546000000002,
+    "api1h_main": 1.0117546000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.25766760000000005,
+    "subscription": 1.3576676,
+    "subscription_main": 1.3576676,
+    "subscription_expiries": 0,
+    "api": 1.3099736,
+    "api_main": 1.3099736,
+    "api_expiries": 0,
+    "api1h": 1.3576676,
+    "api1h_main": 1.3576676,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.171182,
+    "subscription": 0.971182,
+    "subscription_main": 0.971182,
+    "subscription_expiries": 0,
+    "api": 0.9375039999999999,
+    "api_main": 0.9375039999999999,
+    "api_expiries": 0,
+    "api1h": 0.971182,
+    "api1h_main": 0.971182,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2279366,
+    "subscription": 1.3279366000000001,
+    "subscription_main": 1.3279366000000001,
+    "subscription_expiries": 0,
+    "api": 6.086197600000001,
+    "api_main": 6.086197600000001,
+    "api_expiries": 2,
+    "api1h": 1.3279366000000001,
+    "api1h_main": 1.3279366000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-javafx-maven",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20374799999999998,
+    "subscription": 0.903748,
+    "subscription_main": 0.903748,
+    "subscription_expiries": 0,
+    "api": 0.8583999999999999,
+    "api_main": 0.8583999999999999,
+    "api_expiries": 0,
+    "api1h": 0.903748,
+    "api1h_main": 0.903748,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.310589,
+    "subscription": 1.710589,
+    "subscription_main": 1.710589,
+    "subscription_expiries": 0,
+    "api": 4.0545100000000005,
+    "api_main": 4.0545100000000005,
+    "api_expiries": 1,
+    "api1h": 1.710589,
+    "api1h_main": 1.710589,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.27090000000000003,
+    "subscription": 1.1708999999999998,
+    "subscription_main": 1.1708999999999998,
+    "subscription_expiries": 0,
+    "api": 3.515286,
+    "api_main": 3.515286,
+    "api_expiries": 1,
+    "api1h": 1.1708999999999998,
+    "api1h_main": 1.1708999999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.238989,
+    "subscription": 1.138989,
+    "subscription_main": 1.138989,
+    "subscription_expiries": 0,
+    "api": 1.0929870000000002,
+    "api_main": 1.0929870000000002,
+    "api_expiries": 0,
+    "api1h": 1.138989,
+    "api1h_main": 1.138989,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.296911,
+    "subscription": 1.596911,
+    "subscription_main": 1.596911,
+    "subscription_expiries": 0,
+    "api": 1.5427369999999998,
+    "api_main": 1.5427369999999998,
+    "api_expiries": 0,
+    "api1h": 1.596911,
+    "api1h_main": 1.596911,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2815754,
+    "subscription": 1.5815754,
+    "subscription_main": 1.5815754,
+    "subscription_expiries": 0,
+    "api": 1.5309564000000002,
+    "api_main": 1.5309564000000002,
+    "api_expiries": 0,
+    "api1h": 1.5815754,
+    "api1h_main": 1.5815754,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22636699999999998,
+    "subscription": 0.9263669999999999,
+    "subscription_main": 0.9263669999999999,
+    "subscription_expiries": 0,
+    "api": 0.873093,
+    "api_main": 0.873093,
+    "api_expiries": 0,
+    "api1h": 0.9263669999999999,
+    "api1h_main": 0.9263669999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2061124,
+    "subscription": 1.0061124000000001,
+    "subscription_main": 1.0061124000000001,
+    "subscription_expiries": 0,
+    "api": 0.9642264,
+    "api_main": 0.9642264,
+    "api_expiries": 0,
+    "api1h": 1.0061124000000001,
+    "api1h_main": 1.0061124000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-skill",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1865434,
+    "subscription": 0.8865434,
+    "subscription_main": 0.8865434,
+    "subscription_expiries": 0,
+    "api": 0.8461874,
+    "api_main": 0.8461874,
+    "api_expiries": 0,
+    "api1h": 0.8865434,
+    "api1h_main": 0.8865434,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1919108,
+    "subscription": 0.7919108,
+    "subscription_main": 0.7919108,
+    "subscription_expiries": 0,
+    "api": 0.7487438000000001,
+    "api_main": 0.7487438000000001,
+    "api_expiries": 0,
+    "api1h": 0.7919108,
+    "api1h_main": 0.7919108,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.17026500000000003,
+    "subscription": 0.770265,
+    "subscription_main": 0.770265,
+    "subscription_expiries": 0,
+    "api": 0.730587,
+    "api_main": 0.730587,
+    "api_expiries": 0,
+    "api1h": 0.770265,
+    "api1h_main": 0.770265,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2623978,
+    "subscription": 1.1623978000000001,
+    "subscription_main": 1.1623978000000001,
+    "subscription_expiries": 0,
+    "api": 1.1053827999999999,
+    "api_main": 1.1053827999999999,
+    "api_expiries": 0,
+    "api1h": 1.1623978000000001,
+    "api1h_main": 1.1623978000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1582258,
+    "subscription": 0.7582258,
+    "subscription_main": 0.7582258,
+    "subscription_expiries": 0,
+    "api": 0.7227808,
+    "api_main": 0.7227808,
+    "api_expiries": 0,
+    "api1h": 0.7582258,
+    "api1h_main": 0.7582258,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22403040000000002,
+    "subscription": 1.2240304,
+    "subscription_main": 1.2240304,
+    "subscription_expiries": 0,
+    "api": 1.1791804,
+    "api_main": 1.1791804,
+    "api_expiries": 0,
+    "api1h": 1.2240304,
+    "api1h_main": 1.2240304,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22153479999999998,
+    "subscription": 0.9215348000000001,
+    "subscription_main": 0.9215348000000001,
+    "subscription_expiries": 0,
+    "api": 0.8723498000000001,
+    "api_main": 0.8723498000000001,
+    "api_expiries": 0,
+    "api1h": 0.9215348000000001,
+    "api1h_main": 0.9215348000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-repl-usb-iface",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1842282,
+    "subscription": 0.7842282,
+    "subscription_main": 0.7842282,
+    "subscription_expiries": 0,
+    "api": 0.7424651999999999,
+    "api_main": 0.7424651999999999,
+    "api_expiries": 0,
+    "api1h": 0.7842282,
+    "api1h_main": 0.7842282,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20913639999999997,
+    "subscription": 1.0091363999999998,
+    "subscription_main": 1.0091363999999998,
+    "subscription_expiries": 0,
+    "api": 0.9678984,
+    "api_main": 0.9678984,
+    "api_expiries": 0,
+    "api1h": 1.0091363999999998,
+    "api1h_main": 1.0091363999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.21629420000000002,
+    "subscription": 0.8162942000000001,
+    "subscription_main": 0.8162942000000001,
+    "subscription_expiries": 0,
+    "api": 0.7621952,
+    "api_main": 0.7621952,
+    "api_expiries": 0,
+    "api1h": 0.8162942000000001,
+    "api1h_main": 0.8162942000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.29187180000000007,
+    "subscription": 1.3918718,
+    "subscription_main": 1.3918718,
+    "subscription_expiries": 0,
+    "api": 1.3344577999999998,
+    "api_main": 1.3344577999999998,
+    "api_expiries": 0,
+    "api1h": 1.3918718,
+    "api1h_main": 1.3918718,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.34084000000000003,
+    "subscription": 1.6408399999999999,
+    "subscription_main": 1.6408399999999999,
+    "subscription_expiries": 0,
+    "api": 1.574519,
+    "api_main": 1.574519,
+    "api_expiries": 0,
+    "api1h": 1.6408399999999999,
+    "api1h_main": 1.6408399999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1592338,
+    "subscription": 0.8592337999999999,
+    "subscription_main": 0.8592337999999999,
+    "subscription_expiries": 0,
+    "api": 0.8276827999999999,
+    "api_main": 0.8276827999999999,
+    "api_expiries": 0,
+    "api1h": 0.8592337999999999,
+    "api1h_main": 0.8592337999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.19626780000000002,
+    "subscription": 0.9962677999999999,
+    "subscription_main": 0.9962677999999999,
+    "subscription_expiries": 0,
+    "api": 3.3553058000000004,
+    "api_main": 3.3553058000000004,
+    "api_expiries": 1,
+    "api1h": 0.9962677999999999,
+    "api1h_main": 0.9962677999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-brief-owners-rows",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.27428699999999995,
+    "subscription": 1.5742869999999998,
+    "subscription_main": 1.5742869999999998,
+    "subscription_expiries": 0,
+    "api": 1.524334,
+    "api_main": 1.524334,
+    "api_expiries": 0,
+    "api1h": 1.5742869999999998,
+    "api1h_main": 1.5742869999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.271452,
+    "subscription": 1.5714519999999998,
+    "subscription_main": 1.5714519999999998,
+    "subscription_expiries": 0,
+    "api": 1.521652,
+    "api_main": 1.521652,
+    "api_expiries": 0,
+    "api1h": 1.5714519999999998,
+    "api1h_main": 1.5714519999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2524274,
+    "subscription": 1.3524273999999998,
+    "subscription_main": 1.3524273999999998,
+    "subscription_expiries": 0,
+    "api": 1.3032034,
+    "api_main": 1.3032034,
+    "api_expiries": 0,
+    "api1h": 1.3524273999999998,
+    "api1h_main": 1.3524273999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20600500000000002,
+    "subscription": 1.1060050000000001,
+    "subscription_main": 1.1060050000000001,
+    "subscription_expiries": 0,
+    "api": 1.0669419999999998,
+    "api_main": 1.0669419999999998,
+    "api_expiries": 0,
+    "api1h": 1.1060050000000001,
+    "api1h_main": 1.1060050000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.29424999999999996,
+    "subscription": 1.1942499999999998,
+    "subscription_main": 1.1942499999999998,
+    "subscription_expiries": 0,
+    "api": 1.131283,
+    "api_main": 1.131283,
+    "api_expiries": 0,
+    "api1h": 1.1942499999999998,
+    "api1h_main": 1.1942499999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2773144,
+    "subscription": 1.5773143999999997,
+    "subscription_main": 1.5773143999999997,
+    "subscription_expiries": 0,
+    "api": 1.5304424,
+    "api_main": 1.5304424,
+    "api_expiries": 0,
+    "api1h": 1.5773143999999997,
+    "api1h_main": 1.5773143999999997,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.23407500000000003,
+    "subscription": 1.334075,
+    "subscription_main": 1.334075,
+    "subscription_expiries": 0,
+    "api": 6.088091000000001,
+    "api_main": 6.088091000000001,
+    "api_expiries": 2,
+    "api1h": 1.334075,
+    "api1h_main": 1.334075,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1525548,
+    "subscription": 0.8525548,
+    "subscription_main": 0.8525548,
+    "subscription_expiries": 0,
+    "api": 0.8203828,
+    "api_main": 0.8203828,
+    "api_expiries": 0,
+    "api1h": 0.8525548,
+    "api1h_main": 0.8525548,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1952154,
+    "subscription": 0.8952153999999999,
+    "subscription_main": 0.8952153999999999,
+    "subscription_expiries": 0,
+    "api": 0.8532334,
+    "api_main": 0.8532334,
+    "api_expiries": 0,
+    "api1h": 0.8952153999999999,
+    "api1h_main": 0.8952153999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-ci",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20806039999999998,
+    "subscription": 0.9080604,
+    "subscription_main": 0.9080604,
+    "subscription_expiries": 0,
+    "api": 0.8608584,
+    "api_main": 0.8608584,
+    "api_expiries": 0,
+    "api1h": 0.9080604,
+    "api1h_main": 0.9080604,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.40714040000000007,
+    "subscription": 1.4071403999999998,
+    "subscription_main": 1.4071403999999998,
+    "subscription_expiries": 0,
+    "api": 6.098831400000001,
+    "api_main": 6.098831400000001,
+    "api_expiries": 2,
+    "api1h": 1.4071403999999998,
+    "api1h_main": 1.4071403999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.17735340000000002,
+    "subscription": 0.7773533999999999,
+    "subscription_main": 0.7773533999999999,
+    "subscription_expiries": 0,
+    "api": 0.7370844,
+    "api_main": 0.7370844,
+    "api_expiries": 0,
+    "api1h": 0.7773533999999999,
+    "api1h_main": 0.7773533999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2088208,
+    "subscription": 1.1088208,
+    "subscription_main": 1.1088208,
+    "subscription_expiries": 0,
+    "api": 5.866763799999999,
+    "api_main": 5.866763799999999,
+    "api_expiries": 2,
+    "api1h": 1.1088208,
+    "api1h_main": 1.1088208,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.267032,
+    "subscription": 1.4670320000000001,
+    "subscription_main": 1.4670320000000001,
+    "subscription_expiries": 0,
+    "api": 1.415873,
+    "api_main": 1.415873,
+    "api_expiries": 0,
+    "api1h": 1.4670320000000001,
+    "api1h_main": 1.4670320000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2105306,
+    "subscription": 1.2105306,
+    "subscription_main": 1.2105306,
+    "subscription_expiries": 0,
+    "api": 5.972232599999999,
+    "api_main": 5.972232599999999,
+    "api_expiries": 2,
+    "api1h": 1.2105306,
+    "api1h_main": 1.2105306,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2209568,
+    "subscription": 1.0209568000000002,
+    "subscription_main": 1.0209568000000002,
+    "subscription_expiries": 0,
+    "api": 0.9699747999999999,
+    "api_main": 0.9699747999999999,
+    "api_expiries": 0,
+    "api1h": 1.0209568000000002,
+    "api1h_main": 1.0209568000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 5,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1361136,
+    "subscription": 0.6361136,
+    "subscription_main": 0.6361136,
+    "subscription_expiries": 0,
+    "api": 0.6046765999999999,
+    "api_main": 0.6046765999999999,
+    "api_expiries": 0,
+    "api1h": 0.6361136,
+    "api1h_main": 0.6361136,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1920338,
+    "subscription": 0.9920337999999999,
+    "subscription_main": 0.9920337999999999,
+    "subscription_expiries": 0,
+    "api": 0.9514107999999999,
+    "api_main": 0.9514107999999999,
+    "api_expiries": 0,
+    "api1h": 0.9920337999999999,
+    "api1h_main": 0.9920337999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1550808,
+    "subscription": 0.8550808000000001,
+    "subscription_main": 0.8550808000000001,
+    "subscription_expiries": 0,
+    "api": 0.8240218,
+    "api_main": 0.8240218,
+    "api_expiries": 0,
+    "api1h": 0.8550808000000001,
+    "api1h_main": 0.8550808000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 19,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3989726000000001,
+    "subscription": 2.2989725999999995,
+    "subscription_main": 2.2989725999999995,
+    "subscription_expiries": 0,
+    "api": 4.6293366,
+    "api_main": 4.6293366,
+    "api_expiries": 1,
+    "api1h": 2.2989725999999995,
+    "api1h_main": 2.2989725999999995,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-guided-install",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2694248,
+    "subscription": 1.1694248,
+    "subscription_main": 1.1694248,
+    "subscription_expiries": 0,
+    "api": 1.1109158,
+    "api_main": 1.1109158,
+    "api_expiries": 0,
+    "api1h": 1.1694248,
+    "api1h_main": 1.1694248,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 17,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.43459059999999994,
+    "subscription": 2.1345905999999992,
+    "subscription_main": 2.1345905999999992,
+    "subscription_expiries": 0,
+    "api": 6.8556756000000005,
+    "api_main": 6.8556756000000005,
+    "api_expiries": 2,
+    "api1h": 2.1345905999999992,
+    "api1h_main": 2.1345905999999992,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-scoring",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.240158,
+    "subscription": 1.440158,
+    "subscription_main": 1.440158,
+    "subscription_expiries": 0,
+    "api": 1.3963070000000002,
+    "api_main": 1.3963070000000002,
+    "api_expiries": 0,
+    "api1h": 1.440158,
+    "api1h_main": 1.440158,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-update-command",
+    "mainRequests": 22,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.4431066,
+    "subscription": 2.6431065999999994,
+    "subscription_main": 2.6431065999999994,
+    "subscription_expiries": 0,
+    "api": 4.972564599999999,
+    "api_main": 4.972564599999999,
+    "api_expiries": 1,
+    "api1h": 2.6431065999999994,
+    "api1h_main": 2.6431065999999994,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.23345860000000002,
+    "subscription": 1.4334586000000002,
+    "subscription_main": 1.4334586000000002,
+    "subscription_expiries": 0,
+    "api": 10.993036599999998,
+    "api_main": 10.993036599999998,
+    "api_expiries": 4,
+    "api1h": 1.4334586000000002,
+    "api1h_main": 1.4334586000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.38395460000000003,
+    "subscription": 1.3839546,
+    "subscription_main": 1.3839546,
+    "subscription_expiries": 0,
+    "api": 1.2938766000000002,
+    "api_main": 1.2938766000000002,
+    "api_expiries": 0,
+    "api1h": 1.3839546,
+    "api1h_main": 1.3839546,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr9",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1488348,
+    "subscription": 0.7488348,
+    "subscription_main": 0.7488348,
+    "subscription_expiries": 0,
+    "api": 0.7167978,
+    "api_main": 0.7167978,
+    "api_expiries": 0,
+    "api1h": 0.7488348,
+    "api1h_main": 0.7488348,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2639384,
+    "subscription": 1.1639384000000002,
+    "subscription_main": 1.1639384000000002,
+    "subscription_expiries": 0,
+    "api": 1.1088104,
+    "api_main": 1.1088104,
+    "api_expiries": 0,
+    "api1h": 1.1639384000000002,
+    "api1h_main": 1.1639384000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.24899399999999997,
+    "subscription": 1.2489940000000002,
+    "subscription_main": 1.2489940000000002,
+    "subscription_expiries": 0,
+    "api": 1.201285,
+    "api_main": 1.201285,
+    "api_expiries": 0,
+    "api1h": 1.2489940000000002,
+    "api1h_main": 1.2489940000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-sql-row-order",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3005242,
+    "subscription": 1.6005242000000002,
+    "subscription_main": 1.6005242000000002,
+    "subscription_expiries": 0,
+    "api": 1.5463652,
+    "api_main": 1.5463652,
+    "api_expiries": 0,
+    "api1h": 1.6005242000000002,
+    "api1h_main": 1.6005242000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-signpath",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.19555500000000003,
+    "subscription": 0.995555,
+    "subscription_main": 0.995555,
+    "subscription_expiries": 0,
+    "api": 5.759855000000001,
+    "api_main": 5.759855000000001,
+    "api_expiries": 2,
+    "api1h": 0.995555,
+    "api1h_main": 0.995555,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2854088,
+    "subscription": 1.2854088000000001,
+    "subscription_main": 1.2854088000000001,
+    "subscription_expiries": 0,
+    "api": 6.025660800000001,
+    "api_main": 6.025660800000001,
+    "api_expiries": 2,
+    "api1h": 1.2854088000000001,
+    "api1h_main": 1.2854088000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-cli-snap",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2025044,
+    "subscription": 0.8025043999999999,
+    "subscription_main": 0.8025043999999999,
+    "subscription_expiries": 0,
+    "api": 0.7585964,
+    "api_main": 0.7585964,
+    "api_expiries": 0,
+    "api1h": 0.8025043999999999,
+    "api1h_main": 0.8025043999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.48905059999999995,
+    "subscription": 1.9890506000000001,
+    "subscription_main": 1.9890506000000001,
+    "subscription_expiries": 0,
+    "api": 1.8893665999999998,
+    "api_main": 1.8893665999999998,
+    "api_expiries": 0,
+    "api1h": 1.9890506000000001,
+    "api1h_main": 1.9890506000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.18115040000000002,
+    "subscription": 0.9811504,
+    "subscription_main": 0.9811504,
+    "subscription_expiries": 0,
+    "api": 0.9416103999999998,
+    "api_main": 0.9416103999999998,
+    "api_expiries": 0,
+    "api1h": 0.9811504,
+    "api1h_main": 0.9811504,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20695580000000002,
+    "subscription": 1.1069558,
+    "subscription_main": 1.1069558,
+    "subscription_expiries": 0,
+    "api": 1.0668008,
+    "api_main": 1.0668008,
+    "api_expiries": 0,
+    "api1h": 1.1069558,
+    "api1h_main": 1.1069558,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1401018,
+    "subscription": 0.7401017999999999,
+    "subscription_main": 0.7401017999999999,
+    "subscription_expiries": 0,
+    "api": 0.7107827999999999,
+    "api_main": 0.7107827999999999,
+    "api_expiries": 0,
+    "api1h": 0.7401017999999999,
+    "api1h_main": 0.7401017999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2253556,
+    "subscription": 1.2253556,
+    "subscription_main": 1.2253556,
+    "subscription_expiries": 0,
+    "api": 5.982038600000001,
+    "api_main": 5.982038600000001,
+    "api_expiries": 2,
+    "api1h": 1.2253556,
+    "api1h_main": 1.2253556,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-signing-policy",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1976732,
+    "subscription": 1.0976731999999998,
+    "subscription_main": 1.0976731999999998,
+    "subscription_expiries": 0,
+    "api": 1.0582832,
+    "api_main": 1.0582832,
+    "api_expiries": 0,
+    "api1h": 1.0976731999999998,
+    "api1h_main": 1.0976731999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.27982999999999997,
+    "subscription": 1.1798300000000002,
+    "subscription_main": 1.1798300000000002,
+    "subscription_expiries": 0,
+    "api": 1.116932,
+    "api_main": 1.116932,
+    "api_expiries": 0,
+    "api1h": 1.1798300000000002,
+    "api1h_main": 1.1798300000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.142135,
+    "subscription": 0.7421350000000001,
+    "subscription_main": 0.7421350000000001,
+    "subscription_expiries": 0,
+    "api": 0.711538,
+    "api_main": 0.711538,
+    "api_expiries": 0,
+    "api1h": 0.7421350000000001,
+    "api1h_main": 0.7421350000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3026082,
+    "subscription": 1.8026082000000003,
+    "subscription_main": 1.8026082000000003,
+    "subscription_expiries": 0,
+    "api": 6.547945199999999,
+    "api_main": 6.547945199999999,
+    "api_expiries": 2,
+    "api1h": 1.8026082000000003,
+    "api1h_main": 1.8026082000000003,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.27087039999999996,
+    "subscription": 1.7708704,
+    "subscription_main": 1.7708704,
+    "subscription_expiries": 0,
+    "api": 8.923110399999999,
+    "api_main": 8.923110399999999,
+    "api_expiries": 3,
+    "api1h": 1.7708704,
+    "api1h_main": 1.7708704,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.233347,
+    "subscription": 1.133347,
+    "subscription_main": 1.133347,
+    "subscription_expiries": 0,
+    "api": 8.283946,
+    "api_main": 8.283946,
+    "api_expiries": 3,
+    "api1h": 1.133347,
+    "api1h_main": 1.133347,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexaim-workshop-norobot",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20731620000000003,
+    "subscription": 1.0073162,
+    "subscription_main": 1.0073162,
+    "subscription_expiries": 0,
+    "api": 0.9643862,
+    "api_main": 0.9643862,
+    "api_expiries": 0,
+    "api1h": 1.0073162,
+    "api1h_main": 1.0073162,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-hooks-path",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.26386319999999996,
+    "subscription": 1.1638632,
+    "subscription_main": 1.1638632,
+    "subscription_expiries": 0,
+    "api": 1.1067912,
+    "api_main": 1.1067912,
+    "api_expiries": 0,
+    "api1h": 1.1638632,
+    "api1h_main": 1.1638632,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.29763740000000005,
+    "subscription": 1.0976374,
+    "subscription_main": 1.0976374,
+    "subscription_expiries": 0,
+    "api": 1.0262014,
+    "api_main": 1.0262014,
+    "api_expiries": 0,
+    "api1h": 1.0976374,
+    "api1h_main": 1.0976374,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr10",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.168521,
+    "subscription": 0.8685209999999999,
+    "subscription_main": 0.8685209999999999,
+    "subscription_expiries": 0,
+    "api": 0.8342639999999999,
+    "api_main": 0.8342639999999999,
+    "api_expiries": 0,
+    "api1h": 0.8685209999999999,
+    "api1h_main": 0.8685209999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-graph-compare-doc",
+    "mainRequests": 16,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3900286,
+    "subscription": 1.9900286,
+    "subscription_main": 1.9900286,
+    "subscription_expiries": 0,
+    "api": 4.3143026,
+    "api_main": 4.3143026,
+    "api_expiries": 1,
+    "api1h": 1.9900286,
+    "api1h_main": 1.9900286,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.25988979999999995,
+    "subscription": 1.1598898,
+    "subscription_main": 1.1598898,
+    "subscription_expiries": 0,
+    "api": 1.1055148000000001,
+    "api_main": 1.1055148000000001,
+    "api_expiries": 0,
+    "api1h": 1.1598898,
+    "api1h_main": 1.1598898,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2767618,
+    "subscription": 1.4767617999999998,
+    "subscription_main": 1.4767617999999998,
+    "subscription_expiries": 0,
+    "api": 1.4256448000000004,
+    "api_main": 1.4256448000000004,
+    "api_expiries": 0,
+    "api1h": 1.4767617999999998,
+    "api1h_main": 1.4767617999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 5,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1821142,
+    "subscription": 0.6821142,
+    "subscription_main": 0.6821142,
+    "subscription_expiries": 0,
+    "api": 0.6384911999999999,
+    "api_main": 0.6384911999999999,
+    "api_expiries": 0,
+    "api1h": 0.6821142,
+    "api1h_main": 0.6821142,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 42,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 1.3183437999999998,
+    "subscription": 5.5183437999999985,
+    "subscription_main": 5.5183437999999985,
+    "subscription_expiries": 0,
+    "api": 5.326082800000001,
+    "api_main": 5.326082800000001,
+    "api_expiries": 0,
+    "api1h": 5.5183437999999985,
+    "api1h_main": 5.5183437999999985,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.40542179999999994,
+    "subscription": 1.6054218000000002,
+    "subscription_main": 1.6054218000000002,
+    "subscription_expiries": 0,
+    "api": 1.5209358000000002,
+    "api_main": 1.5209358000000002,
+    "api_expiries": 0,
+    "api1h": 1.6054218000000002,
+    "api1h_main": 1.6054218000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-showtail-harness",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22456579999999998,
+    "subscription": 1.2245657999999997,
+    "subscription_main": 1.2245657999999997,
+    "subscription_expiries": 0,
+    "api": 1.1822208,
+    "api_main": 1.1822208,
+    "api_expiries": 0,
+    "api1h": 1.2245657999999997,
+    "api1h_main": 1.2245657999999997,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 32,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.7141638,
+    "subscription": 3.9141638000000003,
+    "subscription_main": 3.9141638000000003,
+    "subscription_expiries": 0,
+    "api": 8.6104448,
+    "api_main": 8.6104448,
+    "api_expiries": 2,
+    "api1h": 3.9141638000000003,
+    "api1h_main": 3.9141638000000003,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstextension-apache-license",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.15153460000000002,
+    "subscription": 0.8515346,
+    "subscription_main": 0.8515346,
+    "subscription_expiries": 0,
+    "api": 0.8206646,
+    "api_main": 0.8206646,
+    "api_expiries": 0,
+    "api1h": 0.8515346,
+    "api1h_main": 0.8515346,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22490339999999995,
+    "subscription": 0.9249034,
+    "subscription_main": 0.9249034,
+    "subscription_expiries": 0,
+    "api": 0.8715934,
+    "api_main": 0.8715934,
+    "api_expiries": 0,
+    "api1h": 0.9249034,
+    "api1h_main": 0.9249034,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3096504,
+    "subscription": 1.6096504,
+    "subscription_main": 1.6096504,
+    "subscription_expiries": 0,
+    "api": 11.146542400000001,
+    "api_main": 11.146542400000001,
+    "api_expiries": 4,
+    "api1h": 1.6096504,
+    "api1h_main": 1.6096504,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3117066,
+    "subscription": 1.5117066000000001,
+    "subscription_main": 1.5117066000000001,
+    "subscription_expiries": 0,
+    "api": 3.8478246,
+    "api_main": 3.8478246,
+    "api_expiries": 1,
+    "api1h": 1.5117066000000001,
+    "api1h_main": 1.5117066000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-shell-bookkeeping",
+    "mainRequests": 16,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.28632919999999995,
+    "subscription": 1.8863291999999996,
+    "subscription_main": 1.8863291999999996,
+    "subscription_expiries": 0,
+    "api": 6.6374142,
+    "api_main": 6.6374142,
+    "api_expiries": 2,
+    "api1h": 1.8863291999999996,
+    "api1h_main": 1.8863291999999996,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-self-upgrade",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3380126,
+    "subscription": 1.6380126,
+    "subscription_main": 1.6380126,
+    "subscription_expiries": 0,
+    "api": 1.5744785999999997,
+    "api_main": 1.5744785999999997,
+    "api_expiries": 0,
+    "api1h": 1.6380126,
+    "api1h_main": 1.6380126,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.192307,
+    "subscription": 0.992307,
+    "subscription_main": 0.992307,
+    "subscription_expiries": 0,
+    "api": 0.9521280000000001,
+    "api_main": 0.9521280000000001,
+    "api_expiries": 0,
+    "api1h": 0.992307,
+    "api1h_main": 0.992307,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20996540000000002,
+    "subscription": 1.2099654000000002,
+    "subscription_main": 1.2099654000000002,
+    "subscription_expiries": 0,
+    "api": 1.1696393999999999,
+    "api_main": 1.1696393999999999,
+    "api_expiries": 0,
+    "api1h": 1.2099654000000002,
+    "api1h_main": 1.2099654000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-windows-cmd",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.224697,
+    "subscription": 1.024697,
+    "subscription_main": 1.024697,
+    "subscription_expiries": 0,
+    "api": 3.378926,
+    "api_main": 3.378926,
+    "api_expiries": 1,
+    "api1h": 1.024697,
+    "api1h_main": 1.024697,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-tui-responsive",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2674748,
+    "subscription": 1.1674748000000001,
+    "subscription_main": 1.1674748000000001,
+    "subscription_expiries": 0,
+    "api": 8.309295800000001,
+    "api_main": 8.309295800000001,
+    "api_expiries": 3,
+    "api1h": 1.1674748000000001,
+    "api1h_main": 1.1674748000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-portable-replays",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.24047600000000002,
+    "subscription": 1.1404760000000003,
+    "subscription_main": 1.1404760000000003,
+    "subscription_expiries": 0,
+    "api": 1.089623,
+    "api_main": 1.089623,
+    "api_expiries": 0,
+    "api1h": 1.1404760000000003,
+    "api1h_main": 1.1404760000000003,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3442878,
+    "subscription": 1.5442878,
+    "subscription_main": 1.5442878,
+    "subscription_expiries": 0,
+    "api": 1.4767608,
+    "api_main": 1.4767608,
+    "api_expiries": 0,
+    "api1h": 1.5442878,
+    "api1h_main": 1.5442878,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2414688,
+    "subscription": 1.2414688,
+    "subscription_main": 1.2414688,
+    "subscription_expiries": 0,
+    "api": 1.1944857999999998,
+    "api_main": 1.1944857999999998,
+    "api_expiries": 0,
+    "api1h": 1.2414688,
+    "api1h_main": 1.2414688,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-book-step-verify",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.49033519999999997,
+    "subscription": 1.6903352,
+    "subscription_main": 1.6903352,
+    "subscription_expiries": 0,
+    "api": 1.5750722,
+    "api_main": 1.5750722,
+    "api_expiries": 0,
+    "api1h": 1.6903352,
+    "api1h_main": 1.6903352,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-aggregate-only",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2063986,
+    "subscription": 1.3063986,
+    "subscription_main": 1.3063986,
+    "subscription_expiries": 0,
+    "api": 8.467002599999999,
+    "api_main": 8.467002599999999,
+    "api_expiries": 3,
+    "api1h": 1.3063986,
+    "api1h_main": 1.3063986,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-review-run-all",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3433008,
+    "subscription": 1.8433008,
+    "subscription_main": 1.8433008,
+    "subscription_expiries": 0,
+    "api": 1.7819538000000001,
+    "api_main": 1.7819538000000001,
+    "api_expiries": 0,
+    "api1h": 1.8433008,
+    "api1h_main": 1.8433008,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-duckling-wheels",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1861474,
+    "subscription": 0.8861474,
+    "subscription_main": 0.8861474,
+    "subscription_expiries": 0,
+    "api": 3.2464304000000004,
+    "api_main": 3.2464304000000004,
+    "api_expiries": 1,
+    "api1h": 0.8861474,
+    "api1h_main": 0.8861474,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2390336,
+    "subscription": 1.5390336000000002,
+    "subscription_main": 1.5390336000000002,
+    "subscription_expiries": 0,
+    "api": 6.299958599999997,
+    "api_main": 6.299958599999997,
+    "api_expiries": 2,
+    "api1h": 1.5390336000000002,
+    "api1h_main": 1.5390336000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-priced-cost-gate",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2103798,
+    "subscription": 1.1103798,
+    "subscription_main": 1.1103798,
+    "subscription_expiries": 0,
+    "api": 8.266414800000002,
+    "api_main": 8.266414800000002,
+    "api_expiries": 3,
+    "api1h": 1.1103798,
+    "api1h_main": 1.1103798,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-sdl-wayland",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.178395,
+    "subscription": 0.978395,
+    "subscription_main": 0.978395,
+    "subscription_expiries": 0,
+    "api": 0.942713,
+    "api_main": 0.942713,
+    "api_expiries": 0,
+    "api1h": 0.978395,
+    "api1h_main": 0.978395,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.31336980000000003,
+    "subscription": 1.6133697999999999,
+    "subscription_main": 1.6133697999999999,
+    "subscription_expiries": 0,
+    "api": 3.9547647999999995,
+    "api_main": 3.9547647999999995,
+    "api_expiries": 1,
+    "api1h": 1.6133697999999999,
+    "api1h_main": 1.6133697999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-parallel-providers",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2080754,
+    "subscription": 1.2080754,
+    "subscription_main": 1.2080754,
+    "subscription_expiries": 0,
+    "api": 3.5687904000000006,
+    "api_main": 3.5687904000000006,
+    "api_expiries": 1,
+    "api1h": 1.2080754,
+    "api1h_main": 1.2080754,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-homebrew-maven",
+    "mainRequests": 18,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.38845339999999995,
+    "subscription": 2.1884534,
+    "subscription_main": 2.1884534,
+    "subscription_expiries": 0,
+    "api": 4.5278354,
+    "api_main": 4.5278354,
+    "api_expiries": 1,
+    "api1h": 2.1884534,
+    "api1h_main": 2.1884534,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-claude-exit-codes",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.214738,
+    "subscription": 1.2147379999999999,
+    "subscription_main": 1.2147379999999999,
+    "subscription_expiries": 0,
+    "api": 1.176275,
+    "api_main": 1.176275,
+    "api_expiries": 0,
+    "api1h": 1.2147379999999999,
+    "api1h_main": 1.2147379999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr8",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1528738,
+    "subscription": 0.7528737999999999,
+    "subscription_main": 0.7528737999999999,
+    "subscription_expiries": 0,
+    "api": 0.7203478,
+    "api_main": 0.7203478,
+    "api_expiries": 0,
+    "api1h": 0.7528737999999999,
+    "api1h_main": 0.7528737999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "winapps-adobe-2026",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.15631899999999999,
+    "subscription": 0.856319,
+    "subscription_main": 0.856319,
+    "subscription_expiries": 0,
+    "api": 0.8253199999999999,
+    "api_main": 0.8253199999999999,
+    "api_expiries": 0,
+    "api1h": 0.856319,
+    "api1h_main": 0.856319,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-render-name-check",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2652262,
+    "subscription": 1.2652262,
+    "subscription_main": 1.2652262,
+    "subscription_expiries": 0,
+    "api": 1.2151712000000001,
+    "api_main": 1.2151712000000001,
+    "api_expiries": 0,
+    "api1h": 1.2652262,
+    "api1h_main": 1.2652262,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-cli-guard-tests",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2591108,
+    "subscription": 1.2591107999999998,
+    "subscription_main": 1.2591107999999998,
+    "subscription_expiries": 0,
+    "api": 1.2110088,
+    "api_main": 1.2110088,
+    "api_expiries": 0,
+    "api1h": 1.2591107999999998,
+    "api1h_main": 1.2591107999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-chained-runs",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.24484039999999999,
+    "subscription": 1.0448404,
+    "subscription_main": 1.0448404,
+    "subscription_expiries": 0,
+    "api": 0.9913683999999999,
+    "api_main": 0.9913683999999999,
+    "api_expiries": 0,
+    "api1h": 1.0448404,
+    "api1h_main": 1.0448404,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-evidence-graph",
+    "mainRequests": 13,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.4266854,
+    "subscription": 1.7266853999999998,
+    "subscription_main": 1.7266853999999998,
+    "subscription_expiries": 0,
+    "api": 1.6363644,
+    "api_main": 1.6363644,
+    "api_expiries": 0,
+    "api1h": 1.7266853999999998,
+    "api1h_main": 1.7266853999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-lean-reviewer",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2573278,
+    "subscription": 1.4573277999999998,
+    "subscription_main": 1.4573277999999998,
+    "subscription_expiries": 0,
+    "api": 1.4094867999999998,
+    "api_main": 1.4094867999999998,
+    "api_expiries": 0,
+    "api1h": 1.4573277999999998,
+    "api1h_main": 1.4573277999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 15,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3326052,
+    "subscription": 1.8326052,
+    "subscription_main": 1.8326052,
+    "subscription_expiries": 0,
+    "api": 11.371162200000002,
+    "api_main": 11.371162200000002,
+    "api_expiries": 4,
+    "api1h": 1.8326052,
+    "api1h_main": 1.8326052,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-learner-replay-ux",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.33311579999999996,
+    "subscription": 1.4331158,
+    "subscription_main": 1.4331158,
+    "subscription_expiries": 0,
+    "api": 1.3616168,
+    "api_main": 1.3616168,
+    "api_expiries": 0,
+    "api1h": 1.4331158,
+    "api1h_main": 1.4331158,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr5",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.22509859999999998,
+    "subscription": 1.2250986,
+    "subscription_main": 1.2250986,
+    "subscription_expiries": 0,
+    "api": 1.1822676,
+    "api_main": 1.1822676,
+    "api_expiries": 0,
+    "api1h": 1.2250986,
+    "api1h_main": 1.2250986,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3532584,
+    "subscription": 1.7532584000000002,
+    "subscription_main": 1.7532584000000002,
+    "subscription_expiries": 0,
+    "api": 1.6868983999999998,
+    "api_main": 1.6868983999999998,
+    "api_expiries": 0,
+    "api1h": 1.7532584000000002,
+    "api1h_main": 1.7532584000000002,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-compare-systems",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2963718000000001,
+    "subscription": 1.6963717999999999,
+    "subscription_main": 1.6963717999999999,
+    "subscription_expiries": 0,
+    "api": 6.442365799999999,
+    "api_main": 6.442365799999999,
+    "api_expiries": 2,
+    "api1h": 1.6963717999999999,
+    "api1h_main": 1.6963717999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-judge-retry",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.251689,
+    "subscription": 1.4516889999999998,
+    "subscription_main": 1.4516889999999998,
+    "subscription_expiries": 0,
+    "api": 3.8059570000000003,
+    "api_main": 3.8059570000000003,
+    "api_expiries": 1,
+    "api1h": 1.4516889999999998,
+    "api1h_main": 1.4516889999999998,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr11",
+    "mainRequests": 7,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.1889192,
+    "subscription": 0.8889192,
+    "subscription_main": 0.8889192,
+    "subscription_expiries": 0,
+    "api": 0.8501922,
+    "api_main": 0.8501922,
+    "api_expiries": 0,
+    "api1h": 0.8889192,
+    "api1h_main": 0.8889192,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-neighborhood",
+    "mainRequests": 12,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.26638080000000003,
+    "subscription": 1.4663808,
+    "subscription_main": 1.4663808,
+    "subscription_expiries": 0,
+    "api": 1.4164097999999996,
+    "api_main": 1.4164097999999996,
+    "api_expiries": 0,
+    "api1h": 1.4663808,
+    "api1h_main": 1.4663808,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-signpath-release",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.26135620000000004,
+    "subscription": 1.0613561999999999,
+    "subscription_main": 1.0613561999999999,
+    "subscription_expiries": 0,
+    "api": 1.0029852,
+    "api_main": 1.0029852,
+    "api_expiries": 0,
+    "api1h": 1.0613561999999999,
+    "api1h_main": 1.0613561999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "pr12",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2031426,
+    "subscription": 1.0031426,
+    "subscription_main": 1.0031426,
+    "subscription_expiries": 0,
+    "api": 0.9583646,
+    "api_main": 0.9583646,
+    "api_expiries": 0,
+    "api1h": 1.0031426,
+    "api1h_main": 1.0031426,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "prbench-crossjudge",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2113878,
+    "subscription": 1.2113878,
+    "subscription_main": 1.2113878,
+    "subscription_expiries": 0,
+    "api": 8.370281799999999,
+    "api_main": 8.370281799999999,
+    "api_expiries": 3,
+    "api1h": 1.2113878,
+    "api1h_main": 1.2113878,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "tracetoon-receipt-quoting",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.30682640000000005,
+    "subscription": 1.4068264000000001,
+    "subscription_main": 1.4068264000000001,
+    "subscription_expiries": 0,
+    "api": 1.3453983999999999,
+    "api_main": 1.3453983999999999,
+    "api_expiries": 0,
+    "api1h": 1.4068264000000001,
+    "api1h_main": 1.4068264000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.16779879999999997,
+    "subscription": 0.7677988,
+    "subscription_main": 0.7677988,
+    "subscription_expiries": 0,
+    "api": 0.7306857999999999,
+    "api_main": 0.7306857999999999,
+    "api_expiries": 0,
+    "api1h": 0.7677988,
+    "api1h_main": 0.7677988,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-macos-installer",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.161703,
+    "subscription": 0.761703,
+    "subscription_main": 0.761703,
+    "subscription_expiries": 0,
+    "api": 0.725073,
+    "api_main": 0.725073,
+    "api_expiries": 0,
+    "api1h": 0.761703,
+    "api1h_main": 0.761703,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-docker-tests",
+    "mainRequests": 11,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.3829346,
+    "subscription": 1.4829345999999999,
+    "subscription_main": 1.4829345999999999,
+    "subscription_expiries": 0,
+    "api": 6.2006836,
+    "api_main": 6.2006836,
+    "api_expiries": 2,
+    "api1h": 1.4829345999999999,
+    "api1h_main": 1.4829345999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vexagent-replug-runs",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2069658,
+    "subscription": 0.8069658,
+    "subscription_main": 0.8069658,
+    "subscription_expiries": 0,
+    "api": 0.7588038,
+    "api_main": 0.7588038,
+    "api_expiries": 0,
+    "api1h": 0.8069658,
+    "api1h_main": 0.8069658,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstwebsite-macos-workaround",
+    "mainRequests": 8,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.19156739999999997,
+    "subscription": 0.9915674,
+    "subscription_main": 0.9915674,
+    "subscription_expiries": 0,
+    "api": 0.9544574,
+    "api_main": 0.9544574,
+    "api_expiries": 0,
+    "api1h": 0.9915674,
+    "api1h_main": 0.9915674,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-replay-start-state",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.16481440000000003,
+    "subscription": 0.7648144,
+    "subscription_main": 0.7648144,
+    "subscription_expiries": 0,
+    "api": 0.7254934,
+    "api_main": 0.7254934,
+    "api_expiries": 0,
+    "api1h": 0.7648144,
+    "api1h_main": 0.7648144,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "vex-v5-serial-aim-port",
+    "mainRequests": 10,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.20879199999999998,
+    "subscription": 1.208792,
+    "subscription_main": 1.208792,
+    "subscription_expiries": 0,
+    "api": 1.167797,
+    "api_main": 1.167797,
+    "api_expiries": 0,
+    "api1h": 1.208792,
+    "api1h_main": 1.208792,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "bazzite-stale-portal",
+    "mainRequests": 6,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.183493,
+    "subscription": 0.7834930000000001,
+    "subscription_main": 0.7834930000000001,
+    "subscription_expiries": 0,
+    "api": 0.741892,
+    "api_main": 0.741892,
+    "api_expiries": 0,
+    "api1h": 0.7834930000000001,
+    "api1h_main": 0.7834930000000001,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcontent-apache",
+    "mainRequests": 9,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.2004712,
+    "subscription": 1.1004711999999999,
+    "subscription_main": 1.1004711999999999,
+    "subscription_expiries": 0,
+    "api": 1.0584682,
+    "api_main": 1.0584682,
+    "api_expiries": 0,
+    "api1h": 1.1004711999999999,
+    "api1h_main": 1.1004711999999999,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "showtail-transcript-migrator",
+    "mainRequests": 37,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.9823174000000001,
+    "subscription": 4.6823174000000005,
+    "subscription_main": 4.6823174000000005,
+    "subscription_expiries": 0,
+    "api": 6.928933399999998,
+    "api_main": 6.928933399999998,
+    "api_expiries": 1,
+    "api1h": 4.6823174000000005,
+    "api1h_main": 4.6823174000000005,
+    "api1h_expiries": 0
+   },
+   {
+    "case": "aifirstcli-book-walk",
+    "mainRequests": 14,
+    "subRequests": 0,
+    "models": [
+     "opus"
+    ],
+    "raw": 0.4446214,
+    "subscription": 1.8446213999999999,
+    "subscription_main": 1.8446213999999999,
+    "subscription_expiries": 0,
+    "api": 1.7528544000000001,
+    "api_main": 1.7528544000000001,
+    "api_expiries": 0,
+    "api1h": 1.8446213999999999,
+    "api1h_main": 1.8446213999999999,
+    "api1h_expiries": 0
+   }
+  ]
+ },
+ "source": "native drafts reused from pool61-flagship-c69il (identical cached drafts; traces retained there)"
+}

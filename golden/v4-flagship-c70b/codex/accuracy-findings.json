@@ -1,0 +1,2411 @@
+{
+ "schema": "prbench.accuracy-findings/v1",
+ "experiment": "3356a8b942ada7b8b44153eedd371ef5993586d1fef7798b84e1a8c605c3108b",
+ "findings": [
+  {
+   "id": "3491c3606a9ed713f648bdd41251c13250c0a112ba84098a9b97472bca26da99",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "a30583b586deefaa2d8707af2af4cea7a071d3fc9e3a010c5a5d78f165707f64",
+   "claim": "with Up/k, Down/j and Page Up/Down scrolling and Enter/Escape returning Home (covered by test/tui-learn.test.ts)",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The behavior is implemented, but the attached coverage claim is broader than the test: it exercises Enter/Escape dismissal and never scrolls."
+    }
+   ]
+  },
+  {
+   "id": "0452ea6a387f4e2acc17e9f31d08662e136336668b374402c23cee5f9f277e22",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "a30583b586deefaa2d8707af2af4cea7a071d3fc9e3a010c5a5d78f165707f64",
+   "claim": "Home progress and command-reference screens become dismissible documents, with Up/k, Down/j and Page Up/Down scrolling and Enter/Escape returning Home (covered by test/tui-learn.test.ts)",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The behavior is implemented, but the attached coverage claim includes scrolling. The Home test dismisses with Enter and Escape and never exercises scrolling."
+    }
+   ]
+  },
+  {
+   "id": "c81646f848e791af42e1a8d209fb24b47487ab0292bb3dd642ebc40446a58f74",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "a30583b586deefaa2d8707af2af4cea7a071d3fc9e3a010c5a5d78f165707f64",
+   "claim": "Home progress and command-reference screens become dismissible documents, with Up/k, Down/j and Page Up/Down scrolling and Enter/Escape returning Home (covered by test/tui-learn.test.ts); pause handling ignores AbortError and propagates other errors.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C1",
+      "D",
+      "U4"
+     ],
+     "reason": "The screen behavior and error handling are supported, but the cited Home-screen test dismisses the screens without testing scrolling. The parenthetical attributes coverage of the listed screen behavior to that test."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "U4"
+     ],
+     "reason": "The screen and pause behavior are implemented, but the cited Home test dismisses screens without exercising scrolling. The parenthetical therefore overstates that test's coverage."
+    }
+   ]
+  },
+  {
+   "id": "333f110b6998ffa30445162cb8afbcfa343b84e53d98330a62024c370e7460b3",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "446953d09f8e7e35ce9bab0743874b60683232996549c174a776e58d5b9dfadb",
+   "claim": "This keeps credentialed replay opt-in for normal development and CI.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C6",
+      "T6"
+     ],
+     "reason": "The opt-in replay uses the local book responder through subprocess pipes and only invokes Claude for its version. Credentialed real-Claude authoring belongs to the separate capture command."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "D",
+      "T6"
+     ],
+     "reason": "The gated replay uses the local book responder over subprocess pipes and invokes Claude only for its version. Credentialed real-Claude authoring belongs to the separate capture command, which is not gated by this environment variable."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "T6",
+      "D"
+     ],
+     "reason": "The opt-in suite replays the committed book through the local responder; it does not run a credentialed Claude session. Credentialed authoring belongs to capture."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "T6",
+      "D"
+     ],
+     "reason": "The opt-in suite checks the Claude version and replays locally through the book responder; it does not run a credentialed Claude session. Credentialed author capture is a separate command."
+    }
+   ]
+  },
+  {
+   "id": "b59908c5c6b780a398152d9538670fb27ebdc95c4f882d7be26a88bafaa508b1",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "b5cf2c0ed504d25c43bf43ae65a5fe018fc0122081b23e3f579bb6c389106b2c",
+   "claim": "To catch execution problems like Java exercise `6-05`",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "T7",
+      "X1"
+     ],
+     "reason": "This presents detection of the reported kind of stale-file failure as the approach's rationale without explaining that reconciliation removes ThermostatApp.java at java-6-03, masking the original failure even without the new clean entry."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "T7",
+      "C2"
+     ],
+     "reason": "This purpose statement implies coverage of the motivating stale-file failure. The sequential pass removes ThermostatApp.java at java-6-03 even without the java-6-05 clean entry, so it does not reproduce or establish detection of that failure."
+    }
+   ]
+  },
+  {
+   "id": "f472d1e6871d0b4360c754b2f9a3ddd23e530531f2cfbe7d91a6da2575a37341",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "b5cf2c0ed504d25c43bf43ae65a5fe018fc0122081b23e3f579bb6c389106b2c",
+   "claim": "To catch execution problems like Java exercise `6-05`, this PR extends the content verifier with isolated and sequential passes through persistent book workspaces as part of the requested ordered harness.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C1",
+      "U3",
+      "T7",
+      "X1",
+      "X2"
+     ],
+     "reason": "The passes address the ordered-harness request, but the framing suggests they catch the reported stale-file failure. The sequential pass removes ThermostatApp.java at java-6-03 even without the java-6-05 clean entry, so it would not reproduce that failure."
+    }
+   ]
+  },
+  {
+   "id": "3f0fa6e585929a57c14bb7d65d113ff30bdb53591cbb42df6d7b0d3df6bafcb4",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-portable-replays",
+   "artifactDigest": "916ec45703f57c1a24f9682873df8800ba09399286248bdee67aa33dafbd7d9e",
+   "claim": "`test/python-chapters-9-10-audit.test.ts` checks portable execution for captured shell commands and preservation of the Windows tool label separately from execution.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C6"
+     ],
+     "reason": "The audit checks portable-command metadata and the PowerShell label; it does not execute the captured commands."
+    }
+   ]
+  },
+  {
+   "id": "b82e2574ef8e6ad563e8c15cadf80eadb9dfb5cb57ee2af6cbb881b15a8fcd7b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "pr11",
+   "artifactDigest": "d47a5a8197a631dd94de836d4188c5146b803f0d9025c5ea0cf3b5f2c69bc321",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The focused page test preceded the final edit, but the full and bundled tests ran later in the same chain that removed the 5% instruction and committed the content, with no intervening edits."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final historical command removed the bottom-5% line before running the full and bundled tests; those tests ran on the committed content with no intervening edits."
+    }
+   ]
+  },
+  {
+   "id": "38e7da7c4985e0a1ae401ea965968bc1b4f418f7ed68c4d81d3e0c1ed34c12e1",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "pr11",
+   "artifactDigest": "d47a5a8197a631dd94de836d4188c5146b803f0d9025c5ea0cf3b5f2c69bc321",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V0"
+     ],
+     "reason": "The recorded session chain removed the 5% line before running the full and bundled tests, and made no later edits before commit. The fresh check's tested content is independently unknown."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "A.V0"
+     ],
+     "reason": "The historical test chain ran after the final prompt edit and on the committed content. The fresh check's content relationship is separately unverified."
+    }
+   ]
+  },
+  {
+   "id": "fa2beb7fee5d898258afcaf97c793a49157a0a686d3886b2d7961f8332313dca",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "pr9",
+   "artifactDigest": "8174cd8de7d7879ed2d40cbd5e168eb4be7605d145504c786c13d0bd1e02ffc2",
+   "claim": "The recorded runs were Linux/x64, leaving the Windows-specific executable handling without a recorded Windows run.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S75",
+      "S87"
+     ],
+     "reason": "The unqualified statement about recorded runs excludes the original Windows work-session runs. Those sessions record successful bundled tests using Windows Git Bash's pwd -W. They do not establish coverage of every Windows executable branch, but they do establish a recorded Windows run."
+    }
+   ]
+  },
+  {
+   "id": "8e198eda75abdcadb251f657cd8b8f8399f1b77385e9ffc15f89ab0ec93f1ff7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "a70aff43d442b78205c3daa4c2200da0fb5c4d80a2d5d9ecf34011b7f1ce7923",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The hand-checked history states that typecheck and the full suite passed after the last edit, in the command that made final commit f7ec46e."
+    }
+   ]
+  },
+  {
+   "id": "00bc391c13eecd0d9a69b96a459873fe8c6c9ff2d690e18e271225e52508bce2",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "414528a848b48642c44bb9b98b5ca003538621ebc3bff883dd9c535b60f12fa7",
+   "claim": "Runner containers drop all capabilities and enable `no-new-privileges`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C4"
+     ],
+     "reason": "This unqualified statement covers containers launched by the runners. Both runners call showtail_docker_prepare_volumes, whose reachable docker run uses root and supplies neither flag. The flags apply to subsequent sandbox and live containers."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C4"
+     ],
+     "reason": "This unqualified container-hardening statement includes the volume-preparation container invoked by both runners. That reachable docker run uses --user root without either restriction; only containers using the shared run-argument array receive them."
+    }
+   ]
+  },
+  {
+   "id": "b1f50f12cb9652b49a33c4ca382e6e9dba42ea058d48446129ca7141acd692e8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "9c78398c1994562360fc1ca5b52f33f565284ddcac6bef773888d8ccdc22cf12",
+   "claim": "the expanded direction labels retain the previous marker budget cost.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D"
+     ],
+     "reason": "The discount is a flat six characters. Replacing '- ' with 'removed: ' adds seven characters, so a removed-line candidate costs one character more than before and can exceed a tight budget. The added label preserves the old cost."
+    }
+   ]
+  },
+  {
+   "id": "81223fe16fc4a09983cd39c4f179168423e474d75429036b5262126810590581",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "9c78398c1994562360fc1ca5b52f33f565284ddcac6bef773888d8ccdc22cf12",
+   "claim": "the expanded direction labels retain the previous marker budget cost",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D"
+     ],
+     "reason": "The flat six-character discount offsets the extra length of `removed: ` over `- `, but exceeds the five-character increase from `+ ` to `added: ` by one character."
+    }
+   ]
+  },
+  {
+   "id": "9a7899f52c08e81020bc70ab2d637ca8f38e3871d8a67664b19908abc25544b2",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "088774cbbc48f05d8d2112059787a3addfff50b84bfa34c6598e6476c1364f0f",
+   "claim": "checks timeout output",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C9"
+     ],
+     "reason": "The named tests/test-files.test.ts timeout regression asserts failure code and elapsed time, but never reads or asserts the retained timeout output. Its descriptive test name does not establish output coverage."
+    }
+   ]
+  },
+  {
+   "id": "3b1ac8bc2fcd57163575bf4d3a98cc568e42cccf1585872f4f7ba2ca8000f93b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "088774cbbc48f05d8d2112059787a3addfff50b84bfa34c6598e6476c1364f0f",
+   "claim": "`tests/test-files.test.ts` checks timeout output",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C9"
+     ],
+     "reason": "The timeout regression checks result code and elapsed time. It does not inspect captured output or the timeout note; that behavior belongs to the runner implementation."
+    }
+   ]
+  },
+  {
+   "id": "2f6f09b0911bdfa1658356f115b97b1d8609088ac9923d92ed7fb5854e6f2a2b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "088774cbbc48f05d8d2112059787a3addfff50b84bfa34c6598e6476c1364f0f",
+   "claim": "Test CLI calls redirect output to files and use a guard that kills a still-running child three seconds after its exit file appears, returning the recorded code; commands without a completion marker remain subject to their timeout.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5",
+      "C6"
+     ],
+     "reason": "The paragraph asserts file redirection for test CLI calls generally, but file redirection is used by the review helpers; other CLI calls, such as the receipt test's spawnSync call, use pipes. The guard's completion-marker behavior is separately supported, and an unmarked command is bounded only where a caller supplies a timeout or another watchdog applies."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "D"
+     ],
+     "reason": "The file redirection is specific to the review helpers, not all test CLI calls. The guard itself has no timeout for a command without a completion marker; the genuine-hang test supplies an outer timeout."
+    }
+   ]
+  },
+  {
+   "id": "7236e96cef17b8fbc9f56ed87401e16f20728bb0f4e17ef88858eaef2faa2e6a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-cli-guard-tests",
+   "artifactDigest": "088774cbbc48f05d8d2112059787a3addfff50b84bfa34c6598e6476c1364f0f",
+   "claim": "`tests/receipts-and-fork.test.ts` checks fork heads, summary ordering, environment identity and receipts without task bookkeeping; `tests/spawn-guard.test.ts` checks completion markers and unfinished hangs, while `tests/test-files.test.ts` checks timeout output and summary-based results.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C9",
+      "C10"
+     ],
+     "reason": "The named receipt and guard coverage and the summary-based runner results are present, but the watchdog regression test does not assert the retained timeout output."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C9",
+      "C10",
+      "D"
+     ],
+     "reason": "The first two review pointers and summary-result pointer are supported, but the watchdog regression checks the exit code and elapsed time, not the captured timeout output."
+    }
+   ]
+  },
+  {
+   "id": "879f98620fa8832adcc2ffa63b1bcc104deb67599ed261b4b7e22035e486d1b9",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "9ce33eedf7f8f0cd3aabe7079a1e56e5e73b0cc8c01e023fea758ed18a0fb9fa",
+   "claim": "reviewer instructions treat unverified files and unexplained hunks as investigation leads requiring supporting diff references.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C9"
+     ],
+     "reason": "The paragraph makes diff references a general requirement for these investigations. The workflow explicitly permits a commit explanation or author.md to support attribution of an unexplained hunk; the added mandatory diff-reference rule instead applies to new or changed conditional-behavior claims during correction rounds."
+    }
+   ]
+  },
+  {
+   "id": "0085014e53bbb0f3bdcda434c5b680c3670c5ba6a68ea204a9bf1ccf2780ae5f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "6efc58a144e975b8e54a3ce35b902f15418cc1acc05e32d6f7473685b4f8d883",
+   "claim": "Render findings encountered earlier in the same run move into a nonblocking `repeated` list",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "This broadly covers render findings, but demoteRepeats does not process unbackedNames. An earlier identical unbacked-name finding stays outside repeated and can continue blocking."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "The statement covers render findings generally, but unbackedNames findings are not demoted."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "This describes previously encountered render findings without qualification, but `unbackedNames` findings are not demoted and can continue to block."
+    }
+   ]
+  },
+  {
+   "id": "987fdb45ed40257771de014be79e1a902bc8c0e62e3d05e7c874e1f290b4633c",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "2a1d5c04c7b9cb7f2dae79d7ae17154b3667089beece1e5a424ebb52a106cf79",
+   "claim": "Receipt evidence now quotes arguments containing spaces or shell characters",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C2"
+     ],
+     "reason": "The asserted category includes shell redirection characters < and >, but shellJoin explicitly leaves those characters unquoted. The added env CLI=<repo>/dist/x.mjs test supplies a concrete counterexample."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C2"
+     ],
+     "reason": "The asserted class includes shell characters that the implementation explicitly leaves unquoted. For example, an argument containing only '<' or '>' passes the safe-set test and is emitted without quotes."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C2"
+     ],
+     "reason": "The safe set includes < and >, which are shell characters but do not trigger quoting."
+    }
+   ]
+  },
+  {
+   "id": "86ec58674eed0bca605afbc2b3829d8954192665b57f44245be709ee2e792388",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "2a1d5c04c7b9cb7f2dae79d7ae17154b3667089beece1e5a424ebb52a106cf79",
+   "claim": "The purpose is to “Research the last findings, find the sweet spot, plan what is next”: make validation commands distinguishable and make drafting from an evidence brief use an inline draft with an independent review.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S2",
+      "X1",
+      "X2"
+     ],
+     "reason": "The earlier request is retained context, but the evidence does not establish it as the purpose of both changes. The receipt issue was found while preparing an adjudication worksheet; the workflow change followed a later step-back request."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S2",
+      "X1",
+      "X2"
+     ],
+     "reason": "The earlier request supplies context for the workflow work, but it does not establish the stated purpose of the receipt fix, which the assistant discovered later while preparing an adjudication worksheet."
+    }
+   ]
+  },
+  {
+   "id": "bbd390483c10b6e329e6ac8ace5e44cf5e58ec1ec9c90ad9f57f8cd605dc42cd",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "2a1d5c04c7b9cb7f2dae79d7ae17154b3667089beece1e5a424ebb52a106cf79",
+   "claim": "Receipt evidence now quotes arguments containing spaces or shell characters, escapes embedded single quotes and preserves empty arguments, so a `bash -c` script remains one argument in the displayed command.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C2",
+      "B.D"
+     ],
+     "reason": "The quoting, escaping, empty-argument and bash examples are supported, but the claim covers shell characters generally. The safe set includes `<` and `>`, so arguments containing those shell-significant characters can remain unquoted."
+    }
+   ]
+  },
+  {
+   "id": "e2194abf1f7bc326d207d700feafdce1f083ba7b4808013bf6237e2ef6af50a4",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "7fc445371e76ef6797ac1954ebe3dac03af29e3b1bea511c61df88886ff7899a",
+   "claim": "For the requested “strong writer, cheap high-effort reviewers” plan, this PR makes SQLite selectable alongside cypherlite and carries read and usage evidence into optional context sections.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S27",
+      "X1",
+      "X2"
+     ],
+     "reason": "The feature summary is correct, but the asserted motivation conflates separate workstreams. The SQLite port was requested to compare graph and relational approaches and measure brief parity, rather than to implement the cheaper-reviewer plan."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S27",
+      "X1",
+      "X2"
+     ],
+     "reason": "SQLite selection and extras are real, but the SQLite port was requested to investigate the separate graph-versus-SQLite question, not as an implementation of the writer/reviewer plan."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S19",
+      "S27",
+      "X1",
+      "X2"
+     ],
+     "reason": "The retained request treats the writer/reviewer cost question and the SQLite comparison as separate questions. The SQLite port was requested to measure brief parity, not as an implementation of the writer/reviewer plan."
+    }
+   ]
+  },
+  {
+   "id": "acb6fed8471cff3cce7f6a7624fe36c2959f07ae94787ed36725edd946e89a61",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "7fc445371e76ef6797ac1954ebe3dac03af29e3b1bea511c61df88886ff7899a",
+   "claim": "Query comments identify preserved engine order in branch-limit symbols, `implementedBy` ties and commit sessions in `why`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C3"
+     ],
+     "reason": "The added query comment identifies the general node/load and relationship/reverse-order rule. The commit message, rather than that comment, identifies these three particular consumers."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C3"
+     ],
+     "reason": "The added query comment states the general node/link ordering rule. The three specific locations are identified by the commit message, not that comment."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C3"
+     ],
+     "reason": "The query comment states the general node and relationship ordering rule; the commit message, not that comment, identifies the three specific places."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C3",
+      "A.D"
+     ],
+     "reason": "The query comment states the general node and relationship ordering rule. The three named examples are in the commit message, not that comment."
+    }
+   ]
+  },
+  {
+   "id": "95ef2abd6fa6bf44be02857374d152261d860fcbeb7a7a08d417a83954f968d2",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "7fc445371e76ef6797ac1954ebe3dac03af29e3b1bea511c61df88886ff7899a",
+   "claim": "For the requested “strong writer, cheap high-effort reviewers” plan",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "This conflates related workstreams. The recorded SQLite request concerns comparison with relational databases and porting the store to measure parity; the quoted reviewer arrangement does not establish that specific motivation."
+    }
+   ]
+  },
+  {
+   "id": "5381ea625e4ecde2c798365a396c990dfa13d297eae37f119f63c8eb4db623f8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 1,
+   "case": "vexagent-skill",
+   "artifactDigest": "e7247725fa647f544dc4ddaa852a7dc41f11ac8bd90ee7ea712b4698d5505d19",
+   "claim": "The version-reporting commit message reports that a fresh agent given the skill completed a cold student-task check covering doctor, battery, LEDs, camera and version without failures.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "K3",
+      "S24",
+      "C8",
+      "X4"
+     ],
+     "reason": "The cold test itself is supported, but the stated commit message only describes the skill clarifications and doctor change; it does not report the cold test."
+    }
+   ]
+  },
+  {
+   "id": "e14aeb23ff5340f38a3d71993e37b871cbdd6024dbfe9095ccb99c6f434fb40a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+   "claim": "Checks passed on the submitted content: `bun scripts/sync-content.ts --check`, `bunx tsc -p tsconfig.json`, `bun scripts/build.ts --local`, `bun run explore:learn:pr`, `shellcheck --shell=sh install/install.sh`, `python3 -c 'import glob,json,subprocess; b=glob.glob(\"bin/aifirst-*\")[0]; subprocess.run([b,\"--version\"],check=True); a…`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.V12"
+     ],
+     "reason": "The matching Python compiled-binary smoke check is explicitly recorded as failed with exit 1. The supported results for other checks do not establish this clause."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.V12"
+     ],
+     "reason": "The visible execution of the quoted Python smoke check reported failure, not a pass."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.V8",
+      "A.V9",
+      "A.V11",
+      "A.V12",
+      "A.V0"
+     ],
+     "reason": "The recorded Python smoke check failed. The captured content-sync, typecheck, local-build and learn-contract executions passed, but their execution-time content relation to the submitted content is unknown; the ShellCheck execution is not visible in the packet."
+    }
+   ]
+  },
+  {
+   "id": "ae106aeeeddf63bfb51df916f5762b695f2bbe062634b1305ded446d18068151",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+   "claim": "Checks passed on the submitted content:",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.V8",
+      "A.V9",
+      "A.V11",
+      "A.V12",
+      "A.V0"
+     ],
+     "reason": "Several executions report passes, but their execution-time content is unknown. They cannot establish the asserted final-content provenance."
+    }
+   ]
+  },
+  {
+   "id": "7e74195c779375bd2fe0ff971b80fc0bd8f2b46324df4bc1df363bee15904823",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "9d790ba9225fbb6b56d1882f2d4e7170269c6c320bc85f4cbc16aec36a8f9467",
+   "claim": "run on the submitted content.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.V10",
+      "A.V0"
+     ],
+     "reason": "The test execution has unknown before/after content, so final-content attribution is not established."
+    }
+   ]
+  },
+  {
+   "id": "8d9cb78fe5a227b9952c469ae85e75911593391007e8b3ac669dface6acee353",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcli-tui-responsive",
+   "artifactDigest": "a2e7cfae87d9480eec61b4abdafb5a66c07afc4b6e5bd231d1815d6e042cd3b6",
+   "claim": "Prepared exercise execution selects reader input for the final interactive command, using the embedded callback when supplied and inherited stdin otherwise and no execution timeout",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C6",
+      "C11",
+      "T7",
+      "D"
+     ],
+     "reason": "This paragraph describes prepared execution without its required reader-mode condition. readerInput also requires options.inputMode === 'reader'. With the default options, or the reachable plain-terminal learner call without a display context, an interactive final command instead receives its authored sample and retains executionTimeoutMs. Callback versus inherited stdin and removal of the watchdog apply only after reader mode is selected."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C6",
+      "C11",
+      "T7"
+     ],
+     "reason": "This unqualified description of prepared execution omits the required inputMode === 'reader' condition. Its default options, plain-terminal learner calls, and external-window learner calls use authored samples and retain the timeout policy. Callback versus inherited input and the timeout exemption apply only after reader mode is selected."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C6",
+      "C11"
+     ],
+     "reason": "Reader input requires inputMode to be 'reader'; the default and plain-terminal learner path use authored-sample mode. The callback, inherited stdin, and timeout details apply only when reader mode is selected."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C6",
+      "C11",
+      "T7"
+     ],
+     "reason": "The final interactive command uses reader input and no watchdog only when inputMode is reader. The default and plain-terminal learner path use authored-sample mode."
+    }
+   ]
+  },
+  {
+   "id": "9241498d8f580bb8e12c133d8f25f6b67e56b8fca79b72cac176c064787b098e",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcli-tui-responsive",
+   "artifactDigest": "a2e7cfae87d9480eec61b4abdafb5a66c07afc4b6e5bd231d1815d6e042cd3b6",
+   "claim": "The recorded renderer tests use fakes or stubs.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "As a blanket characterization, this obscures the real PTY-driven TUI rendering and child-process interaction tests. Some tests use fakes or stubs, but that is not the entire recorded renderer coverage."
+    }
+   ]
+  },
+  {
+   "id": "2dfd32f80a2d90b89aefa05e5a5984f6dbafe3f50507af0be14c9c7ce61b4640",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "79fb87ce9c81d31a2f9ecb38ce2f56378fdef6bf87b495a801db6dd02dbc325d",
+   "claim": "correct the Thermostat response path",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C7",
+      "X5"
+     ],
+     "reason": "The responsePath remains src/main/java/Thermostat.java. The actual correction adds ThermostatApp.java to the clean list."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C7"
+     ],
+     "reason": "The Thermostat responsePath is unchanged. The fix adds ThermostatApp.java to java-6-05's clean list."
+    }
+   ]
+  },
+  {
+   "id": "585e82f9495eeaf90f3b0d6e344e5d65572ec7458bd101e8c5197c158d55037a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "79fb87ce9c81d31a2f9ecb38ce2f56378fdef6bf87b495a801db6dd02dbc325d",
+   "claim": "Java scaffolds specify Maven source and target level 17, guarded by assertions in `test/java-chapter6-maven.test.ts`, and correct the Thermostat response path",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C7",
+      "C8",
+      "D"
+     ],
+     "reason": "The POM settings and test are supported, but the diff adds ThermostatApp.java to the clean list; it does not correct the existing Thermostat response path."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C7",
+      "D"
+     ],
+     "reason": "The response path remains Thermostat.java; the change adds ThermostatApp.java to the clean list."
+    }
+   ]
+  },
+  {
+   "id": "e4741dc498917ac32c6fdd472d92d61229d13f06b7740d3e58f2552d15662260",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-portable-replays",
+   "artifactDigest": "da6075bd550f1ff18e5a485d4550f04495ec8e3ea52fedc1f6aed07505ac8d1c",
+   "claim": "`test/python-chapters-9-10-audit.test.ts` checks portable execution for captured shell commands and preservation of the original Windows tool label separately from execution",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C6"
+     ],
+     "reason": "The named audit checks that captured shell commands have a `<shell>` portable representation and checks the PowerShell label and placeholder. It does not execute those commands."
+    }
+   ]
+  },
+  {
+   "id": "895ca1e9621a8c00bc6dcfe289482999fa20061093539ad42912502f76e2f274",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstwebsite-guided-install",
+   "artifactDigest": "2aa82cb527bba036b49023100d1a52f199dc252f4b03f29e25b9e05cae2822f3",
+   "claim": "appends the corresponding PATH line if an exact matching line is missing",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "grep -Fq checks for the text anywhere in a line, not an exact whole-line match. A commented line containing the proposed export text causes the append to be skipped even though no exact matching line exists."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The guard uses grep -Fq, which searches for a fixed substring rather than an exact whole line. An existing commented line containing the PATH text also suppresses the append even though an exact matching line is missing."
+    }
+   ]
+  },
+  {
+   "id": "a9fc0cd6e748d87e552efd97c7ca41f144e325c4999f5aa51ece1c8b4f06c7bc",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "aifirstwebsite-guided-install",
+   "artifactDigest": "2aa82cb527bba036b49023100d1a52f199dc252f4b03f29e25b9e05cae2822f3",
+   "claim": "When the install directory is absent from PATH, the shell installer selects the zsh, bash, or fish profile, creates its parent directory, and appends the corresponding PATH line if an exact matching line is missing; bash selects `.bash_profile` on macOS and `.bashrc` elsewhere.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The duplicate check uses grep -Fq, which matches the PATH text anywhere in a line. A profile containing that text as part of a longer line can lack an exact matching line yet still skip the append."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The profile selection and directory creation are correct, but grep -Fq searches for the text anywhere in a line. If that text occurs within a longer line, no exact matching line exists and the installer still skips the append."
+    }
+   ]
+  },
+  {
+   "id": "5674e7dc3dafea090cb2b0fb5e65878b7e9d9630a3ddaa5b9619208bfd88986f",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "pr11",
+   "artifactDigest": "2ac49e779eb8ff741f3ff83af8cce61ddaf361faf4a66b909700ae2aedc46d0c",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final historical command removed the bottom-5% instruction before running the full suite and bundled tests, with no intervening edits before the commit. Missing raw output limits the result claim, not this ordering."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The historical chained command removed the final prompt line before running the full and bundled suites on the content subsequently committed. Missing output limits knowledge of outcomes, not this ordering."
+    }
+   ]
+  },
+  {
+   "id": "7f8a78e40cbd2ec7b4b4481779fc0aa6e59b210c33b7f72e4aa8a8c21d039d4a",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "pr11",
+   "artifactDigest": "2ac49e779eb8ff741f3ff83af8cce61ddaf361faf4a66b909700ae2aedc46d0c",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V8",
+      "B.V0"
+     ],
+     "reason": "The historical chained full and bundled tests ran after the final provider edit on committed content. The fresh full-test result and tested-content relation are not visible."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S24",
+      "U3",
+      "A.V0"
+     ],
+     "reason": "The original session's chained full and bundled tests ran after the final provider edit on the committed content. The fresh check's submitted-content binding is separately unverified in the visible packet."
+    }
+   ]
+  },
+  {
+   "id": "8c5de4f807953b6b46a9d02fa38f0f81dad0790591bddfca88487c702ecda83d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The historical typecheck and full suite passed after the last edit, in the command that made the final commit."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The hand-checked history states that typecheck and the full suite passed after the last edit in the command that made the final commit."
+    }
+   ]
+  },
+  {
+   "id": "e8d9f1d6e484a0d714618e3152306cada3b62258f44b3087e367f92eb8ff9813",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "000811f0da4d266c79b330b4002c9d19dddd789156c574a034bcede609916353",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10",
+      "A.V0"
+     ],
+     "reason": "The historical fact sheet reports typecheck and the full suite passing after the last edit in the command that made the final commit. The fresh check's tested-content relationship is also not established by the visible capture."
+    }
+   ]
+  },
+  {
+   "id": "37edd0cc18761d306fbe5f166c2b449aea35fba0707489a6aff2cbc189f1cea2",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "4766acd4044badf2e43e8585e055e2ab3094d32393360884059f5438a50cba2a",
+   "claim": "the commit message reports that per-process values such as `CLAUDE_PID` prevented resumption",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "U4",
+      "S130"
+     ],
+     "reason": "The session found a hash mismatch but did not identify its cause. The visible commit excerpt does not establish the specific attribution to CLAUDE_PID."
+    }
+   ]
+  },
+  {
+   "id": "35b2de2b9429c4f53c042505e1e6c5d55ad0c67fad5f853a12e2e13f52f58a11",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "646ffd3b00f1c94cc67a4e224de7413381e92af5551d6f0a78ef572cb2fc4976",
+   "claim": "Runner containers use `--init`, drop all capabilities, and set `no-new-privileges`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D",
+      "C4"
+     ],
+     "reason": "The unqualified claim covers containers started by the runners. Both runners call volume preparation, whose reachable docker run executes as root without any of these three flags. The flags apply to sandbox and live execution containers."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C4"
+     ],
+     "reason": "This unqualified statement includes the volume-preparation container launched by both runners. That reachable docker run uses root and none of these three flags; only subsequent sandbox and live containers receive them."
+    }
+   ]
+  },
+  {
+   "id": "663ffe72e6927b25ab3801bffc51ec1bc384d6fa4288a38013dee14cfb92065d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "9edeb7e80deb5c1e795efcd18a8ba72a046e494b3dcefaee76d0fe99bf097655",
+   "claim": "`bun run bundle`: failed, run on the submitted content.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.V14",
+      "B.V15"
+     ],
+     "reason": "The check wrapper rejected validation because bundling changed inputs; the underlying log shows a generated bundle and changed artifacts. Reporting that as a bundle-command failure conflates validation invalidation with command failure. Submitted-content identity is separately unknown."
+    }
+   ]
+  },
+  {
+   "id": "25509262fce23cf3ebb7590964e1f59110799603d60de11171c763d2a6b1a428",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "db520350d2a90283d5b0e4f9bde4ec45d0d4e7fff383528dff5d84151013efed",
+   "claim": "The render fix addresses repeated findings described by the commit message: findings seen in an earlier render move to a nonblocking “repeated” list, while result-like sentences naming or tagged to a commit message are exempted from run-claim detection.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "The attribution clause is supported, but the general finding claim includes unbackedNames, which the demotion function does not process."
+    }
+   ]
+  },
+  {
+   "id": "7a95207da4bffc166e510086abfa6d76b24fbab6648b6f3d4c99379ae4bd7833",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-neighborhood",
+   "artifactDigest": "db520350d2a90283d5b0e4f9bde4ec45d0d4e7fff383528dff5d84151013efed",
+   "claim": "findings seen in an earlier render move to a nonblocking “repeated” list",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "The unqualified statement covers findings generally, but unbackedNames findings are not passed through demoteRepeats and remain blocking."
+    }
+   ]
+  },
+  {
+   "id": "0385c02c0b4752a98aa3ed1e179f5acbd7c41bd0f68494158f428fa3729e24f8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "2c1050881c8629301550f31b5e78cc7a1801f7e81cea5264c20aedd33c21e8ef",
+   "claim": "This PR addresses the request to “Research the last findings, find the sweet spot, plan what is next” by preserving command meaning in validation receipts and making the reviewed brief workflow the default when an evidence brief is available.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S2",
+      "S20",
+      "S36",
+      "S38",
+      "X1",
+      "X2"
+     ],
+     "reason": "The quoted earlier context does not establish a causal request for both changes. The receipt fix arose while preparing the adjudication worksheet, and the workflow change followed the later step-back request and approved plan. This is unsupported causal attribution, rather than proof that the quoted request never occurred."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S2",
+      "X1",
+      "X2",
+      "S20",
+      "S36",
+      "S38"
+     ],
+     "reason": "The changes are accurately summarized, but their combined attribution to this earlier request is not established. The receipt fix arose while preparing the adjudication worksheet; the workflow change followed the later step-back request and approved plan."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S1",
+      "S2",
+      "X1",
+      "X2"
+     ],
+     "reason": "The quoted request is retained earlier context, not evidence that it caused both changes. The receipt fix was discovered during worksheet preparation; the default-path change followed a later request and approved plan."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S2",
+      "S20",
+      "S36",
+      "X1",
+      "X2"
+     ],
+     "reason": "The receipt fix was discovered while preparing the adjudication worksheet, not as a response to the quoted earlier request. The workflow change followed a later step-back request and approval."
+    }
+   ]
+  },
+  {
+   "id": "9efcb2e851e11a4a9a250aa35ee5cd3071d2db58c4baee5a40443e04c78f1938",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "2c1050881c8629301550f31b5e78cc7a1801f7e81cea5264c20aedd33c21e8ef",
+   "claim": "The commit message reports that the full independent reviewer won 45–11 head-to-head versus 18–44 before, while researcher and drafter subagents added little separable value at about 1x cost; these are the commit’s reported analysis, rather than a performance guarantee from this patch.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "X2"
+     ],
+     "reason": "The figures are pooled comparisons of the earlier three-role hybrid era against the slim-reviewer brief path, not a head-to-head measurement of the full reviewer. The attribution of the gain to the reviewer is an inference."
+    }
+   ]
+  },
+  {
+   "id": "5dec930720324e0f7da120f9d7d00e371888d1b732203f9375d2fb47862fc1f8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "21d72facab439518e56e63ef12dbcd5d0af0a526732149a2b2305a89bdfe9be9",
+   "claim": "To support the requested “strong writer, cheap high-effort reviewers” round",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "X2",
+      "S6",
+      "S17",
+      "S27"
+     ],
+     "reason": "This attributes the SQLite port to the reviewer-cost experiment. The port addressed the separate question of comparing the graph approach with SQLite and measuring brief parity."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "The SQLite port was requested to compare evidence engines and measure brief parity. The cheaper-reviewer round was a separate strand of work."
+    }
+   ]
+  },
+  {
+   "id": "e3cb85cf318e3f5299b6c865946154329916efea79666bbf44f548fafcbe47b6",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 2,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "21d72facab439518e56e63ef12dbcd5d0af0a526732149a2b2305a89bdfe9be9",
+   "claim": "To support the requested “strong writer, cheap high-effort reviewers” round, this PR makes SQLite available as an evidence store alongside cypherlite",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S27",
+      "X1"
+     ],
+     "reason": "The SQLite port was requested to investigate graph versus embedded relational databases and measure brief parity. The writer/reviewer round was a separate question, so this assigns the port the wrong rationale."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S27",
+      "X1"
+     ],
+     "reason": "The reviewer-model experiment and the SQLite comparison were separate questions. The recorded SQLite request was to port the store and measure brief parity."
+    }
+   ]
+  },
+  {
+   "id": "dc1c79d0f34881ce33e5a88c7f3ba9744810b5810564f5720dfc902d5ae7a299",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "63958eb107e8995a71b3d379b04b686113a8a8f95d508ee564455e499cefe66f",
+   "claim": "this PR implements the requested “complete Claude Code integration independent of the parent process’s `PATH`”",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U4",
+      "D"
+     ],
+     "reason": "The explicit completeness guarantee includes the replay workflow. The hook still supplies bare replay execute and done commands through unchanged replay context, and the skill tells Claude to execute canonicalReplay rather than rewriting it through the launcher."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The explicit completeness guarantee includes hook-supplied replay commands. Their generation remains unchanged and uses bare aifirst; rendering the skill does not rewrite canonicalReplay."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U4",
+      "D",
+      "S3"
+     ],
+     "reason": "The claim asserts the complete integration is PATH-independent, but the hook supplies bare replay commands and the changed skill does not rewrite the supplied canonical replay command through the launcher."
+    }
+   ]
+  },
+  {
+   "id": "9c6fc7bc9826346791e276f29d17818abe340f179a03c9659a820773016bf5f9",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "63958eb107e8995a71b3d379b04b686113a8a8f95d508ee564455e499cefe66f",
+   "claim": "this PR implements the requested “complete Claude Code integration independent of the parent process’s `PATH`” using a Claude-owned Bash launcher that forwards to the current executable.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "S3",
+      "U4"
+     ],
+     "reason": "The requested scope was all Claude calls, but the hook-supplied replay execute command remains a bare aifirst command. The claim of complete PATH independence is therefore too broad."
+    }
+   ]
+  },
+  {
+   "id": "ede0de86d37bc3e3ddba51d1d2d0872c20d285bb2d9963b23d869a05ebcc4283",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "bd20d8802d0050fcf76c1b1dd9c26c11b79d18358932c85dab54399c4f135e48",
+   "claim": "legacy commentary becomes text blocks when events are absent.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Although replaySegments constructs fallback blocks, nativeReplayReply's no-events branch returns only flattened text and never attaches those blocks to the reply."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "Although replaySegments constructs internal blocks for legacy commentary, nativeReplayReply's no-events branch returns text without nativeBlocks. In this paragraph about replay replies, the claim incorrectly extends block preservation to that fallback."
+    }
+   ]
+  },
+  {
+   "id": "ab33dd8e346b7e86f5aeb1b7abf8a9317c61f5f449dbe0fe8b485a2613ab1ddd",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "bd20d8802d0050fcf76c1b1dd9c26c11b79d18358932c85dab54399c4f135e48",
+   "claim": "Replay execution callers await the async executor, retaining the demo/resolve execution bypass.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "D"
+     ],
+     "reason": "The CLI replay command and built-in learner switch to async execution, and the command retains its bypass. The unqualified caller claim also covers the book-mode responder's execute(), which still uses the synchronous executor."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C5",
+      "C6",
+      "D"
+     ],
+     "reason": "The changed CLI replay paths and built-in learning use async execution, and the CLI retains the bypass. The book-mode responder's execute() remains a replay execution caller using the synchronous executor."
+    }
+   ]
+  },
+  {
+   "id": "158ca1e27ca61386dce1a489b947df69fdce8fa8c50b71fdd3abb57318a30118",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "bd20d8802d0050fcf76c1b1dd9c26c11b79d18358932c85dab54399c4f135e48",
+   "claim": "Replay replies preserve text/status blocks, including trailing planning text; legacy commentary becomes text blocks when events are absent.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "Planning trailing blocks are preserved, and the segment helper constructs blocks for legacy commentary. However, nativeReplayReply's no-events return does not attach those blocks to nativeBlocks, so the helper alone does not establish the claimed replay-reply behavior."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "Planning trailing blocks are preserved, and the segment helper constructs legacy text blocks. But the no-events branch of nativeReplayReply returns text without nativeBlocks, so the claim about replay replies overstates what reaches the reply."
+    }
+   ]
+  },
+  {
+   "id": "4f1e6f6cffedcfde83c004a982b8c17441a0de832cecb4479c22e6c7da886a37",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+   "claim": "From runs on the submitted content.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.V10",
+      "B.V11",
+      "B.V12",
+      "B.V13",
+      "B.V14",
+      "B.V15",
+      "B.V16",
+      "B.V20"
+     ],
+     "reason": "The executions report results, but their tested revisions and relation to the final content are unknown. They cannot establish the asserted submitted-content attribution."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.V10",
+      "A.V11",
+      "A.V12",
+      "A.V13",
+      "A.V14",
+      "A.V15",
+      "A.V16",
+      "A.V20"
+     ],
+     "reason": "The executions report passes, but their execution-time content and relation to final content are unknown. The explicit submitted-content attribution exceeds the available evidence."
+    }
+   ]
+  },
+  {
+   "id": "36eca5028956dcea1f33a90ca84e60a71d1cfbece80e6292d042e9d3ee80aab5",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+   "claim": "Checks passed on the submitted content",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.V10",
+      "B.V11",
+      "B.V12",
+      "B.V13",
+      "B.V14",
+      "B.V15",
+      "B.V16",
+      "B.V20"
+     ],
+     "reason": "The named passes are recorded, but binding them to the submitted content exceeds the available execution-time content evidence."
+    }
+   ]
+  },
+  {
+   "id": "3b2725797c795d54c28f42c0fcd50c4b1484e469ef3621adc829cdc6c62cff29",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "5a4486e2007b1097c23c2c4ed4894e01cac881846d6cd65a0b47a2d19dc3170f",
+   "claim": "Checks passed on the submitted content:",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.V10",
+      "A.V11",
+      "A.V12",
+      "A.V13",
+      "A.V14",
+      "A.V15",
+      "A.V16",
+      "A.V20"
+     ],
+     "reason": "The pass results are supported individually; their asserted binding to the submitted tree is not established."
+    }
+   ]
+  },
+  {
+   "id": "2f47244e0ebe1ce4660cc8fa78abf170a8ffc5cdb19c14ff624510b4832256d6",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "f9343926085e6ea40935e620490e2f251bb7d46ac69b98cefe56ed7a236c6b48",
+   "claim": "Previously verification created and removed a temporary directory for each call",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The explicit breadth of 'each call' includes external-launch verification. The unchanged external-launch return occurs before temporary-directory creation, so those calls did not create or remove a directory."
+    }
+   ]
+  },
+  {
+   "id": "5bfbdb5ed41094b634263cb051f3cdebb5dc3f6a2ab2a7e1d156c954e210887d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "b0cdba385f783b274a07a67aebaead362e1df90fe4eb2f52613cd5103265fd5f",
+   "claim": "The installer comment attributes the terminal-input issue to Bun reopening macOS’s `/dev/tty` alias",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "X2"
+     ],
+     "reason": "The installer shell reopens stdin through the alias. The comment attributes the failure to Bun being unable to poll that reopened stdin, not to Bun reopening the alias."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C3",
+      "X2"
+     ],
+     "reason": "The installer reopens stdin through shell redirection. The comment attributes the failure to Bun being unable to poll that reopened stdin, not to Bun reopening the alias."
+    }
+   ]
+  },
+  {
+   "id": "d28da98c39a24d19910b1788810aedba95b35bcc8a6cd859f56e83dd42f0d2e3",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr10",
+   "artifactDigest": "60354446cdc0cd5b47929f5e20f669d796d5a63ec4a675cc455e44719cd01857",
+   "claim": "but its changed tests replace collaborators with fakes or stubs rather than checking the real steps.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C12",
+      "S46",
+      "S48",
+      "S60"
+     ],
+     "reason": "The fake-Codex end-to-end test exercises real CLI steps for whole-page drawing, rendering and proofreading output, overlay, reroll and configuration validation. Replacing the external image provider does not replace those steps; the recorded footer failure and subsequent passing rerun also demonstrate real integration assertions."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C12",
+      "S48",
+      "S60"
+     ],
+     "reason": "The fake-Codex end-to-end test exercises CLI whole-page drawing, rendering, proofread output, overlay, reroll and config validation. Faking the external provider does not replace those application steps; the categorical dismissal misstates what the tests exercise."
+    }
+   ]
+  },
+  {
+   "id": "91c4f9920d659b61dd11d5579edf519726b7a19319bc35a9995a1548d4cad2ad",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr10",
+   "artifactDigest": "60354446cdc0cd5b47929f5e20f669d796d5a63ec4a675cc455e44719cd01857",
+   "claim": "`tests/comic.test.ts` covers sequel recaps and whole-page rendering, but its changed tests replace collaborators with fakes or stubs rather than checking the real steps.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C12",
+      "B.V12"
+     ],
+     "reason": "Some end-to-end collaborators are faked, but the blanket characterization does not follow: the tests also exercise actual validation, rendering and continuity behavior."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C12"
+     ],
+     "reason": "The fake-Codex end-to-end run exercises the CLI workflow; the blanket contrast with checking real steps overstates what the use of test doubles establishes."
+    }
+   ]
+  },
+  {
+   "id": "209e8b346c0e4c58b7395ff18fc242769cd26a26b8e2e03b8f8f63a5b1a0d533",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "c2f0e1fe6b0c6d4254e0c570ce7583943918b76337431ef91dac9baf43eb372c",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final session command removed the 5% line before running the full and bundled tests, with no subsequent edits before committing. Missing raw test output does not reverse that recorded ordering."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The final session command removed the 5% instruction before running the full and bundled suites, with no intervening edits before commit."
+    }
+   ]
+  },
+  {
+   "id": "3edaf8df19f2b6c61edadb8fc2656972ce7eb721139b9dc940531e249005b745",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "c2f0e1fe6b0c6d4254e0c570ce7583943918b76337431ef91dac9baf43eb372c",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "B.V0"
+     ],
+     "reason": "The original full and bundled tests ran in the chain after the final prompt edit, with no intervening edits before commit. The fresh checks report passes, but their tested content is not established by the capture."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "U3",
+      "S24",
+      "A.V0"
+     ],
+     "reason": "The historical chained tests ran after the final provider edit on committed content. The fresh checks report passes, but their tested content is not established."
+    }
+   ]
+  },
+  {
+   "id": "55c45e0560141cf562c18d3a373eb1dd642e6448862a3350010f6715616bd1b7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr5",
+   "artifactDigest": "a305da59af8dd3802fbd31b91b1b8c2783a3bb7e1cee49ce80c3c4454864b448",
+   "claim": "The latest timestamped session command matching a base-branch commit sets the cutoff",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "commitMoments stops at the first matching command for each commit, and earlierWorkCutoff takes the maximum of those first-match times. A commit command followed by a later git log showing the same SHA is a reachable counterexample: the later matching command does not set the cutoff."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "commitMoments takes the first matching command for each base commit, then earlierWorkCutoff takes the latest of those recorded moments. It does not take the latest matching command overall. The new regression fixture contains a reachable distinction: a quiet commit followed by git log matching the same base commit; the later log does not advance the cutoff."
+    }
+   ]
+  },
+  {
+   "id": "85f25aeddb6a9424e8144327615cef7dc45794754495b72e4b4bb271ea555f47",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "pr5",
+   "artifactDigest": "a305da59af8dd3802fbd31b91b1b8c2783a3bb7e1cee49ce80c3c4454864b448",
+   "claim": "The latest timestamped session command matching a base-branch commit sets the cutoff: earlier completed turns are dropped; crossing turns retain conversation while losing earlier work, with links and artifacts exempt from that filtering.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "For each base commit, commitMoments stops at the first matching command, then the cutoff takes the latest recorded time among those per-commit matches. A later command matching the same base commit therefore need not set the cutoff. The turn-filtering and exemption clauses are otherwise supported."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "The filtering and exemptions are described accurately, but commitMoments records the first matching command for each commit. A later command matching that same commit does not replace its recorded time; the cutoff is the maximum of those per-commit times."
+    }
+   ]
+  },
+  {
+   "id": "915b541a0487231c0eba34c09dc6d471b760112ef5190452f573eb1e5bdac366",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "feeff9b4fadb0afe2d60a200cea4ea075e7ad7920165bb86a597f4be14242f6a",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The hand-checked history establishes a typecheck and full-suite pass after the last edit, in the command that made the final commit."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The hand-checked history establishes that typecheck and the full suite passed after the last edit in the command that made final commit f7ec46e."
+    }
+   ]
+  },
+  {
+   "id": "6e3a075d06cfd3bc1c44dfcb5a9f99fa90a11de0e755463728cc4555982ab793",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "fa78d0e54c085bb20238bbc6f6c8df943b7652ee2f4afc769f495d6ede5b81db",
+   "claim": "the commit message reports that inherited values such as `CLAUDE_PID` and `INVOCATION_ID` prevented that resume.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S130",
+      "U4"
+     ],
+     "reason": "The retained commit excerpt does not establish that specific attribution, and the session did not identify the variable responsible for the refusal. The evidence does not show that either named variable caused it."
+    }
+   ]
+  },
+  {
+   "id": "573cfe3a0a33f0718c6fdbf000e15fc6061d365ebd8edf6ce573c6aba2b5813d",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "showtail-signpath",
+   "artifactDigest": "d188ff7b94f2efc15bb9337e2635110698d348ce4cdf2b669f6cc5d6cc7acb33",
+   "claim": "publication and push attribution remain unresolved after the session’s `gh pr` errors.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X4",
+      "U2",
+      "K2",
+      "K3"
+     ],
+     "reason": "The supplied history establishes that the PR opened and follow-up commits were pushed. Missing final CI results do not make those outcomes unresolved."
+    }
+   ]
+  },
+  {
+   "id": "d726087328fea10dca1eefdf793c7c34bf1033387e53ba1d2ccea8ca24c2863b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "showtail-signpath",
+   "artifactDigest": "d188ff7b94f2efc15bb9337e2635110698d348ce4cdf2b669f6cc5d6cc7acb33",
+   "claim": "`tests/signingReadiness.test.ts` covers policy availability, Bun/Windows metadata requirements, signing-before-publication, and immutable action references.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C10",
+      "D"
+     ],
+     "reason": "These are static text checks, and the action-reference regex skips `- uses:` list items. The wording does not communicate those limits and overstates coverage of immutable action references."
+    }
+   ]
+  },
+  {
+   "id": "bab4830954b3a690cd8ed9eb3846a250385c8393b4b7034bc293ddde215297dd",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "f60a20be11a0823699ef78ce431f9a254555af1c13351e977af471fc35c00bd9",
+   "claim": "JSON mode avoids prompts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C3",
+      "D"
+     ],
+     "reason": "The unqualified guarantee includes bulk resume. `showtail migrate --resume <run-id> --yes --json` reaches applyRoot, which installs the TTY-gated interactiveMatcher and can prompt for ambiguous candidates."
+    },
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C3",
+      "D"
+     ],
+     "reason": "This unqualified guarantee includes the explicitly listed bulk resume path. Resuming with --yes --json reaches applyRoot, which supplies the TTY-gated interactiveMatcher; ambiguous matches in an eligible project can therefore prompt on a terminal."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C3",
+      "D"
+     ],
+     "reason": "This paragraph includes bulk resume in the command's scope. Resumed bulk application with --yes --json retains the TTY-gated ambiguous-match picker."
+    }
+   ]
+  },
+  {
+   "id": "c21096c70fafe70c17ce23cb4e5241c1f471196ef7f8ddd3a0a3d6d2c44225e8",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "f60a20be11a0823699ef78ce431f9a254555af1c13351e977af471fc35c00bd9",
+   "claim": "`showtail migrate [tool]` supports `--session`, explicit `--file`, `--dry-run`, `--yes`, `--json`, and bulk `--resume`; JSON mode avoids prompts, and undo accepts a batch identifier with `--yes` or `--json`, rejecting session/file/dry-run/resume options.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "C1",
+      "C3",
+      "D"
+     ],
+     "reason": "The options and undo routing are supported, but the unqualified JSON claim covers bulk resume: resumed application with `--yes --json` retains the TTY-gated ambiguous-match picker."
+    }
+   ]
+  },
+  {
+   "id": "ad1aa4caf8aacf7a5a941915f99fb796800b8da61369e635aee68fd012f585d7",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "a8d69299da91c24ccecacc35b6c1ba4b382cb283ae7269364adb94449b833cd3",
+   "claim": "so their expanded wording does not increase their cost.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "B.D"
+     ],
+     "reason": "The flat discount does not fully offset `removed:`. For an otherwise identical short candidate, replacing `- ` with `removed: ` adds seven characters, but the discount subtracts six, increasing its budget cost by one. Such a removal candidate can therefore cross a budget boundary."
+    }
+   ]
+  },
+  {
+   "id": "3beb60220184bfb3b8c11689f951c43b97837275005f26ae20da3ec0e7ab1241",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "tracetoon-review-run-all",
+   "artifactDigest": "4ddcd18cde54bd087b5b1a824684491ce920eae365c5bd1db0cb9494e24ff9d1",
+   "claim": "rerunning skips Tracetoon-run slots already imported for the same body hash, lens and verified model unless `--fresh` is supplied.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C3"
+     ],
+     "reason": "The partial-failure paragraph gives this rerun rule without limiting it to initial reviews. A failed --all --recheck under default once is a reachable counterexample: its printed rerun resumes successful slots too, bypassing the body/model skip branch."
+    }
+   ]
+  },
+  {
+   "id": "d177757ffbd62c27e0b27016fcf9c67b38e45bbefef1ee3b857eb8f5684210fa",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "tracetoon-review-run-all",
+   "artifactDigest": "4ddcd18cde54bd087b5b1a824684491ce920eae365c5bd1db0cb9494e24ff9d1",
+   "claim": "On partial failure, completed reviewer slots remain imported and the command reports the unsuccessful slots and exits nonzero; rerunning skips Tracetoon-run slots already imported for the same body hash, lens and verified model unless `--fresh` is supplied.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "A.D",
+      "C3"
+     ],
+     "reason": "The partial-success behavior and plain --all retry are supported. The unqualified rerun claim also encompasses --all --recheck: under the default once policy its retry resumes previously successful sessions as well."
+    }
+   ]
+  },
+  {
+   "id": "ab06d861f0df10ecf5fd8ee268d6da6e426e83f1a93707017d5863345f9e0471",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "0b4961fc158c59f55f962395756858d96674aa156a25811aafdb8a79452637be",
+   "claim": "This PR supports the requested “strong writer, cheap high-effort reviewers” work by making SQLite evidence available alongside the current graph engine",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "This attributes the SQLite port to the reviewer-cost work. The retained request treats that work and the SQLite comparison as separate follow-up questions; the port was requested to compare stores against the current graph build."
+    }
+   ]
+  },
+  {
+   "id": "f54f6f38da532f18177a71bb4eea5692aca9271d89af453dc2b0f9a6846cec6b",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "0b4961fc158c59f55f962395756858d96674aa156a25811aafdb8a79452637be",
+   "claim": "This PR supports the requested “strong writer, cheap high-effort reviewers” work by making SQLite evidence available alongside the current graph engine, with comparisons to expose differences in the evidence supplied to writers.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "SQLite availability and comparison are supported, but the asserted connection to the writer/reviewer cost work is not. The recorded SQLite request concerns comparing graph and relational approaches and measuring brief parity."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "S27",
+      "X1",
+      "X2"
+     ],
+     "reason": "The retained context presents the reviewer-cost question and the SQLite comparison as separate follow-up questions. The port request is to measure brief parity for the database comparison, not to expose differences in evidence supplied to writers for the reviewer-cost work."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "S17",
+      "X1",
+      "X2",
+      "C4"
+     ],
+     "reason": "The retained context presents cheaper reviewers and the SQLite comparison as separate questions. The parity harness compares engine answers; the evidence does not establish that this port was requested to support the reviewer-model work."
+    }
+   ]
+  },
+  {
+   "id": "87784c33b6a3df5123f6210735ed815b9e37228ca0cf07628e72f39cda41bbad",
+   "arm": "tracetoon-candidate",
+   "model": "gpt-6.1-sol@medium",
+   "replicate": 3,
+   "case": "vexaim",
+   "artifactDigest": "b43b12a5509a323b7b06833a0601ed37cf3d3517b5c1fdcb99f6657a30f84ad6",
+   "claim": "Previously collection required possession confirmation and a retention reverse, and delivery required release confirmation before returning success.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "codex:gpt-6.1-sol@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The possession and release requirements are supported, but the asserted collection requirement has a reachable base-code exception: collect immediately returned for already-confirmed held cargo, without a retention reverse. The sentence states the reverse as a requirement of collection rather than limiting it to acquisition of previously unheld cargo."
+    },
+    {
+     "judge": "codex:gpt-6.1-terra@medium",
+     "opponent": "codex-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Previously, collect returned immediately when the requested cargo was already confirmed held; that reachable path did not perform a retention reverse. The delivery release-confirmation clause is supported."
+    }
+   ]
+  }
+ ]
+}

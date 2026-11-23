@@ -1,0 +1,4191 @@
+{
+ "schema": "prbench.accuracy-findings/v1",
+ "experiment": "f2cc633d4cd08834874b9d3e24404bb69837f4c722f2631970613c68cf4737b5",
+ "findings": [
+  {
+   "id": "57db2a8c7342616baeac43ac00b250d4fdd88189242813f7e98a675bd0722504",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-book-walk",
+   "artifactDigest": "785f827afe698b5a6f8558769587fc9368279a67c3cbbd99d5abb90c0f332fe1",
+   "claim": "the Dockerfile installs packages with `--no-install-recommends`",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base Dockerfile already used this flag. The actual change adds the GTK, xauth, xdotool and Xvfb packages, so describing the Dockerfile change this way is misleading."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C9"
+     ],
+     "reason": "The flag was already in the base Dockerfile. The change added libgtk-3-0, xauth, xdotool and xvfb."
+    }
+   ]
+  },
+  {
+   "id": "2b0c649e0ea98ab63c077a52d447c3d489440e7fc8534f90bacf76177bc0d054",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "6bad20916861a7067cdd87fc3f790f790634b31e2c8ab518d59c7178bc123f2d",
+   "claim": "This PR stops the Claude Code integration from looking up `aifirst` on the inherited `PATH` (the generated commands still start with `bash`), by installing a stable Claude-owned Bash launcher",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The hook-supplied `aifirst replay execute` command is not changed, so the whole integration is not shown to avoid PATH."
+    }
+   ]
+  },
+  {
+   "id": "e5bbce517e87b83cfa2f30c3e823e0dadaaf3236f89b804ba030b403f814c761",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "6bad20916861a7067cdd87fc3f790f790634b31e2c8ab518d59c7178bc123f2d",
+   "claim": "This PR stops the Claude Code integration from looking up `aifirst` on the inherited `PATH` (the generated commands still start with `bash`), by installing a stable Claude-owned Bash launcher that delegates to the current `aifirst` executable and using it in hooks, generated instructions and permission rules.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U4",
+      "D"
+     ],
+     "reason": "The hook, skill text and permissions do use the launcher. But src/commands/replay.ts is unchanged, so the `aifirst replay execute` command that the hook supplies is not shown to go through the launcher. Saying the integration no longer looks up `aifirst` on PATH is broader than the evidence."
+    }
+   ]
+  },
+  {
+   "id": "eb0ff9b5c83e38b3e80f6b10eef2572a7a6e2e6077a0ff27488ff2761345ce79",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "6bad20916861a7067cdd87fc3f790f790634b31e2c8ab518d59c7178bc123f2d",
+   "claim": "using it in hooks, generated instructions and permission rules",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U4"
+     ],
+     "reason": "Mild: generic phrasing, but the replay execute commands the hook generates are not launcher-based."
+    }
+   ]
+  },
+  {
+   "id": "065fdad1cc79a311b3a0c4cdbcde493657dff5bc636c4e8a662425618e06abd7",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "6bad20916861a7067cdd87fc3f790f790634b31e2c8ab518d59c7178bc123f2d",
+   "claim": "This PR stops the Claude Code integration from looking up `aifirst` on the inherited `PATH` (the generated commands still start with `bash`)",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U4",
+      "D"
+     ],
+     "reason": "The broad wording does not hold for the hook-supplied replay execute and done commands. src/commands/replay.ts is unchanged, and only the launcher's `--version` was tested under a stripped PATH."
+    }
+   ]
+  },
+  {
+   "id": "16c796da9defe8f28548470c6b0ed0304cbbbaf08d23ddd7b2d16cea78585bb0",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-macos-installer",
+   "artifactDigest": "9568cc204ea44635ca92ccdb7b72f39b9ce67b22ec1a0718094e2c81209f5631",
+   "claim": "The commit message says the hang comes from Bun being unable to poll stdin reopened through macOS's `/dev/tty` alias (oven-sh/bun#41495)",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "K1",
+      "D"
+     ],
+     "reason": "The commit message is only the subject line 'fix: defer macOS setup outside piped installer'. This explanation is in the install.sh code comment, not the commit message."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "K1",
+      "D"
+     ],
+     "reason": "The commit message is only 'fix: defer macOS setup outside piped installer'. The Bun explanation is in the install.sh comment, not the commit message."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "K1",
+      "C2"
+     ],
+     "reason": "The commit message is only the title. The Bun attribution is in the install.sh comment, so the commit message is misattributed as the source."
+    }
+   ]
+  },
+  {
+   "id": "f3d163655433b4a3051431da80702b162260eb2322f1cf02df01dc7c882c717b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "18ac18cc74b1230e9108c25463e01d478a77975d6b0fe9373f2da079df4579a3",
+   "claim": "a `license` field in `package.json`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The license field already existed with the value MIT. The PR changes it to Apache-2.0 and does not add it."
+    }
+   ]
+  },
+  {
+   "id": "8936c8b01378accecf257ebb217de606ed3e6f79fa80062423dc415562345f26",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "18ac18cc74b1230e9108c25463e01d478a77975d6b0fe9373f2da079df4579a3",
+   "claim": "Replacement executables are published by the `release` job once a `v*` tag is pushed; this PR does not publish them itself.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "S54",
+      "S64"
+     ],
+     "reason": "The replacement v0.8.0 Windows executables were already built and published separately during the session, not by a future release job."
+    }
+   ]
+  },
+  {
+   "id": "80a22efdc329c3e042ff738a6f4180483a7a4a75394214de359ec3269dcce7ba",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "aifirstcontent-replay-start-state",
+   "artifactDigest": "c21dc28a477ca8628451bfdeff87e90084b848fc3946c0d7eb71f981b671a727",
+   "claim": "This PR makes a replay declare which earlier exercise's files it starts from, so a runner can set up that state first.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T2",
+      "X2"
+     ],
+     "reason": "The CLI uses the field to choose a captured sequence or a fallback. It does not seed files. The wording is mild and leans toward T2. The description also says runners still must act on the field."
+    }
+   ]
+  },
+  {
+   "id": "358a86492b9feecb02b809a467269d74fb8d43fef37ec37dc80569a33907fe75",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "pr11",
+   "artifactDigest": "29879ab6257baadff8de27808ec3cadfa9635a88300dac0bb4d3dfe8f29b9663",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The chained S24 command removed the 5% line and then ran the full suite and the bundled tests on the committed content, so the session's last test run came after the final edit."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The full suite ran in the chained command after the 5% line was dropped, so the session's last test ran on the committed content."
+    }
+   ]
+  },
+  {
+   "id": "1e77eb352e91540652505602ed874b21b6469da51c0eb46c5d519c7e8ddc6a4b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "pr12",
+   "artifactDigest": "f1b145dec1e5683dd2cc3902e2400caf29c34e1d81e123a3ad5c4f1658ff1ba8",
+   "claim": "For sessions that run inline scripts, test detection, command grouping and commit detection now see the commands outside quotes and heredoc bodies rather than the script text inside them.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "For commit detection, quoted text stays inside the segment, and the unanchored COMMIT_MAKER regex still matches it. The claim holds only for heredoc bodies and for the anchored test detection."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "Quoted text stays inside its segment and COMMIT_MAKER is unanchored, so commit detection still matches quoted text such as echo \"git commit\". The claim holds for heredoc bodies and for the anchored test detection."
+    }
+   ]
+  },
+  {
+   "id": "873926415ef3c8fd9f85a91dbd9316bb7d072cbfff27a65b1ab1d01a74da188e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "pr5",
+   "artifactDigest": "48d2dbab2b5df8977bc1479c0951ec1de0cc81b528008a02e622f746a8fdbd16",
+   "claim": "Where to start: `earlierWorkCutoff` in `src/correlate/correlate.ts`, which leaves out work already in the base branch and assigns work after the last commit to the next PR.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "earlierWorkCutoff only computes the cutoff time. dropEarlierWork drops the records, and windowFor sets the 5-minute tail after the last commit, so this function does not own either behavior described."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "earlierWorkCutoff only computes the cutoff time. dropEarlierWork, called from matchSession, removes the records. The end of the window after the last commit is set in windowFor, which earlierWorkCutoff does not touch."
+    }
+   ]
+  },
+  {
+   "id": "a07a7231b58dca513e27f47dac40a247533981e94c78b126b35b015f2755ae13",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "pr9",
+   "artifactDigest": "5a585b565a766214e7769a8ecba1074972aefbcdef535a5d76f954823dac40bc",
+   "claim": "A new `--provider <name>` flag picks the route",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base cli.ts already had `--provider <name>` with the values auto, builtin, gemini or openai. This change only adds values to it."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The base cli.ts already had `--provider <name>` with 'auto, builtin, gemini or openai'. Only the accepted values changed."
+    }
+   ]
+  },
+  {
+   "id": "bba3ba436d624718375f8ab23de15958c472011334b21ea13cc4772a4828ae74",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "58857dc9824af89749beee38996b9f91e5aa52af6c14ef93e89f9e6ec2ad6dc5",
+   "claim": "The session's goal also covered switching codex back to the neo4j subscription, which touches no file here.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S65"
+     ],
+     "reason": "S2 was earlier, unrelated user context, not a goal of this change. The sentence is irrelevant padding."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T5",
+      "S2"
+     ],
+     "reason": "This is unrelated earlier session context, wrongly attributed to this change."
+    }
+   ]
+  },
+  {
+   "id": "1e4e22a63779a8e118c57eb64dee79b3d85a5e2cf4b3d943d8a8c8d2d5bc812e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "58857dc9824af89749beee38996b9f91e5aa52af6c14ef93e89f9e6ec2ad6dc5",
+   "claim": "Checks passed on the submitted content: `bun run typecheck`, `bun run prbench validate`, `bun run test` (296 pass, 0 fail, Ran 297 tests across 41 files. [416.90s]).",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.V6",
+      "B.V7",
+      "B.V8",
+      "B.V11",
+      "U1"
+     ],
+     "reason": "Fresh full-suite runs were interrupted or errored. The 296/416.90s figures do not appear in them. The historical pass belonged to separate shim work."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.V4",
+      "A.V5",
+      "A.V6",
+      "A.V7",
+      "A.V8",
+      "A.V11",
+      "A.V0",
+      "U1"
+     ],
+     "reason": "Typecheck and validate show passed, but the tested content relation to the final content is unknown. All three visible `bun run test` runs were interrupted at the 10-minute timeout (exit 143), and a later one hit an EACCES tool error. No visible run shows a full-suite pass. Sixteen executions were omitted, so a pass may exist there, but nothing visible supports the specific numbers. The 296 pass / 0 fail / 297 tests counts also don't add up."
+    }
+   ]
+  },
+  {
+   "id": "dac25dec940703a30bd721d96e5c78622d98f0600aacbd9087e3c86ac5e25b41",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-crossjudge",
+   "artifactDigest": "7da4fcc94e933d897cc0401f0b800489a06c3dd49004444ecd2a66239863532e",
+   "claim": "Any refusal or error is printed to stderr with exit status 2.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "CLI catch does that for crossjudge, so broadly true; but not a contradiction. Treated as supported in substance."
+    }
+   ]
+  },
+  {
+   "id": "f39fd29da14d376860c91700fedf5807a2e89814e4fb3f5e0d553c4b2fe70943",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-graph-compare-doc",
+   "artifactDigest": "61a0edb62b448d9d5622a00e53ca00358d39cfcb5ff116e67c7438c2863d812a",
+   "claim": "so it can be repeated with the same inputs, controls and scoring, provided the writer CLIs are pinned as the page describes",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "U3"
+     ],
+     "reason": "Reproducibility is not established: the shipped defaults and an unedited 7483847 bundle are not shown to reproduce the reference numbers."
+    }
+   ]
+  },
+  {
+   "id": "1b8bfd8e165379c19ee87354d7303ee3da0a79eae29b1f76f199d0abefd355f0",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-judge-retry",
+   "artifactDigest": "f0eb3da1158c3570e6c4737f694d58bfcb122e67a59246386b488beb40155464",
+   "claim": "Writer environment identity for Codex and Claude ignores ... `CLAUDE_*`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C8",
+      "D"
+     ],
+     "reason": "Only CLAUDECODE is ignored."
+    }
+   ]
+  },
+  {
+   "id": "3377cac573813c611078599bcc1445ad7fe8b25af6f81427ac7f93c7339888e7",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "fcd16a9ee9e8bb62e459d7e98fda9a9edcd10fc68a3074a1e4b4e66d436d08dc",
+   "claim": "Codex keeps Sol and Terra and its frozen identity",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3"
+     ],
+     "reason": "Writer and judge contract digests cover edited files, so the frozen identity changes and pre-change runs would not resume."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3",
+      "D"
+     ],
+     "reason": "Codex keeps its settings shape and hashes. But the frozen identity also includes writer and judge contract digests over files this diff edits, so pre-change Codex experiments would be refused on resume."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "Mostly true for settings shape, but this is close to the T7 trap, because contract digests changed so old runs would not resume. It is not stated explicitly that they resume."
+    }
+   ]
+  },
+  {
+   "id": "9f7220131c9ba3ff24aeb71be6e64f6e557d631438241202ff83299cde46a10d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "fcd16a9ee9e8bb62e459d7e98fda9a9edcd10fc68a3074a1e4b4e66d436d08dc",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The typecheck and full suite passed after the last edit, in the command that made the final commit."
+    }
+   ]
+  },
+  {
+   "id": "e78553a10a8ff9a83be3c5a1051feeebde57ea5249635f0efabd3a24f4869edd",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "fcd16a9ee9e8bb62e459d7e98fda9a9edcd10fc68a3074a1e4b4e66d436d08dc",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The session's full suite passed after the last edit, in the command that made the final commit."
+    }
+   ]
+  },
+  {
+   "id": "263a87e64ddb39db403597ddf559253528cc474264dfff1e9b1d899708170d86",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-priced-cost-gate",
+   "artifactDigest": "73e80feb6727b4b19247a17cdecb8dd9b30928a485214e7d55220d5c52406ff8",
+   "claim": "If any draft in a candidate/baseline pair has no usable priced cost (the draft is missing, a model has no price, token counts are missing, Codex usage is limited to the main thread, or the cost is not positive), the gate is inconclusive and lists that draft in `unpricedDrafts`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Only the 'missing draft' branch is wrong. A candidate without a baseline is skipped by `if (!baseline) continue;`, so a missing draft is never listed in unpricedDrafts. The other listed reasons are correct."
+    }
+   ]
+  },
+  {
+   "id": "abdb66139d840919f5cf8ff14dd718889b2f19975d1608c785ffa86dc0964bf3",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "1614847b8c0474126ad12671471325f825dae8897c216fad0c14e48e94b58081",
+   "claim": "This fix came up while comparing drafts for work on how Tracetoon builds and retrieves its evidence graph, where the request was to make the graph cheaper and more precise for the drafting task; a comparison run had to be cancelled, fixed and restarted.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S5",
+      "S74",
+      "X1"
+     ],
+     "reason": "This mixes unrelated session requests. The cancel/restart request was for a different run, and the actual trigger was a refused resume."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S5",
+      "S74",
+      "X1"
+     ],
+     "reason": "The cancel-and-restart request (S5) concerned an earlier graph fix, not this change. The recorded trigger was a refused dev7 resume, which this sentence does not mention."
+    }
+   ]
+  },
+  {
+   "id": "368a7f9573dea2420324fe13bb3e6c771968dc51984713cb25ed648fb8d3d3d7",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "1614847b8c0474126ad12671471325f825dae8897c216fad0c14e48e94b58081",
+   "claim": "Because the hash now skips names it used to include, a shell that sets any of them gets a different identity from before this change, so existing experiments recorded under the old hash will not match.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3"
+     ],
+     "reason": "The conclusion is too broad. Old and new hashes can still match if none of the newly skipped variables was present. The sentence is partly conditional but ends in a general statement."
+    }
+   ]
+  },
+  {
+   "id": "85c925e60ae3740cf573db2398bacc425517843632badecc970c51fbfca4f5b4",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "1614847b8c0474126ad12671471325f825dae8897c216fad0c14e48e94b58081",
+   "claim": "a comparison run had to be cancelled, fixed and restarted",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S5"
+     ],
+     "reason": "The cancel and restart in S5 was for the graph-outline fix. It was not for this env-hash change, so tying it to this PR is a loose attribution."
+    }
+   ]
+  },
+  {
+   "id": "fc5aa5c929878dd3e696e30f57088fcb705dc46ace58d40d8a2de14f0c0ffdcb",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "6ae68cb22622fb761213c4ad43effff9a411bb7c4d658bd39bedb0b1f52c4ae7",
+   "claim": "Both scripts rebuild the image from the current checkout at every invocation.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "docker-test.sh `clean` and `--help` exit before showtail_docker_build runs, so 'every invocation' is broader than the code supports."
+    }
+   ]
+  },
+  {
+   "id": "1552d4e3a92a351fb2b4b9e3b2018a1fe86445f67586a95a7b2580730671d77b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "bc294b5f6ba5ab0718a27acb51a3620aa8d8be66689c890cc471a72a82e28738",
+   "claim": "Feedback wanted: is moving the project-root filter out of `findProjectTranscripts` and `findProjectChatSessions` safe for their existing live-capture callers?",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.D"
+     ],
+     "reason": "The project finders still filter by root. The filter was not moved out of them, which also contradicts B's own Design section."
+    }
+   ]
+  },
+  {
+   "id": "9e36c6ae9861e151dce7d1071c8b2ad5af9463fc67712ef5ab16f9c84520f78f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "bc294b5f6ba5ab0718a27acb51a3620aa8d8be66689c890cc471a72a82e28738",
+   "claim": "The offer runs from the CLI pre-action hook for commands other than `migrate` and `--json` runs",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.D"
+     ],
+     "reason": "The NO_BOOTSTRAP commands (hook, setup, connect and others) return before the offer is checked, so the stated breadth is too wide."
+    }
+   ]
+  },
+  {
+   "id": "f63e243cbf81b60e5060a6f4b40e4e5801aa527c2d8a28a8c41c924ffa11e865",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "bc294b5f6ba5ab0718a27acb51a3620aa8d8be66689c890cc471a72a82e28738",
+   "claim": "The Windows-specific lowercasing in `migration.ts` and `projectDiscovery.ts` and the `install.ps1` change are Windows-only paths, as are the interactive terminal prompts in `migrate.ts` and `upgrade.ts` for a user at the keyboard.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.D"
+     ],
+     "reason": "askYesNo and the upgrade prompt are not Windows-only. The sentence also fails to state clearly that these paths went untested."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.D",
+      "U2"
+     ],
+     "reason": "The interactive prompts are not Windows-only. The wording garbles the real limit, which is that these paths were not exercised."
+    }
+   ]
+  },
+  {
+   "id": "8506a503dc573e37f678fc4587d0369311f204c10521091261d5af2b3a644462",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "bc294b5f6ba5ab0718a27acb51a3620aa8d8be66689c890cc471a72a82e28738",
+   "claim": "The Windows-specific lowercasing ... are Windows-only paths, as are the interactive terminal prompts",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2"
+     ],
+     "reason": "Interactive prompts are not Windows-only. The accurate limit is that they weren't run."
+    }
+   ]
+  },
+  {
+   "id": "00af13910aa53bfefdeb25f887c26be7637fc230c9463ba8fd089b36efb87728",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "86bc9c237bcca81daeb2810577b6a38948d562b10a5254a0abf86674490dea4f",
+   "claim": "direction words are discounted from the code-cell budget, so they cost about what `+`/`-` did (one character less for `added:`, one more for `removed:`)",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The discount is a flat 6 for both labels. `added:` is 6 characters against 1 for `+`, and `removed:` is 8, so the net cost is not one less or one more as stated. The described discount in C5 is a flat budget discount."
+    }
+   ]
+  },
+  {
+   "id": "2386607f79fb4ae441fd546c398897d9eb5e074c9fbd2af0cbc6d2b2ea60aac2",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-chained-runs",
+   "artifactDigest": "082f7a281ed5f3d332a4026880eff54081f95178bbcafd007c26317decde6db9",
+   "claim": "agents writing PR descriptions claimed checks \"were not run\" when they were, and in a prbench comparison this caused most of the factual errors Opus made.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "X1"
+     ],
+     "reason": "The 'most of the factual errors' figure comes from an analysis of a subset of drafts and is unverified. It is attributed to the commit message, but the figure is still repeated as fact."
+    }
+   ]
+  },
+  {
+   "id": "49aac6ea8490129b63cde66b71c0be897dba2d4e05f34d087e3d9c5300118912",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-evidence-graph",
+   "artifactDigest": "8eec47bc1c9da46e9e35196454cea07054c28c84ee6c148c376ea497b7e384d2",
+   "claim": "The bundle and WebAssembly binary are regenerated.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "C10",
+      "B.D"
+     ],
+     "reason": "The bundle was regenerated only in the first commit, so it predates later commits, including the bug fixes. The wasm is newly vendored, not regenerated. The sentence implies a current bundle, which is likely why test:bundled failed."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.D",
+      "U2",
+      "C10"
+     ],
+     "reason": "In A's diff the buildId is from the first commit only, so the committed bundle predates commits 2–4. The cypherlite.wasm file is newly added, not regenerated."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "D"
+     ],
+     "reason": "The committed bundle was regenerated only in the first commit. It lacks commits 2–4, and the .wasm was added, not regenerated. It reads as though the shipped bundle is current, and the failing test:bundled fits a stale bundle."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "K5",
+      "D"
+     ],
+     "reason": "The committed bundle was regenerated only in the first commit and still lacks later changes. The .wasm is newly added, not regenerated. The wording hides the stale bundle, which is probably why test:bundled fails."
+    }
+   ]
+  },
+  {
+   "id": "91ab6a4ab9126bb33b80fdce2cfc52d77d038bf8561e1d3a1f40f3da49aab5d2",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "f3f5a8fee44ff4f73365e8bb981a5cd789ce73a3baef724fecc558a8ced306e0",
+   "claim": "Import marks the review incomplete when contributor guidance is not current or has requirements the lean review does not assess, when change-map.json is missing or a behavior group has no behaviorChecks, or when a comic is present.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.D",
+      "C7"
+     ],
+     "reason": "The listed conditions are correct, but import only reports the reasons. Render is what sets the incomplete status."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C7"
+     ],
+     "reason": "Import only reports these reasons; render is what sets the status to incomplete. The listed conditions are correct, but the text attributes the behavior to the wrong component and leaves out that publishing is still allowed."
+    }
+   ]
+  },
+  {
+   "id": "dcf64b5ea56d4e315437f96b07d5d523401ecabd3df37eeede6334938bf45ad5",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "f3f5a8fee44ff4f73365e8bb981a5cd789ce73a3baef724fecc558a8ced306e0",
+   "claim": "The work came from a session whose stated goal was a plan for faster, heavily parallel measurement runs, where tokens rather than raw speed are measured; a cheaper reviewer serves that token budget.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The lean reviewer came from the planning request in S1. S3 is about parallelizing the work, so this framing misattributes the goal."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The user asked for a lean reviewer directly in S1. The parallelization request in S3 was about how to execute the plan, so presenting it as the goal misattributes the rationale."
+    }
+   ]
+  },
+  {
+   "id": "23d664cb5d15f4c3b763f9814d5edace1c04535a0cea4b00aaf6a7aef4944e05",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "c5d1816438204aba9b223819422ade502460540d603b02be56b250172976d285",
+   "claim": "as part of the request to \"research the last findings, find the sweet spot, plan what is next\" and then carry out that plan.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S20",
+      "S36",
+      "S38",
+      "X1",
+      "X2"
+     ],
+     "reason": "S2 is earlier retained context, which does not establish a causal request. The receipt fix came from the adjudication choice in S20. The default-path change followed the step-back request in S36 and the approval in S38."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S36",
+      "X2"
+     ],
+     "reason": "The default-path change followed the later step-back request. The receipt fix was found while adjudicating flags, so this framing misattributes the whole PR."
+    }
+   ]
+  },
+  {
+   "id": "7509a763e66abee0cc6fbdac2c1af44ac840ad0756f3f01a3b793ccdd0ec6121",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "c5d1816438204aba9b223819422ade502460540d603b02be56b250172976d285",
+   "claim": "This PR fixes how check receipts record commands and makes the reviewed brief path the default way to write a PR from an evidence brief, as part of the request to \"research the last findings, find the sweet spot, plan what is next\" and then carry out that plan.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S20",
+      "S36",
+      "S38",
+      "X1",
+      "X2"
+     ],
+     "reason": "S2 is earlier retained context and does not establish a causal request. The receipt fix came out of preparing the adjudication worksheet (X1). The default change followed the later step-back request (S36) and the plan approval (S38)."
+    }
+   ]
+  },
+  {
+   "id": "be44f66a7ac05f1bd807da3abae6b9cc582ca6df6fd44c7097a3c7a8f0b31cdf",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "c5d1816438204aba9b223819422ade502460540d603b02be56b250172976d285",
+   "claim": "Commit 96457dabc19c notes that in the conf21 Terra confirmation, four of six accuracy flags were Tracetoon's own Validation lines.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "X1"
+     ],
+     "reason": "Assistant's own unadjudicated reading, presented as the commit's note without caveat."
+    }
+   ]
+  },
+  {
+   "id": "cb99c3fba4a613e50fbadabe94dd1491e7e51cb6fa9134cb387c954d63046a8d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "442781e704d41681016aabad3704de20194ceed2326e369af31773ff4ff6d39b",
+   "claim": "Publish also carries the graph rows through to render.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Vague. renderCmd itself loads the graph; nothing in the diff shows publish carrying rows to render."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Nothing in the diff does this."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.D"
+     ],
+     "reason": "The diff loads the graph inside renderCmd. It shows no publish step that carries rows through to render."
+    }
+   ]
+  },
+  {
+   "id": "53db6c3e618a8af75b3a3c0a215246a415e2ea9d978acdb6dad1e018793a7047",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "442781e704d41681016aabad3704de20194ceed2326e369af31773ff4ff6d39b",
+   "claim": "Render writes a Validation section from the recorded checks at `## Validation ... `, so no writer restates run results. Writers end factual sentences with refs such as ``;",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.V6",
+      "C2"
+     ],
+     "reason": "The body is malformed. The marker and ref examples were replaced by a rendered section and empty backticks, which makes the text garbled and misleading."
+    }
+   ]
+  },
+  {
+   "id": "57ce1bf74daf2ade8790c331f0a581135c046a2e8b4171d09f41f588a52fac1f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "442781e704d41681016aabad3704de20194ceed2326e369af31773ff4ff6d39b",
+   "claim": "Render writes a Validation section from the recorded checks at `## Validation ... Checks passed on the submitted content ...`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.D",
+      "C2",
+      "T2"
+     ],
+     "reason": "The marker text was replaced by an expanded Validation section, so the paragraph is garbled. The expanded text says 'Checks passed on the submitted content', which is not the wording the generated section uses. A.V0 and A.V5 do not establish the tested content relation to the final code."
+    }
+   ]
+  },
+  {
+   "id": "b81c6685f194d16e6991f2811e258f9cfeccf8b003ef5fb78bc215052b7f96b6",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-review-run-all",
+   "artifactDigest": "aeeffd60e8c8c535ba51c6848fc8bae18fcabdabe435f812bf0ffabc87d83d84",
+   "claim": "under `once` or `none`, `--recheck` resumes every earlier reviewer.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "Under none, the recheck is not recommended. Code resumes all slots that have a prior pass under non-contested settings, so the claim is roughly accurate."
+    }
+   ]
+  },
+  {
+   "id": "a735d07d73afe3a22809be2ad3900a4a58648e2a5342ebc3d13d2e7b02bacc2d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "f7c6ead8f8549f5d8ff7d6c22b68fd25582c355c6d7a64295b6d0acf907a692b",
+   "claim": "It is part of the plan titled \"Round 14: strong writer, cheap high-effort reviewers (Claude), with fixes A\".",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "S27"
+     ],
+     "reason": "The port was requested for the SQLite comparison question. Nothing ties it to a plan with this title."
+    }
+   ]
+  },
+  {
+   "id": "ec40539d6f324322b6f137f2a5315aec69efdba2b4025ccd3cbbfda8889952a6",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "f7c6ead8f8549f5d8ff7d6c22b68fd25582c355c6d7a64295b6d0acf907a692b",
+   "claim": "it also says one 728-node real graph differed there and all 69 real graphs now give identical answers",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X3",
+      "T5",
+      "U1"
+     ],
+     "reason": "Attributed to the commit message, which matches X3, but the session did not verify it and A does not say so. Attribution softens it, but it still passes on the T5 claim."
+    }
+   ]
+  },
+  {
+   "id": "de74b6f8b819e22bd0cd1eaa54a1f85091abd41eec1d00dd026485d6a8dcd137",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-update-command",
+   "artifactDigest": "85e64b58e69223760f314911e37ebff5b59096b52144820e40dcedffe9036cd4",
+   "claim": "On Windows the old exe is renamed aside rather than overwritten, and its removal may fail while in use, leaving a copy for the next update to clear.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U3"
+     ],
+     "reason": "The rename-aside part matches the code. The 'next update clears it' part repeats a code comment, but a later update uses a different pid-based name and does not remove older .old-* files. rmSync throwing would also send the update into the catch path. The Windows path was not exercised."
+    }
+   ]
+  },
+  {
+   "id": "c2f4c7f52c4e3cc0791f229e285ab65d8942c4c790cf3e8ec8ac6368fa5cb197",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "tracetoon-update-command",
+   "artifactDigest": "85e64b58e69223760f314911e37ebff5b59096b52144820e40dcedffe9036cd4",
+   "claim": "Per the commit message, the install step in `src/update/apply.ts` verifies SHA-256 checksums and that the skill and runtime are one build, then replaces the binary, comic assets, installed skill copies and hooks, restoring the old files if a step fails.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6",
+      "U4"
+     ],
+     "reason": "The restore path is untested. It is also not reliable once the old copies have been deleted. The claim is hedged by attributing it to the commit message and is partly offset by the hook-failure caveat."
+    }
+   ]
+  },
+  {
+   "id": "4ef15d90121a43bb84faa67178e58ba954cfad4daf0fdd886c34c1c8ee0539dd",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "400729c6b15f6c132ae8a2f7153d6a623c7f4331069b8f2e667ab7d0a670cd4c",
+   "claim": "VAIMRC-Console and aim-ai are pinned as submodules under `refs/` for reference.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "They are bare gitlinks with no .gitmodules, so they are not registered submodules and a fresh clone cannot initialize them."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The diff adds only mode-160000 gitlinks and no .gitmodules file, so these are not registered submodules."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "They are gitlinks without .gitmodules, so they are not registered submodules. B does not flag this."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "They are gitlinks only; no .gitmodules, so not registered submodules."
+    }
+   ]
+  },
+  {
+   "id": "6f481708027bb19a081f38c2a3eb8097427c01afdf2e005a6541787cbd5dfeec",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "winapps-sdl-wayland",
+   "artifactDigest": "df6f05d6695cbb9416798b906e8d8cc1c08ea0fb8a06f141beaf2a03e6a51e01",
+   "claim": "`shfmt -d -i 4 -ci -s bin/winapps`: could not run in this environment (- dprint \"ERROR: FREERDP VERSION 3 IS NOT INSTALLED. EXITING.\"); it got no result on the code.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.V7"
+     ],
+     "reason": "The quoted output looks like a shfmt -d diff line (exit 1 means formatting differences), not an inability to run. Saying it produced no result on the code is not supported."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.V7"
+     ],
+     "reason": "The quoted output is a diff line, which suggests shfmt did run and reported formatting differences (exit 1 under -d). Saying it 'could not run' and got no result overstates the wrapper's interpretation."
+    }
+   ]
+  },
+  {
+   "id": "9e9f87a27cd96a02c0195bbb4a886864203a3df0583b0205727c86d82a557b40",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 1,
+   "case": "winapps-sdl-wayland",
+   "artifactDigest": "df6f05d6695cbb9416798b906e8d8cc1c08ea0fb8a06f141beaf2a03e6a51e01",
+   "claim": "which the author adopted for better performance",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "U2"
+     ],
+     "reason": "The performance motivation is the user's and was not measured. The description attributes it to the author, so this is only a mild overclaim."
+    }
+   ]
+  },
+  {
+   "id": "b5f5065abbc49024920a5b7055259956f407d3b2fd72fdec2336ded3139a0564",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-book-walk",
+   "artifactDigest": "144afca773200dc8e3a3d3fcb2a0344b449d192d36a31cd28fa47dcadbbe4013",
+   "claim": "Previously the native learning UI put the result content or \"Failed\" in the tool card; for a failed result it now shows the command details via the new `renderExecutionFailure`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The tool-card path already showed the failed content and is unchanged in behaviour. The real change adds the failure detail to the reader-run program path, which previously printed only 'The program did not run cleanly.'"
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The tool-card output for failed results is unchanged; that path was only refactored. The real new behaviour, a 'Program failure' detail after a failed program run, is not described."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "Old code already put failed content into the tool card; the change adds a Program failure card after a failed program run, which is the real gap."
+    }
+   ]
+  },
+  {
+   "id": "859cc20da1d4c96b35574a0cdddd8b414cfa38589d6849c696b804c9a297f992",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "81e28a56b416911ffa9d77b8e4b45cec6b1ab28a718b9c17de9f48a3708a0814",
+   "claim": "This PR stops the Claude Code integration from looking up `aifirst` on the inherited `PATH`, for the hook as well as the instructions and permissions",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The replay execute command supplied by the hook is generated by the unchanged replay.ts and is not shown going through the launcher. The integration-wide claim is broader than the evidence."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The hook, rendered instructions and permission prefixes use the launcher. However, src/commands/replay.ts is unchanged, and the hook-supplied `aifirst replay execute` command is not shown to go through the launcher. That makes 'the integration' too broad."
+    }
+   ]
+  },
+  {
+   "id": "bbc0c1e9413ae5bd278b53664df4198cba48d5b74a2de892d42ebf1a88206e89",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "14045578862f78d08173785c239d704a9bceb9bf9f4b8c98febda7aa263677c1",
+   "claim": "After a read-only prompt finishes typing, the learner presses Enter to continue; `pauseForEnter` waits on the TUI when one is active",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "C2"
+     ],
+     "reason": "pauseForEnter serves the Home screens. The prompt gate is renderExercisePrompt/presentPrompt."
+    }
+   ]
+  },
+  {
+   "id": "7c6942f9257e01d9ff95ac5b12a2adbb6a2b5effaf32110501248c4a6c8afb0e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "14045578862f78d08173785c239d704a9bceb9bf9f4b8c98febda7aa263677c1",
+   "claim": "Choosing exit at that prompt ends the replay, and back re-shows it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "Back returns to the built-in learning menu loop; it does not re-show the prompt."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C2"
+     ],
+     "reason": "Back runs `continue` in nativeLearn, which returns to the built-in learning menu. It does not re-show the prompt."
+    }
+   ]
+  },
+  {
+   "id": "459abf8dcfeccff91a163b34263466189ca2d8f42d5a882c62971e58b3a3978c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "14045578862f78d08173785c239d704a9bceb9bf9f4b8c98febda7aa263677c1",
+   "claim": "the recorded checks run without a terminal, so none shows that path with a user at the keyboard",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C8",
+      "U4"
+     ],
+     "reason": "The PTY tests do drive these paths with a terminal. The no-manual-check part is accurate."
+    }
+   ]
+  },
+  {
+   "id": "e2b6906915d7f96620746a8ada928064f9b1256e4119a868ba3eb2cb58db807d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "14045578862f78d08173785c239d704a9bceb9bf9f4b8c98febda7aa263677c1",
+   "claim": "After a read-only prompt finishes typing, the learner presses Enter to continue; `pauseForEnter` waits on the TUI when one is active, returns without waiting when the terminal is not interactive, and treats an aborted readline as an interrupt.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C1",
+      "C2"
+     ],
+     "reason": "pauseForEnter is only called by the Home progress/help screens. The prompt-gate Enter wait belongs to renderExercisePrompt/presentPrompt. The helper behavior is described correctly, but it is attached to the wrong feature."
+    }
+   ]
+  },
+  {
+   "id": "0a5a608d2637c0ab25ecdad664dbf6f99ec64dea9d0fd1ce3195b2524e452855",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "c89b233c400d417a578bcc5ca30738826c2a67068f11432cbb01f42c543a1d6b",
+   "claim": "Python PTY drivers under `test/fixtures/` type the prompts for authoring and replay.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "The replay driver uses subprocess pipes, not a PTY."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "The replay driver uses subprocess pipes in stream-JSON mode. It is not a PTY driver."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C6"
+     ],
+     "reason": "The replay driver uses subprocess pipes, not a PTY."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "Only the author driver uses a PTY. The replay driver runs `aifirst learn` over subprocess pipes."
+    }
+   ]
+  },
+  {
+   "id": "d6accdcc685e613cc4987d40f1c1437d91bdccd7badf4a2233f3e7e5b2567621",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "c89b233c400d417a578bcc5ca30738826c2a67068f11432cbb01f42c543a1d6b",
+   "claim": "the live tier re-drives Claude against source checkpoints",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "T6"
+     ],
+     "reason": "The live tier only checks `claude --version`, then replays the committed book through `aifirst learn`; it never runs a Claude session."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "T6",
+      "C5"
+     ],
+     "reason": "The live suite only checks `claude --version`, then replays the committed book through `aifirst learn` with the local responder. It does not re-drive Claude."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T6",
+      "C5"
+     ],
+     "reason": "The live tier replays the committed book through `aifirst learn` with the local responder. It does not re-drive Claude."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "T6",
+      "D"
+     ],
+     "reason": "The live suite only checks `claude --version` and replays the committed book through `aifirst learn`. It does not re-drive a real Claude session."
+    }
+   ]
+  },
+  {
+   "id": "f440c96270fc47b40da0addc929ed4ec37bd26a7b0e6ddd42fdcadc9300c3023",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "c89b233c400d417a578bcc5ca30738826c2a67068f11432cbb01f42c543a1d6b",
+   "claim": "`captureScenario` in `scripts/capture-claude-showtail-e2e.ts`, which owns the non-empty-target guard and subprocess failure handling.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "captureScenario owns the non-empty-target guard, but generic subprocess failure handling lives in the separate `run()` helper."
+    }
+   ]
+  },
+  {
+   "id": "baddf466089bcbd705db4ed333da9e5b9b666d5b193348807b06f86553a9c1ff",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-signpath-release",
+   "artifactDigest": "6038d87809603ef285c2451f9c34195ab17240b11034b6552993ff3578e93df9",
+   "claim": "a `NOTICE` naming AI First Programming",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The NOTICE file contains the line 'AI First Programming' followed by a copyright line naming Stephen Chin, Cassandra Chin, and Jennifer Reif, so this is accurate enough. It is minor and not a real error."
+    }
+   ]
+  },
+  {
+   "id": "235d2297c635f248a1bb4da0de5a0e8482cef56e63911b25b5428843b5200067",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcli-tui-responsive",
+   "artifactDigest": "247fb2c4d62479c36ffa6408b7e9a0ca58cd07b457fc627b316d95226e9ea733",
+   "claim": "Esc or Ctrl+C stops a running command from the TUI.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "U4",
+      "D"
+     ],
+     "reason": "The withTaskRunning handler aborts the signal, but only the argv branch honours it and no test covers it; as an unqualified claim it overstates this, and <shell> commands ignore it. Counted as contradicted for the shell branch."
+    }
+   ]
+  },
+  {
+   "id": "4d77336f33523805d6cf05a5799ec87d0034feb04e939265b3c7bb82f1529fa2",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-apache",
+   "artifactDigest": "bb709e1ec636f08eb91d9b7263bc665b37ef666fdd821c08105edde93f45c772",
+   "claim": "as the first step of standardizing the AI First repositories on one license",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S41",
+      "S43",
+      "X3"
+     ],
+     "reason": "This is one part of a four-repository change, and the CLI was pushed before this repository, so calling it the 'first step' is not supported."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S40",
+      "S41",
+      "S43",
+      "X3"
+     ],
+     "reason": "The session committed and pushed aifirstcli before aifirstcontent, so calling this the first step is not established. It is one part of a four-repository change."
+    }
+   ]
+  },
+  {
+   "id": "81367aecde4205ce162b5463328e44d4ccdceae3a98769c8f6e95afab0e75f79",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "aifirstcontent-replay-start-state",
+   "artifactDigest": "b7e2314a28bbd3f991c08ffeed5e2a871380f16e5dbab771f6ab175794a024f4",
+   "claim": "py-10-01 on its own could not find the file from the chapter 9 level-editor exercise.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "D"
+     ],
+     "reason": "The missing file (level.py) came from the chapter 9 Save the Duckling exercises. The level editor is py-10-01 itself, in chapter 10, so this is a minor mislabel."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S8",
+      "X1"
+     ],
+     "reason": "The user reported a missing chapter 9 file. Chapter 9 is the Save the Duckling game; the level editor first appears in py-10-01. Calling it the 'chapter 9 level-editor exercise' attributes the file to the wrong exercise."
+    }
+   ]
+  },
+  {
+   "id": "40b5b23f1cbf8e2498af4abb1d726ab6033e81ed5feef306026273c17e9839bb",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "bazzite-stale-portal",
+   "artifactDigest": "38e919cea423ff4ac7a1716afcf788721259e55cf876d18805d78aab1bb3d90f",
+   "claim": "The README also documents the new hook, a `gdbus introspect` check for the `InputCapture`, `FileChooser` and `Settings` interfaces",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The README grep pattern is `InputCapture|FileChooser|Settings`. This is accurate, so it is actually supported."
+    }
+   ]
+  },
+  {
+   "id": "9091e299246c7f699a5dda9be6c10373d52187ea9b5264be95f7241d922aec2e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr11",
+   "artifactDigest": "b01ab59e16401b671ca618f5e90e7945b37347f957515ffe88063d0ce4f2a1a7",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The session's last tests ran in the chained command after the 5% line was dropped, so they ran on the committed content."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The session's last tests ran in the chained command after the 5% line was dropped, so they ran on the committed content."
+    }
+   ]
+  },
+  {
+   "id": "4d62dbfda2052ec247d72aadb45f93d6c72dd44349389a50659cee6426b16c6c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr12",
+   "artifactDigest": "bbe6ecb91e247ff2ae5d7d93f20789b6ec9889fdb34f880ad0ae1c3a281b6174",
+   "claim": "`makesCommit` no longer matches a commit command that appears only inside a quoted string or heredoc body.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The regex is unanchored, so quoted text such as echo \"git commit\" still matches. Only the heredoc-body part of the claim holds."
+    }
+   ]
+  },
+  {
+   "id": "8f86fd9db1f13344ef26e7ecb7c5d993d8c54e4f903fa3e46260c67f5e219c42",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr12",
+   "artifactDigest": "bbe6ecb91e247ff2ae5d7d93f20789b6ec9889fdb34f880ad0ae1c3a281b6174",
+   "claim": "So commit detection changes too: `makesCommit` no longer matches a commit command that appears only inside a quoted string or heredoc body.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C5"
+     ],
+     "reason": "The heredoc part is correct. The quoted-string part is wrong: splitCommands keeps quoted text inside its segment, and the unanchored COMMIT_MAKER regex still matches it, so echo \"git commit\" still matches."
+    }
+   ]
+  },
+  {
+   "id": "a411f5d33537e29489cc232e603c44a180a911f9eb4322a338e71a3e5657116e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr12",
+   "artifactDigest": "bbe6ecb91e247ff2ae5d7d93f20789b6ec9889fdb34f880ad0ae1c3a281b6174",
+   "claim": "`makesCommit` no longer matches a commit command that appears only inside a quoted string or heredoc body",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The heredoc half is correct. Quoted text such as `echo \"git commit\"` still matches the unanchored regex."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "The COMMIT_MAKER regex is unchanged and unanchored. Quoted text is not excluded, so `echo \"git commit\"` still matches. Only recognized heredoc bodies are skipped."
+    }
+   ]
+  },
+  {
+   "id": "b3b97beb2d21ce737fc486913cd87fb01351eff6f36f81e36e604e148b5534cd",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr9",
+   "artifactDigest": "d531f2921526c586aa989b688948376594bc723c104ef2970394c63b4f1be0bf",
+   "claim": "The Windows executable lookup (`.exe`, `.cmd`, `.bat`) was not shown running, since the recorded runs were on Linux.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S53",
+      "S75"
+     ],
+     "reason": "The original sessions ran on Windows: they use C:/ paths and pwd -W, and doctor found codex and agy there. The OS of the fresh runs is not established, so the stated reason is unbacked."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S38",
+      "S53",
+      "S75"
+     ],
+     "reason": "The original sessions ran on Windows (powershell.exe, pwd -W, C: paths). In S53 doctor reported codex and antigravity as found, so the onPath lookup ran there."
+    }
+   ]
+  },
+  {
+   "id": "ca59823ec620e0914241754d0a45b7df2e959f2fc10e804e90e48e35086d7aa9",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "pr9",
+   "artifactDigest": "d531f2921526c586aa989b688948376594bc723c104ef2970394c63b4f1be0bf",
+   "claim": "Feedback wanted: when Codex's final reply is missing or the image counts differ, matching refuses to guess",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "pickCodexImages uses mtime order when the reply is missing but the counts match, and uses the reply when the counts differ. It refuses only when both fail. A refusal also already falls back to the built-in artist with a warning."
+    }
+   ]
+  },
+  {
+   "id": "d368a306f7ebdf5c75fd375cf4533ea4bb34242bd130afe1eb3066df39bc248f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "ef8e8c6235e3ba44ae8d8477cbf4b6cc7408fbfae5344220a164cc11523ebdcc",
+   "claim": "The work began from a request to switch codex back to the neo4j subscription.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S51",
+      "S65",
+      "X3"
+     ],
+     "reason": "The subscription switch was unrelated earlier context; the work came from the releasable-plan request and the Phase 2 brief."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S51",
+      "S65",
+      "X1",
+      "X3"
+     ],
+     "reason": "The codex subscription switch was unrelated earlier user context. The work came from the releasable-plan request and the delegated Phase 2 gate and sealing brief."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S65",
+      "T5",
+      "X3"
+     ],
+     "reason": "That request was earlier, unrelated session context. This change came from the Phase 2 delegation."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "T5",
+      "S65"
+     ],
+     "reason": "The switch request was unrelated earlier session context. This work was a Phase 2 delegation. The sentence misattributes the origin."
+    }
+   ]
+  },
+  {
+   "id": "18ae2306b681b806be4c5680dd134020f61b05eea8b4e25c344dd17b162f0390",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-aggregate-only",
+   "artifactDigest": "ef8e8c6235e3ba44ae8d8477cbf4b6cc7408fbfae5344220a164cc11523ebdcc",
+   "claim": "is the pooled qualify-cases composite (pair-weighted mean of per-case values) the right aggregate to report for sealed runs",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The composite uses caseClustered over per-case means; it is not pair-weighted."
+    }
+   ]
+  },
+  {
+   "id": "6b10a46d307aad2aafaac22c5fbe905c3eec7e69ec2311e1f2a063df8f7eda16",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-judge-retry",
+   "artifactDigest": "c272d3b5a7991d12b4fecb2243b6ea5b1ac066efa75b16feee5d00df67094dde",
+   "claim": "a frozen manifest that recorded the current hash uses it, and one that recorded only the legacy hash keeps that.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The legacy hash is kept only if the legacy hash recomputed now still matches. A resume from a different shell gets the new hash. The text drops the 'still matches' condition."
+    }
+   ]
+  },
+  {
+   "id": "92fdc7f7b7ba3e2845921bad01b975a80fa36e70e6a97f3c9b0ed97f28b5804c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "0c0d91d754d76e7aa9ae044837a580ea187622a595844723170a834f36f6c352",
+   "claim": "Codex keeps Sol and Terra and its frozen identity",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C3",
+      "T7",
+      "D"
+     ],
+     "reason": "The contract digests in the identity cover files this diff edits, so the identity is not kept."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "The Codex settings shape and hashes are unchanged, but the frozen identity also includes contract digests over files this diff edits. Pre-change runs would therefore be refused."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "Settings shape and hashes are unchanged, but resume requires the whole identity, including contract digests over edited files, so pre-change runs would be refused. The wording invites the T7 reading."
+    }
+   ]
+  },
+  {
+   "id": "43338a0485cc1624a8d4ebf91a390a72b9cf658db3572ee9a53d6a40906994d5",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "0c0d91d754d76e7aa9ae044837a580ea187622a595844723170a834f36f6c352",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "In the session, the typecheck and full suite passed after the last edit, in the same command that made the final commit f7ec46e."
+    }
+   ]
+  },
+  {
+   "id": "cacc28ed6fad5fdf2c5edff67b23ce58543a7a128697eb8895d6cb1cdb72605d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "0c0d91d754d76e7aa9ae044837a580ea187622a595844723170a834f36f6c352",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The typecheck and full suite passed after the last edit, in the same command that made the final commit."
+    }
+   ]
+  },
+  {
+   "id": "f7e537cb3f2fd01aed481aa981d3108453425023c74ccad8705a6730a0fab7a2",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "0c0d91d754d76e7aa9ae044837a580ea187622a595844723170a834f36f6c352",
+   "claim": "Codex keeps Sol and Terra and its frozen identity;",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3"
+     ],
+     "reason": "Contract digests change, so frozen pre-change runs would not resume."
+    }
+   ]
+  },
+  {
+   "id": "bacb62dcc3385e5fc31bf384d87f93343f827460d98b448eca19de799da67c17",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "0c0d91d754d76e7aa9ae044837a580ea187622a595844723170a834f36f6c352",
+   "claim": "Claude judges run with no tools and no hooks.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C7"
+     ],
+     "reason": "Only claude:model@effort judge ids run isolated. Legacy claude[:model] ids keep their old behaviour, and the unqualified statement ignores that fallback."
+    }
+   ]
+  },
+  {
+   "id": "9273230ca85e46f3194616e006e383d74351b33c23be035eb31801b699ce4847",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-priced-cost-gate",
+   "artifactDigest": "7a4350786a25c4cfdf98c15a1c28363c1d56e4f97760ea685ba87a7cd0025fbd",
+   "claim": "a pooled cost ratio above 1.000 is the sole reason for a fail verdict.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C1"
+     ],
+     "reason": "The ratio is a case-clustered geometric mean of paired ratios, not pooled; the 'sole' part is plausible but the full status logic is truncated."
+    }
+   ]
+  },
+  {
+   "id": "e92b30c62ce0b50e4784563324a48be80bca8ae1492b9e9d21f2ac78a1e1846f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-priced-cost-gate",
+   "artifactDigest": "7a4350786a25c4cfdf98c15a1c28363c1d56e4f97760ea685ba87a7cd0025fbd",
+   "claim": "a pooled cost ratio above 1.000 is the sole reason for a fail verdict",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "T4",
+      "C1"
+     ],
+     "reason": "The gate uses a case-clustered geometric mean, not a pooled ratio. A cost ratio above 1 is the only failure message, which is right, but calling it \"pooled\" misdescribes the method."
+    }
+   ]
+  },
+  {
+   "id": "3e04c8991464bba578dd82faaa0932e2dcb1bc49e715d2e54054ee664a4b9178",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "49affe4c5c7aa24d2e6b5dcd53fb0043be4bda30f3afe8d5d9cccb21fdea86b8",
+   "claim": "Because both sides import a single list, the hash skips the same bookkeeping names the sandbox drops, so it still changes with variables a writer can see.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "X2"
+     ],
+     "reason": "The first half is correct. The hash still skips PWD, INIT_CWD and NPM_*, which the sandbox passes through, so it does not change with every variable a writer can see. The hedged wording ('variables a writer can see') makes this a mild overreach."
+    }
+   ]
+  },
+  {
+   "id": "621bf3b9c332f709521ac27c877e17572f90040763a8f87dde8e36cbea93dbef",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "89733a62ab4d5c97607cf020e609d3a8fe185524bfcc1b2fe29afeed5a31021c",
+   "claim": "start every container with `--init`, `--cap-drop ALL`, and `no-new-privileges`",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "showtail_docker_prepare_volumes, in the same helpers file, starts a `--user root` container without --init, cap-drop or no-new-privileges, so the explicit 'every' is false."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "showtail_docker_prepare_volumes runs `docker run --rm --user root` without --init, --cap-drop or no-new-privileges, so 'every container' is false."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C4",
+      "D"
+     ],
+     "reason": "The root volume-preparation container runs without these flags. 'Every container' is an explicit universal that the code does not support."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "The one-off volume-preparation container runs as root without those flags, so 'every container' is too broad."
+    }
+   ]
+  },
+  {
+   "id": "3f66c9ae0abd92b26414f2fcf69077f8ea767f4540817c6adea5c635bea78ba1",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "e3ec940798d1a0e12ac65d7e4eeab77be4050bb4bfaecb0f59671aa9a2a99074",
+   "claim": "asked on the first command that is neither `migrate` nor a `--json` run, where Enter accepts",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The preAction hook returns early for the NO_BOOTSTRAP commands (hook, setup, connect, disconnect, capabilities), and the offer also needs a TTY. So an interactive `connect` is a counterexample to the stated breadth. The Enter part is correct."
+    }
+   ]
+  },
+  {
+   "id": "c5124c7e94009cc7d133176f170deeb098c0a19fa9510dd7e16e987c2bd05e1a",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-transcript-migrator",
+   "artifactDigest": "e3ec940798d1a0e12ac65d7e4eeab77be4050bb4bfaecb0f59671aa9a2a99074",
+   "claim": "An existing generation-1 install gets one pending generation-2 offer, asked on the first command that is neither `migrate` nor a `--json` run, where Enter accepts.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.D",
+      "C7",
+      "C11"
+     ],
+     "reason": "Enter does accept, but the claim is broader than the code. The preAction hook returns early for hook, setup, connect, disconnect and capabilities, and the offer also requires a TTY."
+    }
+   ]
+  },
+  {
+   "id": "c9d61c85e668e71d715795c2ac32da9dcef52e1eacffca83339617374de69fae",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-windows-cmd",
+   "artifactDigest": "4f5656fb43a3055cf8269518fdce518cb275384b96e8b20ae2c9d9261d34b8dd",
+   "claim": "This PR routes the VS Code and Antigravity extension launchers through the Windows command processor, so a Windows problem in those launchers no longer holds back a release from publishing artifacts.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "X2"
+     ],
+     "reason": "Nothing shows the Windows gate now passing. B itself later says a real .cmd launch is unconfirmed."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "T2",
+      "S12"
+     ],
+     "reason": "The routing part is correct. Nothing shows the Windows gate now passes: all local runs were on Linux, and Windows CI was not observed."
+    }
+   ]
+  },
+  {
+   "id": "f6f5d72d45f392606109b2c5f6556b49b723a1204f86886298b51fdbbd42e465",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-windows-cmd",
+   "artifactDigest": "4f5656fb43a3055cf8269518fdce518cb275384b96e8b20ae2c9d9261d34b8dd",
+   "claim": "so a Windows problem in those launchers no longer holds back a release from publishing artifacts.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "U2",
+      "T2"
+     ],
+     "reason": "The fix was never shown to make Windows CI pass. The claim asserts the outcome, and the Consequences section contradicts it internally."
+    }
+   ]
+  },
+  {
+   "id": "c2fc24f5165fdc839909da2b22bd72b9fa750ae67a133f6f7e2c6f006d395c36",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "showtail-windows-cmd",
+   "artifactDigest": "4f5656fb43a3055cf8269518fdce518cb275384b96e8b20ae2c9d9261d34b8dd",
+   "claim": "so a Windows problem in those launchers no longer holds back a release from publishing artifacts",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "U2",
+      "X2"
+     ],
+     "reason": "Asserts the release blockage is resolved, but the fix was never verified on Windows CI (U1)."
+    }
+   ]
+  },
+  {
+   "id": "ba62ebe2855de14cd676e4324e708470b222afc9681c49fe4c1c065b66386de0",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "b90a1254167d7d51541ccabc3b162961e6f6f1f4f55425ac9dc349474611195c",
+   "claim": "Previously the code-cell matcher split bodies on a fixed double-space `⇒  +` separator; it now accepts any whitespace.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The separator change is in conflictRows (the conflict check), not in the code-cell matcher."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The separator regex change is in conflictRows (the conflict check), not in addCodeCells or a code-cell matcher. The new regex also requires at least one whitespace character on each side, so 'any whitespace' is loose wording."
+    }
+   ]
+  },
+  {
+   "id": "9381bcb7750cac0c70144a8332331a3981e262e33d817bb30f05ec0b9515fdad",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-brief-owners-rows",
+   "artifactDigest": "b90a1254167d7d51541ccabc3b162961e6f6f1f4f55425ac9dc349474611195c",
+   "claim": "The goal of this PR is to \"implement both fixes and rerun Claude and Codex\"",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S11",
+      "U1"
+     ],
+     "reason": "This was the user's request, but the PR does not rerun anything. Framing the rerun as part of the PR's goal is misleading, although no results are claimed."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S11",
+      "U1"
+     ],
+     "reason": "The reruns are not part of this PR and had not run. Quoting the session request as the PR goal overstates its scope."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "S11"
+     ],
+     "reason": "The reruns were not part of this PR and had not run; stating them as the PR goal is misleading."
+    }
+   ]
+  },
+  {
+   "id": "1219d5f07f69f8f7ea8d8c7178d2f1567b1f223a9a26867f4f6926c05e0d2d12",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "a1d0e01e14251e2e23744c285d7bb1429121a5868786a4bcece008e3b038237e",
+   "claim": "It serves a planning request to get the measurement work done faster, where runs are measured in tokens.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The request was for a lean reviewer that cuts token cost. The 'faster' wording came from a separate parallelisation remark, so the rationale is misattributed."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The user asked for a lean reviewer to cut token cost. The 'faster' request in S3 was about parallelizing the work, so this sentence misattributes the motivation."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "S1",
+      "S3"
+     ],
+     "reason": "The user's request was for a lean reviewer to cut token cost. The wording about speed and measurement work blends in the later parallelization instruction."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "X1"
+     ],
+     "reason": "The user asked for a lean reviewer to cut token cost. Their 'faster' remark was about parallelizing the work, not the purpose of this feature."
+    }
+   ]
+  },
+  {
+   "id": "acd4163ac70eb1c89442715e99b30212dc95c25511ad6b710f457150166c3f5c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4822c1572ab78fd90b00178832e8a8bc1a95426c84745fc0ba1123d6ff5cd50d",
+   "claim": "This PR does what was asked after a step-back review of recent results: \"go ahead with the plan\" to find the sweet spot for the workflow.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S34",
+      "S36",
+      "S38",
+      "X1",
+      "T3"
+     ],
+     "reason": "The receipt fix was committed at 19:24, before the step-back request and the plan approval (19:36/19:48). The assistant found that bug itself, so the PR as a whole was not what the user asked for."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X2",
+      "X1",
+      "T3"
+     ],
+     "reason": "Receipt fix was not asked by the user; framing implies the whole PR was requested."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "X2",
+      "T3",
+      "S38"
+     ],
+     "reason": "The receipt fix was not asked for by the user. It was found by the assistant while preparing the adjudication worksheet. The 'sweet spot' wording comes from an earlier prompt."
+    }
+   ]
+  },
+  {
+   "id": "46ef09e1767f6ab2d8898b572a0f3eb74a2269bebe8727abcbf98dc3bfb287ff",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "4822c1572ab78fd90b00178832e8a8bc1a95426c84745fc0ba1123d6ff5cd50d",
+   "claim": "This PR does what was asked after a step-back review of recent results: \"go ahead with the plan\" to find the sweet spot for the workflow. It fixes how check receipts record commands and changes which drafting path Tracetoon recommends when an evidence brief exists.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "X2",
+      "S34",
+      "S36",
+      "S38",
+      "T3"
+     ],
+     "reason": "Only the default-path change followed 'go ahead with the plan'. The receipt fix was committed earlier (S34), before the step-back request (S36). The assistant found that bug itself while preparing the adjudication worksheet, so presenting the whole PR as 'what was asked' misattributes where the receipt fix came from."
+    }
+   ]
+  },
+  {
+   "id": "8acb8f18eb644b61a57c5a1b197224b956cd92c74e1be21ebd99c81975e90fc7",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "7ab67f498071b321baea8395b387426a99f1d21e593bf0837b25c5e34962a38f",
+   "claim": "plus untagged sentences once a draft uses tags, in `render --json` under `briefCheck`",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "briefCheckSummary always includes untagged. Only the text lines depend on b.tags being non-zero."
+    }
+   ]
+  },
+  {
+   "id": "bd3329614bc8bdace0ccce8ba8e72b233e3732d5fd52a062613892b06c7e92c6",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "7ab67f498071b321baea8395b387426a99f1d21e593bf0837b25c5e34962a38f",
+   "claim": "render strips the tags and reports unknown refs and run or test claims outside the Validation section, plus untagged sentences once a draft uses tags, in `render --json` under `briefCheck`.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "briefCheckSummary always includes untagged sentences in the JSON. Only the text output (briefCheckLines) waits for at least one tag before listing them."
+    }
+   ]
+  },
+  {
+   "id": "bb0811577bf36fc3d7dad573ad73a19052c9fcc5076ab55bd7b432a7e78ba1e4",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "18eafe3a191f6fb7a05fe21bff25319b4ab5fb5c7a217c625db71b7e4d207d80",
+   "claim": "The changes were made while carrying out the approved \"Round 14: strong writer, cheap high-effort reviewers\" plan for Tracetoon drafting.",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "The port came from the user's question about SQLite in round r16, not from a 'Round 14' plan."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "S17",
+      "S27"
+     ],
+     "reason": "The port came from the user's SQLite-vs-graph question and a separate r16 parity task. Nothing ties it to a 'Round 14' plan."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S19",
+      "S27"
+     ],
+     "reason": "The session shows the work was a SQLite port request; no Round 14 plan appears."
+    }
+   ]
+  },
+  {
+   "id": "64494b3bc1b399be3b589db3b71eed7b43c43811cc476219ff91ac7a30d71eea",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "18eafe3a191f6fb7a05fe21bff25319b4ab5fb5c7a217c625db71b7e4d207d80",
+   "claim": "The commit reports that a 728-node real graph differed before the ordering fix and that all 69 real graphs now give identical answers.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X3",
+      "T5"
+     ],
+     "reason": "Attributed to the commit message, but not verified in-session and presented as a result."
+    }
+   ]
+  },
+  {
+   "id": "a89126306b8b4105ee6940e337e2e098653d5829245cbd50c29290db7ba98469",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "tracetoon-update-command",
+   "artifactDigest": "14be935687ad19a963bd8947eeff23dc6ffbe70a5f13cdfff0cad4303f562c08",
+   "claim": "The Windows installer change only ran on linux/x64, so it has not been seen running on Windows.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1"
+     ],
+     "reason": "Nothing shows install.ps1 ran at all. The caveat that it was never run on Windows is honest, but 'only ran on linux/x64' implies an execution that the evidence does not record."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1"
+     ],
+     "reason": "No record shows install.ps1 running at all. The 'not seen on Windows' limit is honest, but the claim that it ran on linux/x64 has no backing."
+    }
+   ]
+  },
+  {
+   "id": "3097319321adb2d18b9eed373180fbca72adcc176f97659caa1fb09d24dd12b0",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "vexagent-skill",
+   "artifactDigest": "d38a99b63780489441dfee6e20fe17614d62211361da89d221d00531cf9bc65e",
+   "claim": "According to the commit message, a later cold test went cleanly: a fresh agent with only the skill completed the student task without failures.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S27",
+      "U1",
+      "C8"
+     ],
+     "reason": "The cold test ran before the doctor change: its doctor output shows the old 'micropython' field. It came first and prompted the edits, so it was not 'later', and the revised version was never cold-tested."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S27",
+      "U1",
+      "C8"
+     ],
+     "reason": "The cold test ran before the doctor change: S27 shows the old single 'micropython' field. 'Later' wrongly suggests the revised skill was cold-tested."
+    }
+   ]
+  },
+  {
+   "id": "31ce201f04ff027d22a41f94c6d2e972080b44e058f0e9f235ddb4ea83eae664",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "vexagent-skill",
+   "artifactDigest": "d38a99b63780489441dfee6e20fe17614d62211361da89d221d00531cf9bc65e",
+   "claim": "On Linux, `sh linux/install-udev.sh` has to be run once with sudo so ModemManager leaves the robot's ports alone.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "SKILL.md says the folder is not needed if doctor reports ready, so 'has to be run' is broader than what the skill says."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "SKILL.md says the script is not needed if doctor reports ready. The rule was also never installed or tested, so 'has to be run' goes beyond the evidence."
+    }
+   ]
+  },
+  {
+   "id": "9e6e5ab5a703a5b449f68b2dd684c4902d4b276aae85a5c1a55cbc24c961c681",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 2,
+   "case": "vexaim",
+   "artifactDigest": "5aae53d52e9c3701a8a18057e7807b65dc09da3065e9eebb514877cf0daca49f",
+   "claim": "Results now include `completed: True`",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The vision-mode capture path in collect still returns a dict with no completed key, so this is broader than the code."
+    }
+   ]
+  },
+  {
+   "id": "ccb16a61d94bac4e00db46e5d863c4e8c2a86a4abe77a94d9cb93234bf885d0a",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-homebrew-maven",
+   "artifactDigest": "3d15ba21d23fe1a1901f25d5e54295456383d235ee84503b8693ad9e30831ff5",
+   "claim": "The repo pins bun 1.4.0 (.bun-version; this environment runs 1.3.14); the failure may reflect this environment rather than the change.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "B.V6",
+      "B.V5"
+     ],
+     "reason": "The bun pin is not visible in the packet. More importantly, B.V6 shows the APT test failed because the host has /run/ostree-booted and the test does not stub exists. That failure comes from the change's own test interacting with the host, not plausibly from the bun version."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.V6",
+      "A.D"
+     ],
+     "reason": "Nothing in the packet shows a .bun-version pin. A.V6 shows the Maven plan failure is caused by the change: the APT test does not stub `exists`, and this host has /run/ostree-booted. Blaming the bun version is not backed by evidence and misleads about a failure the change introduced."
+    }
+   ]
+  },
+  {
+   "id": "85d0eddb44c99911631fb7d72397b63fad939270a02b1598eb7b325cc6d2060c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-homebrew-maven",
+   "artifactDigest": "3d15ba21d23fe1a1901f25d5e54295456383d235ee84503b8693ad9e30831ff5",
+   "claim": "the failure may reflect this environment rather than the change.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "A.V6",
+      "A.D"
+     ],
+     "reason": "The writer's own evidence shows /run/ostree-booted exists on the host. The 'builds native Maven installation plans' failure follows from the change, because A's APT test does not stub `exists`. A also does not name the failing tests."
+    }
+   ]
+  },
+  {
+   "id": "b9a6a844f863163b2bf9b334eaf0762ed6d6af2bcac812a3079c48f3b95d6d18",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "8486fc5bd25accd68708f465256c21dcad346554298de9449b92658179e24f1e",
+   "claim": "Everything Claude runs then goes through `bash '<launcher>'`: the replay hook (tagged with a `# aifirst-managed-replay-hook-v1` marker so it can be recognized later), the rendered `SKILL.md` and command files, and the permission allowlist.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U4",
+      "D"
+     ],
+     "reason": "The hook-supplied `aifirst replay execute` command is not rerouted through the launcher in the diff, so 'everything' overreaches."
+    }
+   ]
+  },
+  {
+   "id": "ebfe1737e7750f2a426063670761f8899670f372305044a0d03d693557fcd9b5",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "8486fc5bd25accd68708f465256c21dcad346554298de9449b92658179e24f1e",
+   "claim": "This PR stops the whole Claude Code integration from looking up `aifirst` on the parent process's `PATH` (each command still invokes `bash`) — hooks, generated instructions and permission rules, not just the hook",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The claim covers the whole integration. The hook-supplied `aifirst replay execute` command comes from unchanged src/commands/replay.ts, and the skill never renders it through the launcher."
+    }
+   ]
+  },
+  {
+   "id": "ef4caa30f2ec21dd1905404f8300c3cc1f6e6eb3877ae73f520dfd9df8edaf8a",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "8486fc5bd25accd68708f465256c21dcad346554298de9449b92658179e24f1e",
+   "claim": "Everything Claude runs then goes through `bash '<launcher>'`",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "U4"
+     ],
+     "reason": "The skill, the slash commands, the hook and the permissions use the launcher. However, the hook-supplied replay execute/done commands are not shown to do so."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U4",
+      "D"
+     ],
+     "reason": "Overbroad. The hook-supplied replay execute and done commands are not shown to go through the launcher."
+    }
+   ]
+  },
+  {
+   "id": "501aa9a18bbaa2a9b3a41e43f2ba2e3eddfd11c9866f50c838922229ad865331",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-hooks-path",
+   "artifactDigest": "8486fc5bd25accd68708f465256c21dcad346554298de9449b92658179e24f1e",
+   "claim": "Install instructions in the replay docs and skill content are now platform-specific instead of sending Windows users to `install.sh`.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The skill content is platform-specific. The replay docs add a note about the installers but not instructions."
+    }
+   ]
+  },
+  {
+   "id": "06d7748620925cbda161fdf6b096946074fce378ef3331b7d75713468f20e6c8",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "fb6dd29c8c7d166fdf589ef6b56faa0847c633f6933eb35f1a150c5966469ccf",
+   "claim": "Where to start: `LearnTuiSession.appendCode` and its key handling in `src/tui/session.ts`, which own code collapse/expand and document-view scrolling.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Document-view scrolling lives in waitForDocumentReturn, and the 'e' key is handled in onGlobalKey, not appendCode."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Document-view scrolling is owned by waitForDocumentReturn, not by appendCode or its key handling."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "appendCode owns code collapse/expand. Document-view scrolling is in waitForDocumentReturn, and the 'e' key is handled in onGlobalKey."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "appendCode owns code collapse. Document-view scrolling lives in waitForDocumentReturn, not appendCode."
+    }
+   ]
+  },
+  {
+   "id": "2bbfd4d3d672ee7ef408dae568a76b5301b7b38cc5fab2812062963c256665a9",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "fb6dd29c8c7d166fdf589ef6b56faa0847c633f6933eb35f1a150c5966469ccf",
+   "claim": "new driver fixtures back the replay, planning, streaming and Windows timeline tests.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The new fixtures are TUI prompt and code-preview drivers, plus edits to existing drivers. They do not back the planning or Windows tests."
+    }
+   ]
+  },
+  {
+   "id": "dfef0b98a67cc59b81d8cb6f3e291c12d3919915c59fbe9712361bf6fcddfcdc",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "fb6dd29c8c7d166fdf589ef6b56faa0847c633f6933eb35f1a150c5966469ccf",
+   "claim": "new driver fixtures back the replay, planning, streaming and Windows timeline tests",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C8"
+     ],
+     "reason": "The new fixtures are the TUI code-preview and prompt drivers. The visible replay-flow and planning tests do not use them."
+    }
+   ]
+  },
+  {
+   "id": "7a51bf7bdc72f4168991430bfdac39aa47686a56a593ab3ed8d6fd01840e6f91",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-learner-replay-ux",
+   "artifactDigest": "fb6dd29c8c7d166fdf589ef6b56faa0847c633f6933eb35f1a150c5966469ccf",
+   "claim": "A command with no exit status now reports 124 when it timed out, and 127 otherwise.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "Only the direct spawn path does this. The shell path reports the shell's exit code and never times out."
+    }
+   ]
+  },
+  {
+   "id": "ec5d1177b10e934a45e7a2a1d038e7428037453dac107b4a81c0ce17e36e1f11",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcli-showtail-harness",
+   "artifactDigest": "cfbdba82eb58e5112c192e40b078f410d21adda46467d9c4df424220a2e0d40c",
+   "claim": "Two Python PTY drivers in `test/fixtures` drive the authoring and replay sessions.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "The replay driver uses subprocess pipes, not a PTY."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C6"
+     ],
+     "reason": "The replay driver uses subprocess.Popen pipes in stream-JSON mode, not a PTY."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C6",
+      "T6"
+     ],
+     "reason": "Only the author driver uses a PTY. The replay driver runs aifirst learn over subprocess pipes."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C6",
+      "D"
+     ],
+     "reason": "The replay driver uses subprocess pipes in stream-JSON mode, not a PTY."
+    }
+   ]
+  },
+  {
+   "id": "0a9442bf168aece6a7d773e8ea87c3f4eb957f079b1d32d3cc895468dca1cb0c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "ec849a6ad2676c0755f7a829aff9e05f2517a515ec2e11cfed69a52d4f3ac764",
+   "claim": "a bug that an automated in-order walk of the books should catch",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "U3"
+     ],
+     "reason": "This implies the walk can catch the java-6-05 bug. The walk's own reconciliation would remove the file anyway, and the evidence does not show that it catches it."
+    }
+   ]
+  },
+  {
+   "id": "fe7516cfff825eb3d769dc74f9bd072f9e684d9199b822c399135d3b0e1bae7d",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-book-step-verify",
+   "artifactDigest": "ec849a6ad2676c0755f7a829aff9e05f2517a515ec2e11cfed69a52d4f3ac764",
+   "claim": "The Java exercise java-6-05 broke for a reader in the CLI, a bug that an automated in-order walk of the books should catch.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "U3",
+      "S73"
+     ],
+     "reason": "The user reported the failure. The sequential pass deletes java-6-02's ThermostatApp.java when java-6-03 runs, so it would not reproduce the bug. 'Should catch' overstates what the walk does."
+    }
+   ]
+  },
+  {
+   "id": "f80141c20b5d669583091d1e90aeb0471a127f9300a95cd82a138d6d03a1c7ab",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstcontent-replay-start-state",
+   "artifactDigest": "24047cfd10c65438bc53bb194a281c13041eeac0d6eef123bdb4fe132b7e6310",
+   "claim": "This PR makes an imported replay record which exercise's scaffold it starts from when it depends on that scaffold, so a runner can set up that state before replaying.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X2",
+      "D"
+     ],
+     "reason": "The recording part is correct. However, the CLI uses the field to decide between the captured sequence and the full-file fallback. Nothing shows a runner setting up the starting state."
+    }
+   ]
+  },
+  {
+   "id": "85a4796eb4dcf1f2fb20ccf132dcd12eaddc619944633454bc4530124be820f4",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstextension-apache-license",
+   "artifactDigest": "9b142b5c4a6880e73c1456f170cf7159482cd104dac70d03ff1cf706e05daf02",
+   "claim": "The rights to release committed `aifirstcontent` material, including examples, under Apache-2.0 were confirmed by the user, while private Apress manuscripts stay excluded.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T5",
+      "S230"
+     ],
+     "reason": "The user did confirm content rights (S230). But the sentence sits in the bullet about the extension README, so it implies that README excludes manuscripts and Apress material. It does not; that exclusion is in the content repo README. This is the T5 trap, softened."
+    }
+   ]
+  },
+  {
+   "id": "e297ef250e7a720d971ce28e48229a2ef16ad738971c9c55c09ebcac31cc214b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "aifirstwebsite-macos-workaround",
+   "artifactDigest": "84cb1fe9bc6c8230d42531ac97c0a4d5290b10866249f335dc5b5888bc665bb7",
+   "claim": "macOS users get one extra manual step after installing, but setup is interactive when they take it.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "S1"
+     ],
+     "reason": "The workaround was not run on a Mac. Interactivity is inferred from a user report about a different installer (Showtail) and from the code comment."
+    }
+   ]
+  },
+  {
+   "id": "4f1d9356d0fea5cabab3682b133953639acfc43977ef4ee5047094b17b518910",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "pr10",
+   "artifactDigest": "def365b27f44bd497b99d0dc4df1e4af745a10201ca5544e9935c1323cc4b71e",
+   "claim": "per the commit, both redrawn showcase pages then held their styles",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "K2"
+     ],
+     "reason": "Rests on the agent's own judgment of images that are redacted, and the sentence presents it as an outcome."
+    }
+   ]
+  },
+  {
+   "id": "a126a9b74ddf4d863a3d4910d4421e4981222c73af84d6eb2df2ae737ac79657",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "c2c260a659f274333121b9d13eb3ce2992244b03c85adc254ab222a0f9394c9e",
+   "claim": "According to the commit message, the GitHub releases API orders by tag name, so `v1.0.0-rc.10` sorted ahead of `rc.2` and the installers kept installing rc.9.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C4",
+      "S12",
+      "S13",
+      "S18"
+     ],
+     "reason": "The recorded listing put rc.10 after rc.2, just before rc.1, and the commit message says rc.10 'came after'. Saying it sorted 'ahead of' rc.2 misstates the order."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S18",
+      "S12",
+      "S13",
+      "C4"
+     ],
+     "reason": "The commit message, although truncated, says rc.10 'came after r…'. The recorded listing put rc.9 first and rc.10 after rc.2. 'Sorted ahead of rc.2' gets the order backwards and does not explain why rc.9 was installed."
+    }
+   ]
+  },
+  {
+   "id": "e0b2e8bb10992624980e800214bd450ce8fa788d1d0c9156de1901bf4207f8ac",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "pr11",
+   "artifactDigest": "c2c260a659f274333121b9d13eb3ce2992244b03c85adc254ab222a0f9394c9e",
+   "claim": "The session's last test run came before the final edits to src/comic/providers.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "S24"
+     ],
+     "reason": "The chained command in S24 removed the 5% line first and then ran the full test suite and the bundled-CLI tests, so the session's last tests ran after the final providers.ts edit."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S24",
+      "U3"
+     ],
+     "reason": "The session's last full test run was in the chained command that removed the 5% line and committed. It therefore ran after the final providers.ts edit."
+    }
+   ]
+  },
+  {
+   "id": "8c6f2f1d347be7fcd1e4d1a35ed66d618c4d224855bf445a5fa9f46b5f9d9e03",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "pr5",
+   "artifactDigest": "f97c73943fd1b357d22658dc7f763843ee4f60f4dabc43d8764ca442770c09ea",
+   "claim": "Where to start: `dropEarlierWork` and `earlierWorkCutoff` in `src/correlate/correlate.ts`, which decide what earlier work is left out and where the window ends.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "windowFor sets the window end, not these two functions."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "windowFor sets where the window ends. These two functions only set the earlier-work cutoff."
+    }
+   ]
+  },
+  {
+   "id": "1bb3df5bd999e52516bf010b4b69106e78468eb2e197903ed2f30a56750e6f7a",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "pr9",
+   "artifactDigest": "70667c4968ce267be4f3db3674acce04a2b28ee0e9abc2232b62692536e7a150",
+   "claim": "The executable lookup in src/comic/providers.ts has a Windows-specific branch (`.exe`, `.cmd`, `.bat`) that hasn't been shown working on Windows.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S53",
+      "S40",
+      "U1"
+     ],
+     "reason": "The original session ran on Windows (C:/ paths, powershell). The doctor output there listed codex and antigravity as found, and live Codex runs used the PATH lookup."
+    }
+   ]
+  },
+  {
+   "id": "7bb4f2af55a685022a354a2bc19856f6d9487a19c3277f75f49d181dd7934b86",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-graph-compare-doc",
+   "artifactDigest": "c2a9dd3c984c5b30d7e17b5735e98b565ac33f8984e80c0c3fc1f4fb8e1dd92a",
+   "claim": "the skill settings to leave unedited in `SKILL.md`",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "D"
+     ],
+     "reason": "The unedited-defaults guidance is presented as sound, but the reference runs used edited bundles."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "D"
+     ],
+     "reason": "The claim repeats the doc's assertion that unedited defaults reproduce the winning configuration. U3 says the evidence does not show this."
+    }
+   ]
+  },
+  {
+   "id": "515602097593a967a1427857b850cf0b4be0b66a045491da8a37b5a870c2c40b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "6346ea94bfad989d347992ea2fa3110e15b49d267f64b8a378834b67bb5d8344",
+   "claim": "Codex keeps Sol and Terra and its frozen identity",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3"
+     ],
+     "reason": "The writer and judge contract digests cover files this diff edits, so the frozen identity changes and pre-change runs would be refused."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3"
+     ],
+     "reason": "Codex settings and hashes are unchanged, but the frozen identity also includes contract digests over files this diff edits, so pre-change experiments would be refused."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C3",
+      "T7"
+     ],
+     "reason": "The settings shape is kept, but pre-change frozen runs would not resume because the contract digests changed. The wording invites T7."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "T7",
+      "C3"
+     ],
+     "reason": "Settings shape and environment hash are unchanged for Codex, but the writer and judge contract digests cover files this diff edits. Pre-change frozen runs would be refused on resume. The wording invites the T7 reading."
+    }
+   ]
+  },
+  {
+   "id": "69ffa66f9b51b136c60a739dc04b79b0c8f6e57cb1027b90368ffe09c03bf692",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-parallel-providers",
+   "artifactDigest": "6346ea94bfad989d347992ea2fa3110e15b49d267f64b8a378834b67bb5d8344",
+   "claim": "The session's last build run came before the final edits to src/run/fake-gh.ts; the fresh check on the submitted content came after it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The session's full suite passed after the last edit, in the same command that made commit f7ec46e."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C10"
+     ],
+     "reason": "The typecheck and full suite passed after the last edit, in the same command that made the final commit."
+    }
+   ]
+  },
+  {
+   "id": "6c434d58c0cdfbc69a67fecd8b80bca5f5f5d3c674a759dcffa7c670a57976de",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "bffba37f81585c3493963e46aa9caea17614ac3c6e102dccae853b77a03eb8dc",
+   "claim": "The consequence is that the environment hash ignores the volatile names and prefixes the sandbox strips, so it still changes when a variable a writer can see changes.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X2"
+     ],
+     "reason": "The first half is accurate. The second half is overbroad because PWD, INIT_CWD and NPM_* are visible to writers but not hashed."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X2"
+     ],
+     "reason": "The hash still skips variables that writers can see, such as PWD, INIT_CWD and NPM_*. The general claim is therefore broader than the code supports."
+    }
+   ]
+  },
+  {
+   "id": "bf9b84324a1bd92a395f72c8941155504462f442ae04d33f2e0b497ed9672c9e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "bffba37f81585c3493963e46aa9caea17614ac3c6e102dccae853b77a03eb8dc",
+   "claim": "Because the hash now skips these variables, a Claude environment hash recorded before this change will differ from the new one whenever that environment contained any of them.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "D"
+     ],
+     "reason": "OLDPWD, SHLVL, _ and CLAUDE_CODE_* were already skipped, so an environment containing only those would not change the hash. The no-migration point itself is correct."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U3",
+      "D"
+     ],
+     "reason": "OLDPWD, SHLVL, _ and CLAUDE_CODE_* were already skipped before this change. An old environment that held only those variables would produce the same hash."
+    }
+   ]
+  },
+  {
+   "id": "6432e2a20eac24e55cf7a084339d42d42a5c74f08356c190251cc85de0464514",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "bffba37f81585c3493963e46aa9caea17614ac3c6e102dccae853b77a03eb8dc",
+   "claim": "It came out of work on optimizing how the evidence graph is built and retrieved for PR drafting, measured by comparison runs that had to be cancelled and restarted.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S5",
+      "S74",
+      "X1"
+     ],
+     "reason": "The cancel and restart in S5 was a separate run. The trigger for this change was the refused dev7 resume (X1), so the sentence links the change to the wrong event."
+    }
+   ]
+  },
+  {
+   "id": "28b13e9c622d12f6c0194992d4956ada86723f447be80bc11f85b87ebc0fe0ca",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "bffba37f81585c3493963e46aa9caea17614ac3c6e102dccae853b77a03eb8dc",
+   "claim": "the environment hash ignores the volatile names and prefixes the sandbox strips, so it still changes when a variable a writer can see changes.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X2",
+      "D"
+     ],
+     "reason": "The hash also skips variables the sandbox passes through (PWD, INIT_CWD, NPM_*), so a writer-visible variable can change without changing the hash. The 'still changes when a variable a writer can see changes' wording is too broad. A's own case-asymmetry note partly qualifies this."
+    }
+   ]
+  },
+  {
+   "id": "47fc625d151190aabd57d104bd61d911e62dc2b0773a1c40deacc3186d02fac6",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "prbench-shell-bookkeeping",
+   "artifactDigest": "bffba37f81585c3493963e46aa9caea17614ac3c6e102dccae853b77a03eb8dc",
+   "claim": "This PR lets a Claude comparison resume from a new shell that differs only in per-shell bookkeeping",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2",
+      "U4",
+      "U3"
+     ],
+     "reason": "No resume was attempted after the fix, and the cause of the dev7 refusal was never found. It is framed as a general property and not as dev7, so it is only mildly overstated."
+    }
+   ]
+  },
+  {
+   "id": "97d223333693e543c1a8d753dcade16d8929967aa19ac4e0d1e3da68a5d03ff7",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "753bc4f08a9e15667570c857ec9367b7e1718ea8195875bef75cb9b1b527c32c",
+   "claim": "every call except `clean` rebuilds the image first",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "The `-h`/`--help` branch exits before showtail_docker_build, so that call does not rebuild."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "In docker-test.sh, the `-h|--help` branch exits 0 before `showtail_docker_build`. Help therefore does not rebuild the image either, and A mentions `--help` in the same sentence."
+    }
+   ]
+  },
+  {
+   "id": "3a0d5a827cea1273af7c821645371252611e9baf1683b43db79ab14418889d4c",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "showtail-docker-tests",
+   "artifactDigest": "753bc4f08a9e15667570c857ec9367b7e1718ea8195875bef75cb9b1b527c32c",
+   "claim": "`bun test`: failed (617 pass, 65 fail, Ran 686 tests across 94 files. [189.63s]), run on the submitted content.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U1",
+      "S48",
+      "A.V0"
+     ],
+     "reason": "Session evidence shows the full suite passing in the image (682 pass, 0 fail). No fresh bun test execution is recorded in the visible packet, so the 65 failures cannot be verified. They look like an environment artifact, and presenting them on a PR with no explanation is misleading."
+    }
+   ]
+  },
+  {
+   "id": "3da85fc9c8dcb27bc7a3afc122c90eedb8f440856a8495a15a79e267c30fae40",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-chained-runs",
+   "artifactDigest": "01de2b66be5aafb7d8c32fa8fbc74f84949e6f3226129840cfbaf58333d7c460",
+   "claim": "a non-zero exit status no longer decides an entry's outcome (it becomes `unknown`)",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C4"
+     ],
+     "reason": "Only a 'failed' outcome whose basis is exit status becomes 'unknown', and only in a multi-check chain. In a chain, a passing exit status still yields 'passed'. The sentence is broader than that."
+    }
+   ]
+  },
+  {
+   "id": "cef80e0ccb0c9cff5c80951ae0f428e3c22048213316ce5acca096093d88452b",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "ae3d92570d18486c9da93cf5fc506072c262e36549e993da7e0f4fec5ef151ae",
+   "claim": "The work came from a session whose request (paraphrased) was to get the runs done faster by running many more sessions in parallel.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The lean reviewer was requested in S1 to cut token cost. The parallelization request in S3 was about how to run the implementation work, not why this change exists."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The lean reviewer came from the S1 request for a lean reviewer without the excessive token cost. The parallelization request in S3 was about how to carry out the work, not why this change exists."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S3",
+      "X1"
+     ],
+     "reason": "The request that led to the lean reviewer was for another planning round exploring a lean reviewer to cut token cost. The parallelization remark in S3 concerned how the work was executed. Presenting it as the origin of the change misattributes the request."
+    }
+   ]
+  },
+  {
+   "id": "e9143e7e66aa82156d9d2bf2aa832c830ce89cd9b65d49375e5aeb7f0994384e",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-lean-reviewer",
+   "artifactDigest": "ae3d92570d18486c9da93cf5fc506072c262e36549e993da7e0f4fec5ef151ae",
+   "claim": "Import marks the review incomplete when contributor guidance is missing, not current or has requirements, when change-map.json is missing or a behavior group lacks behavior checks, or when there is a comic.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C7"
+     ],
+     "reason": "The conditions are right, but render sets the status. Import only reports the reasons in advance, and B leaves out that publishing is still allowed."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C7"
+     ],
+     "reason": "The listed conditions are right. However, import only reports reasons; render decides the status. The sentence also leaves out that publishing is still allowed."
+    }
+   ]
+  },
+  {
+   "id": "1e217d387464ea1bd9d0cc78b6d8a40d2c2397223e27c9df1b7b91bdd6fa5ca6",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-receipt-quoting",
+   "artifactDigest": "c7ccc2b8ab226a349468dd287eb7111760b45dde5eae79f1bb70e498f40e8c1d",
+   "claim": "The work answers a request to research the latest findings, find the sweet spot and plan what is next, then to carry out that plan.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S36",
+      "S38",
+      "X1"
+     ],
+     "reason": "It cites earlier context (S2) as the cause of all the work. The receipt fix came from preparing the adjudication worksheet, and the default change followed the later step-back request."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S20",
+      "S36",
+      "S38",
+      "X1",
+      "X2"
+     ],
+     "reason": "S2 is earlier retained context. The receipt fix came out of the adjudication worksheet (S20), not this request. The default-path change followed the step-back request at S36/S38."
+    }
+   ]
+  },
+  {
+   "id": "5bf6acfd483bfe0d76f2d994d66a82fc0172f8ee29d810bbf11a1e5329b48e75",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-render-name-check",
+   "artifactDigest": "900baccd49e93baed49fd5ad46f59c7daa9eb8ea67fafbfa88f1876c3de069f8",
+   "claim": "an unrecorded outcome says the result is not in the logs",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "Final code says 'ran; Tracetoon could not read its result'."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D",
+      "C3"
+     ],
+     "reason": "In validationSection, every outcome other than passed or failed renders 'ran; Tracetoon could not read its result'."
+    }
+   ]
+  },
+  {
+   "id": "c66f2d258713fcd62e2bf055a9d8c88c022e934d9d1729a8a562af7cb6636059",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-review-run-all",
+   "artifactDigest": "d2bcecb35da2f18598b6962c61c2ff5fa90b5a787f2f7d7b3b90bd2dfe7943ec",
+   "claim": "This PR changes the review commands for the next code round (\"put a plan together for the next code round\").",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S22"
+     ],
+     "reason": "Quotes a user chat line as motivation; it is not meaningful context for a maintainer."
+    }
+   ]
+  },
+  {
+   "id": "86bfe61dad6f5d7088cd51a81eb00eb562005db2685b8fec7d307856a7864047",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "782d9a641508bba8c38b7fa168b2b555e2ace774659adfb39fac588aa27e8324",
+   "claim": "It was built under the approved Round 14 plan (strong writer, cheap high-effort reviewers).",
+   "statuses": [
+    "unsupported",
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S2",
+      "S27",
+      "X1"
+     ],
+     "reason": "That plan was about writer and reviewer arms. The port was a separate task, triggered by the SQLite-comparison question."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "X1",
+      "X2",
+      "S17",
+      "S27"
+     ],
+     "reason": "The port came from the user's question about whether the graph approach beats SQLite, and it was assigned as a separate worktree task. The writer/reviewer benchmark plan is unrelated work."
+    }
+   ]
+  },
+  {
+   "id": "3f49a09932e43065e8d250aada31aaa30804a7133244ff2c061596aac521af7f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "tracetoon-sql-row-order",
+   "artifactDigest": "782d9a641508bba8c38b7fa168b2b555e2ace774659adfb39fac588aa27e8324",
+   "claim": "cypherlite stays the default, so nothing changes unless the SQLite engine is selected.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C8",
+      "C1",
+      "T1"
+     ],
+     "reason": "The default is correct. But 'nothing changes' is an explicit broad guarantee, and session parsing now captures reads and per-response usage into trails and into `extras` in evidence-graph.json whichever engine is selected. A.D also changes digest trails."
+    }
+   ]
+  },
+  {
+   "id": "6ca9f641e6a958faae9f1ac2a07773780d78fb948cffffe35f0f2db710b1cc45",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "ff97828e6eb1af0580490f4b9bf26e028604e8ce221d821c3589d47e85afa55f",
+   "claim": "`refs/VAIMRC-Console` and `refs/aim-ai` are added as submodules for reference.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "These are only gitlinks with no .gitmodules, so they are not registered submodules."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "They are bare mode-160000 gitlinks with no .gitmodules, so they are not registered submodules."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "Only gitlinks, no .gitmodules; not registered submodules."
+    },
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "D"
+     ],
+     "reason": "They are gitlinks with no .gitmodules, so not registered submodules."
+    }
+   ]
+  },
+  {
+   "id": "f1ece9e7820b6d52126ec3100ee66b4ac4b75030712c32485cb745ba36069906",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "vexagent-repl-usb-iface",
+   "artifactDigest": "ff97828e6eb1af0580490f4b9bf26e028604e8ce221d821c3589d47e85afa55f",
+   "claim": "10 of 10 trips OK on `/dev/ttyACM1` ... at about 50 ms each",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "U2"
+     ],
+     "reason": "Reported as trip time, not latency; mild, but not caveated."
+    }
+   ]
+  },
+  {
+   "id": "0ba97eaa55e73861a02ccce8a725b913243f6fe685ea1b0a03c706a3865060f8",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "vexagent-skill",
+   "artifactDigest": "2125fa589e292dbb6c9d78c052c437b2a7aa592e7f9763d3b7f02335a61ac8ef",
+   "claim": "It notes that `exec` already imports `vex_globals`, and recommends `--no-preamble` to callers who know why they need it.",
+   "statuses": [
+    "contradicted",
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "SKILL.md warns 'use `--no-preamble` only if you know why'. That is a restriction, not a recommendation."
+    },
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "SKILL.md says to use --no-preamble only if you know why. That is a caution, not a recommendation."
+    }
+   ]
+  },
+  {
+   "id": "9d366227946146f8a498490368715d4c996bf2bb625a10c2467e5d86350a3f4f",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "vexagent-skill",
+   "artifactDigest": "2125fa589e292dbb6c9d78c052c437b2a7aa592e7f9763d3b7f02335a61ac8ef",
+   "claim": "and recommends `--no-preamble` to callers who know why they need it.",
+   "statuses": [
+    "contradicted"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "D"
+     ],
+     "reason": "SKILL.md says to use `--no-preamble` only if you know why. That is a restriction, not a recommendation, so the wording slightly misstates it."
+    }
+   ]
+  },
+  {
+   "id": "b2d9a1462e52c14ac70c8896743abcd10bd668cab68762596f2cc3e5e0bbb0fc",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "vexaim",
+   "artifactDigest": "5a1ad18550cae31ff6e59d5e3af37436f416dc898a53eea7868015f4ff6294f3",
+   "claim": "It implements the requested plan.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-opus-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "S1",
+      "S105"
+     ],
+     "reason": "'Implement the plan' (S1) was earlier context for different work. This change followed the request in S105."
+    }
+   ]
+  },
+  {
+   "id": "ac92b3558999f39fa691f261d80716b02e097da331d6e11026e047c2a50c2a8a",
+   "arm": "tracetoon-candidate",
+   "model": "claude-opus-5-5@medium",
+   "replicate": 3,
+   "case": "winapps-adobe-2026",
+   "artifactDigest": "1adf12f8c3c951b9c52fd0a17e5b8fa05806a2741c71c7b1a95b1ff7c1c61e33",
+   "claim": "The `icon.svg` files are the standard Adobe Photoshop and Illustrator logos.",
+   "statuses": [
+    "unsupported"
+   ],
+   "observations": [
+    {
+     "judge": "claude:claude-sonnet-5-5@medium",
+     "opponent": "claude-native",
+     "evidenceRefs": [
+      "C5",
+      "T3"
+     ],
+     "reason": "The icons are identical to the existing templates' icons, which is consistent with this wording. Nothing in the evidence establishes that they are the official logos, and the description does not say they were reused. It avoids trap T3, since it does not claim new icons were created."
+    }
+   ]
+  }
+ ]
+}

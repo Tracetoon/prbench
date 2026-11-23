@@ -1,0 +1,378 @@
+{
+ "schema": "prbench.comparison/v2",
+ "split": "dev",
+ "baseline": {
+  "hash": "8d1194c8862301cb16b42771bc7b427cd7d01b03f9e44f091f39f24399cbd60d",
+  "identity": {
+   "version": "1.0.0-rc.24",
+   "buildId": "d9db47254d1c342324c99c476cb674567336da8feeea64d3365296b70d593f77",
+   "sha256": "d125f6f8bddac6019f51ae0bece4bdd18a8a384536019b660e6d65b801003bb0",
+   "outputReceiptSha256": "90f21bbe6f18d34eab73e42e334fc7fcf8267b67e740c600358ef43430e67a22"
+  },
+  "runtimeName": "tracetoon-linux-x64"
+ },
+ "candidate": {
+  "hash": "b4a56200bce5cf5681b5117308bad90822089cd77e2c3febc497294088165bf8",
+  "identity": {
+   "version": "1.0.0-rc.24",
+   "buildId": "1bb8725e440a71e053b27df23de9c2fed2821f6a44a43b87d2ca34f4c7662dc1",
+   "sha256": "aac760e91300470b7672d5ade1028b52b0d89d835944217a46180098d0c3b2ef",
+   "outputReceiptSha256": "2a78f5b1ebb05fbfb69b65c9f71f66ffd2b283bb7e69bdb7cac798fbe73ad4e2"
+  },
+  "runtimeName": "tracetoon-linux-x64"
+ },
+ "cases": [
+  {
+   "id": "aifirstcli-book-walk",
+   "hash": "78795639ac14d0455ef79af5ce256f285731b7f1edca59eebd83d778b82bef58",
+   "writerIdentity": "119b33619720d798e0751029f35b256b0ca7af2436256bd4e218d458ad563203"
+  },
+  {
+   "id": "aifirstcli-duckling-wheels",
+   "hash": "87f38711ffe57d941d1e14edcfe7142b8908f6e7161e67649ed13685ea69ee3e",
+   "writerIdentity": "9caffe3cff3a4ead20512793b1c6cfd3ba82229dc513bb923743a512cab3da5b"
+  },
+  {
+   "id": "aifirstcli-homebrew-maven",
+   "hash": "548ab67c11546019b151af8c012488b57ecf7d323856ac87448b520d808416a2",
+   "writerIdentity": "f1423bafe45aa69bc9a7cce164db05e03eed86ee7c794398abddf3f16905e4d6"
+  },
+  {
+   "id": "aifirstcli-hooks-path",
+   "hash": "b6a5c771b56cbf7ec700f8e938a6875b5739793e88423a07263ec00b6ece309f",
+   "writerIdentity": "2b705971233076557b1cd0e33b13ff548868867d265a6a89f4a197e021bf5e01"
+  },
+  {
+   "id": "aifirstcli-javafx-maven",
+   "hash": "27ab2bea9f2966279fbef781d9ee7c98ee3331966f2aa48d6c578f65b9288828",
+   "writerIdentity": "ca1f916f4753b11392a9d8be13a345bfedc5c221e5304bf0e55c92f4ab656ef6"
+  },
+  {
+   "id": "aifirstcli-learner-replay-ux",
+   "hash": "ebcb55e0bae9c2595055ac82b32e95fa74c0e16c9569cf01a6f58646547d0891",
+   "writerIdentity": "a864723a21d1f279f737aaa1fb46ba2da18ecbb6d0dc401d74d2c0151348bab9"
+  },
+  {
+   "id": "aifirstcli-macos-installer",
+   "hash": "cc482961176f2fedde411045866cc077c07b3d67c98d5b97f497d448d89896a9",
+   "writerIdentity": "71ca308a0753b5b70b51824d48d69cd50b61938e0a8a3ec390b238fc2ccf186d"
+  },
+  {
+   "id": "aifirstcli-showtail-harness",
+   "hash": "0205e4ff54e6b966b07d991ef5d52a898113dfc53c7ebbc86cdd6267a671ba67",
+   "writerIdentity": "300a48edf2c54bab2997e55e31e6a989d395e943096048b5b535c793b1c35518"
+  },
+  {
+   "id": "aifirstcli-signpath-release",
+   "hash": "a24fa8d0ccc32f523685a8d9a5220796db6ebe9a391fe1c39d181bfed9cb5f50",
+   "writerIdentity": "0dd6233707716d4ec14cc948274f8ecb04d014cc5ff751063a32a5243b360191"
+  },
+  {
+   "id": "aifirstcli-tui-responsive",
+   "hash": "d5a6ec11455f70d08b0cb3345a1c577110e762c16dc6b5b77eeb80aedee5fc30",
+   "writerIdentity": "b41668a59ce52af7200d74a46441026022248091b01b786d723623c14ee09f89"
+  },
+  {
+   "id": "aifirstcontent-apache",
+   "hash": "d8f333c7bcc73589da148f1e6a7d1f8b6af4ef8ec193a7f6f2362c1cbbe4e40b",
+   "writerIdentity": "dcb7bb26a82d0d5caaa543f00eff09e2fc4b0cf01441b0efe05c3a1cf19f7d3f"
+  },
+  {
+   "id": "aifirstcontent-book-step-verify",
+   "hash": "9edd067d4c3288a45c1c0f13619b1160fc9a0ce6ce5bc08c539115b239a870a3",
+   "writerIdentity": "3f5b45a0555c7ac17658b34b2ebe1126608813f4d5bad505144edadf511c3ad6"
+  },
+  {
+   "id": "aifirstcontent-portable-replays",
+   "hash": "e7c5f001b8b33d73921621112e9b0f631f8d6387d36a936fc9ef7c7d6a843576",
+   "writerIdentity": "0d85035497fe8f22263d756cdb19b62afc3d1b25f9e359fb20376cc108b49c16"
+  },
+  {
+   "id": "aifirstcontent-replay-start-state",
+   "hash": "110a49461ca78d5c1df38411f288c4c21757b33e4dd05d70d238e636a4d6a3de",
+   "writerIdentity": "8f5392b070affb9c542cb433c6c6000d259abd8611c95a591b69aa1065a96e4b"
+  },
+  {
+   "id": "aifirstextension-apache-license",
+   "hash": "6a29387732a56d1df320c41bae000c5566cccd286c7e68c8e2408bdfa595a4db",
+   "writerIdentity": "740b6ec7ce85b83f49d88d16f8cf49b1f0192abfedaa914cd7e3729e43246be1"
+  },
+  {
+   "id": "aifirstwebsite-guided-install",
+   "hash": "a982562ef615d683f4f6291e391397464346a888835180cd55ccb526af2102e7",
+   "writerIdentity": "f1d30ec9b626b195f168d38437235f54587687dd903f681c40eb0528bc14bbee"
+  },
+  {
+   "id": "aifirstwebsite-macos-workaround",
+   "hash": "c6140cd1d3742f75a547c9741b9662e31d1cd050574ddbdcfc599ff6e4e4d7b9",
+   "writerIdentity": "84eb67378de31e0de207abb3e09b3bb55f1154844c10e4cb7c486123768a283b"
+  },
+  {
+   "id": "aifirstwebsite-signing-policy",
+   "hash": "5c490dbc69af69e3a81c0186e3e65e8702fa725187198fffcae868c569881eb2",
+   "writerIdentity": "c911b0797791bfc3473427038d3830df17c0e108feeb9e303a9d1cf42e44439a"
+  },
+  {
+   "id": "bazzite-stale-portal",
+   "hash": "6ba3706c1a560a0ea7cb47887bdedd60bcfc0d42b34171f42c42666d3fdc505f",
+   "writerIdentity": "6b5daa6ebe462fb1c51f0999c6501be3776962e6a8e278346f6a848e3b904a57"
+  },
+  {
+   "id": "pr10",
+   "hash": "f3fb1b78d4a1afa708cc19cb9888e988b02dc5a417892ee9d2dcd926031429df",
+   "writerIdentity": "ccbcff356b10eeb2a3adb98e16dc3250ff5b5204885f1b41711815ef1a1471dc"
+  },
+  {
+   "id": "pr11",
+   "hash": "3140c79e46de12388ccb9cd63ca07bb5a5327a347d6df2a7612dda46e2dcc2b9",
+   "writerIdentity": "468f6da6253e21738aeb870197b421282b79a340d1f77624ccb3f337c951ef00"
+  },
+  {
+   "id": "pr12",
+   "hash": "5bd61f104d82407be80fa29151c5a8337240a764b9cfb16395400ffa129fc24f",
+   "writerIdentity": "f56802394fd49eed69321edc4a0367b12b10aac9d462a7a948c9301a95e13a94"
+  },
+  {
+   "id": "pr5",
+   "hash": "fd3a9d936626da18b3ac545e03cdef06b62690240e2c8ae2a36fcd56b89f0257",
+   "writerIdentity": "47615fb4c22822b24ee1e1cee47ecea2cc9695c72b3c48c7017c8df1dc9c3f08"
+  },
+  {
+   "id": "pr8",
+   "hash": "1c26b7a3850d59ea2737fc5156fc1bb3759eadaeeb9f0a3674f890637c6ae42a",
+   "writerIdentity": "6709b838b5b6ff24df23de2f7dc4f28772d6e5d864cb1bde90f1b2cac5a84aed"
+  },
+  {
+   "id": "pr9",
+   "hash": "9431e5b00ea59d6ebb0109ce3c6d48c617b9e97daa08fa447fb7b16895025b79",
+   "writerIdentity": "ab7a4d444e186b104888fa68c77255b33a851c0c4992cc61d9700dbab87a7981"
+  },
+  {
+   "id": "prbench-aggregate-only",
+   "hash": "de34942e7a809549d019be9e1fdee22a5abacd50f5f1741d9d3ca0c5daa11391",
+   "writerIdentity": "f7f443b37edadad2d84e8f38b24aa0389239b8dc666efb5e1efdc8a35b7e0d14"
+  },
+  {
+   "id": "prbench-compare-systems",
+   "hash": "f21c3748350035e1b3d35fae28f74726faadd93e41bd830034c81370530046d0",
+   "writerIdentity": "aaecf076305c48d18690e04162e75c68cc47c16c177e43bccce3b11daeb97ad8"
+  },
+  {
+   "id": "prbench-crossjudge",
+   "hash": "5156cf22f660b1579c31447be52c09e84d9cacde91271ec2c3261cb28c1865e4",
+   "writerIdentity": "c0703cbb39c11fe06ef6eb4924c3abf793545576b4fe5123087c1ddb73aa79c8"
+  },
+  {
+   "id": "prbench-graph-compare-doc",
+   "hash": "eaff90225e32560be2eee72aeaf9fa67528d953ddec0ddce5df682e300a23a5f",
+   "writerIdentity": "68f170c07c560bc8e7c4d83476bb9b3ebc928872bb3b8571faa6d7fab4c4d06c"
+  },
+  {
+   "id": "prbench-judge-retry",
+   "hash": "70040f59ad6f407849646c0169777773f5ff9c541104ca89feea6e85f37691dd",
+   "writerIdentity": "444cf322c10e3ad5e87980c1cd499d07570d3168f291c581423033a817776b07"
+  },
+  {
+   "id": "prbench-parallel-providers",
+   "hash": "8dc0cfbe2e2d275b6ecb841fbde95a57bdf56034507ea52f9b639fa5fe803c8e",
+   "writerIdentity": "5b0161a568b9928e8aa36fc9e9b36d6d36dc9402894f3e2a6a03046aa17562b9"
+  },
+  {
+   "id": "prbench-priced-cost-gate",
+   "hash": "a4750a61553113cd51da675a8bef0846ea603443750a5d34425ed1ddfc68e241",
+   "writerIdentity": "881e9bf51da418c1e25a7e70c6c42e694bc19699acceb7cafb22fc7b0aa854b7"
+  },
+  {
+   "id": "prbench-scoring",
+   "hash": "f2d89a5ad8f3dbdd1b5d130fde7077265e17bbf671760897db942c9cb4cbbdcd",
+   "writerIdentity": "ed86c708763ac2f71aef17550558e88300ef51f8a3b9ca6f542b049cbc426551"
+  },
+  {
+   "id": "prbench-shell-bookkeeping",
+   "hash": "4d8e66aa0c9f260e830362afcbfdfbc29f6f34eb04fa02a626e454b31738a417",
+   "writerIdentity": "ab127654996b6cfddf7963d80a8c2da914dbda13eb0e4313d6d7154f1777abac"
+  },
+  {
+   "id": "showtail-claude-exit-codes",
+   "hash": "d6a4ec08a1a496134f6cdfbb94be83958f17c682799924c6c7205344078344eb",
+   "writerIdentity": "92269c5a3d64d49c862abece8b271af0ff1eaf00f781b0f64aff06e665178e7e"
+  },
+  {
+   "id": "showtail-docker-tests",
+   "hash": "ba64dbeaacb450cf1bce37ee671d6e38cc2c916a8707c7bfd83bdfbb9eb51299",
+   "writerIdentity": "621125592f7d0489e46ab88a1f96505543817e5bb52f36dd2338a90b8b75a7ed"
+  },
+  {
+   "id": "showtail-self-upgrade",
+   "hash": "d5a7b781efa88e11c4208b6d5f007332f85fc54b170b2c96b7f6d0ec37d48531",
+   "writerIdentity": "3b35caf4a44125d6e5e41d02e2efd3d93df159bc0412d9fadb7343390fb324cf"
+  },
+  {
+   "id": "showtail-signpath",
+   "hash": "e5f190588f8f79e37225863d8e1c7a44a9eb7f1677f7265ad31377e1c984d4a8",
+   "writerIdentity": "ea5327ce54c59f8a01316354d7d2f2d1663ed902edd2567b5c07cdac52d69a6f"
+  },
+  {
+   "id": "showtail-transcript-migrator",
+   "hash": "9545d14a6d12ffcb5b2f70e0ef3a02b5d2e74d0fa85c0d2086af9339fad183ad",
+   "writerIdentity": "d2bcd3165e49eb6d4b2a92db84501b1fb4bf3471041c966e89734394262097c0"
+  },
+  {
+   "id": "showtail-windows-cmd",
+   "hash": "fbdc187aae574f317cb75afac9a4028260e1f41e03c66e90c6ad5c5d64158803",
+   "writerIdentity": "108209ce75b6beca258984d32c0c6ed2fb18c62d50f724332bd6db4b4b43ce2f"
+  },
+  {
+   "id": "tracetoon-brief-owners-rows",
+   "hash": "6d2cca538fc06351cf4f828a92d969760e31cf1eff9499af0f70be8116a78163",
+   "writerIdentity": "e617286f09e6b6f16505f10dd1497640613bdcbb5bae05f8b2f90d9de04a0248"
+  },
+  {
+   "id": "tracetoon-chained-runs",
+   "hash": "659b98ab63496a4ba9eb6db59d260efc05a56f9c740ffb5f9f9079b2d8896b76",
+   "writerIdentity": "ffa9ef192cb073c0acd62562ddc259f41b83f3cf7305e4816d92b6c467745489"
+  },
+  {
+   "id": "tracetoon-cli-guard-tests",
+   "hash": "fb75877e073112430ae1fdc76951d46ded3b9903ce7ca5fe4ccd7d7c815b162c",
+   "writerIdentity": "e43d5eb8d21333a8958f239c4e9ade6d5f5a68801724639d784be6a9a2e32c1f"
+  },
+  {
+   "id": "tracetoon-evidence-graph",
+   "hash": "72b1ef17517d842e56cd078a4de8825a88d0a9f887e4cd655d858f86b5a108dd",
+   "writerIdentity": "cdc77e1fb0f73e7c0b7af6bd38d7703e2021ed0b28800856b90f920b7a23949c"
+  },
+  {
+   "id": "tracetoon-lean-reviewer",
+   "hash": "513f180ad37876cd2b26456302db13418bb02b6b242b7c3719dbe094e76f5510",
+   "writerIdentity": "b7d09c0a2ea7c84a183f493ce6af53a8ad8f06182d646c0006d8dddc2c2dce73"
+  },
+  {
+   "id": "tracetoon-neighborhood",
+   "hash": "33c18cc8eabb856fc236d855bd813eed440616ac2fba6df73047e16938e23c11",
+   "writerIdentity": "bf77c4ee86b6b076912b9a7da343c0c84b3df6f2f79a14f7e2a5c9edb1468b40"
+  },
+  {
+   "id": "tracetoon-receipt-quoting",
+   "hash": "f3602f978a27002de917167fe2c884cbbcbbba7f756526bcc350fd368b72f539",
+   "writerIdentity": "d8bf36f146dc079be781202b34afff0653c6bb344d020b44df60c4980418f661"
+  },
+  {
+   "id": "tracetoon-render-name-check",
+   "hash": "47059d92b88edd77d06183c6dc6a9cb2298d53a003a0e88f2706cd79bebdff20",
+   "writerIdentity": "43e3c48049f044554e36ba118e85f735fd802ff81e73c4c29f6e8e3b6fa17b21"
+  },
+  {
+   "id": "tracetoon-review-run-all",
+   "hash": "251ca717792b25ac1f1841459c766c73aff9a1c72d0bcc208fbc67790d428d99",
+   "writerIdentity": "40b9bf0f25e3fe77cd2eb5665dad338cbb05f6deb2a86e8cbcf3df6f33309b88"
+  },
+  {
+   "id": "tracetoon-sql-row-order",
+   "hash": "24fb90219a01a954d4401d502fb1f9ca69cd9e4d51af65f0725eb9b579b2fdd9",
+   "writerIdentity": "9850156502b311f1e407f2d3b31ef769ca42784afc47e20afeac51ac0a1c5159"
+  },
+  {
+   "id": "tracetoon-update-command",
+   "hash": "931b36a1ad37355a5d566c2fdd3e3e14f2e0c905c05843e5308f63893381ef64",
+   "writerIdentity": "2769dd11d9fa9c5255cec756af1747757547070fdba63297d1d2efaffd8f2c10"
+  },
+  {
+   "id": "vex-v5-serial-aim-port",
+   "hash": "488ffa62ef2b3dc3ae0e6002bf67916bb4c1b31cfa3db1c8524e45e82e41f8d0",
+   "writerIdentity": "4297bc89756d7e850d339357299102cb99c7e1f426c95b8761fe930aa567a4a3"
+  },
+  {
+   "id": "vexagent-cli-snap",
+   "hash": "339d2cacda90575422946869509ef8c5c3d0f075cae5718584d6bd7f0de06ed3",
+   "writerIdentity": "4bd0aa63680ac621e0ad2cf79ff96992d40bed6069094ca3e785bfc04b41e827"
+  },
+  {
+   "id": "vexagent-repl-usb-iface",
+   "hash": "84c0d15106c1dedb914dcfd08bec64721c965e7dffd138717de45ceb4c0ee2a5",
+   "writerIdentity": "a23da61ad700369bea010440ab7d37bb7f1d028322bb63758eac2d7db95ed993"
+  },
+  {
+   "id": "vexagent-replug-runs",
+   "hash": "e4ecf5e7eabe5b42bca28eb9aa9f36d675464662dedf0cfa353ba854ed91b96a",
+   "writerIdentity": "5a41089509883d57c0683b7528b8d4f1b0b5bc26c28e765143bb541b3858c212"
+  },
+  {
+   "id": "vexagent-skill",
+   "hash": "6aff5e6531c746ec97e7d6df588f4f80e2816ccb2ad13b70b8972e371f25cbab",
+   "writerIdentity": "8686f916142bc7708c8dd8f28fe601a199c0a27bdf19ae8977bd3287a86f34b2"
+  },
+  {
+   "id": "vexaim",
+   "hash": "5acbe1427501aa870eb2cb80d17d1d6afdeccb9924bc208e4cbf102c193771d8",
+   "writerIdentity": "72ac37dfd5fa93e6212bf84e6ee30a5bcb165997f1afea75b72eb8ed76661678"
+  },
+  {
+   "id": "vexaim-workshop-ci",
+   "hash": "0639bdf81b09d4bcd6480b3d5a7c8640a26242e4b54eb7bf69fbc700e3bbc07e",
+   "writerIdentity": "0a27360583fe2eacbb071bf0a559ad8632717391a06eb427425132482d3c1365"
+  },
+  {
+   "id": "vexaim-workshop-norobot",
+   "hash": "11aec096a62784ccdd70e0604fdc5e88c2fc08146f667f940d17ace0a538df76",
+   "writerIdentity": "7dfa441c3dee88d28b3a22149afd1d1a7a448716c23c7d1e0516041232193539"
+  },
+  {
+   "id": "winapps-adobe-2026",
+   "hash": "39133a73d23a3aabd3375161d6ea1b46fd074f34a0da8658030746d260626961",
+   "writerIdentity": "71b9089fb13ee80e8332554dc6757c1367e2d7d7478bdc76c5479e512020d0e2"
+  },
+  {
+   "id": "winapps-sdl-wayland",
+   "hash": "26db8931222b9d5e1ff9fef52a5770980fea69f7f6e6c1730eaa94099e8a73cf",
+   "writerIdentity": "4d6bd3d2dcc68fb5a27ee0b3c9a2efaf4658af4c63e3ab269ed8d319a544c4b0"
+  }
+ ],
+ "writerContract": "cbf2daaff65733cf1e10615d2c5f71004e7bdad69614eae91f4a701e268c0e62",
+ "judgeContract": "3208716b610cb8f4c62272c8a9b6483cd4b2ae338b1092f9f2916ec6d5ef8be0",
+ "gatePolicyHash": "90cd8ece579bacbc5fa322e3c174430f198f3ac1acff032830afcbad78730d3c",
+ "preparationHash": "0a61fa4372230da94f85ffe85a15b441df102595787d4a739491f290cbd1d74d",
+ "probeCaseHash": "3f9909d7a855e4793d88f08528e5dc25dab9450915fe7185afa54158c9824d6b",
+ "settings": {
+  "provider": "claude",
+  "models": [
+   "claude-opus-5-5@medium"
+  ],
+  "systems": [
+   "claude-native",
+   "tracetoon-candidate"
+  ],
+  "judges": [
+   "claude:claude-opus-5-5@medium",
+   "claude:claude-sonnet-5-5@medium"
+  ],
+  "effort": "medium",
+  "timeoutMs": 3600000,
+  "rubricVersion": 6,
+  "replicates": 3,
+  "purpose": "diagnostic",
+  "cliVersion": "2.1.319 (Claude Code)",
+  "agentCommandHash": "8d97995186d41762c14b94b92feef850de5cb0625ca34fef7a8f5983700a4e86",
+  "promptHash": "93c8b00380acc61a58983b9a7a2302d0d349ae9141382a21c11ec3abe577192d",
+  "toolchain": {
+   "bun": "1.3.14",
+   "node": "v24.3.0",
+   "platform": "linux",
+   "arch": "x64",
+   "environmentHash": "d0383bf059cb193f6cfd9af7e02ed9fc6786f94875b11270bfe8c06c7289a8d7",
+   "authProfileHash": "a1b7024b247888dfe3bdd55ece55860669b7c311156cee8d21fb4d92a99067b0",
+   "executableSha256": "9fd36f87e4b90b07632b987a2e4ec81ca15a62c81bf983190cea6d715be2ad74",
+   "owner": "posix-process-group/v1"
+  }
+ },
+ "performanceBlock": "7951f484-fc65-4b4c-992a-b001bb7e258d",
+ "id": "f2cc633d4cd08834874b9d3e24404bb69837f4c722f2631970613c68cf4737b5",
+ "identity": "f2cc633d4cd08834874b9d3e24404bb69837f4c722f2631970613c68cf4737b5",
+ "provenance": {
+  "harnessRevision": "1a9de82fa261907deebe9604b65c114f74911de1",
+  "harnessHash": "6ea1e90b0f1dffcd67ac387a42e71a26791aca183b1d020626770a60222b54f7",
+  "harnessSnapshotHash": "8245d74d263c84eac073febd8dfa2a9d0de15055ef9499ec6d5efa223fdf0d17",
+  "bun": "1.3.14",
+  "at": "2026-11-23T09:14:07.107Z"
+ }
+}

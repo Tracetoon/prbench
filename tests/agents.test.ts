@@ -135,5 +135,6 @@ test("Claude writer sandboxes get an owner-only file login from the token (neste
   writeSandboxLogin(home, { CLAUDE_CODE_OAUTH_TOKEN: "tok-123" });
   const file = join(home, ".claude", ".credentials.json");
   expect(JSON.parse(readFileSync(file, "utf8")).claudeAiOauth.accessToken).toBe("tok-123");
-  expect(statSync(file).mode & 0o777).toBe(0o600);
+  // Windows has no POSIX permission bits (files report 0o666).
+  if (process.platform !== "win32") expect(statSync(file).mode & 0o777).toBe(0o600);
 });

@@ -1,10 +1,30 @@
 # prbench
 
+**Other benchmarks read the diff. prbench reads the receipts.**
+
+<p align="center"><a href="https://tracetoon.ai/prbench.html#results"><img src="docs/img/comic-results.webp" alt="Two-panel comic. Trust me, it's great: on a dark blue stage a developer proudly holds up a blank pull request while three grey robot judges in the front row fold their arms, one squinting through a magnifying glass. Show the receipts: on a bright yellow stage the developer unrolls a long receipt that spills over the stage edge while the cheering judges hold up score cards reading 72-9, 111-19 and 79-38." width="720"></a></p>
+
 prbench measures whether a PR-writing tool helps AI coding agents write better pull requests. It replays real agent work sessions and asks each system to write the pull request. Judges then score every draft against an expert-reviewed fact sheet for the change.
 
 The question it answers: **does an agent with this tool write a more accurate and more useful PR than the same agent without it, and at what cost?**
 
 ## What makes it different
+
+A diff shows what changed. The session shows why. An AI agent's pull request is the end of a long conversation: the user explained the goal, the agent made a plan, tried things and ran tests. A PR tool worth using turns that into a description a reviewer can trust, and you can only measure that if the benchmark has the conversation too. As far as we know, no other PR test framework replays the pull request from the agent's actual session logs and runs the PR tool the way it really runs.
+
+| Question | Typical PR benchmarks | prbench |
+| --- | --- | --- |
+| Does it replay the agent's real session? | No: PR datasets hold diffs, comments and outcomes | Yes: each case ships the redacted Claude Code or Codex sessions that produced the change |
+| Can it see what was asked and what ran? | Only what the diff and commit messages imply | Requests, plans, decisions and recorded test runs, for writers and judges alike |
+| Does the tool run the way it runs for real? | Usually a model prompted with the inputs | The real agent CLI with the tool installed, in an isolated sandbox with its own home and a fake `gh` |
+| Are claims checked against evidence? | Text overlap with a reference, or one overall score | Claim by claim against an expert-reviewed fact sheet, traps included |
+| Is judging blind and paired? | Often one reading per output | Branding stripped, two judges, both orders; a win needs both |
+| Are flagged errors double-checked? | The judge's word is final | Every flag goes to expert models; only confirmed errors count |
+| Does it report what quality costs? | Rarely | Cost per draft from measured token use, compared pair by pair |
+
+"Typical" describes the common setup of PR-description and code-review evaluations in our [related-work survey](docs/related-work.md), not any one project.
+
+<p align="center"><img src="docs/img/comic-quality.webp" alt="Two-panel comic. The old way: three bored robot judges hold up question-mark scorecards at a sad pull request that says 'Improves stuff.' With Tracetoon: the judges leap up holding scores of 10, 10 and 10 while a confident pull request with a comic pinned to it takes a bow and the developer cheers." width="560"><br><sub>The real judges are less excitable: two per provider, each reading every pair twice, with the drafts swapped.</sub></p>
 
 - **Real sessions, replayed end to end.** Each case is a real piece of work by Claude Code or Codex: the repository at the commit before the change, the commits that made it, and the session logs, redacted and cut to that change. The writer runs in a sandbox on that checkout, with those logs in its home directory, and opens its PR through a fake `gh`. A PR tool can read the actual session, as it would on a developer's machine.
 - **Expert fact sheets.** Every case has a fact sheet listing the claims a good description makes, the context a reviewer needs, what the evidence leaves open, and tempting wrong statements ("traps"). Each fact cites the exact lines of code or session that support it. Sheets are written from the code and sessions, never from a published PR. A panel of Claude and GPT models reviews each sheet against the raw evidence and accepts a change only when both model families agree; judges settle disputes. Writers never see the sheets.
@@ -22,7 +42,15 @@ prbench is behind all three published Tracetoon results, newest first:
 2. **The v4 golden run:** Tracetoon's evidence-graph brief against its original multi-agent workflow (61 cases × 3).
 3. **The first evidence-graph study:** the same graph-vs-original comparison on 5 cases × 5, before it was repeated at scale.
 
-Each report, with its charts and caveats, is linked from the [Tracetoon results page](https://tracetoon.ai/results.html).
+<table>
+<tr>
+<td align="center" width="33%"><a href="https://tracetoon.ai/vs-native.html"><img src="docs/img/comic-vs-native.webp" alt="Comic: the agent alone hands over a crumpled 'Fixed stuff.' page next to a $3.50 jar; with Tracetoon it hands over a checked-off PR next to a $0.93 jar." width="260"></a><br><b>Flagship</b><br><sub>Tracetoon vs your agent alone</sub></td>
+<td align="center" width="33%"><a href="https://tracetoon.ai/evidence-graph-61.html"><img src="docs/img/comic-graph-61.webp" alt="Comic: three robots pass towering log stacks along a conveyor belt; one robot points at a map of connected dots under a 61 REAL PRs banner." width="260"></a><br><b>The v4 golden run</b><br><sub>The evidence graph on 61 real PRs</sub></td>
+<td align="center" width="33%"><a href="https://tracetoon.ai/evidence-graph.html"><img src="docs/img/comic-cost.webp" alt="Comic: without the graph, tired robots re-read session logs; with the graph, one robot holds a map while two drone reviewers check it." width="260"></a><br><b>The first study</b><br><sub>5 PRs × 5, before the scale-up</sub></td>
+</tr>
+</table>
+
+Each report, with its charts and caveats, is summarised on the [Tracetoon benchmark page](https://tracetoon.ai/prbench.html#results).
 
 ### Tracetoon vs no Tracetoon on flagship models
 
@@ -70,6 +98,44 @@ Tracetoon's evidence-graph build at the time (`bd55f75`, on Relate) against its 
 | Writer cost per draft, graph / original | **$0.207** / $0.320 | **$0.407** / $0.690 |
 
 Five cases from one repository make this a small, early test. A same-build Codex rerun gave +5.2 (13–2), about the ±3-point run-to-run noise to expect at 25 pairs.
+
+## Run it yourself in 3 steps
+
+The cases are a public download: frozen repository bundles, redacted sessions and fact sheets, consented by their owners. You need Bun 1.3.14+, Git, and the Codex or Claude Code CLI for the model steps.
+
+1. **Install prbench** from the GitHub release:
+   ```sh
+   bun install --global https://github.com/Tracetoon/prbench/releases/download/v0.4.0/prbench-0.4.0.tgz
+   ```
+2. **Fetch the cases.** Downloads, verifies every file's checksum and caches the 61-case library. No account, no model calls.
+   ```sh
+   prbench datasets fetch real-cases@4.0.0
+   prbench preflight --dataset real-cases@4.0.0
+   ```
+3. **Compare two builds.** Sign in a separate benchmark login (`prbench auth codex`), preview the plan for free with `--plan`, then run the same command without it and score:
+   ```sh
+   prbench compare --provider codex --models gpt-6.1-terra@medium \
+     --systems baseline,candidate --purpose diagnostic \
+     --dataset real-cases@4.0.0 \
+     --baseline-skill skills/baseline --candidate-skill skills/candidate \
+     --out results/my-run --plan
+   prbench score results/my-run --dataset real-cases@4.0.0
+   ```
+
+For a cheaper first pass, add `--replicates 1`. The sections below cover a source checkout, the dataset, both providers, judges and recovery in full.
+
+### What a run costs, and how long it takes
+
+Everything up to the run itself is free. The paid part is your writers and your judges, on your own model login.
+
+| Step | Cost | Time |
+| --- | --- | --- |
+| Fetch, preflight, `--plan`, `--prepare-only` | Free, no model calls | Minutes |
+| Writers (your tool) | Whatever your tool spends. Tracetoon in the golden run: $0.13–$0.45 per draft on Codex, $0.34–$0.65 on Claude Code | About 5–8 min per draft (median), many in parallel |
+| Judges on Codex (Sol + Terra) | Uses your Codex login's quota; prbench records no dollar cost | A 25-pair run takes about 30–40 min at `--parallel 10` |
+| Judges on Claude (Opus + Sonnet) | About $1.60 per pair (4 readings), from our 25-pair reference run | |
+
+The full library at 3 replicates is 183 pairs per provider (366 drafts, 732 judge readings); with `--replicates 1` it is a third of that. Judges are stochastic, so a rerun won't match our numbers exactly; expect the same direction with intervals of similar width. The golden run's own totals are under [Reproduce the results](#reproduce-the-results).
 
 ## Install
 
@@ -229,7 +295,7 @@ Results folders contain traces and paths from your machine. Keep them out of Git
 - [Expert fact review](docs/fact-review.md), [cases](docs/cases.md), [validation evidence](docs/validation-evidence.md), [scope calibration](docs/scope-calibration.md).
 - [Reproducing the Tracetoon graph-vs-base comparison](docs/reproduce-graph-vs-base.md) and the [v4 golden run](golden/v4-candidate62/README.md).
 - [Flagship benchmark bundle](golden/v4-flagship-c70b/README.md): Tracetoon vs no Tracetoon on Opus 5.5 and Sol 6.1, with a [rerun guide](golden/v4-flagship-c70b/README.md#rerunning).
-- Published write-ups: [Tracetoon vs your agent alone](https://tracetoon.ai/vs-native.html) (flagship), [the evidence graph on 61 real PRs](https://tracetoon.ai/evidence-graph-61.html) (golden run), [the first evidence-graph study](https://tracetoon.ai/evidence-graph.html), and the [results page](https://tracetoon.ai/results.html) that lists all three.
+- Published write-ups: [Tracetoon vs your agent alone](https://tracetoon.ai/vs-native.html) (flagship), [the evidence graph on 61 real PRs](https://tracetoon.ai/evidence-graph-61.html) (golden run), [the first evidence-graph study](https://tracetoon.ai/evidence-graph.html), and the [benchmark page](https://tracetoon.ai/prbench.html#results) that summarises all three.
 
 ## Adding a system
 

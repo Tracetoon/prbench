@@ -14,7 +14,17 @@ The question it answers: **does an agent with this tool write a more accurate an
 
 Methodology: [docs/methodology.md](docs/methodology.md). Related work: [docs/related-work.md](docs/related-work.md).
 
-## Results: Tracetoon vs no Tracetoon on flagship models
+## Results
+
+prbench is behind all three published Tracetoon results, newest first:
+
+1. **Flagship:** Tracetoon against the same agent writing the PR on its own, on Opus 5.5 and Sol 6.1 (61 cases × 3).
+2. **The v4 golden run:** Tracetoon's evidence-graph brief against its original multi-agent workflow (61 cases × 3).
+3. **The first evidence-graph study:** the same graph-vs-original comparison on 5 cases × 5, before it was repeated at scale.
+
+Each report, with its charts and caveats, is linked from the [Tracetoon results page](https://tracetoon.ai/results.html).
+
+### Tracetoon vs no Tracetoon on flagship models
 
 The user's own agent writing the PR with no Tracetoon (`native`), against the same agent using Tracetoon `candidate70b`. Both run in a Claude Code session on Opus 5.5 and a Codex session on Sol 6.1. The run used 61 real cases × 3 replicates per provider, two judges per provider in both orders, and the same accuracy review. Data, drafts, cost model and commands: [golden/v4-flagship-c70b/](golden/v4-flagship-c70b/).
 
@@ -27,7 +37,7 @@ The user's own agent writing the PR with no Tracetoon (`native`), against the sa
 
 The session's own model only coordinates (about 4–6 requests). A fresh drafter on the same model at low effort writes from the evidence brief, and cheap reviewers check it (Haiku / Luna). Cost assumes a 500k-token session with subscription-style caching (main thread 1 h, subagents 5 min; Codex 30 min). Without a long carried session, Tracetoon costs more than the native agent. Details and caveats are in the bundle's README.
 
-## Results: the v4 golden run
+### The v4 golden run
 
 Tracetoon's evidence-graph skill (`candidate62`) against Tracetoon's original workflow. The run used 61 real cases × 3 replicates per provider, with two pre-registered judges per provider, each judging every pair in both orders, and an expert accuracy review of every flagged claim. Data, drafts and commands: [golden/v4-candidate62/](golden/v4-candidate62/). Write-up: [the Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html).
 
@@ -38,6 +48,7 @@ Tracetoon's evidence-graph skill (`candidate62`) against Tracetoon's original wo
 | Writer cost, candidate / original | **0.30** [0.28, 0.32] | **0.57** [0.53, 0.62] |
 | Confirmed accuracy errors per draft, candidate vs original | 0.33 vs 0.16 | 0.47 vs 0.84 |
 | Strict accuracy gate (no worse than the original + 0.05) | fails | passes |
+| Key facts conveyed (claim coverage), candidate vs original | **82% vs 72%** | 73% vs 77% |
 
 **How to read the table:**
 - **Consensus picks** count the cases × replicates where both judges, in both orders, preferred the same draft. Ties and split decisions are left out.
@@ -45,6 +56,20 @@ Tracetoon's evidence-graph skill (`candidate62`) against Tracetoon's original wo
 - **Intervals** are 95% bootstrap intervals clustered by case.
 - **In-sample results.** The pool has no held-out split, and the candidate was tuned on these cases.
 - **Codex accuracy.** The Codex candidate makes more confirmed errors than the original workflow. This is disclosed in the run details, and most of those errors trace to known Validation-section render bugs.
+- **Claude Code coverage.** On Claude Code the candidate conveys slightly fewer key facts (73% vs 77%), within the 5-point coverage margin.
+
+### The first evidence-graph study
+
+Tracetoon's evidence-graph build at the time (`bd55f75`, on Relate) against its original workflow, on the 5 dev cases of `real-cases@1.0.0` × 5 replicates per arm, rubric v6. Same writers and judges as the golden run. Method, commands and the run-to-run comparison: [docs/reproduce-graph-vs-base.md](docs/reproduce-graph-vs-base.md). Write-up: [the first evidence-graph study](https://tracetoon.ai/evidence-graph.html).
+
+| | Codex (writer gpt-6.1-terra) | Claude Code (writer claude-sonnet-5-5) |
+| --- | --- | --- |
+| Consensus picks, graph–original | **12–1** (12 ties) | **18–1** (6 ties) |
+| Composite score, original → graph | 83.2 → **86.6** (+3.5 [1.8, 5.1]) | 73.7 → **78.9** (+5.2 [2.5, 8.0]) |
+| Judge-flagged factual errors per judgment, graph / original | **0.00** / 0.07 | 0.08 / 0.09 |
+| Writer cost per draft, graph / original | **$0.207** / $0.320 | **$0.407** / $0.690 |
+
+Five cases from one repository make this a small, early test. A same-build Codex rerun gave +5.2 (13–2), about the ±3-point run-to-run noise to expect at 25 pairs.
 
 ## Install
 
@@ -142,7 +167,13 @@ bun run prbench score results/my-run/codex --cases <cases dir>   # per-draft sco
 - **Timeouts.** `PRBENCH_WRITER_TIMEOUT_MS` sets the writer timeout (default 30 min; frozen in the experiment). `PRBENCH_JUDGE_TIMEOUT_MS` or `--judge-timeout-ms` sets the judge timeout (default 15 min; may be raised on resume).
 - **Exit codes.** 0 passed, 1 a gate failed, 2 incomplete or invalid, 3 inconclusive, 130 cancelled.
 
-## Reproduce the golden run
+## Reproduce the results
+
+- **Flagship:** [golden/v4-flagship-c70b/README.md](golden/v4-flagship-c70b/README.md#rerunning) is a step-by-step guide, checked from a clean clone: tagged harness revisions (`bench-v4-flagship-claude`, `bench-v4-flagship-codex`), the published dataset, the `candidate70b` bundle rebuilt from its tag, and both `compare` commands.
+- **First evidence-graph study:** [docs/reproduce-graph-vs-base.md](docs/reproduce-graph-vs-base.md).
+- **The v4 golden run:** below.
+
+### The v4 golden run
 
 [golden/v4-candidate62/README.md](golden/v4-candidate62/README.md) has the full procedure. In short:
 
@@ -197,8 +228,8 @@ Results folders contain traces and paths from your machine. Keep them out of Git
 - [Datasets](docs/datasets.md) and the [dataset card](datasets/DATASET_CARD.md).
 - [Expert fact review](docs/fact-review.md), [cases](docs/cases.md), [validation evidence](docs/validation-evidence.md), [scope calibration](docs/scope-calibration.md).
 - [Reproducing the Tracetoon graph-vs-base comparison](docs/reproduce-graph-vs-base.md) and the [v4 golden run](golden/v4-candidate62/README.md).
-- [Tracetoon evidence page](https://tracetoon.ai/evidence-graph-61.html), the published write-up of the golden run.
-- [Flagship benchmark bundle](golden/v4-flagship-c70b/README.md): Tracetoon vs no Tracetoon on Opus 5.5 and Sol 6.1.
+- [Flagship benchmark bundle](golden/v4-flagship-c70b/README.md): Tracetoon vs no Tracetoon on Opus 5.5 and Sol 6.1, with a [rerun guide](golden/v4-flagship-c70b/README.md#rerunning).
+- Published write-ups: [Tracetoon vs your agent alone](https://tracetoon.ai/vs-native.html) (flagship), [the evidence graph on 61 real PRs](https://tracetoon.ai/evidence-graph-61.html) (golden run), [the first evidence-graph study](https://tracetoon.ai/evidence-graph.html), and the [results page](https://tracetoon.ai/results.html) that lists all three.
 
 ## Adding a system
 

@@ -80,19 +80,135 @@ Raw costs (no carried session) are in the same files. Without a carried session 
 
 ## Rerunning
 
-You need prbench at this revision, Claude Code 2.1.319 and Codex 0.169.0 signed in, the `real-cases@4.0.0` dataset, and the `candidate70b` skill bundle (Tracetoon tag `candidate70b`). Then, per provider:
+Everything this run used is public. A rerun writes and judges every draft afresh, so expect the same picture with run-to-run noise of a few composite points, not identical numbers. These steps were checked from a clean clone: the rebuilt bundle is byte-identical to the one the run used, and the experiment frozen against the published dataset has the run's writer and judge contracts, preparation and bundle identity (see "What will differ" below).
 
+### 1. Tools
+
+- [Bun](https://bun.sh) 1.3.14 (the compiled Tracetoon binary is reproducible only with the same Bun).
+- Claude Code 2.1.319, for example `npm install --prefix ~/cc-2.1.319 @anthropic-ai/claude-code@2.1.319`, then point prbench at it with `PRBENCH_CLAUDE_COMMAND='["<prefix>/node_modules/.bin/claude"]'`.
+- Codex CLI 0.169.0 on your `PATH`.
+- Accounts that can run `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5` and `claude-fable-5-1` (the accuracy-review decider), and `gpt-6.1-sol`, `gpt-6.1-terra` and `gpt-6-luna`.
+
+### 2. The harness
+
+Each provider ran from its own tagged prbench revision (also recorded in `skills.json` and the manifests):
+
+| Provider | Tag | Commit |
+|---|---|---|
+| Claude Code | `bench-v4-flagship-claude` | `1a9de82` |
+| Codex | `bench-v4-flagship-codex` | `189bd5f` |
+
+```sh
+mkdir flagship && cd flagship          # everything below lives here
+git clone https://github.com/Tracetoon/prbench.git
+(cd prbench && bun install --frozen-lockfile)
+cd prbench
+git worktree add ../prbench-claude bench-v4-flagship-claude
+git worktree add ../prbench-codex  bench-v4-flagship-codex
+(cd ../prbench-claude && bun install --frozen-lockfile)
+(cd ../prbench-codex  && bun install --frozen-lockfile)
 ```
+
+The Claude tag adds one setting to the Codex one: background tasks are disabled for Claude Code writers. prbench `main` contains both, plus two portability fixes (macOS process-group cleanup and Windows path matching). It runs the same benchmark, but its frozen writer contract hash differs, so use the tags to match the published manifests.
+
+Sign the sandboxes in once (they get their own `HOME`; your interactive login is never copied):
+
+```sh
+bun run prbench auth codex
+claude setup-token > token.txt && bun run prbench auth claude < token.txt
+```
+
+### 3. The dataset
+
+Fetch it from the `main` checkout (`flagship/prbench`): the two tags predate the registry entry for 4.0.0.
+
+```sh
+bun run prbench datasets fetch real-cases@4.0.0 --out ../cases-v4
+```
+
+The archive (`cases-v4.0.0` release, 433 MB) is checked against the registry's SHA-256 values. It contains `preparation.json`.
+
+### 4. The skill bundles
+
+Build `candidate70b` from its Tracetoon tag, then add the one setting the run used that the tag doesn't ship (`Drafter effort: low.`):
+
+```sh
+cd ..                                          # back in flagship/
+git clone https://github.com/Tracetoon/tracetoon.git tt && cd tt
+git checkout candidate70b                      # b9597b0
+bun install --frozen-lockfile
+bun run dependencies:prepare                   # pinned Showtail checkout
+bun run bundle
+bun run build --outfile plugin/skills/tracetoon/bin/tracetoon-linux-x64
+python3 - <<'EOF'
+p = "plugin/skills/tracetoon/SKILL.md"
+s = open(p).read()
+s = s.replace("Drafter model: inherit.\n\n", "Drafter model: inherit.\n\nDrafter effort: low.\n\n", 1)
+open(p, "w").write(s)
+EOF
+mkdir -p ../skills && cp -r plugin/skills/tracetoon ../skills/candidate70b
+```
+
+Check it against the run (`treeSha256` in `skills.json`):
+
+```sh
+cd ../skills/candidate70b && find . -type f | sed 's#^\./##' \
+  | while read f; do printf '%s  %s\n' "$(sha256sum "$f" | cut -d' ' -f1)" "$f"; done \
+  | LC_ALL=C sort | sha256sum            # 38b6a94e8315a4631723e3e3cd94293924d6e06be0f697230c77bbbe37aa75c2
+```
+
+`bin/tracetoon-linux-x64.build.json` should show build id `1bb8725e…` and binary SHA-256 `aac760e9…`, as in the manifests.
+
+`--baseline-skill` is required but unused here: no baseline drafts are written with `--systems native,candidate`. The run passed the `candidate62` bundle (Tracetoon tag `candidate62`, built as in [docs/reproduce-graph-vs-base.md](../../docs/reproduce-graph-vs-base.md#build-the-two-skill-bundles)); copy it to `flagship/skills/candidate62`. Any bundle works, but only `candidate62` reproduces the manifests' baseline entry.
+
+### 5. Run
+
+The run's timeouts are environment settings, and they are part of the frozen settings:
+
+```sh
+export PRBENCH_WRITER_TIMEOUT_MS=3600000 PRBENCH_JUDGE_TIMEOUT_MS=1800000
+```
+
+Claude Code, from `flagship/prbench-claude` (with `PRBENCH_CLAUDE_COMMAND` set as above):
+
+```sh
 bun run src/cli.ts compare --provider claude --models claude-opus-5-5@medium \
   --judges claude:claude-opus-5-5@medium,claude:claude-sonnet-5-5@medium \
   --systems native,candidate --replicates 3 --purpose diagnostic \
-  --baseline-skill <any skill bundle> --candidate-skill <candidate70b bundle> \
-  --cases <real-cases 4.0.0> --preparation <cases>/preparation.json --split dev --out <out>/claude
+  --baseline-skill ../skills/candidate62 --candidate-skill ../skills/candidate70b \
+  --cases ../cases-v4 --preparation ../cases-v4/preparation.json --split dev \
+  --parallel 6 --out results/flagship/claude
 ```
 
-For Codex: `--provider codex --models gpt-6.1-sol@medium --judges codex:gpt-6.1-sol@medium,codex:gpt-6.1-terra@medium`.
+Codex, from `flagship/prbench-codex`:
 
-Then `accuracy-review` and `python3 tools/flagship-cost.py <out>/<provider>` for the cost model. A fresh run regenerates the native drafts too; expect run-to-run noise of a few composite points.
+```sh
+bun run src/cli.ts compare --provider codex --models gpt-6.1-sol@medium \
+  --judges codex:gpt-6.1-sol@medium,codex:gpt-6.1-terra@medium \
+  --systems native,candidate --replicates 3 --purpose diagnostic \
+  --baseline-skill ../skills/candidate62 --candidate-skill ../skills/candidate70b \
+  --cases ../cases-v4 --preparation ../cases-v4/preparation.json --split dev \
+  --parallel 6 --out results/flagship/codex
+```
+
+Add `--prepare-only` first, then `--resume --plan`, to freeze and inspect the experiment without model calls. Each run writes 366 drafts and judges each Tracetoon/native pair with both judges in both orders.
+
+### 6. Accuracy review, report and cost
+
+```sh
+bun run src/cli.ts accuracy-review --run results/flagship/claude --cases ../cases-v4 \
+  --out results/flagship/claude-accuracy --decider claude-fable-5-1 --parallel 6 --write
+bun run src/cli.ts compare <same arguments as the run> --resume --report-only
+python3 ../prbench/golden/v4-flagship-c70b/tools/flagship-cost.py results/flagship/claude --json results/flagship/claude-cost.json
+```
+
+The same for Codex. The cost script reprices every model request in the run's writer traces (method above) and reports native and Tracetoon side by side. The published run reused its native drafts from an earlier run with identical native settings; a fresh run writes them itself.
+
+### What will differ
+
+- **Model output:** every draft and verdict is a fresh sample.
+- **Four case hashes:** the four `vexagent-*` cases were history-rewritten before the dataset was published (an e-mail address and a local path scrubbed; see the [dataset card](../../datasets/DATASET_CARD.md)). Their commit SHAs, and so their case hashes, differ from the manifests. The trees the writers see are unchanged. The other 57 case hashes match.
+- **Machine identity:** `settings.agentCommandHash` and `settings.toolchain.environmentHash` depend on local paths and installs, so they differ on every machine. prbench uses them to keep one machine's results from silently mixing with another's.
 
 ## Caveats
 
